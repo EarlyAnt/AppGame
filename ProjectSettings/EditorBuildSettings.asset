@@ -6,12 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/3rd-Party/FlutterUnityIntegration/Demo/Scenes/Scene1.unity
+    guid: 1de23c438491149ecacfae4362bfe5d4
+  - enabled: 1
+    path: Assets/3rd-Party/FlutterUnityIntegration/Demo/Scenes/Scene2.unity
+    guid: 78e45f16305ad48beb12bee6b4f6e23c
+  - enabled: 0
     path: Assets/3rd-Party/StrangeIoC/examples/Assets/scenes/multiplecontexts/main.unity
     guid: c8ed8038df3b647b68e612bd6fde86e0
-  - enabled: 1
+  - enabled: 0
     path: Assets/3rd-Party/StrangeIoC/examples/Assets/scenes/multiplecontexts/game.unity
     guid: 63cc202a6aefd4364ab9d942a24c0716
-  - enabled: 1
+  - enabled: 0
     path: Assets/3rd-Party/StrangeIoC/examples/Assets/scenes/multiplecontexts/social.unity
     guid: ca117a9bbd0d14ec294e0e9ae05a2103
   m_configObjects: {}
