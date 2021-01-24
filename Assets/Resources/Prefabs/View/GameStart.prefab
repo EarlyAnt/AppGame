@@ -354,5 +354,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressBar: {fileID: 946753428}
   progressValue: {fileID: 858122552}
-  durationMin: 5
-  durationMax: 10
+  durationMin: 3
+  durationMax: 5

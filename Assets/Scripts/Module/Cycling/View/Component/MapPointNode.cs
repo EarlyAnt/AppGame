@@ -1,22 +1,20 @@
-using strange.extensions.mediation.impl;
+using System.Collections.Generic;
+using UnityEngine;
 
-namespace AppGame.Module.GameStart
+namespace AppGame.Module.Cycling
 {
-    public class GameStartMediator : EventMediator
+    public class MapPointNode : MonoBehaviour
     {
         /************************************************属性与变量命名************************************************/
-        [Inject]
-        public GameStartView View { get; set; }
+        [SerializeField]
+        private string id;
+        [SerializeField]
+        private NodeTypes nodeType;
+        public string ID { get { return this.id; } }
+        public NodeTypes NodeType { get { return this.nodeType; } }
         /************************************************Unity方法与事件***********************************************/
 
         /************************************************自 定 义 方 法************************************************/
-        public override void OnRegister()
-        {
-        }
 
-        public override void OnRemove()
-        {
-        }
     }
 }
-
