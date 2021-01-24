@@ -1,15 +1,18 @@
+using AppGame.UI;
 using DG.Tweening;
-using strange.extensions.mediation.impl;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace AppGame.Module.Cycling
 {
-    public class CyclingView : EventView
+    public class CyclingView : BaseView
     {
         /************************************************属性与变量命名************************************************/
+        [SerializeField]
+        private Image mask;
+        [SerializeField]
+        private CanvasGroup canvasGroup;
         [SerializeField]
         private MapNode mapNode;
         [SerializeField]
@@ -18,6 +21,8 @@ namespace AppGame.Module.Cycling
         private Camera camera;
         [SerializeField]
         private float step;
+        [SerializeField, Range(0f, 5f)]
+        private float lerp = 0.5f;
         private int nodeIndex;
         private Vector3 top;
         private Vector3 bottom;
@@ -28,8 +33,12 @@ namespace AppGame.Module.Cycling
         private Vector3 topRight;
         private Vector3 bottomLeft;
         private Vector3 bottomRight;
+        private float frustumHeight;
+        private float frustumWidth;
         private float fieldOfViewVertical = 60f;
         private float fieldOfViewHorizontal = 35.98339f;
+        private float canvasScale = 0.05f;
+        private bool inRange;
         private Vector3 destination
         {
             get
@@ -52,7 +61,13 @@ namespace AppGame.Module.Cycling
         {
             Vector3 playerPos = this.player.position;
             playerPos.z = this.camera.transform.position.z;
-            this.camera.transform.position = playerPos;
+            if (!this.inRange)
+            {
+                Image image = this.mapNode.GetComponent<Image>();
+                playerPos.x = Mathf.Clamp(playerPos.x, -image.rectTransform.sizeDelta.x * this.canvasScale / 2f + this.frustumWidth / 2f, image.rectTransform.sizeDelta.x * this.canvasScale / 2f - this.frustumWidth / 2f);
+                playerPos.y = Mathf.Clamp(playerPos.y, -image.rectTransform.sizeDelta.y * this.canvasScale / 2f + this.frustumHeight / 2f, image.rectTransform.sizeDelta.y * this.canvasScale / 2f - this.frustumHeight / 2f);
+            }
+            this.camera.transform.DOMove(playerPos, this.lerp);
         }
         private void OnDrawGizmos()
         {
@@ -63,39 +78,45 @@ namespace AppGame.Module.Cycling
             Vector3 projection = this.mapNode.transform.TransformPoint(localPos);
 
             float distance = Vector3.Distance(this.camera.transform.position, projection);
-            float frustumHeight = 2.0f * distance * Mathf.Tan(this.fieldOfViewVertical * 0.5f * Mathf.Deg2Rad);
-            float frustumWidth = 2.0f * distance * Mathf.Tan(this.fieldOfViewHorizontal * 0.5f * Mathf.Deg2Rad);
-            Debug.LogFormat("height: {0}, width: {1}", frustumHeight, frustumWidth);
+            this.frustumHeight = 2.0f * distance * Mathf.Tan(this.fieldOfViewVertical * 0.5f * Mathf.Deg2Rad);
+            this.frustumWidth = 2.0f * distance * Mathf.Tan(this.fieldOfViewHorizontal * 0.5f * Mathf.Deg2Rad);
+            Debug.LogFormat("distance: {0}, height: {1}, width: {2}", distance, frustumHeight, frustumWidth);
 
-            this.top = new Vector3(this.camera.transform.position.x, projection.y + frustumHeight / 2, this.mapNode.transform.position.z);
-            this.bottom = new Vector3(this.camera.transform.position.x, projection.y - frustumHeight / 2, this.mapNode.transform.position.z);
-            this.left = new Vector3(projection.x + frustumWidth / 2, this.camera.transform.position.y, this.mapNode.transform.position.z);
-            this.right = new Vector3(projection.x - frustumWidth / 2, this.camera.transform.position.y, this.mapNode.transform.position.z);
+            this.top = new Vector3(this.player.transform.position.x, this.player.position.y + frustumHeight / 2, this.mapNode.transform.position.z);
+            this.bottom = new Vector3(this.player.transform.position.x, this.player.position.y - frustumHeight / 2, this.mapNode.transform.position.z);
+            this.left = new Vector3(this.player.position.x + frustumWidth / 2, this.player.transform.position.y, this.mapNode.transform.position.z);
+            this.right = new Vector3(this.player.position.x - frustumWidth / 2, this.player.transform.position.y, this.mapNode.transform.position.z);
 
             this.topLeft = new Vector3(this.left.x, this.top.y, this.top.z);
             this.topRight = new Vector3(this.right.x, this.top.y, this.top.z);
             this.bottomLeft = new Vector3(this.left.x, this.bottom.y, this.bottom.z);
             this.bottomRight = new Vector3(this.right.x, this.bottom.y, this.bottom.z);
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawLine(this.camera.transform.position, projection);
-            Gizmos.DrawLine(this.camera.transform.position, this.top);
-            Gizmos.DrawLine(this.camera.transform.position, this.bottom);
-            Gizmos.DrawLine(this.camera.transform.position, this.left);
-            Gizmos.DrawLine(this.camera.transform.position, this.right);
-
+            Gizmos.color = Color.yellow;
             Gizmos.DrawLine(this.topLeft, this.topRight);
             Gizmos.DrawLine(this.topRight, this.bottomRight);
             Gizmos.DrawLine(this.bottomRight, this.bottomLeft);
             Gizmos.DrawLine(this.bottomLeft, this.topLeft);
 
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(projection, 2f);
+            this.inRange = this.PointInEdge(this.topLeft) && this.PointInEdge(this.topRight) &&
+                           this.PointInEdge(this.bottomLeft) && this.PointInEdge(this.bottomRight);
+
+            Gizmos.color = inRange ? Color.cyan : Color.red;
+            Gizmos.DrawSphere(projection, 9f);
         }
         /************************************************自 定 义 方 法************************************************/
         private void Initialize()
         {
             this.player.position = this.mapNode.Points[this.nodeIndex].position;
+            Vector3 playerPos = this.player.position;
+            playerPos.z = this.camera.transform.position.z;
+            this.camera.transform.position = playerPos;
+
+            this.DelayInvoke(() =>
+            {
+                this.mask.DOFade(0f, 1f);
+                this.canvasGroup.DOFade(1f, 1f);
+            }, 1f);
         }
         public void MoveForward()
         {
@@ -121,6 +142,17 @@ namespace AppGame.Module.Cycling
             }
             while (pointNode == null);
             Debug.Log("stop");
+        }
+        private bool PointInEdge(Vector3 point)
+        {
+            Image image = this.mapNode.GetComponent<Image>();
+            if (point.x >= -image.rectTransform.sizeDelta.x * this.canvasScale / 2f &&
+                point.x <= image.rectTransform.sizeDelta.x * this.canvasScale / 2f &&
+                point.y >= -image.rectTransform.sizeDelta.y * this.canvasScale / 2f &&
+                point.y <= image.rectTransform.sizeDelta.y * this.canvasScale / 2f)
+                return true;
+            else
+                return false;
         }
     }
 }
