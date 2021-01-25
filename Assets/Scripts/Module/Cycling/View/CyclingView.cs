@@ -19,11 +19,12 @@ namespace AppGame.Module.Cycling
         private Transform player;
         [SerializeField]
         private Camera camera;
-        [SerializeField]
+        [SerializeField, Range(0f, 5f)]
         private float step;
         [SerializeField, Range(0f, 5f)]
         private float lerp = 0.5f;
         private int nodeIndex;
+        private int lastNodeIndex;
         private Vector3 top;
         private Vector3 bottom;
         private Vector3 left;
@@ -39,6 +40,7 @@ namespace AppGame.Module.Cycling
         private float fieldOfViewHorizontal = 35.98339f;
         private float canvasScale = 0.05f;
         private bool inRange;
+        private bool stop;
         private Vector3 destination
         {
             get
@@ -59,15 +61,18 @@ namespace AppGame.Module.Cycling
         }
         private void Update()
         {
-            Vector3 playerPos = this.player.position;
-            playerPos.z = this.camera.transform.position.z;
-            if (!this.inRange)
+            if (!this.stop)
             {
-                Image image = this.mapNode.GetComponent<Image>();
-                playerPos.x = Mathf.Clamp(playerPos.x, -image.rectTransform.sizeDelta.x * this.canvasScale / 2f + this.frustumWidth / 2f, image.rectTransform.sizeDelta.x * this.canvasScale / 2f - this.frustumWidth / 2f);
-                playerPos.y = Mathf.Clamp(playerPos.y, -image.rectTransform.sizeDelta.y * this.canvasScale / 2f + this.frustumHeight / 2f, image.rectTransform.sizeDelta.y * this.canvasScale / 2f - this.frustumHeight / 2f);
+                Vector3 playerPos = this.player.position;
+                playerPos.z = this.camera.transform.position.z;
+                if (!this.inRange)
+                {
+                    Image image = this.mapNode.GetComponent<Image>();
+                    playerPos.x = Mathf.Clamp(playerPos.x, -image.rectTransform.sizeDelta.x * this.canvasScale / 2f + this.frustumWidth / 2f, image.rectTransform.sizeDelta.x * this.canvasScale / 2f - this.frustumWidth / 2f);
+                    playerPos.y = Mathf.Clamp(playerPos.y, -image.rectTransform.sizeDelta.y * this.canvasScale / 2f + this.frustumHeight / 2f, image.rectTransform.sizeDelta.y * this.canvasScale / 2f - this.frustumHeight / 2f);
+                }
+                this.camera.transform.DOMove(playerPos, this.lerp);
             }
-            this.camera.transform.DOMove(playerPos, this.lerp);
         }
         private void OnDrawGizmos()
         {
@@ -120,18 +125,46 @@ namespace AppGame.Module.Cycling
         }
         public void MoveForward()
         {
-            this.StopAllCoroutines();
-            this.StartCoroutine(this.MovePlayer());
+            if (this.nodeIndex + 1 < this.mapNode.Points.Count)
+            {
+                this.nodeIndex += 1;
+                this.StopAllCoroutines();
+                this.StartCoroutine(this.MovePlayer(true));
+            }
         }
-        private IEnumerator MovePlayer()
+        public void MoveBack()
         {
-            if (this.nodeIndex + 1 >= this.mapNode.Points.Count)
+            if (this.nodeIndex > 0)
+            {
+                this.nodeIndex -= 1;
+                this.StopAllCoroutines();
+                this.StartCoroutine(this.MovePlayer(false));
+            }
+        }
+        private IEnumerator MovePlayer(bool forward)
+        {
+            if (this.nodeIndex < 0 || this.nodeIndex + 1 >= this.mapNode.Points.Count)
                 yield break;
 
+            bool viewSetting = false;
+            this.stop = true;
+            Debug.LogFormat("MovePlayer 1 1 1 1 1: {0}", System.DateTime.Now.ToString("HH:mm:ss:fff"));
+            if (this.mapNode.Points[this.lastNodeIndex].childCount > 0 && this.mapNode.Points[this.lastNodeIndex].GetComponentInChildren<ViewNode>() != null)
+            {
+                viewSetting = true;
+                Vector3 viewPos = this.mapNode.Points[this.lastNodeIndex].position;
+                viewPos.z = this.camera.transform.position.z;
+                this.camera.transform.DOMove(viewPos, 2f).onComplete = () => viewSetting = false;
+                yield return new WaitUntil(() => viewSetting == false);
+                yield return new WaitForSeconds(0.5f);
+            }
+
+            Debug.LogFormat("MovePlayer 2 2 2 2 2: {0}", System.DateTime.Now.ToString("HH:mm:ss:fff"));
             MapPointNode pointNode = null;
             do
             {
-                this.nodeIndex += 1;
+                this.stop = false;
+                this.nodeIndex += forward ? 1 : -1;
                 do
                 {
                     this.player.position = Vector3.MoveTowards(this.player.position, this.destination, this.step);
@@ -141,7 +174,20 @@ namespace AppGame.Module.Cycling
                 pointNode = this.mapNode.Points[this.nodeIndex].GetComponent<MapPointNode>();
             }
             while (pointNode == null);
-            Debug.Log("stop");
+            yield return new WaitForSeconds(0.5f);
+
+            Debug.LogFormat("MovePlayer 3 3 3 3 3: {0}", System.DateTime.Now.ToString("HH:mm:ss:fff"));
+            this.stop = true;
+            if (this.mapNode.Points[this.nodeIndex].childCount > 0 && this.mapNode.Points[this.nodeIndex].GetComponentInChildren<ViewNode>() != null)
+            {
+                viewSetting = true;
+                Vector3 viewPos = this.mapNode.Points[this.nodeIndex].GetChild(0).position;
+                viewPos.z = this.camera.transform.position.z;
+                this.camera.transform.DOMove(viewPos, 2f).onComplete = () => viewSetting = false;
+                yield return new WaitUntil(() => viewSetting == false);
+            }
+            this.lastNodeIndex = this.nodeIndex;
+            Debug.LogFormat("MovePlayer 4 4 4 4 4: {0}", System.DateTime.Now.ToString("HH:mm:ss:fff"));
         }
         private bool PointInEdge(Vector3 point)
         {
