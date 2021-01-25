@@ -12,6 +12,10 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private Image mask;
         [SerializeField]
+        private RectTransform mapCanvas;
+        [SerializeField, Range(0f, 1f)]
+        private float canvasScale = 0.04f;
+        [SerializeField]
         private CanvasGroup canvasGroup;
         [SerializeField]
         private MapNode mapNode;
@@ -37,7 +41,6 @@ namespace AppGame.Module.Cycling
         private float frustumWidth;
         private float fieldOfViewVertical = 60f;
         private float fieldOfViewHorizontal = 35.98339f;
-        private float canvasScale = 0.05f;
         private bool inRange;
         private Vector3 destination
         {
@@ -48,6 +51,11 @@ namespace AppGame.Module.Cycling
             }
         }
         /************************************************Unity方法与事件***********************************************/
+        protected override void Awake()
+        {
+            base.Awake();
+            this.mapCanvas.localScale = new Vector3(this.canvasScale, this.canvasScale, 1);
+        }
         protected override void Start()
         {
             base.Start();
@@ -120,18 +128,31 @@ namespace AppGame.Module.Cycling
         }
         public void MoveForward()
         {
-            this.StopAllCoroutines();
-            this.StartCoroutine(this.MovePlayer());
+            if (this.nodeIndex + 1 < this.mapNode.Points.Count)
+            {
+                this.nodeIndex += 1;
+                this.StopAllCoroutines();
+                this.StartCoroutine(this.MovePlayer(true));
+            }
         }
-        private IEnumerator MovePlayer()
+        public void MoveBack()
         {
-            if (this.nodeIndex + 1 >= this.mapNode.Points.Count)
+            if (this.nodeIndex > 0)
+            {
+                this.nodeIndex -= 1;
+                this.StopAllCoroutines();
+                this.StartCoroutine(this.MovePlayer(false));
+            }
+        }
+        private IEnumerator MovePlayer(bool forward)
+        {
+            if (this.nodeIndex < 0 || this.nodeIndex >= this.mapNode.Points.Count)
                 yield break;
 
             MapPointNode pointNode = null;
             do
             {
-                this.nodeIndex += 1;
+                this.nodeIndex += forward ? 1 : -1;
                 do
                 {
                     this.player.position = Vector3.MoveTowards(this.player.position, this.destination, this.step);
