@@ -128,53 +128,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1776553451}
     m_Modifications:
-    - target: {fileID: 1166681445, guid: e154a759f82dbf84cb2a3b6aa97bd374, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1166681446, guid: e154a759f82dbf84cb2a3b6aa97bd374, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 7481.1914
-      objectReference: {fileID: 0}
-    - target: {fileID: 1166681446, guid: e154a759f82dbf84cb2a3b6aa97bd374, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 5494
-      objectReference: {fileID: 0}
-    - target: {fileID: 1166681448, guid: e154a759f82dbf84cb2a3b6aa97bd374, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 72db5dc3ce7649449bfe46ba08f44856,
-        type: 3}
-    - target: {fileID: 711089315329687200, guid: e154a759f82dbf84cb2a3b6aa97bd374,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 711089315329687200, guid: e154a759f82dbf84cb2a3b6aa97bd374,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 711089315329687200, guid: e154a759f82dbf84cb2a3b6aa97bd374,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 7481.1914
-      objectReference: {fileID: 0}
-    - target: {fileID: 711089315329687200, guid: e154a759f82dbf84cb2a3b6aa97bd374,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 5494
-      objectReference: {fileID: 0}
-    - target: {fileID: 711089315329687200, guid: e154a759f82dbf84cb2a3b6aa97bd374,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 711089315329687200, guid: e154a759f82dbf84cb2a3b6aa97bd374,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6632596976234362360, guid: e154a759f82dbf84cb2a3b6aa97bd374,
         type: 3}
       propertyPath: m_LocalPosition.x
