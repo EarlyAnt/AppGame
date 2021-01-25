@@ -6,3 +6,4 @@ AppGame.sln
 /.vs/AppGame/v16
 /Temp
 /*.user
+/Assembly-CSharp-Editor.csproj
