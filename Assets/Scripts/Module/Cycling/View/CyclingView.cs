@@ -10,6 +10,8 @@ namespace AppGame.Module.Cycling
     {
         /************************************************属性与变量命名************************************************/
         [SerializeField]
+        private bool showGizmos;
+        [SerializeField]
         private Image mask;
         [SerializeField]
         private RectTransform mapCanvas;
@@ -79,6 +81,7 @@ namespace AppGame.Module.Cycling
         }
         private void OnDrawGizmos()
         {
+            if (!this.showGizmos) return;
             Vector3 localPos = this.mapNode.transform.InverseTransformPoint(this.camera.transform.position);
             float dis = Vector3.Dot(localPos, Vector3.forward);
             Vector3 vectorNormal = Vector3.forward * dis;
