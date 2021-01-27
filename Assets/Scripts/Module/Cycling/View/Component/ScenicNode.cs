@@ -1,3 +1,4 @@
+using AppGame.Config;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,10 @@ namespace AppGame.Module.Cycling
     public class ScenicNode : BaseInteraction
     {
         /************************************************属性与变量命名************************************************/
+        [Inject]
+        public IScenicConfig ScenicConfig { get; set; }
+        [Inject]
+        public II18NUtil I18NUtil { get; set; }
         [SerializeField]
         private Image imageBox;
         [SerializeField]

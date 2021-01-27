@@ -15,7 +15,7 @@ namespace AppGame.Config
         /************************************************自  定  义  类************************************************/
 
         /************************************************属性与变量命名************************************************/
-        private List<ScenicInfo> maps = new List<ScenicInfo>();
+        private List<ScenicInfo> configs = new List<ScenicInfo>();
         /************************************************私  有  方  法************************************************/
         //读取语言配置文件
         private void ReadConfig(WWW www)
@@ -26,23 +26,23 @@ namespace AppGame.Config
                 return;
             }
 
-            if (www.isDone && (www.error == null || www.error.Length == 0))
+            if (www.isDone && string.IsNullOrEmpty(www.error))
             {
-                SecurityParser xmlDoc = new SecurityParser();
-                Debug.LogFormat("<><ScenicConfig.ReadConfig>Content: {0}", www.text);
+                try
+                {
+                    SecurityParser xmlDoc = new SecurityParser();
+                    Debug.LogFormat("<><ScenicConfig.ReadConfig>Content: {0}", www.text);
 
-                xmlDoc.LoadXml(www.text);
-                ArrayList allNodes = xmlDoc.ToXml().Children;
-                foreach (SecurityElement xeResConfigs in allNodes)
-                {//根节点
-                    if (xeResConfigs.Tag == "Maps")
-                    {//Plants点
-                        ArrayList plantsNode = xeResConfigs.Children;
-                        foreach (SecurityElement xePlant in plantsNode)
-                        {//Plant
-                            if (xePlant.Tag == "Map")
-                            {
-                                try
+                    xmlDoc.LoadXml(www.text);
+                    ArrayList allNodes = xmlDoc.ToXml().Children;
+                    foreach (SecurityElement xeResConfigs in allNodes)
+                    {//根节点
+                        if (xeResConfigs.Tag == "Maps")
+                        {//Plants点
+                            ArrayList plantsNode = xeResConfigs.Children;
+                            foreach (SecurityElement xePlant in plantsNode)
+                            {//Plant
+                                if (xePlant.Tag == "Map")
                                 {
                                     ScenicInfo mapInfo = new ScenicInfo()
                                     {
@@ -52,15 +52,15 @@ namespace AppGame.Config
                                         Image = xePlant.Attribute("Image"),
                                         Text = xePlant.Attribute("Text")
                                     };
-                                    this.maps.Add(mapInfo);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Debug.LogErrorFormat("<><ScenicConfig.ReadConfig>Error: {0}", ex.Message);
+                                    this.configs.Add(mapInfo);
                                 }
                             }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogErrorFormat("<><ScenicConfig.ReadConfig>Error: {0}", ex.Message);
                 }
                 Debug.Log("<><ScenicConfig.ReadConfig>Load complete");
                 this.isLoaded = true;
@@ -74,8 +74,8 @@ namespace AppGame.Config
         {
             if (this.isLoaded)
                 return;
-            this.maps.Clear();
-            ConfigLoader.Instance.LoadConfig("Config/Cycling/Scenic.xml", ReadConfig);
+            this.configs.Clear();
+            ConfigLoader.Instance.LoadConfig("Config/Cycling/Scenic.xml", this.ReadConfig);
         }
         /// <summary>
         /// 判断是否包含指定的景点
@@ -84,8 +84,8 @@ namespace AppGame.Config
         /// <returns></returns>
         public bool HasScenic(string scenicID)
         {
-            if (this.maps != null)
-                return this.maps.Exists(t => t.ID == scenicID);
+            if (this.configs != null)
+                return this.configs.Exists(t => t.ID == scenicID);
             else
                 return false;
         }
@@ -95,7 +95,7 @@ namespace AppGame.Config
         /// <returns></returns>
         public List<ScenicInfo> GetAllScenics()
         {
-            return this.maps;
+            return this.configs;
         }
         /// <summary>
         /// 获取指定景点
@@ -104,8 +104,8 @@ namespace AppGame.Config
         /// <returns></returns>
         public ScenicInfo GetScenic(string scenicID)
         {
-            if (this.maps != null)
-                return this.maps.Find(t => t.ID == scenicID);
+            if (this.configs != null)
+                return this.configs.Find(t => t.ID == scenicID);
             else
                 return null;
         }

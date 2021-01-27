@@ -15,7 +15,7 @@ namespace AppGame.Config
         /************************************************自  定  义  类************************************************/
 
         /************************************************属性与变量命名************************************************/
-        private List<MapInfo> maps = new List<MapInfo>();
+        private List<MapInfo> configs = new List<MapInfo>();
         /************************************************私  有  方  法************************************************/
         //读取语言配置文件
         private void ReadConfig(WWW www)
@@ -26,23 +26,23 @@ namespace AppGame.Config
                 return;
             }
 
-            if (www.isDone && (www.error == null || www.error.Length == 0))
+            if (www.isDone && string.IsNullOrEmpty(www.error))
             {
-                SecurityParser xmlDoc = new SecurityParser();
-                Debug.LogFormat("<><MapConfig.ReadConfig>Content: {0}", www.text);
+                try
+                {
+                    SecurityParser xmlDoc = new SecurityParser();
+                    Debug.LogFormat("<><MapConfig.ReadConfig>Content: {0}", www.text);
 
-                xmlDoc.LoadXml(www.text);
-                ArrayList allNodes = xmlDoc.ToXml().Children;
-                foreach (SecurityElement xeResConfigs in allNodes)
-                {//根节点
-                    if (xeResConfigs.Tag == "Maps")
-                    {//Plants点
-                        ArrayList plantsNode = xeResConfigs.Children;
-                        foreach (SecurityElement xePlant in plantsNode)
-                        {//Plant
-                            if (xePlant.Tag == "Map")
-                            {
-                                try
+                    xmlDoc.LoadXml(www.text);
+                    ArrayList allNodes = xmlDoc.ToXml().Children;
+                    foreach (SecurityElement xeResConfigs in allNodes)
+                    {//根节点
+                        if (xeResConfigs.Tag == "Maps")
+                        {//Plants点
+                            ArrayList plantsNode = xeResConfigs.Children;
+                            foreach (SecurityElement xePlant in plantsNode)
+                            {//Plant
+                                if (xePlant.Tag == "Map")
                                 {
                                     MapInfo mapInfo = new MapInfo()
                                     {
@@ -53,15 +53,15 @@ namespace AppGame.Config
                                         CityID = xePlant.Attribute("CityID"),
                                         CityName = xePlant.Attribute("CityName")
                                     };
-                                    this.maps.Add(mapInfo);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Debug.LogErrorFormat("<><MapConfig.ReadConfig>Error: {0}", ex.Message);
+                                    this.configs.Add(mapInfo);
                                 }
                             }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogErrorFormat("<><MapConfig.ReadConfig>Error: {0}", ex.Message);
                 }
                 Debug.Log("<><MapConfig.ReadConfig>Load complete");
                 this.isLoaded = true;
@@ -75,8 +75,8 @@ namespace AppGame.Config
         {
             if (this.isLoaded)
                 return;
-            this.maps.Clear();
-            ConfigLoader.Instance.LoadConfig("Config/Cycling/Map.xml", ReadConfig);
+            this.configs.Clear();
+            ConfigLoader.Instance.LoadConfig("Config/Cycling/Map.xml", this.ReadConfig);
         }
         /// <summary>
         /// 判断是否包含指定的地图
@@ -85,8 +85,8 @@ namespace AppGame.Config
         /// <returns></returns>
         public bool HasMap(string mapID)
         {
-            if (this.maps != null)
-                return this.maps.Exists(t => t.ID == mapID);
+            if (this.configs != null)
+                return this.configs.Exists(t => t.ID == mapID);
             else
                 return false;
         }
@@ -96,7 +96,7 @@ namespace AppGame.Config
         /// <returns></returns>
         public List<MapInfo> GetAllMaps()
         {
-            return this.maps;
+            return this.configs;
         }
         /// <summary>
         /// 获取指定地图
@@ -105,8 +105,8 @@ namespace AppGame.Config
         /// <returns></returns>
         public MapInfo GetMap(string mapID)
         {
-            if (this.maps != null)
-                return this.maps.Find(t => t.ID == mapID);
+            if (this.configs != null)
+                return this.configs.Find(t => t.ID == mapID);
             else
                 return null;
         }

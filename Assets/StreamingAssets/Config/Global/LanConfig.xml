@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Name="Gululu" Version="">
+  <Languages>
+    <Language Name="CHS" Text="中文简体" Default="true" />
+    <Language Name="CHT" Text="中文繁體" Default="false" />
+    <Language Name="EN" Text="English" Default="false" />
+    <Language Name="JP" Text="日本語" Default="false" />
+  </Languages>
+</Project>

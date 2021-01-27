@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Name="Gululu" Version="">
+  <Fonts>
+    <Font Name="HKHB" FullName="华康海报体W12" Desc="适用于中文简体" />
+    <Font Name="DFPT" FullName="DFPT_HBC" Desc="使用中文繁体" />
+	<Font Name="Pomeranian" FullName="Pomeranian" Desc="适用于日文" />
+  </Fonts>
+</Project>

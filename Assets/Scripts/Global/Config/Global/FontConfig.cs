@@ -1,0 +1,100 @@
+﻿using Mono.Xml;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security;
+using UnityEngine;
+
+namespace AppGame.Config
+{
+    /// <summary>
+    /// 语言配置读取类
+    /// </summary>
+    public class FontConfig : BaseConfig, IFontConfig
+    {
+        /************************************************属性与变量命名************************************************/
+        public const string DEFAULT_FONT = "Arial";
+        //语言配置数据字典
+        private Dictionary<string, string> configs = new Dictionary<string, string>();
+        /************************************************私  有  方  法************************************************/
+        //读取语言配置文件
+        private void ReadConfig(WWW www)
+        {
+            if (!string.IsNullOrEmpty(www.error))
+            {
+                Debug.LogErrorFormat("<><FontConfig.ReadConfig>Error: {0}" + www.error);
+                return;
+            }
+
+            if (www.isDone && string.IsNullOrEmpty(www.error))
+            {
+                try
+                {
+                    SecurityParser xmlDoc = new SecurityParser();
+                    Debug.LogFormat("<><FontConfig.ReadConfig>Content: {0}", www.text);
+
+                    xmlDoc.LoadXml(www.text);
+                    ArrayList allNodes = xmlDoc.ToXml().Children;
+                    foreach (SecurityElement xeLanguages in allNodes)
+                    {
+                        if (xeLanguages.Tag == "Fonts")
+                        {
+                            ArrayList languageNodes = xeLanguages.Children;
+                            foreach (SecurityElement xeLanguage in languageNodes)
+                            {
+                                if (xeLanguage.Tag == "Font")
+                                {
+                                    configs.Add(xeLanguage.Attribute("Name"), xeLanguage.Attribute("FullName"));
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogErrorFormat("<><FontConfig.ReadConfig>Error: {0}", ex.Message);
+                }
+            }
+            Debug.Log("<><FontConfig.ReadConfig>Load complete");
+            this.isLoaded = true;
+        }
+        /************************************************公  共  方  法************************************************/
+        /// <summary>
+        /// 加载字体配置数据
+        /// </summary>
+        public void Load()
+        {
+            if (this.isLoaded)
+                return;
+            this.configs.Clear();
+            ConfigLoader.Instance.LoadConfig("Config/Global/FontConfig.xml", this.ReadConfig);
+        }
+        /// <summary>
+        /// 获取字体完整名称
+        /// </summary>
+        /// <param name="fontShortName">字体简称</param>
+        /// <returns>如果配置项中能找到简称对应的字体则返回该字体全程，否则返回Unity默认字体Arial</returns>
+        public string GetFontFullName(string fontShortName)
+        {
+            return this.configs != null && this.configs.ContainsKey(fontShortName) ? this.configs[fontShortName] : DEFAULT_FONT;
+        }
+        /// <summary>
+        /// 判断字体是否合法
+        /// </summary>
+        /// <param name="fontShortName">字体简称</param>
+        /// <returns></returns>
+        public bool IsValid(string fontShortName)
+        {
+            return this.configs != null && this.configs.ContainsKey(fontShortName);
+        }
+        /// <summary>
+        /// 获取所有字体的完整名称
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetAllFont()
+        {
+            return this.configs != null && this.configs.Count > 0 ? this.configs.Values.ToList() : null;
+        }
+    }
+}
