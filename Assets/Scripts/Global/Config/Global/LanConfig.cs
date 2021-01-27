@@ -53,7 +53,7 @@ namespace AppGame.Config
                 try
                 {
                     SecurityParser xmlDoc = new SecurityParser();
-                    Debug.LogFormat("<><FontConfig.ReadConfig>Content: {0}", www.text);
+                    Debug.LogFormat("<><LanConfig.ReadConfig>Content: {0}", www.text);
 
                     xmlDoc.LoadXml(www.text);
                     ArrayList allNodes = xmlDoc.ToXml().Children;
@@ -82,7 +82,7 @@ namespace AppGame.Config
                 {
                     Debug.LogErrorFormat("<><LanConfig.ReadConfig>Error: {0}", ex.Message);
                 }
-                Debug.Log("<><FontConfig.ReadConfig>Load complete");
+                Debug.Log("<><LanConfig.ReadConfig>Load complete");
                 this.isLoaded = true;
             }
         }
@@ -169,6 +169,14 @@ namespace AppGame.Config
                 return allLanText;
             }
             else return null;
+        }
+        /// <summary>
+        /// 获取配置文件是否已经加载完
+        /// </summary>
+        /// <returns></returns>
+        public bool IsLoaded()
+        {
+            return this.isLoaded;
         }
     }
 }

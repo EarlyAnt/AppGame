@@ -5,7 +5,7 @@ namespace AppGame.Config
     /// <summary>
     /// 多语言资源配置接口
     /// </summary>
-    public interface II18NConfig
+    public interface II18NConfig : IConfig
     {
         /// <summary>
         /// 加载资源配置数据

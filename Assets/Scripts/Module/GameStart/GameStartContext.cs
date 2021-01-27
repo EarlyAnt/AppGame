@@ -1,5 +1,3 @@
-using AppGame.Config;
-using AppGame.Util;
 using strange.extensions.command.api;
 using strange.extensions.command.impl;
 using strange.extensions.context.api;
@@ -10,10 +8,6 @@ namespace AppGame.Module.GameStart
 {
     public class GameStartContext : MVCSContext
     {
-        public GameStartContext(MonoBehaviour view) : base(view)
-        {
-        }
-
         public GameStartContext(MonoBehaviour view, ContextStartupFlags flags) : base(view, flags)
         {
         }
@@ -34,17 +28,13 @@ namespace AppGame.Module.GameStart
 
         protected override void mapBindings()
         {
+            base.mapBindings();
+
             //bind mediation
             mediationBinder.Bind<GameStartView>().To<GameStartMediator>();
 
             //bind command
             commandBinder.Bind<StartSignal>().To<StartCommand>();
-
-            //bind injection
-            injectionBinder.Bind<IPrefabUtil>().To<PrefabUtil>().ToSingleton().CrossContext();
-
-            injectionBinder.Bind<IMapConfig>().To<MapConfig>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IScenicConfig>().To<ScenicConfig>().ToSingleton().CrossContext();
         }
     }
 }

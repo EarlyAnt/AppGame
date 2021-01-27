@@ -37,12 +37,12 @@ namespace AppGame.Config
                     ArrayList allNodes = xmlDoc.ToXml().Children;
                     foreach (SecurityElement xeResConfigs in allNodes)
                     {//根节点
-                        if (xeResConfigs.Tag == "Maps")
+                        if (xeResConfigs.Tag == "Scenics")
                         {//Plants点
                             ArrayList plantsNode = xeResConfigs.Children;
                             foreach (SecurityElement xePlant in plantsNode)
                             {//Plant
-                                if (xePlant.Tag == "Map")
+                                if (xePlant.Tag == "Scenic")
                                 {
                                     ScenicInfo mapInfo = new ScenicInfo()
                                     {

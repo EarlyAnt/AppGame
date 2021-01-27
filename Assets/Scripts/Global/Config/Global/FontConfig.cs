@@ -96,5 +96,13 @@ namespace AppGame.Config
         {
             return this.configs != null && this.configs.Count > 0 ? this.configs.Values.ToList() : null;
         }
+        /// <summary>
+        /// 获取配置文件是否已经加载完
+        /// </summary>
+        /// <returns></returns>
+        public bool IsLoaded()
+        {
+            return this.isLoaded;
+        }
     }
 }

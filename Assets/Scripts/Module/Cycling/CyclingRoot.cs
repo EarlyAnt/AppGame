@@ -6,7 +6,13 @@ namespace AppGame.Module.Cycling
     {
         void Awake()
         {
-            context = new CyclingContext(this);
+            this.context = new CyclingContext(this, strange.extensions.context.api.ContextStartupFlags.MANUAL_LAUNCH);
+        }
+
+        private void OnEnable()
+        {
+            if (this.context != null)
+                this.context.Launch();
         }
     }
 }

@@ -52,6 +52,7 @@ namespace AppGame.Module.Cycling
                        this.mapNode.Points[this.nodeIndex].position : Vector3.zero;
             }
         }
+        private ScenicNode scenicNode;
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
         {
@@ -133,7 +134,6 @@ namespace AppGame.Module.Cycling
         {
             if (this.nodeIndex + 1 < this.mapNode.Points.Count)
             {
-                this.nodeIndex += 1;
                 this.StopAllCoroutines();
                 this.StartCoroutine(this.MovePlayer(true));
             }
@@ -142,13 +142,14 @@ namespace AppGame.Module.Cycling
         {
             if (this.nodeIndex > 0)
             {
-                this.nodeIndex -= 1;
                 this.StopAllCoroutines();
                 this.StartCoroutine(this.MovePlayer(false));
             }
         }
         private IEnumerator MovePlayer(bool forward)
         {
+            if (this.scenicNode != null) this.scenicNode.Hide();
+
             if (this.nodeIndex < 0 || this.nodeIndex >= this.mapNode.Points.Count)
                 yield break;
 
@@ -165,6 +166,10 @@ namespace AppGame.Module.Cycling
                 pointNode = this.mapNode.Points[this.nodeIndex].GetComponent<MapPointNode>();
             }
             while (pointNode == null);
+            yield return new WaitForSeconds(0.5f);
+
+            this.scenicNode = this.mapNode.Points[this.nodeIndex].GetComponent<ScenicNode>();
+            if (this.scenicNode != null) this.scenicNode.Show();
             Debug.Log("stop");
         }
         private bool PointInEdge(Vector3 point)

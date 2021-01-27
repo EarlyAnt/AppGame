@@ -13,6 +13,12 @@ namespace AppGame.Module.GameStart
         /************************************************属性与变量命名************************************************/
         #region 注入接口
         [Inject]
+        public IFontConfig FontConfig { get; set; }
+        [Inject]
+        public ILanConfig LanConfig { get; set; }
+        [Inject]
+        public II18NConfig I18NConfig { get; set; }
+        [Inject]
         public IMapConfig MapConfig { get; set; }
         [Inject]
         public IScenicConfig ScenicConfig { get; set; }
@@ -52,13 +58,29 @@ namespace AppGame.Module.GameStart
         private IEnumerator ReadConfig(float endValue)
         {
             float startValue = 0f;
-            float stepValue = endValue / 2f;
+            float stepValue = endValue / 5f;
 
+            //read font config
+            this.FontConfig.Load();
+            yield return new WaitUntil(() => this.FontConfig.IsLoaded());
+            this.SetProgress(startValue += stepValue);
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            //read language config
+            this.LanConfig.Load();
+            yield return new WaitUntil(() => this.LanConfig.IsLoaded());
+            this.SetProgress(startValue += stepValue);
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            //read i18n config
+            this.I18NConfig.Load();
+            yield return new WaitUntil(() => this.I18NConfig.IsLoaded());
+            this.SetProgress(startValue += stepValue);
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            //read map config
             this.MapConfig.Load();
             yield return new WaitUntil(() => this.MapConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
-
+            //read scenic config
             this.ScenicConfig.Load();
             yield return new WaitUntil(() => this.ScenicConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);

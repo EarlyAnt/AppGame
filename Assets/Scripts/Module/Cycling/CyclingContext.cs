@@ -1,3 +1,4 @@
+using AppGame.Config;
 using AppGame.Util;
 using strange.extensions.command.api;
 using strange.extensions.command.impl;
@@ -9,10 +10,6 @@ namespace AppGame.Module.Cycling
 {
     public class CyclingContext : MVCSContext
     {
-        public CyclingContext(MonoBehaviour view) : base(view)
-        {
-        }
-
         public CyclingContext(MonoBehaviour view, ContextStartupFlags flags) : base(view, flags)
         {
         }
@@ -38,9 +35,6 @@ namespace AppGame.Module.Cycling
 
             //bind command
             commandBinder.Bind<StartSignal>().To<StartCommand>();
-
-            //bind injection
-            injectionBinder.Bind<IPrefabUtil>().To<PrefabUtil>().ToSingleton().CrossContext();
         }
     }
 }

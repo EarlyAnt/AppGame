@@ -283,5 +283,13 @@ namespace AppGame.Config
             //return this.GameDataHelper.GetObject<string>("Language");
             return AppGame.Config.LanConfig.Languages.ChineseSimplified;
         }
+        /// <summary>
+        /// 获取配置文件是否已经加载完
+        /// </summary>
+        /// <returns></returns>
+        public bool IsLoaded()
+        {
+            return this.isLoaded;
+        }
     }
 }

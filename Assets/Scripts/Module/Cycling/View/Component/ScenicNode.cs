@@ -1,6 +1,5 @@
 using AppGame.Config;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace AppGame.Module.Cycling
 {
@@ -10,22 +9,33 @@ namespace AppGame.Module.Cycling
         [Inject]
         public IScenicConfig ScenicConfig { get; set; }
         [Inject]
-        public II18NUtil I18NUtil { get; set; }
+        public II18NConfig I18NConfig { get; set; }
         [SerializeField]
-        private Image imageBox;
-        [SerializeField]
-        private Text textBox;
+        private ScenicCard scenicCard;
         /************************************************Unity方法与事件***********************************************/
-
+        protected override void Start()
+        {
+            base.Start();
+        }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+        }
         /************************************************自 定 义 方 法************************************************/
         public override void Show()
         {
-            //Todo: 从配置文件中读取要显示的图片，文字，及文字的国际化，显示卡片
+            ScenicInfo scenicInfo = this.ScenicConfig.GetScenic(this.ID);
+            if (scenicInfo == null)
+            {
+                Debug.LogErrorFormat("<><ScenicNode.Show>Error: can not find scenic named '{0}'", this.ID);
+                return;
+            }
+            this.scenicCard.Show(null, this.I18NConfig.GetText(scenicInfo.Text));
         }
 
         public override void Hide()
         {
-            throw new System.NotImplementedException();
+            this.scenicCard.Hide();
         }
     }
 }

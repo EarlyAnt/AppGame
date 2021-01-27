@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace AppGame.UI
 {
-    public class BaseView : View
+    public class BaseView : EventView
     {
         private List<Tweener> tweeners = new List<Tweener>();
 

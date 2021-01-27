@@ -24,7 +24,7 @@ namespace AppGame.Config
     /// <summary>
     /// 语言配置文件读取接口
     /// </summary>
-    public interface ILanConfig
+    public interface ILanConfig : IConfig
     {
         /// <summary>
         /// 加载语言配置数据

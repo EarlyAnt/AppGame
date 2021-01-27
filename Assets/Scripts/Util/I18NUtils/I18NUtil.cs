@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace AppGame.Util
 {
-    class I18NUtils : II18NUtil
+    class I18NUtil : II18NUtil
     {
         [Inject]
         public ILanConfig LanConfig { get; set; }//语言配置工具

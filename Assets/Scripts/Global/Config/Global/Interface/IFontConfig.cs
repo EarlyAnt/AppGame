@@ -5,7 +5,7 @@ namespace AppGame.Config
     /// <summary>
     /// 字体配置文件读取接口
     /// </summary>
-    public interface IFontConfig
+    public interface IFontConfig : IConfig
     {
         /// <summary>
         /// 加载字体配置数据
