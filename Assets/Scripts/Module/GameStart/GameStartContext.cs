@@ -1,3 +1,4 @@
+using AppGame.Config;
 using AppGame.Util;
 using strange.extensions.command.api;
 using strange.extensions.command.impl;
@@ -41,6 +42,9 @@ namespace AppGame.Module.GameStart
 
             //bind injection
             injectionBinder.Bind<IPrefabUtil>().To<PrefabUtil>().ToSingleton().CrossContext();
+
+            injectionBinder.Bind<IMapConfig>().To<MapConfig>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IScenicConfig>().To<ScenicConfig>().ToSingleton().CrossContext();
         }
     }
 }

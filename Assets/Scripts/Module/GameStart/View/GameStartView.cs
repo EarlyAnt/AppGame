@@ -1,3 +1,4 @@
+using AppGame.Config;
 using DG.Tweening;
 using strange.extensions.mediation.impl;
 using System.Collections;
@@ -10,6 +11,13 @@ namespace AppGame.Module.GameStart
     public class GameStartView : EventView
     {
         /************************************************属性与变量命名************************************************/
+        #region 注入接口
+        [Inject]
+        public IMapConfig MapConfig { get; set; }
+        [Inject]
+        public IScenicConfig ScenicConfig { get; set; }
+        #endregion
+        #region 页面UI组件
         [SerializeField]
         private Image progressBar;
         [SerializeField]
@@ -18,14 +26,16 @@ namespace AppGame.Module.GameStart
         private float durationMin = 3f;
         [SerializeField, Range(3f, 30f)]
         private float durationMax = 5f;
+        #endregion
+        #region 其他变量
         private Tweener tweener;
+        #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Start()
         {
             base.Start();
             this.StartCoroutine(this.Initialize());
         }
-
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -41,13 +51,34 @@ namespace AppGame.Module.GameStart
         //读取配置
         private IEnumerator ReadConfig(float endValue)
         {
-            bool complete = false;
-            this.tweener = this.progressBar.DOFillAmount(endValue, Random.Range(this.durationMin, this.durationMax));
-            this.tweener.onUpdate = () => { this.progressValue.text = string.Format("{0:f1}%", this.progressBar.fillAmount * 100); };
-            this.tweener.onComplete = () => { complete = true; };
-            yield return new WaitUntil(() => complete == true);
+            float startValue = 0f;
+            float stepValue = endValue / 2f;
+
+            this.MapConfig.Load();
+            yield return new WaitUntil(() => this.MapConfig.IsLoaded());
+            this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
+            this.ScenicConfig.Load();
+            yield return new WaitUntil(() => this.ScenicConfig.IsLoaded());
+            this.SetProgress(startValue += stepValue);
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
+            #region 测试代码
+            //bool complete = false;
+            //this.tweener = this.progressBar.DOFillAmount(endValue, Random.Range(this.durationMin, this.durationMax));
+            //this.tweener.onUpdate = () => { this.progressValue.text = string.Format("{0:f1}%", this.progressBar.fillAmount * 100); };
+            //this.tweener.onComplete = () => { complete = true; };
+            //yield return new WaitUntil(() => complete == true);
+            //yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            #endregion
             Debug.Log("<><GameStartView.ReadConfig>Read config complete...");
+        }
+        //设置进度条
+        private void SetProgress(float progressValue)
+        {
+            this.progressBar.fillAmount = progressValue;
+            this.progressValue.text = string.Format("{0:f1}%", this.progressBar.fillAmount * 100);
         }
         //加载场景
         private IEnumerator LoadScene(float startValue, float endValue)
