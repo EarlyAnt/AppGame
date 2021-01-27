@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Name="Gululu" Version="">
+  <Maps>
+    <Map ID="320101" Name="江苏01" ProvinceID="32" ProvinceName="江苏" CityID="3201" CityName="南京" />
+  </Maps>
+</Project>
