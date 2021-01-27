@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Name="Gululu" Version="">
+  <ResConfigs>
+    <!--每种语言的资源配置都是按照文本，图片，动画，音频的顺序进行组织-->
+    <!--图片和音频按照目录区分不同语言；动画按照动画名称区分不同语言-->
+    <ResConfig Language="CHS" Des="中文简体">
+      <!--文本配置-->
+      <Text Key="中山陵介绍" Value="孙中山先生的陵墓，被誉为“中国近代建筑史上的第一陵”。从空中往下看，像一座平卧在绿绒毯上的“自由钟”。|HKHB" />
+      <Text Key="总统府介绍" Value="总统府是国民政府中央所在地，见证着太平天国与两江总督衙门的兴衰，迄今已有600多年历史。|HKHB" />
+      <Text Key="夫子庙介绍" Value="为供奉祭祀孔子之地，是中国第一所国家最高学府，也是中国四大文庙，是明清时期南京的文教中心。|HKHB" />
+      <Text Key="瞻园介绍" Value="瞻园是南京现存历史最久的一座园林，始建于明嘉靖年间。布局典雅精致，有宏伟壮观的明清古建筑群，陡峭峻拔的假山。|HKHB" />
+      <Text Key="玄武湖公园介绍" Value="玄武湖是中国最大的皇家园林湖泊，与嘉兴南湖、杭州西湖并称“江南三大名湖”，荟萃了许多的名胜古迹。|HKHB" />
+      <Text Key="明孝陵介绍" Value="明太祖朱元璋与马皇后的陵墓，宏伟壮观，是我国古代最大的帝王陵寝之一。陵园布局气魄恢宏，技艺高超，神道长达2400米。|HKHB" />
+      <Text Key="美龄宫介绍" Value="原为国民政府主席的寓所，蒋介石、宋美龄常在此居住，主体建筑是一座三层重檐山式宫殿，是南京最壮观、最典雅的建筑之一。|HKHB" />
+      <Text Key="栖霞山介绍" Value="栖霞山风景迷人，名胜古迹遍布诸峰，被誉为“金陵第一名秀山”，尤其是深秋的栖霞，枫林漫山红遍。|HKHB" />
+      <Text Key="南京大屠杀纪念馆介绍" Value="一处以史料文物、建筑、雕塑、影视等综合手法，全面展示“南京大屠杀”的专史陈列馆，位于原日军大屠杀遗址之一的万人坑。|HKHB" />
+
+      <!--图片配置-->
+      <Image Key="PetPageTitle" Value="Texture/PetPage/pet_title_CHS" />
+
+      <!--动画配置-->
+      <Animation Key="CommingSoon" Value="CommingSoon_CHS" />
+
+      <!--音频配置-->
+      <Audio Key="NoviceGuide" Value="NoviceGuide/NoviceGuide_CHS" />
+    </ResConfig>
+
+    <ResConfig Language="CHT" Des="中文繁体">
+      <!--文本配置-->
+      <Text Key="中山陵介绍" Value="孫中山先生的陵墓，被譽為「中國近代建築史上的第一陵」。從空中往下看，像一座平臥在綠絨毯上的「自由鐘」。|DFPT" />
+      <Text Key="总统府介绍" Value="總統府是國民政府中央所在地，見證着太平天國與兩江總督衙門的興衰，迄今已有600多年歷史。|DFPT" />
+      <Text Key="夫子庙介绍" Value="為供奉祭祀孔子之地，是中國第一所國家最高學府，也是中國四大文廟，是明清時期南京的文教中心。|DFPT" />
+      <Text Key="瞻园介绍" Value="瞻園是南京現存歷史最久的一座園林，始建於明嘉靖年間。布局典雅精緻，有宏偉壯觀的明清古建築群，陡峭峻拔的假山。|DFPT" />
+      <Text Key="玄武湖公园介绍" Value="玄武湖是中國最大的皇家園林湖泊，與嘉興南湖、杭州西湖並稱「江南三大名湖」，薈萃了許多的名勝古蹟。|DFPT" />
+      <Text Key="明孝陵介绍" Value="明太祖朱元璋與馬皇后的陵墓，宏偉壯觀，是我國古代最大的帝王陵寢之一。陵園布局氣魄恢宏，技藝高超，神道長達2400米。|DFPT" />
+      <Text Key="美龄宫介绍" Value="原為國民政府主席的寓所，蔣介石、宋美齡常在此居住，主體建築是一座三層重檐山式宮殿，是南京最壯觀、最典雅的建築之一。|DFPT" />
+      <Text Key="栖霞山介绍" Value="棲霞山風景迷人，名勝古蹟遍布諸峰，被譽為「金陵第一名秀山」，尤其是深秋的棲霞，楓林漫山紅遍。|DFPT" />
+      <Text Key="南京大屠杀纪念馆介绍" Value="一處以史料文物、建築、雕塑、影視等綜合手法，全面展示「南京大屠殺」的專史陳列館，位於原日軍大屠殺遺址之一的萬人坑。|DFPT" />
+
+      <!--图片配置-->
+      <Image Key="PetPageTitle" Value="Texture/PetPage/pet_title_CHT" />
+
+      <!--动画配置-->
+      <Animation Key="CommingSoon" Value="CommingSoon_CHT" />
+
+      <!--音频配置-->
+      <Audio Key="NoviceGuide" Value="NoviceGuide/NoviceGuide_CHS" />
+    </ResConfig>
+
+    <ResConfig Language="EN" DES="英文">
+      <!--文本配置-->
+      <Text Key="该喝水啦" Value="Time to drink|DFPT" />
+
+      <!--图片配置-->
+      <Image Key="PetPageTitle" Value="Texture/PetPage/pet_title_EN" />
+
+      <!--动画配置-->
+      <Animation Key="CommingSoon" Value="CommingSoon_EN" />
+
+      <!--音频配置-->
+      <Audio Key="NoviceGuide" Value="NoviceGuide/NoviceGuide_EN" />
+    </ResConfig>
+
+    <ResConfig Language="JP" DES="日文">
+      <!--文本配置-->
+      <Text Key="该喝水啦" Value="水を飲もう|Pomeranian" />
+
+      <!--图片配置-->
+      <Image Key="PetPageTitle" Value="Texture/PetPage/pet_title_JP" />
+
+      <!--动画配置-->
+      <Animation Key="CommingSoon" Value="CommingSoon_JP" />
+
+      <!--音频配置-->
+      <Audio Key="NoviceGuide" Value="NoviceGuide/NoviceGuide_JP" />
+    </ResConfig>
+  </ResConfigs>
+</Project>
