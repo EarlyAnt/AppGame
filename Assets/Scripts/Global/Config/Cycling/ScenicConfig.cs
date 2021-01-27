@@ -1,0 +1,121 @@
+﻿using Mono.Xml;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Security;
+using UnityEngine;
+
+namespace AppGame.Config
+{
+    /// <summary>
+    /// 景点配置读取类
+    /// </summary>
+    public class ScenicConfig : BaseConfig, IScenicConfig
+    {
+        /************************************************自  定  义  类************************************************/
+
+        /************************************************属性与变量命名************************************************/
+        private List<ScenicInfo> maps = new List<ScenicInfo>();
+        /************************************************私  有  方  法************************************************/
+        //读取语言配置文件
+        private void ReadConfig(WWW www)
+        {
+            if (!string.IsNullOrEmpty(www.error))
+            {
+                Debug.LogErrorFormat("<><ScenicConfig.ReadConfig>Error: {0}" + www.error);
+                return;
+            }
+
+            if (www.isDone && (www.error == null || www.error.Length == 0))
+            {
+                SecurityParser xmlDoc = new SecurityParser();
+                Debug.LogFormat("<><ScenicConfig.ReadConfig>Content: {0}", www.text);
+
+                xmlDoc.LoadXml(www.text);
+                ArrayList allNodes = xmlDoc.ToXml().Children;
+                foreach (SecurityElement xeResConfigs in allNodes)
+                {//根节点
+                    if (xeResConfigs.Tag == "Maps")
+                    {//Plants点
+                        ArrayList plantsNode = xeResConfigs.Children;
+                        foreach (SecurityElement xePlant in plantsNode)
+                        {//Plant
+                            if (xePlant.Tag == "Map")
+                            {
+                                try
+                                {
+                                    ScenicInfo mapInfo = new ScenicInfo()
+                                    {
+                                        ID = xePlant.Attribute("ID"),
+                                        Name = xePlant.Attribute("Name"),
+                                        MapID = xePlant.Attribute("Name"),
+                                        Image = xePlant.Attribute("Image"),
+                                        Text = xePlant.Attribute("Text")
+                                    };
+                                    this.maps.Add(mapInfo);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Debug.LogErrorFormat("<><ScenicConfig.ReadConfig>Error: {0}", ex.Message);
+                                }
+                            }
+                        }
+                    }
+                }
+                Debug.Log("<><ScenicConfig.ReadConfig>Load complete");
+                this.isLoaded = true;
+            }
+        }
+        /************************************************公  共  方  法************************************************/
+        /// <summary>
+        /// 加载景点数据
+        /// </summary>
+        public void Load()
+        {
+            if (this.isLoaded)
+                return;
+            this.maps.Clear();
+            ConfigLoader.Instance.LoadConfig("Config/Cycling/Scenic.xml", ReadConfig);
+        }
+        /// <summary>
+        /// 判断是否包含指定的景点
+        /// </summary>
+        /// <param name="scenicID">指定的景点的ID</param>
+        /// <returns></returns>
+        public bool HasScenic(string scenicID)
+        {
+            if (this.maps != null)
+                return this.maps.Exists(t => t.ID == scenicID);
+            else
+                return false;
+        }
+        /// <summary>
+        /// 获取所有景点
+        /// </summary>
+        /// <returns></returns>
+        public List<ScenicInfo> GetAllScenics()
+        {
+            return this.maps;
+        }
+        /// <summary>
+        /// 获取指定景点
+        /// </summary>
+        /// <param name="scenicID">景点ID</param>
+        /// <returns></returns>
+        public ScenicInfo GetScenic(string scenicID)
+        {
+            if (this.maps != null)
+                return this.maps.Find(t => t.ID == scenicID);
+            else
+                return null;
+        }
+        /// <summary>
+        /// 获取配置文件是否已经加载完
+        /// </summary>
+        /// <returns></returns>
+        public bool IsLoaded()
+        {
+            return this.isLoaded;
+        }
+    }
+}
