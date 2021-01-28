@@ -2324,6 +2324,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1517289409620272565}
+  - component: {fileID: 1279589157}
   m_Layer: 5
   m_Name: Player
   m_TagString: Untagged
@@ -2351,6 +2352,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1279589157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364308035712669579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5056a2b6c6cfa145b686ea57956c44c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapCanvas: {fileID: 1673776819}
+  canvasScale: 0.03
+  mapNode: {fileID: 1166681447}
+  player: {fileID: 1517289409620272565}
+  camera: {fileID: 34381790}
+  step: 0.5
+  lerp: 0.5
+  showGizmos: 0
 --- !u!1 &406682165973292651
 GameObject:
   m_ObjectHideFlags: 0
@@ -6094,16 +6115,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 500aa16dc958038439410503309475a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showGizmos: 1
+  player: {fileID: 1279589157}
   mask: {fileID: 1299863575}
-  mapCanvas: {fileID: 1673776819}
-  canvasScale: 0.025
   canvasGroup: {fileID: 191638086}
-  mapNode: {fileID: 1166681447}
-  player: {fileID: 1517289409620272565}
-  camera: {fileID: 34381789}
-  step: 0.5
-  lerp: 0.5
 --- !u!1 &6653416620544601233
 GameObject:
   m_ObjectHideFlags: 0

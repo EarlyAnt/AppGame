@@ -6,15 +6,22 @@ using UnityEngine.UI;
 
 namespace AppGame.Module.Cycling
 {
-    public class CyclingView : BaseView
+    public abstract class BasePlayer : BaseView
     {
         /************************************************属性与变量命名************************************************/
+        #region 注入接口
+
+        #endregion
+        #region 页面UI组件
         [SerializeField]
-        private Player player;
+        protected MapNode mapNode;
         [SerializeField]
-        private Image mask;
-        [SerializeField]
-        private CanvasGroup canvasGroup;
+        protected Transform player;
+
+        #endregion
+        #region 其他变量
+        private int nodeIndex;
+        #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
         {
@@ -30,21 +37,12 @@ namespace AppGame.Module.Cycling
             base.OnDestroy();
         }
         /************************************************自 定 义 方 法************************************************/
+        //初始化
         private void Initialize()
         {
-            this.DelayInvoke(() =>
-            {
-                this.mask.DOFade(0f, 1f);
-                this.canvasGroup.DOFade(1f, 1f);
-            }, 1f);
+            this.player.position = this.mapNode.Points[this.nodeIndex].position;
         }
-        public void MoveForward()
-        {
-            this.player.MoveForward();
-        }
-        public void MoveBack()
-        {
-            this.player.MoveBack();
-        }
+        //移动到指定位置
+        public abstract void MoveToNode(string nodeID);
     }
 }
