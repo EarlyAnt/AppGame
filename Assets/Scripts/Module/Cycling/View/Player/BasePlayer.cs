@@ -1,8 +1,5 @@
 using AppGame.UI;
-using DG.Tweening;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace AppGame.Module.Cycling
 {
@@ -17,10 +14,19 @@ namespace AppGame.Module.Cycling
         protected MapNode mapNode;
         [SerializeField]
         protected Transform player;
-
+        [SerializeField, Range(0f, 5f)]
+        protected float step;
         #endregion
         #region 其他变量
-        private int nodeIndex;
+        protected int nodeIndex;
+        protected Vector3 destination
+        {
+            get
+            {
+                return this.mapNode != null && this.mapNode.Points != null && this.mapNode.Points.Count > 0 ?
+                       this.mapNode.Points[this.nodeIndex].position : Vector3.zero;
+            }
+        }
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -38,11 +44,11 @@ namespace AppGame.Module.Cycling
         }
         /************************************************自 定 义 方 法************************************************/
         //初始化
-        private void Initialize()
+        protected virtual void Initialize()
         {
             this.player.position = this.mapNode.Points[this.nodeIndex].position;
         }
         //移动到指定位置
-        public abstract void MoveToNode(string nodeID);
+        public abstract void MoveToNode(string nodeID, bool lerp = false);
     }
 }

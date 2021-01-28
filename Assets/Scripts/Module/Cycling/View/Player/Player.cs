@@ -1,4 +1,3 @@
-using AppGame.UI;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
@@ -20,26 +19,15 @@ namespace AppGame.Module.Cycling
         private float canvasScale = 0.04f;
         [SerializeField]
         private Transform camera;
-        [SerializeField]
-        private float step;
         [SerializeField, Range(0f, 5f)]
         private float lerp = 0.5f;
         [SerializeField]
         private bool showGizmos;
         #endregion
         #region 其他变量
-        private int nodeIndex;
         private CameraEdge cameraEdge;
         private RectTransform mapRectTransform;
         private bool inRange;
-        private Vector3 destination
-        {
-            get
-            {
-                return this.mapNode != null && this.mapNode.Points != null && this.mapNode.Points.Count > 0 ?
-                       this.mapNode.Points[this.nodeIndex].position : Vector3.zero;
-            }
-        }
         private ScenicNode scenicNode;
         #endregion
         /************************************************Unity方法与事件***********************************************/
@@ -82,9 +70,9 @@ namespace AppGame.Module.Cycling
         }
         /************************************************自 定 义 方 法************************************************/
         //初始化
-        private void Initialize()
+        protected override void Initialize()
         {
-            this.player.position = this.mapNode.Points[this.nodeIndex].position;
+            base.Initialize();
             Vector3 playerPos = this.player.position;
             playerPos.z = this.camera.position.z;
             this.camera.position = playerPos;
@@ -132,10 +120,10 @@ namespace AppGame.Module.Cycling
 
             this.scenicNode = this.mapNode.Points[this.nodeIndex].GetComponent<ScenicNode>();
             if (this.scenicNode != null) this.scenicNode.Show();
-            Debug.Log("stop");
+            Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
         //移动到指定位置
-        public override void MoveToNode(string nodeID)
+        public override void MoveToNode(string nodeID, bool lerp = false)
         {
             int index = this.mapNode.Points.FindIndex(t => t.name == nodeID);
             if (index >= 0 && index < this.mapNode.Points.Count)
@@ -146,7 +134,7 @@ namespace AppGame.Module.Cycling
             }
             else
             {
-                Debug.LogErrorFormat("<><Player.SetPosition>Error: can not find the node named '{0}'", nodeID);
+                Debug.LogErrorFormat("<><Player.MoveToNode>Error: can not find the node named '{0}'", nodeID);
             }
         }
         //获取相机的合理位置(不超出地图)
