@@ -33,6 +33,7 @@ namespace AppGame.Module.Cycling
         private float lerp = 0.5f;
         private int nodeIndex;
         private CameraEdge cameraEdge;
+        private RectTransform mapRectTransform;
         private bool inRange;
         private Vector3 destination
         {
@@ -60,8 +61,15 @@ namespace AppGame.Module.Cycling
         }
         private void Update()
         {
-            if (this.cameraEdge == null) return;
-
+            //计算相机可视区域的大小
+            this.cameraEdge = this.CameraUtil.GetCameraEdge(this.mapNode.transform, this.camera.transform.position, this.player.position);
+            //计算相机可视区域是否超过地图
+            this.mapRectTransform = this.mapNode.GetComponent<RectTransform>();
+            this.inRange = this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopLeft, this.canvasScale) &&
+                           this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopRight, this.canvasScale) &&
+                           this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
+                           this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomLeft, this.canvasScale);
+            //根据玩家的位置调整相机的位置，使相机可视区域不超出地图
             Vector3 playerPos = this.player.position;
             playerPos.z = this.camera.transform.position.z;
             if (!this.inRange)
@@ -75,19 +83,12 @@ namespace AppGame.Module.Cycling
         private void OnDrawGizmos()
         {
             if (!this.showGizmos) return;
-            this.cameraEdge = this.CameraUtil.GetCameraEdge(this.mapNode.transform, this.camera.transform.position, this.player.position);
 
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(this.cameraEdge.TopLeft, this.cameraEdge.TopRight);
             Gizmos.DrawLine(this.cameraEdge.TopRight, this.cameraEdge.BottomRight);
             Gizmos.DrawLine(this.cameraEdge.BottomRight, this.cameraEdge.BottomLeft);
             Gizmos.DrawLine(this.cameraEdge.BottomLeft, this.cameraEdge.TopLeft);
-
-            RectTransform mapRectTransform = this.mapNode.GetComponent<RectTransform>();
-            this.inRange = this.CameraUtil.PointInEdge(mapRectTransform, this.cameraEdge.TopLeft, this.canvasScale) &&
-                           this.CameraUtil.PointInEdge(mapRectTransform, this.cameraEdge.TopRight, this.canvasScale) &&
-                           this.CameraUtil.PointInEdge(mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
-                           this.CameraUtil.PointInEdge(mapRectTransform, this.cameraEdge.BottomLeft, this.canvasScale);
         }
         /************************************************自 定 义 方 法************************************************/
         private void Initialize()
