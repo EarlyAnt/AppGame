@@ -9,6 +9,8 @@ namespace AppGame.Module.Cycling
     public class CyclingView : BaseView
     {
         /************************************************属性与变量命名************************************************/
+        [Inject]
+        public ICameraUtil CameraUtil { get; set; }
         [SerializeField]
         private bool showGizmos;
         [SerializeField]
@@ -30,19 +32,7 @@ namespace AppGame.Module.Cycling
         [SerializeField, Range(0f, 5f)]
         private float lerp = 0.5f;
         private int nodeIndex;
-        private Vector3 top;
-        private Vector3 bottom;
-        private Vector3 left;
-        private Vector3 right;
-
-        private Vector3 topLeft;
-        private Vector3 topRight;
-        private Vector3 bottomLeft;
-        private Vector3 bottomRight;
-        private float frustumHeight;
-        private float frustumWidth;
-        private float fieldOfViewVertical = 60f;
-        private float fieldOfViewHorizontal = 35.98339f;
+        private CameraEdge cameraEdge;
         private bool inRange;
         private Vector3 destination
         {
@@ -70,51 +60,34 @@ namespace AppGame.Module.Cycling
         }
         private void Update()
         {
+            if (this.cameraEdge == null) return;
+
             Vector3 playerPos = this.player.position;
             playerPos.z = this.camera.transform.position.z;
             if (!this.inRange)
             {
                 Image image = this.mapNode.GetComponent<Image>();
-                playerPos.x = Mathf.Clamp(playerPos.x, -image.rectTransform.sizeDelta.x * this.canvasScale / 2f + this.frustumWidth / 2f, image.rectTransform.sizeDelta.x * this.canvasScale / 2f - this.frustumWidth / 2f);
-                playerPos.y = Mathf.Clamp(playerPos.y, -image.rectTransform.sizeDelta.y * this.canvasScale / 2f + this.frustumHeight / 2f, image.rectTransform.sizeDelta.y * this.canvasScale / 2f - this.frustumHeight / 2f);
+                playerPos.x = Mathf.Clamp(playerPos.x, -image.rectTransform.sizeDelta.x * this.canvasScale / 2f + this.cameraEdge.Width / 2f, image.rectTransform.sizeDelta.x * this.canvasScale / 2f - this.cameraEdge.Width / 2f);
+                playerPos.y = Mathf.Clamp(playerPos.y, -image.rectTransform.sizeDelta.y * this.canvasScale / 2f + this.cameraEdge.Height / 2f, image.rectTransform.sizeDelta.y * this.canvasScale / 2f - this.cameraEdge.Height / 2f);
             }
             this.camera.transform.DOMove(playerPos, this.lerp);
         }
         private void OnDrawGizmos()
         {
             if (!this.showGizmos) return;
-            Vector3 localPos = this.mapNode.transform.InverseTransformPoint(this.camera.transform.position);
-            float dis = Vector3.Dot(localPos, Vector3.forward);
-            Vector3 vectorNormal = Vector3.forward * dis;
-            localPos = localPos - vectorNormal;
-            Vector3 projection = this.mapNode.transform.TransformPoint(localPos);
-
-            float distance = Vector3.Distance(this.camera.transform.position, projection);
-            this.frustumHeight = 2.0f * distance * Mathf.Tan(this.fieldOfViewVertical * 0.5f * Mathf.Deg2Rad);
-            this.frustumWidth = 2.0f * distance * Mathf.Tan(this.fieldOfViewHorizontal * 0.5f * Mathf.Deg2Rad);
-            Debug.LogFormat("distance: {0}, height: {1}, width: {2}", distance, frustumHeight, frustumWidth);
-
-            this.top = new Vector3(this.player.transform.position.x, this.player.position.y + frustumHeight / 2, this.mapNode.transform.position.z);
-            this.bottom = new Vector3(this.player.transform.position.x, this.player.position.y - frustumHeight / 2, this.mapNode.transform.position.z);
-            this.left = new Vector3(this.player.position.x + frustumWidth / 2, this.player.transform.position.y, this.mapNode.transform.position.z);
-            this.right = new Vector3(this.player.position.x - frustumWidth / 2, this.player.transform.position.y, this.mapNode.transform.position.z);
-
-            this.topLeft = new Vector3(this.left.x, this.top.y, this.top.z);
-            this.topRight = new Vector3(this.right.x, this.top.y, this.top.z);
-            this.bottomLeft = new Vector3(this.left.x, this.bottom.y, this.bottom.z);
-            this.bottomRight = new Vector3(this.right.x, this.bottom.y, this.bottom.z);
+            this.cameraEdge = this.CameraUtil.GetCameraEdge(this.mapNode.transform, this.camera.transform.position, this.player.position);
 
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(this.topLeft, this.topRight);
-            Gizmos.DrawLine(this.topRight, this.bottomRight);
-            Gizmos.DrawLine(this.bottomRight, this.bottomLeft);
-            Gizmos.DrawLine(this.bottomLeft, this.topLeft);
+            Gizmos.DrawLine(this.cameraEdge.TopLeft, this.cameraEdge.TopRight);
+            Gizmos.DrawLine(this.cameraEdge.TopRight, this.cameraEdge.BottomRight);
+            Gizmos.DrawLine(this.cameraEdge.BottomRight, this.cameraEdge.BottomLeft);
+            Gizmos.DrawLine(this.cameraEdge.BottomLeft, this.cameraEdge.TopLeft);
 
-            this.inRange = this.PointInEdge(this.topLeft) && this.PointInEdge(this.topRight) &&
-                           this.PointInEdge(this.bottomLeft) && this.PointInEdge(this.bottomRight);
-
-            Gizmos.color = inRange ? Color.cyan : Color.red;
-            Gizmos.DrawSphere(projection, 9f);
+            RectTransform mapRectTransform = this.mapNode.GetComponent<RectTransform>();
+            this.inRange = this.CameraUtil.PointInEdge(mapRectTransform, this.cameraEdge.TopLeft, this.canvasScale) &&
+                           this.CameraUtil.PointInEdge(mapRectTransform, this.cameraEdge.TopRight, this.canvasScale) &&
+                           this.CameraUtil.PointInEdge(mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
+                           this.CameraUtil.PointInEdge(mapRectTransform, this.cameraEdge.BottomLeft, this.canvasScale);
         }
         /************************************************自 定 义 方 法************************************************/
         private void Initialize()
@@ -171,17 +144,6 @@ namespace AppGame.Module.Cycling
             this.scenicNode = this.mapNode.Points[this.nodeIndex].GetComponent<ScenicNode>();
             if (this.scenicNode != null) this.scenicNode.Show();
             Debug.Log("stop");
-        }
-        private bool PointInEdge(Vector3 point)
-        {
-            Image image = this.mapNode.GetComponent<Image>();
-            if (point.x >= -image.rectTransform.sizeDelta.x * this.canvasScale / 2f &&
-                point.x <= image.rectTransform.sizeDelta.x * this.canvasScale / 2f &&
-                point.y >= -image.rectTransform.sizeDelta.y * this.canvasScale / 2f &&
-                point.y <= image.rectTransform.sizeDelta.y * this.canvasScale / 2f)
-                return true;
-            else
-                return false;
         }
     }
 }

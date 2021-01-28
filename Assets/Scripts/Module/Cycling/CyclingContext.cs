@@ -35,6 +35,9 @@ namespace AppGame.Module.Cycling
 
             //bind command
             commandBinder.Bind<StartSignal>().To<StartCommand>();
+
+            //bind injection
+            injectionBinder.Bind<ICameraUtil>().To<CameraUtil>().ToSingleton();
         }
     }
 }
