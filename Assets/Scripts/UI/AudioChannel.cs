@@ -10,15 +10,15 @@ namespace AppGame.UI
     public class AudioChannel : MonoBehaviour
     {
         [SerializeField]
-        private AudioPlayerTypes type;
+        private AudioChannelTypes type;
         [SerializeField]
         private AudioSource audioSource;
 
-        public AudioPlayerTypes Type { get { return this.type; } }
-        public AudioSource Player { get { return this.audioSource; } }
+        public AudioChannelTypes Type { get { return this.type; } }
+        public AudioSource AudioSource { get { return this.audioSource; } }
     }
 
-    public enum AudioPlayerTypes
+    public enum AudioChannelTypes
     {
         Bgm = 0,
         AudioClip = 1

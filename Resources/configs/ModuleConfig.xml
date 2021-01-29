@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Name="Gululu" Version="">
+  <Modules>
+    <Module Name="PetDress" Desc="换装页">
+      <File Name="cash" Path="PetDress/View/cash" Type="Image" Enable="1" />
+      <File Name="check" Path="PetDress/View/check" Type="Image" Enable="1" />
+      <File Name="clock" Path="PetDress/View/clock" Type="Image" Enable="1" />
+      <File Name="code_bg" Path="PetDress/View/code_bg" Type="Image" Enable="1" />
+      <File Name="coin" Path="PetDress/View/coin" Type="Image" Enable="1" />
+      <File Name="coin_bg" Path="PetDress/View/coin_bg" Type="Image" Enable="1" />
+    </Module>
+  </Modules>
+</Project>

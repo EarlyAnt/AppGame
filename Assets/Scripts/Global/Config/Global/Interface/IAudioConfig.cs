@@ -29,6 +29,7 @@ namespace AppGame.Config
         public string Name { get; set; }
         public string Storage { get; set; }
         public string Des { get; set; }
+        public string Module { get { return "Common"; } }
         public List<AudioFile> Files { get; set; }
         public Audio() { this.Files = new List<AudioFile>(); }
     }

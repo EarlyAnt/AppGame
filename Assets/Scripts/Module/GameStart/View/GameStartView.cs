@@ -21,6 +21,8 @@ namespace AppGame.Module.GameStart
         [Inject]
         public IAudioConfig AudioConfig { get; set; }
         [Inject]
+        public IModuleConfig ModuleConfig { get; set; }
+        [Inject]
         public IMapConfig MapConfig { get; set; }
         [Inject]
         public IScenicConfig ScenicConfig { get; set; }
@@ -60,33 +62,44 @@ namespace AppGame.Module.GameStart
         private IEnumerator ReadConfig(float endValue)
         {
             float startValue = 0f;
-            float stepValue = endValue / 6f;
+            float stepValue = endValue / 7f;
 
             //read font config
             this.FontConfig.Load();
             yield return new WaitUntil(() => this.FontConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
             //read language config
             this.LanConfig.Load();
             yield return new WaitUntil(() => this.LanConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
             //read i18n config
             this.I18NConfig.Load();
             yield return new WaitUntil(() => this.I18NConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
             //read audio config
             this.AudioConfig.Load();
             yield return new WaitUntil(() => this.AudioConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
+            //read module config
+            this.ModuleConfig.Load();
+            yield return new WaitUntil(() => this.ModuleConfig.IsLoaded());
+            this.SetProgress(startValue += stepValue);
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
             //read map config
             this.MapConfig.Load();
             yield return new WaitUntil(() => this.MapConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
             //read scenic config
             this.ScenicConfig.Load();
             yield return new WaitUntil(() => this.ScenicConfig.IsLoaded());
