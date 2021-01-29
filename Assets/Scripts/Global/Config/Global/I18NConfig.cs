@@ -54,26 +54,26 @@ namespace AppGame.Config
                                     {
                                         ResConfig resConfig = new ResConfig() { Language = language };
                                         ArrayList elementNodes = xeResConfig.Children;
-                                        foreach (SecurityElement xeText in elementNodes)
+                                        foreach (SecurityElement xeElement in elementNodes)
                                         {
-                                            if (xeText.Tag == "Text")
+                                            if (xeElement.Tag == "Text")
                                             {//TextElement节点
-                                                TextElement textElement = new TextElement() { Key = xeText.Attribute("Key"), Value = xeText.Attribute("Value").Replace("\\n", "\n") };
+                                                TextElement textElement = new TextElement() { Key = xeElement.Attribute("Key"), Value = xeElement.Attribute("Value").Replace("\\n", "\n") };
                                                 resConfig.TextElements.Add(textElement);
                                             }
-                                            else if (xeText.Tag == "Image")
+                                            else if (xeElement.Tag == "Image")
                                             {//ImageElement节点
-                                                ImageElement imageElement = new ImageElement() { Key = xeText.Attribute("Key"), Value = xeText.Attribute("Value") };
+                                                ImageElement imageElement = new ImageElement() { Key = xeElement.Attribute("Key"), Value = xeElement.Attribute("Value") };
                                                 resConfig.ImageElements.Add(imageElement);
                                             }
-                                            else if (xeText.Tag == "Animation")
+                                            else if (xeElement.Tag == "Animation")
                                             {//AnimationElement节点
-                                                AnimationElement animationElement = new AnimationElement() { Key = xeText.Attribute("Key"), Value = xeText.Attribute("Value") };
+                                                AnimationElement animationElement = new AnimationElement() { Key = xeElement.Attribute("Key"), Value = xeElement.Attribute("Value") };
                                                 resConfig.AnimationElements.Add(animationElement);
                                             }
-                                            else if (xeText.Tag == "Audio")
+                                            else if (xeElement.Tag == "Audio")
                                             {//AudioElement节点
-                                                AudioElement audioElement = new AudioElement() { Key = xeText.Attribute("Key"), Value = xeText.Attribute("Value") };
+                                                AudioElement audioElement = new AudioElement() { Key = xeElement.Attribute("Key"), Value = xeElement.Attribute("Value") };
                                                 resConfig.AudioElements.Add(audioElement);
                                             }
                                         }

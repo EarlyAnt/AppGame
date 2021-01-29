@@ -72,7 +72,7 @@ namespace AppGame.Config
                                         Text = xeLanguage.Attribute("Text"),
                                         Default = Convert.ToBoolean(xeLanguage.Attribute("Default"))
                                     };
-                                    configs.Add(language.Name, language);
+                                    this.configs.Add(language.Name, language);
                                 }
                             }
                         }

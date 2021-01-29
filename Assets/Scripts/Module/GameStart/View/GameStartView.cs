@@ -19,6 +19,8 @@ namespace AppGame.Module.GameStart
         [Inject]
         public II18NConfig I18NConfig { get; set; }
         [Inject]
+        public IAudioConfig AudioConfig { get; set; }
+        [Inject]
         public IMapConfig MapConfig { get; set; }
         [Inject]
         public IScenicConfig ScenicConfig { get; set; }
@@ -58,7 +60,7 @@ namespace AppGame.Module.GameStart
         private IEnumerator ReadConfig(float endValue)
         {
             float startValue = 0f;
-            float stepValue = endValue / 5f;
+            float stepValue = endValue / 6f;
 
             //read font config
             this.FontConfig.Load();
@@ -73,6 +75,11 @@ namespace AppGame.Module.GameStart
             //read i18n config
             this.I18NConfig.Load();
             yield return new WaitUntil(() => this.I18NConfig.IsLoaded());
+            this.SetProgress(startValue += stepValue);
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            //read audio config
+            this.AudioConfig.Load();
+            yield return new WaitUntil(() => this.AudioConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
             //read map config

@@ -36,16 +36,16 @@ namespace AppGame.Config
 
                     xmlDoc.LoadXml(www.text);
                     ArrayList allNodes = xmlDoc.ToXml().Children;
-                    foreach (SecurityElement xeLanguages in allNodes)
+                    foreach (SecurityElement xeFonts in allNodes)
                     {
-                        if (xeLanguages.Tag == "Fonts")
+                        if (xeFonts.Tag == "Fonts")
                         {
-                            ArrayList languageNodes = xeLanguages.Children;
-                            foreach (SecurityElement xeLanguage in languageNodes)
+                            ArrayList fontNodes = xeFonts.Children;
+                            foreach (SecurityElement xeFont in fontNodes)
                             {
-                                if (xeLanguage.Tag == "Font")
+                                if (xeFont.Tag == "Font")
                                 {
-                                    configs.Add(xeLanguage.Attribute("Name"), xeLanguage.Attribute("FullName"));
+                                    this.configs.Add(xeFont.Attribute("Name"), xeFont.Attribute("FullName"));
                                 }
                             }
                         }

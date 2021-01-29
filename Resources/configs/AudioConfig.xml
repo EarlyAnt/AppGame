@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Name="Gululu" Version="">
+  <Audios>
+    <Audio Name="Welcome" Storage="Remote" Des="欢迎音效">
+      <File Path="WangZheRongYao" />
+    </Audio>
+  </Audios>
+</Project>

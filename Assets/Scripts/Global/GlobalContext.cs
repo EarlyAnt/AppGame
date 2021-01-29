@@ -32,6 +32,7 @@ namespace AppGame.Global
             injectionBinder.Bind<IFontConfig>().To<FontConfig>().ToSingleton().CrossContext();
             injectionBinder.Bind<ILanConfig>().To<LanConfig>().ToSingleton().CrossContext();
             injectionBinder.Bind<II18NConfig>().To<I18NConfig>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IAudioConfig>().To<AudioConfig>().ToSingleton().CrossContext();
 
             injectionBinder.Bind<IMapConfig>().To<MapConfig>().ToSingleton().CrossContext();
             injectionBinder.Bind<IScenicConfig>().To<ScenicConfig>().ToSingleton().CrossContext();

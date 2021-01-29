@@ -38,20 +38,20 @@ namespace AppGame.Config
                     foreach (SecurityElement xeResConfigs in allNodes)
                     {//根节点
                         if (xeResConfigs.Tag == "Maps")
-                        {//Plants点
-                            ArrayList plantsNode = xeResConfigs.Children;
-                            foreach (SecurityElement xePlant in plantsNode)
-                            {//Plant
-                                if (xePlant.Tag == "Map")
+                        {
+                            ArrayList mapNodes = xeResConfigs.Children;
+                            foreach (SecurityElement xeMap in mapNodes)
+                            {
+                                if (xeMap.Tag == "Map")
                                 {
                                     MapInfo mapInfo = new MapInfo()
                                     {
-                                        ID = xePlant.Attribute("ID"),
-                                        Name = xePlant.Attribute("Name"),
-                                        ProvinceID = xePlant.Attribute("ProvinceID"),
-                                        ProvinceName = xePlant.Attribute("ProvinceName"),
-                                        CityID = xePlant.Attribute("CityID"),
-                                        CityName = xePlant.Attribute("CityName")
+                                        ID = xeMap.Attribute("ID"),
+                                        Name = xeMap.Attribute("Name"),
+                                        ProvinceID = xeMap.Attribute("ProvinceID"),
+                                        ProvinceName = xeMap.Attribute("ProvinceName"),
+                                        CityID = xeMap.Attribute("CityID"),
+                                        CityName = xeMap.Attribute("CityName")
                                     };
                                     this.configs.Add(mapInfo);
                                 }

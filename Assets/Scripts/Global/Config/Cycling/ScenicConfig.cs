@@ -38,19 +38,19 @@ namespace AppGame.Config
                     foreach (SecurityElement xeResConfigs in allNodes)
                     {//根节点
                         if (xeResConfigs.Tag == "Scenics")
-                        {//Plants点
-                            ArrayList plantsNode = xeResConfigs.Children;
-                            foreach (SecurityElement xePlant in plantsNode)
-                            {//Plant
-                                if (xePlant.Tag == "Scenic")
+                        {
+                            ArrayList scenicNodes = xeResConfigs.Children;
+                            foreach (SecurityElement xeScenic in scenicNodes)
+                            {
+                                if (xeScenic.Tag == "Scenic")
                                 {
                                     ScenicInfo mapInfo = new ScenicInfo()
                                     {
-                                        ID = xePlant.Attribute("ID"),
-                                        Name = xePlant.Attribute("Name"),
-                                        MapID = xePlant.Attribute("Name"),
-                                        Image = xePlant.Attribute("Image"),
-                                        Text = xePlant.Attribute("Text")
+                                        ID = xeScenic.Attribute("ID"),
+                                        Name = xeScenic.Attribute("Name"),
+                                        MapID = xeScenic.Attribute("Name"),
+                                        Image = xeScenic.Attribute("Image"),
+                                        Text = xeScenic.Attribute("Text")
                                     };
                                     this.configs.Add(mapInfo);
                                 }
