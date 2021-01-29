@@ -116,7 +116,7 @@ namespace AppGame.Module.Cycling
                 pointNode = this.mapNode.Points[this.nodeIndex].GetComponent<MapPointNode>();
             }
             while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode || pointNode.NodeType == NodeTypes.EventNode);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.35f);
 
             this.scenicNode = this.mapNode.Points[this.nodeIndex].GetComponent<ScenicNode>();
             if (this.scenicNode != null) this.scenicNode.Show();
@@ -125,7 +125,7 @@ namespace AppGame.Module.Cycling
         //移动到指定位置
         public override void MoveToNode(string nodeID, bool lerp = false)
         {
-            int index = this.mapNode.Points.FindIndex(t => t.name == nodeID);
+            int index = this.mapNode.Points.FindIndex(t => t.GetComponent<MapPointNode>().ID == nodeID);
             if (index >= 0 && index < this.mapNode.Points.Count)
             {
                 this.nodeIndex = index;

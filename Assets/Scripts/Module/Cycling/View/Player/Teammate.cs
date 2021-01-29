@@ -35,7 +35,7 @@ namespace AppGame.Module.Cycling
         //移动到指定位置
         public override void MoveToNode(string nodeID, bool lerp = false)
         {
-            int index = this.mapNode.Points.FindIndex(t => t.name == nodeID);
+            int index = this.mapNode.Points.FindIndex(t => t.GetComponent<MapPointNode>().ID == nodeID);
             if (index >= 0 && index < this.mapNode.Points.Count)
             {
                 if (lerp)

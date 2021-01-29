@@ -12,6 +12,7 @@ namespace AppGame.Module.GameStart
             gameObject.AddComponent<GlobalRoot>();
             GameObject.DontDestroyOnLoad(gameObject);
             this.context = new GameStartContext(this, strange.extensions.context.api.ContextStartupFlags.MANUAL_LAUNCH);
+            Global.AppData.UserID = "01";
         }
 
         private void OnEnable()

@@ -14,6 +14,7 @@ namespace AppGame.Module.Cycling
         public override void OnRegister()
         {
             UpdateListeners(true);
+            this.GetGameData();
         }
 
         public override void OnRemove()
@@ -47,6 +48,15 @@ namespace AppGame.Module.Cycling
         private void onRestart()
         {
             OnRegister();
+        }
+
+        private void GetGameData()
+        {
+            LocationDatas locationDatas = new LocationDatas();
+            locationDatas.Datas.Add(new LocationData() { UserID = "01", MapPointID = "320101 _54" });
+            locationDatas.Datas.Add(new LocationData() { UserID = "02", MapPointID = "320101 _34" });
+            locationDatas.Datas.Add(new LocationData() { UserID = "03", MapPointID = "320101 _12" });
+            this.View.LocationDatas = locationDatas;
         }
     }
 }
