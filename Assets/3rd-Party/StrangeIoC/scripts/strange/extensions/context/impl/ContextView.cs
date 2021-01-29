@@ -39,32 +39,39 @@ using strange.extensions.context.api;
 
 namespace strange.extensions.context.impl
 {
-	public class ContextView : MonoBehaviour, IContextView
-	{
-		public IContext context{get;set;}
-		
-		public ContextView ()
-		{
-		}
+    public class ContextView : MonoBehaviour, IContextView
+    {
+        public IContext context { get; set; }
 
-		/// <summary>
-		/// When a ContextView is Destroyed, automatically removes the associated Context.
-		/// </summary>
-		protected virtual void OnDestroy()
-		{
-			if (context != null)
-				Context.firstContext.RemoveContext(context);
-		}
+        public ContextView()
+        {
+        }
 
-		#region IView implementation
+        /// <summary>
+        /// When a ContextView is Destroyed, automatically removes the associated Context.
+        /// </summary>
+        protected virtual void OnDestroy()
+        {
+            try
+            {
+                if (context != null && Context.firstContext != null)
+                    Context.firstContext.RemoveContext(context);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("<><ContextView.OnDestroy>Error: {0}", ex.Message);
+            }
+        }
 
-		public bool requiresContext {get;set;}
+        #region IView implementation
 
-		public bool registeredWithContext {get;set;}
+        public bool requiresContext { get; set; }
 
-		public bool autoRegisterWithContext{ get; set; }
+        public bool registeredWithContext { get; set; }
 
-		#endregion
-	}
+        public bool autoRegisterWithContext { get; set; }
+
+        #endregion
+    }
 }
 

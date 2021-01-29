@@ -30,7 +30,7 @@ namespace AppGame.Module.Cycling
             float distance = Vector3.Distance(cameraPosition, projection);
             cameraEdge.Height = 2.0f * distance * Mathf.Tan(FIELD_OF_VIEW_VERTICAL * 0.5f * Mathf.Deg2Rad);
             cameraEdge.Width = 2.0f * distance * Mathf.Tan(FIELD_OF_VIEW_HORIZONTAL * 0.5f * Mathf.Deg2Rad);
-            Debug.LogFormat("distance: {0}, height: {1}, width: {2}", distance, cameraEdge.Height, cameraEdge.Width);
+            //Debug.LogFormat("distance: {0}, height: {1}, width: {2}", distance, cameraEdge.Height, cameraEdge.Width);
 
             Vector3 top = new Vector3(playerPosition.x, playerPosition.y + cameraEdge.Height / 2, mapTransform.position.z);
             Vector3 bottom = new Vector3(playerPosition.x, playerPosition.y - cameraEdge.Height / 2, mapTransform.position.z);
