@@ -19,9 +19,10 @@ namespace AppGame.Module.Cycling
     public enum NodeTypes
     {
         StartNode = 0,
-        EventNode = 1,
-        SiteNode = 2,
-        EndNode = 3
+        EmptyNode = 1,
+        EventNode = 2,
+        SiteNode = 3,
+        EndNode = 4
     }
 
     public enum Interactions

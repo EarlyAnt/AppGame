@@ -8,7 +8,7 @@
     <Scenic ID="32010105" Name="玄武湖公园" MapID="320101" Image="Texture/Map/Scenic" Text="玄武湖公园介绍" />
     <Scenic ID="32010106" Name="明孝陵" MapID="320101" Image="Texture/Map/Scenic" Text="明孝陵介绍" />
     <Scenic ID="32010107" Name="美龄宫" MapID="320101" Image="Texture/Map/Scenic" Text="美龄宫介绍" />
-    <Scenic ID="32010108" Name="栖霞山" MapID="320101" Image="Texture/Map/Scenic" Text="栖霞山介绍" />
-    <Scenic ID="32010109" Name="南京大屠杀纪念馆" MapID="320101" Image="Texture/Map/Scenic" Text="南京大屠杀纪念馆介绍" />
+    <Scenic ID="32010108" Name="南京大屠杀纪念馆" MapID="320101" Image="Texture/Map/Scenic" Text="南京大屠杀纪念馆介绍" />
+    <Scenic ID="32010109" Name="栖霞山" MapID="320101" Image="Texture/Map/Scenic" Text="栖霞山介绍" />
   </Scenics>
 </Project>
