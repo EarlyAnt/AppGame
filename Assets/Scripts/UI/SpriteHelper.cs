@@ -19,7 +19,8 @@ public class SpriteHelper : BaseView
     [SerializeField, Range(0f, 60f)]
     private float GCDelaySeconds = 10f;
     private List<ModuleInfo> moduleInfos = new List<ModuleInfo>();
-    private Dictionary<ModuleViews, Dictionary<string, Sprite>> buffer = new Dictionary<ModuleViews, Dictionary<string, Sprite>>();
+    private Dictionary<ModuleViews, Dictionary<string, Sprite>> spriteBuffer = new Dictionary<ModuleViews, Dictionary<string, Sprite>>();
+    private Dictionary<ModuleViews, Dictionary<string, Texture2D>> textureBuffer = new Dictionary<ModuleViews, Dictionary<string, Texture2D>>();
     private Dictionary<ModuleViews, Coroutine> clearBufferCoroutines = new Dictionary<ModuleViews, Coroutine>();
     /************************************************Unity方法与事件***********************************************/
     protected override void Awake()
@@ -38,62 +39,6 @@ public class SpriteHelper : BaseView
         if (this.moduleInfos == null)
             Debug.LogError("<><SpriteHelper.LoadModuleInfo>moduleInfos is null");
     }
-
-    public void LoadModuleSprites(ModuleViews moduleName)
-    {
-        ModuleInfo moduleInfo = this.moduleInfos.Find(t => t.Name == moduleName.ToString("G"));
-        if (moduleInfo != null)
-        {
-            foreach (ModuleFile file in moduleInfo.Files)
-                this.LoadTexture(moduleName, string.Format("Texture/{0}.png", file.Path));
-        }
-        else
-        {
-            Debug.LogErrorFormat("<><SpriteHelper.GetAssetPath>Module config is null, '{0}'", moduleName);
-        }
-    }
-
-    public void LoadTexture(ModuleViews moduleName, string imagePath, System.Action<Sprite> success = null, System.Action<string> failure = null)
-    {
-        this.StopClearBuffer(moduleName);
-        if (!this.HasImage(moduleName, imagePath))
-        {
-            this.StartCoroutine(this.ResourceUtils.LoadTexture(imagePath,
-                                           (sprite) =>
-                                           {
-                                               this.RegisterImage(moduleName, imagePath, sprite);
-                                               if (success != null) success(sprite);
-                                           },
-                                           (failureInfo) => Debug.LogErrorFormat("<><SpriteHelper.LoadTexture>Unknown error: {0}", failureInfo.Message)));
-        }
-        else if (success != null) success(this.LoadTextureFromBuffer(imagePath));
-    }
-
-    public void LoadTextureByName(ModuleViews moduleName, string imageName, System.Action<Sprite> success = null, System.Action<string> failure = null)
-    {
-        this.StopClearBuffer(moduleName);
-
-        string imagePath = this.GetAssetPath(moduleName, imageName);
-        if (string.IsNullOrEmpty(imagePath))
-        {
-            string errorText = "Can't not find image from buffer";
-            Debug.LogErrorFormat("<><SpriteHelper.LoadTextureByName>{0}", errorText);
-            if (failure != null) failure(errorText);
-        }
-
-        if (!this.HasImage(moduleName, imagePath))
-        {
-            this.StartCoroutine(this.ResourceUtils.LoadTexture(imagePath,
-                                           (sprite) =>
-                                           {
-                                               this.RegisterImage(moduleName, imagePath, sprite);
-                                               if (success != null) success(sprite);
-                                           },
-                                           (failureInfo) => Debug.LogErrorFormat("<><SpriteHelper.LoadTextureByName>Unknown error: {0}", failureInfo.Message)));
-        }
-        else if (success != null) success(this.LoadTextureFromBuffer(imagePath));
-    }
-
     public string GetAssetPath(ModuleViews moduleName, string assetName, string extension = ".png")
     {
         ModuleInfo moduleInfo = this.moduleInfos.Find(t => t.Name == moduleName.ToString("G"));
@@ -116,50 +61,127 @@ public class SpriteHelper : BaseView
             return "";
         }
     }
-
-    public void RegisterImage(ModuleViews moduleName, string imagePath, Sprite image)
+    public void LoadModuleImages(ModuleViews moduleName)
     {
-        //Debug.LogFormat("<><SpriteHelper.RegisterImage>ModuleName: {0}, ImagePath: {1}", moduleName, imagePath);
-        if (this.buffer != null)
+        ModuleInfo moduleInfo = this.moduleInfos.Find(t => t.Name == moduleName.ToString("G"));
+        if (moduleInfo != null)
         {
-            if (!this.buffer.ContainsKey(moduleName))
-                this.buffer.Add(moduleName, new Dictionary<string, Sprite>());
-
-            if (!this.buffer[moduleName].ContainsKey(imagePath))
-                this.buffer[moduleName].Add(imagePath, image);
+            foreach (ModuleFile file in moduleInfo.Files)
+                this.LoadSprite(moduleName, string.Format("Texture/{0}.png", file.Path));
+        }
+        else
+        {
+            Debug.LogErrorFormat("<><SpriteHelper.GetAssetPath>Module config is null, '{0}'", moduleName);
         }
     }
+    private bool HasImage(ModuleViews moduleName, string imagePath)
+    {
+        if (this.spriteBuffer != null && this.spriteBuffer.ContainsKey(moduleName) &&
+            this.spriteBuffer[moduleName].ContainsKey(imagePath))
+            return true;
+        else if (this.textureBuffer != null && this.textureBuffer.ContainsKey(moduleName) &&
+            this.textureBuffer[moduleName].ContainsKey(imagePath))
+            return true;
+        else
+            return false;
+    }
 
-    public Sprite LoadTextureFromBuffer(string imagePath)
+    public void LoadSprite(ModuleViews moduleName, string imagePath, System.Action<Sprite> success = null, System.Action<string> failure = null)
+    {
+        this.StopClearBuffer(moduleName);
+        if (!this.HasImage(moduleName, imagePath))
+        {
+            this.StartCoroutine(this.ResourceUtils.LoadSprite(imagePath,
+                                           (sprite) =>
+                                           {
+                                               this.RegisterSprite(moduleName, imagePath, sprite);
+                                               if (success != null) success(sprite);
+                                           },
+                                           (failureInfo) => Debug.LogErrorFormat("<><SpriteHelper.LoadSprite>Unknown error: {0}", failureInfo.Message)));
+        }
+        else if (success != null) success(this.LoadSpriteFromBuffer(imagePath));
+    }
+    public Sprite LoadSpriteFromBuffer(string imagePath)
     {
         Sprite sprite = null;
-        foreach (var kvp in this.buffer)
+        foreach (var kvp in this.spriteBuffer)
         {
-            sprite = this.LoadTextureFromBuffer(kvp.Key, imagePath);
+            sprite = this.LoadSpriteFromBuffer(kvp.Key, imagePath);
             if (sprite != null) return sprite;
         }
         return null;
     }
-
-    public Sprite LoadTextureFromBuffer(ModuleViews moduleName, string imagePath, string extension = ".png")
+    public Sprite LoadSpriteFromBuffer(ModuleViews moduleName, string imagePath, string extension = ".png")
     {
         if (!string.IsNullOrEmpty(imagePath) && !imagePath.ToLower().EndsWith(extension))
             imagePath += extension;
 
-        if (this.buffer != null && this.buffer.ContainsKey(moduleName) &&
-            this.buffer[moduleName].ContainsKey(imagePath))
-            return this.buffer[moduleName][imagePath];
+        if (this.spriteBuffer != null && this.spriteBuffer.ContainsKey(moduleName) &&
+            this.spriteBuffer[moduleName].ContainsKey(imagePath))
+            return this.spriteBuffer[moduleName][imagePath];
         else
             return null;
     }
-
-    private bool HasImage(ModuleViews moduleName, string imagePath)
+    public void RegisterSprite(ModuleViews moduleName, string imagePath, Sprite image)
     {
-        if (this.buffer != null && this.buffer.ContainsKey(moduleName) &&
-            this.buffer[moduleName].ContainsKey(imagePath))
-            return true;
+        //Debug.LogFormat("<><SpriteHelper.RegisterSprite>ModuleName: {0}, ImagePath: {1}", moduleName, imagePath);
+        if (this.spriteBuffer != null)
+        {
+            if (!this.spriteBuffer.ContainsKey(moduleName))
+                this.spriteBuffer.Add(moduleName, new Dictionary<string, Sprite>());
+
+            if (!this.spriteBuffer[moduleName].ContainsKey(imagePath))
+                this.spriteBuffer[moduleName].Add(imagePath, image);
+        }
+    }
+
+    public void LoadTexture(ModuleViews moduleName, string imagePath, System.Action<Texture2D> success = null, System.Action<string> failure = null)
+    {
+        this.StopClearBuffer(moduleName);
+        if (!this.HasImage(moduleName, imagePath))
+        {
+            this.StartCoroutine(this.ResourceUtils.LoadTexture(imagePath,
+                                           (texture) =>
+                                           {
+                                               this.RegisterTexture(moduleName, imagePath, texture);
+                                               if (success != null) success(texture);
+                                           },
+                                           (failureInfo) => Debug.LogErrorFormat("<><SpriteHelper.LoadTexture>Unknown error: {0}", failureInfo.Message)));
+        }
+        else if (success != null) success(this.LoadTextureFromBuffer(imagePath));
+    }
+    public Texture2D LoadTextureFromBuffer(string imagePath)
+    {
+        Texture2D texture = null;
+        foreach (var kvp in this.textureBuffer)
+        {
+            texture = this.LoadTextureFromBuffer(kvp.Key, imagePath);
+            if (texture != null) return texture;
+        }
+        return null;
+    }
+    public Texture2D LoadTextureFromBuffer(ModuleViews moduleName, string imagePath, string extension = ".png")
+    {
+        if (!string.IsNullOrEmpty(imagePath) && !imagePath.ToLower().EndsWith(extension))
+            imagePath += extension;
+
+        if (this.textureBuffer != null && this.textureBuffer.ContainsKey(moduleName) &&
+            this.textureBuffer[moduleName].ContainsKey(imagePath))
+            return this.textureBuffer[moduleName][imagePath];
         else
-            return false;
+            return null;
+    }
+    public void RegisterTexture(ModuleViews moduleName, string imagePath, Texture2D image)
+    {
+        //Debug.LogFormat("<><SpriteHelper.RegisterTexture>ModuleName: {0}, ImagePath: {1}", moduleName, imagePath);
+        if (this.textureBuffer != null)
+        {
+            if (!this.textureBuffer.ContainsKey(moduleName))
+                this.textureBuffer.Add(moduleName, new Dictionary<string, Texture2D>());
+
+            if (!this.textureBuffer[moduleName].ContainsKey(imagePath))
+                this.textureBuffer[moduleName].Add(imagePath, image);
+        }
     }
 
     public void ClearBuffer(ModuleViews moduleName)
@@ -178,7 +200,6 @@ public class SpriteHelper : BaseView
             }
         }
     }
-
     private void StopClearBuffer(ModuleViews moduleName)
     {
         if (this.clearBufferCoroutines != null && this.clearBufferCoroutines.ContainsKey(moduleName) &&
@@ -188,17 +209,25 @@ public class SpriteHelper : BaseView
             this.clearBufferCoroutines.Remove(moduleName);
         }
     }
-
     private IEnumerator DelayClearBuffer(ModuleViews moduleName)
     {
         yield return new WaitForSeconds(this.GCDelaySeconds);
-        if (this.buffer != null && this.buffer.ContainsKey(moduleName))
+        if (this.spriteBuffer != null && this.spriteBuffer.ContainsKey(moduleName))
         {
-            foreach (var moduleFile in this.buffer[moduleName])
+            foreach (var moduleFile in this.spriteBuffer[moduleName])
             {
                 GameObject.Destroy(moduleFile.Value);
             }
-            this.buffer.Remove(moduleName);
+            this.spriteBuffer.Remove(moduleName);
+            Resources.UnloadUnusedAssets();
+        }
+        if (this.textureBuffer != null && this.textureBuffer.ContainsKey(moduleName))
+        {
+            foreach (var moduleFile in this.textureBuffer[moduleName])
+            {
+                GameObject.Destroy(moduleFile.Value);
+            }
+            this.textureBuffer.Remove(moduleName);
             Resources.UnloadUnusedAssets();
         }
     }

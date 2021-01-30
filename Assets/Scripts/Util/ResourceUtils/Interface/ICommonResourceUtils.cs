@@ -41,6 +41,7 @@ namespace AppGame.Util
     public static class FileTypes
     {
         public const string AUDIO = ".mp3";
+        public const string SPRITE = ".png";
         public const string TEXTURE = ".png";
         public const string ASSET_BUNDLE = ".ab";
         public const string MANIFEST = ".manifest";
@@ -66,6 +67,27 @@ namespace AppGame.Util
             }
         }
         /// <summary>
+        /// 判断指定的文件是否是Sprite文件(.png)
+        /// </summary>
+        /// <param name="fileName">指定文件的文件名</param>
+        /// <returns></returns>
+        public static bool IsSprite(string fileName)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(fileName))
+                    return false;
+
+                FileInfo fileInfo = new FileInfo(fileName);
+                return fileInfo != null && fileInfo.Extension == SPRITE;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogErrorFormat("<><FileTypes.IsSprite>Error: {0}", ex.Message);
+                return false;
+            }
+        }
+        /// <summary>
         /// 判断指定的文件是否是Texture文件(.png)
         /// </summary>
         /// <param name="fileName">指定文件的文件名</param>
@@ -78,7 +100,7 @@ namespace AppGame.Util
                     return false;
 
                 FileInfo fileInfo = new FileInfo(fileName);
-                return fileInfo != null && fileInfo.Extension == TEXTURE;
+                return fileInfo != null && fileInfo.Extension == SPRITE;
             }
             catch (Exception ex)
             {

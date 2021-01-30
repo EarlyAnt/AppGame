@@ -57,7 +57,16 @@ namespace AppGame.Util
         /// <param name="failure">失败时的回调</param>
         /// <param name="forcedDownload">是否强制下载(即使本地存在文件也下载并覆盖)</param>
         /// <returns></returns>
-        IEnumerator LoadTexture(string imagePath, Action<Sprite> success = null, Action<FailureInfo> failure = null, bool forcedDownload = false);
+        IEnumerator LoadSprite(string imagePath, Action<Sprite> success = null, Action<FailureInfo> failure = null, bool forcedDownload = false);
+        /// <summary>
+        /// 从网络或缓存中获取图片
+        /// </summary>
+        /// <param name="imagePath">图片相对路径</param>    
+        /// <param name="success">成功时的回调</param>
+        /// <param name="failure">失败时的回调</param>
+        /// <param name="forcedDownload">是否强制下载(即使本地存在文件也下载并覆盖)</param>
+        /// <returns></returns>
+        IEnumerator LoadTexture(string imagePath, Action<Texture2D> success = null, Action<FailureInfo> failure = null, bool forcedDownload = false);
         /// <summary>
         /// 从网络或缓存中获取AssetBundle包
         /// </summary>

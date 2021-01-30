@@ -59,7 +59,9 @@ namespace AppGame.Util
 
             if (FileTypes.IsAudio(filePath))
                 yield return this.LoadAudio(filePath, (audioClip) => { if (success != null) success(audioClip); }, failure, forcedDownload);
-            else if (FileTypes.IsTexture(filePath))
+            else if (FileTypes.IsSprite(filePath))
+                yield return this.LoadSprite(filePath, (sprite) => { if (success != null) success(sprite); }, failure, forcedDownload);
+            else if (FileTypes.IsSprite(filePath))
                 yield return this.LoadTexture(filePath, (texture) => { if (success != null) success(texture); }, failure, forcedDownload);
             else if (FileTypes.IsAssetBundle(filePath))
                 yield return this.LoadAssetBundle(filePath, (assetBundle) => { if (success != null) success(assetBundle); }, failure, forcedDownload);
@@ -139,7 +141,7 @@ namespace AppGame.Util
         /// <param name="failure">失败时的回调</param>
         /// <param name="forcedDownload">是否强制下载(即使本地存在文件也下载并覆盖)</param>
         /// <returns></returns>
-        public IEnumerator LoadTexture(string imagePath, Action<Sprite> success = null, Action<FailureInfo> failure = null, bool forcedDownload = false)
+        public IEnumerator LoadSprite(string imagePath, Action<Sprite> success = null, Action<FailureInfo> failure = null, bool forcedDownload = false)
         {
             if (string.IsNullOrEmpty(imagePath))
             {//图片文件路径异常，退出下载
@@ -188,11 +190,77 @@ namespace AppGame.Util
                 {
                     string spriteName = Path.GetFileName(imagePath);
                     if (!string.IsNullOrEmpty(spriteName))
-                        spriteName = spriteName.Replace(FileTypes.TEXTURE, "");
+                        spriteName = spriteName.Replace(FileTypes.SPRITE, "");
                     Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
                     sprite.name = spriteName;
                     //Debug.LogFormat("<><ResourceUtils.LoadTexture>Path: {0}, Rect: {1}", imagePath, sprite.rect);
                     success(sprite);
+                }
+                www.Dispose();
+                www = null;
+            }
+        }
+        /// <summary>
+        /// 从网络或缓存中获取图片
+        /// </summary>
+        /// <param name="imagePath">图片相对路径</param>    
+        /// <param name="success">成功时的回调</param>
+        /// <param name="failure">失败时的回调</param>
+        /// <param name="forcedDownload">是否强制下载(即使本地存在文件也下载并覆盖)</param>
+        /// <returns></returns>
+        public IEnumerator LoadTexture(string imagePath, Action<Texture2D> success = null, Action<FailureInfo> failure = null, bool forcedDownload = false)
+        {
+            if (string.IsNullOrEmpty(imagePath))
+            {//图片文件路径异常，退出下载
+                Debug.LogError("<><ResourceUtils.LoadTexture>imagePath is null");
+                if (failure != null) failure(new FailureInfo() { Interrupt = false, Message = "imagePath is null" });
+                yield break;
+            }
+
+            string fileName = string.Format("{0}/{1}", Application.persistentDataPath, imagePath);
+            //Debug.LogFormat("<><ResourceUtils.LoadTexture>local file name: {0}", fileName);
+
+            if (!this.CheckFolderExist(Path.GetDirectoryName(fileName)))
+            {//逐级检查检查本地是否存在指定的目录，没有则创建
+                Debug.LogErrorFormat("<><ResourceUtils.LoadTexture>Folder Not Exist: {0}", Path.GetDirectoryName(fileName));
+                if (failure != null) failure(new FailureInfo() { Interrupt = false, Message = string.Format("Folder Not Exist: {0}", Path.GetDirectoryName(fileName)) });
+                yield break;
+            }
+
+            bool fileExisted = File.Exists(fileName) && !forcedDownload;//文件不存在或指定强制下载，都视为文件不存在
+            fileName = string.Format("{0}/{1}", fileExisted ? this.localPath : this.serverPath, imagePath);//根据本地是否存在指定文件，拼接文件获取路径(本地或网络)
+            //Debug.LogFormat("<><ResourceUtils.LoadTexture>{0} file name: {1}", fileExisted ? "cache" : "server", fileName);
+
+            WWW www = new WWW(fileName);
+            yield return www;
+
+            if (!string.IsNullOrEmpty(www.error))
+            {//下载过程中遇到错误，退出下载
+                Debug.LogErrorFormat("<><ResourceUtils.LoadTexture>Download error: {0}({1})", www.error, fileName);
+                string errorText = www.error;
+                www.Dispose();
+                www = null;
+                if (failure != null) failure(new FailureInfo() { Interrupt = !this.IgnoreFileNotExisted, Message = string.Format("Download error: {0}({1})", errorText, fileName) });
+                yield break;
+            }
+            else
+            {
+                if (!fileExisted)
+                {//如果文件原本不存在，则写文件到本地指定目录
+                    fileName = string.Format("{0}/{1}", Application.persistentDataPath, imagePath);
+                    Debug.LogFormat("<><ResourceUtils.LoadTexture>write file name: {0}", fileName);
+                    File.WriteAllBytes(fileName, www.bytes);
+                }
+
+                Texture2D texture = www.texture;
+                if (texture != null && success != null)
+                {
+                    string textureName = Path.GetFileName(imagePath);
+                    if (!string.IsNullOrEmpty(textureName))
+                        textureName = textureName.Replace(FileTypes.SPRITE, "");
+                    texture.name = textureName;
+                    //Debug.LogFormat("<><ResourceUtils.LoadTexture>Path: {0}, Rect: {1}", imagePath, sprite.rect);
+                    success(texture);
                 }
                 www.Dispose();
                 www = null;

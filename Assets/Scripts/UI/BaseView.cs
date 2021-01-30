@@ -58,7 +58,7 @@ namespace AppGame.UI
 
         protected IEnumerator LoadModuleFiles(ModuleViews moduleView, Action callback = null, float delaySeconds = 0)
         {
-            SpriteHelper.Instance.LoadModuleSprites(moduleView);
+            SpriteHelper.Instance.LoadModuleImages(moduleView);
             yield return new WaitForSeconds(0.2f);
             this.LoadStaticImage();
             yield return new WaitForSeconds(delaySeconds);

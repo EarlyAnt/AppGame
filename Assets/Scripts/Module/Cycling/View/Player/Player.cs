@@ -144,9 +144,8 @@ namespace AppGame.Module.Cycling
             playerPosition.z = this.camera.position.z;
             if (!this.inRange)
             {
-                Image image = this.mapNode.GetComponent<Image>();
-                playerPosition.x = Mathf.Clamp(playerPosition.x, -image.rectTransform.sizeDelta.x * this.canvasScale / 2f + this.cameraEdge.Width / 2f, image.rectTransform.sizeDelta.x * this.canvasScale / 2f - this.cameraEdge.Width / 2f);
-                playerPosition.y = Mathf.Clamp(playerPosition.y, -image.rectTransform.sizeDelta.y * this.canvasScale / 2f + this.cameraEdge.Height / 2f, image.rectTransform.sizeDelta.y * this.canvasScale / 2f - this.cameraEdge.Height / 2f);
+                playerPosition.x = Mathf.Clamp(playerPosition.x, -this.mapRectTransform.sizeDelta.x * this.canvasScale / 2f + this.cameraEdge.Width / 2f, this.mapRectTransform.sizeDelta.x * this.canvasScale / 2f - this.cameraEdge.Width / 2f);
+                playerPosition.y = Mathf.Clamp(playerPosition.y, -this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f + this.cameraEdge.Height / 2f, this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f - this.cameraEdge.Height / 2f);
             }
             return playerPosition;
         }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// 图片加载框
 /// </summary>
 [RequireComponent(typeof(Image))]
-public class ImageLoader : MonoBehaviour
+public class SpriteLoader : MonoBehaviour
 {
     /************************************************属性与变量命名************************************************/
     [SerializeField]
@@ -23,7 +23,7 @@ public class ImageLoader : MonoBehaviour
         {
             if (this.moduleView == ModuleViews.None)
             {
-                Debug.LogErrorFormat("<><ImageLoader.imagePath>moduleView need to set up, object name: {0}", this.gameObject.name);
+                Debug.LogErrorFormat("<><SpriteLoader.imagePath>moduleView need to set up, object name: {0}", this.gameObject.name);
                 return "";
             }
             return "Texture/" + SpriteHelper.Instance.GetAssetPath(this.moduleView, imageName, ".png");
@@ -45,12 +45,12 @@ public class ImageLoader : MonoBehaviour
     {
         if (string.IsNullOrEmpty(this.imageName))
         {
-            Debug.LogErrorFormat("<><ImageLoader.LoadImage>Parameter 'imageName' is null or empty, object: {0}", this.gameObject != null ? this.gameObject.name : "");
+            Debug.LogErrorFormat("<><SpriteLoader.LoadImage>Parameter 'imageName' is null or empty, object: {0}", this.gameObject != null ? this.gameObject.name : "");
             return;
         }
         else if (this.moduleView == ModuleViews.None)
         {
-            Debug.LogErrorFormat("<><ImageLoader.LoadImage>Component 'baseView' is null, object: {0}", this.gameObject != null ? this.gameObject.name : "");
+            Debug.LogErrorFormat("<><SpriteLoader.LoadImage>Component 'baseView' is null, object: {0}", this.gameObject != null ? this.gameObject.name : "");
             return;
         }
 
@@ -66,15 +66,15 @@ public class ImageLoader : MonoBehaviour
         //再次检查组件
         if (this.imageBox == null)
         {
-            Debug.LogErrorFormat("<><ImageLoader.LoadImage2>Component 'image' is null");
+            Debug.LogErrorFormat("<><SpriteLoader.LoadImage2>Component 'image' is null");
             return;
         }
 
         //加载图片
         if (this.moduleView != ModuleViews.None)
         {
-            //Debug.LogFormat("<><ImageLoader.SetImage>Object: {0}, Image: {1}", this.gameObject.name, imagePath);
-            SpriteHelper.Instance.LoadTexture(this.moduleView, imagePath,
+            //Debug.LogFormat("<><SpriteLoader.SetImage>Object: {0}, Image: {1}", this.gameObject.name, imagePath);
+            SpriteHelper.Instance.LoadSprite(this.moduleView, imagePath,
                                               (sprite) =>
                                               {
                                                   this.imageBox.sprite = sprite;
@@ -83,10 +83,10 @@ public class ImageLoader : MonoBehaviour
                                               },
                                               (failureInfo) =>
                                               {
-                                                  Debug.LogErrorFormat("<><ImageLoader.SetImage>Unknown error: {0}", failureInfo);
+                                                  Debug.LogErrorFormat("<><SpriteLoader.SetImage>Unknown error: {0}", failureInfo);
                                               });
         }
-        else Debug.LogErrorFormat("<><ImageLoader.LoadImage2>Component 'baseView' is null");
+        else Debug.LogErrorFormat("<><SpriteLoader.LoadImage2>Component 'baseView' is null");
     }
     [ContextMenu("设置Image组件")]
     private void SetImageBox()
