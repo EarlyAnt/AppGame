@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Project Name="Gululu" Version="">
   <Modules>
-    <Module Name="PetDress" Desc="换装页">
-      <File Name="cash" Path="PetDress/View/cash" Type="Image" Enable="1" />
-      <File Name="check" Path="PetDress/View/check" Type="Image" Enable="1" />
-      <File Name="clock" Path="PetDress/View/clock" Type="Image" Enable="1" />
-      <File Name="code_bg" Path="PetDress/View/code_bg" Type="Image" Enable="1" />
-      <File Name="coin" Path="PetDress/View/coin" Type="Image" Enable="1" />
-      <File Name="coin_bg" Path="PetDress/View/coin_bg" Type="Image" Enable="1" />
+    <Module Name="Cycling" Desc="骑行游戏">
+      <File Name="nanjing_bg" Path="Cycling/View/nanjing_bg" Type="Image" Enable="1" />
+      <File Name="coord" Path="Cycling/View/coord" Type="Image" Enable="1" />
+      <File Name="location1" Path="Cycling/View/location1" Type="Image" Enable="1" />
+      <File Name="location2" Path="Cycling/View/location2" Type="Image" Enable="1" />
+      <File Name="location3" Path="Cycling/View/location3" Type="Image" Enable="1" />
+      <File Name="path01" Path="Cycling/View/path01" Type="Image" Enable="1" />
+      <File Name="path02" Path="Cycling/View/path02" Type="Image" Enable="1" />
     </Module>
   </Modules>
 </Project>

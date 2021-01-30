@@ -95,7 +95,7 @@ namespace AppGame.Util
 
             bool fileExisted = File.Exists(fileName) && !forcedDownload;//文件不存在或指定强制下载，都视为文件不存在
             fileName = string.Format("{0}/{1}", fileExisted ? this.localPath : this.serverPath, audioPath);//根据本地是否存在指定文件，拼接文件获取路径(本地或网络)
-                                                                                                           //Debug.LogFormat("<><ResourceUtils.LoadAudio>{0} file name: {1}", fileExisted ? "cache" : "server", fileName);
+            //Debug.LogFormat("<><ResourceUtils.LoadAudio>{0} file name: {1}", fileExisted ? "cache" : "server", fileName);
 
             WWW www = new WWW(fileName);
             yield return www;
@@ -160,7 +160,7 @@ namespace AppGame.Util
 
             bool fileExisted = File.Exists(fileName) && !forcedDownload;//文件不存在或指定强制下载，都视为文件不存在
             fileName = string.Format("{0}/{1}", fileExisted ? this.localPath : this.serverPath, imagePath);//根据本地是否存在指定文件，拼接文件获取路径(本地或网络)
-                                                                                                           //Debug.LogFormat("<><ResourceUtils.LoadTexture>{0} file name: {1}", fileExisted ? "cache" : "server", fileName);
+            //Debug.LogFormat("<><ResourceUtils.LoadTexture>{0} file name: {1}", fileExisted ? "cache" : "server", fileName);
 
             WWW www = new WWW(fileName);
             yield return www;

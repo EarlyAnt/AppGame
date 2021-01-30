@@ -714,6 +714,7 @@ GameObject:
   - component: {fileID: 1166681446}
   - component: {fileID: 1166681449}
   - component: {fileID: 1166681448}
+  - component: {fileID: 5528849674374339982}
   - component: {fileID: 1166681447}
   m_Layer: 5
   m_Name: Map
@@ -781,6 +782,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5528849674374339982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166681445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageBox: {fileID: 1166681448}
+  moduleView: 1
+  imageName: nanjing_bg
+  autoLoad: 1
 --- !u!114 &1166681447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1408,6 +1425,7 @@ GameObject:
   - component: {fileID: 1999059210}
   - component: {fileID: 1999059212}
   - component: {fileID: 1999059211}
+  - component: {fileID: 8778322160571881232}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -1471,6 +1489,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8778322160571881232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1999059209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageBox: {fileID: 1999059211}
+  moduleView: 1
+  imageName: coord
+  autoLoad: 1
 --- !u!1 &2010325261
 GameObject:
   m_ObjectHideFlags: 0
@@ -3540,6 +3574,7 @@ GameObject:
   - component: {fileID: 6209511583580567791}
   - component: {fileID: 1762496467101285447}
   - component: {fileID: 7855027369483820489}
+  - component: {fileID: 5538026001986033766}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -3603,6 +3638,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5538026001986033766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2422876622775028592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageBox: {fileID: 7855027369483820489}
+  moduleView: 1
+  imageName: location2
+  autoLoad: 1
 --- !u!1 &2444467804159681923
 GameObject:
   m_ObjectHideFlags: 0
@@ -5302,6 +5353,7 @@ GameObject:
   - component: {fileID: 4736752625093833302}
   - component: {fileID: 384874402527649910}
   - component: {fileID: 9135868119450799467}
+  - component: {fileID: 949174398}
   m_Layer: 5
   m_Name: Road2
   m_TagString: Untagged
@@ -5365,6 +5417,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &949174398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4203850684171862861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageBox: {fileID: 9135868119450799467}
+  moduleView: 1
+  imageName: path02
+  autoLoad: 1
 --- !u!1 &4422842899443506299
 GameObject:
   m_ObjectHideFlags: 0
@@ -6186,6 +6254,7 @@ GameObject:
   - component: {fileID: 1683079243221755031}
   - component: {fileID: 8378974244923666941}
   - component: {fileID: 6248888825361129819}
+  - component: {fileID: 949174399}
   m_Layer: 5
   m_Name: Road1
   m_TagString: Untagged
@@ -6249,6 +6318,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &949174399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5478547439972146121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageBox: {fileID: 6248888825361129819}
+  moduleView: 1
+  imageName: path01
+  autoLoad: 1
 --- !u!1 &5717096390476200932
 GameObject:
   m_ObjectHideFlags: 0
