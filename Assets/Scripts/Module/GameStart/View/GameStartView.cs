@@ -1,4 +1,5 @@
 using AppGame.Config;
+using AppGame.UI;
 using DG.Tweening;
 using strange.extensions.mediation.impl;
 using System.Collections;
@@ -8,7 +9,7 @@ using UnityEngine.UI;
 
 namespace AppGame.Module.GameStart
 {
-    public class GameStartView : EventView
+    public class GameStartView : BaseView
     {
         /************************************************属性与变量命名************************************************/
         #region 注入接口
@@ -53,7 +54,7 @@ namespace AppGame.Module.GameStart
         /************************************************自 定 义 方 法************************************************/
         //初始化
         private IEnumerator Initialize()
-        {
+        {            
             float progress = Random.Range(0.2f, 0.5f);
             yield return this.StartCoroutine(this.ReadConfig(progress));
             yield return this.StartCoroutine(this.LoadScene(progress, 1f));

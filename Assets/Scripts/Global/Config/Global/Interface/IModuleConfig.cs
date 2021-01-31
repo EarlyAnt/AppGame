@@ -67,7 +67,9 @@ namespace AppGame.Config
 
     public enum FileTypes
     {
-        Image = 0
+        Sprite = 0,
+        Texture = 1,
+        Spine = 2
     }
 
     public class ModuleFile

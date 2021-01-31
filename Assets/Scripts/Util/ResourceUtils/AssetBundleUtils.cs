@@ -10,7 +10,7 @@ namespace AppGame.Util
     class AssetBundleUtils : IAssetBundleUtils
     {
         [Inject]
-        public IResourceUtils ResourceUtils { get; set; }
+        public IResourceUtils ResourceUtils { get; set; } 
         private Dictionary<string, Coroutine> asyncOperations = new Dictionary<string, Coroutine>();
         private Dictionary<string, AssetBundle> assetBundles = new Dictionary<string, AssetBundle>();
         private AssetBundleManifest manifest;

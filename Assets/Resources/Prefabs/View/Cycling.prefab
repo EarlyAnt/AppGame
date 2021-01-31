@@ -714,8 +714,8 @@ GameObject:
   - component: {fileID: 1166681446}
   - component: {fileID: 1166681449}
   - component: {fileID: 6060263608380743074}
-  - component: {fileID: 160555019472104790}
   - component: {fileID: 1166681447}
+  - component: {fileID: 2145385808}
   m_Layer: 5
   m_Name: Map
   m_TagString: Untagged
@@ -779,22 +779,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &160555019472104790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1166681445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8a02a6c9e65910438d559fba1b32c41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  imageBox: {fileID: 6060263608380743074}
-  moduleView: 1
-  imageName: nanjing_bg
-  autoLoad: 1
 --- !u!114 &1166681447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -886,6 +870,23 @@ MonoBehaviour:
   - {fileID: 8557961947859492808}
   - {fileID: 1491496742097259882}
   - {fileID: 2283067339657235793}
+--- !u!114 &2145385808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1166681445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c58f00d48ad134478291ccaa179c90c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  assetBundleName: cycling/map.ab
+  autoLoad: 1
+  next: {fileID: 0}
+  spriteName: nanjing_bg
+  imageBox: {fileID: 6060263608380743074}
 --- !u!1 &1192521318
 GameObject:
   m_ObjectHideFlags: 0
@@ -979,7 +980,7 @@ RectTransform:
   m_GameObject: {fileID: 1299863573}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 1673776819}
   m_RootOrder: 4
@@ -1498,10 +1499,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageBox: {fileID: 1999059211}
-  moduleView: 1
+  moduleView: 2
   imageName: coord
   autoLoad: 1
+  imageBox: {fileID: 1999059211}
 --- !u!1 &2010325261
 GameObject:
   m_ObjectHideFlags: 0
@@ -3647,10 +3648,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageBox: {fileID: 7855027369483820489}
-  moduleView: 1
+  moduleView: 2
   imageName: location2
   autoLoad: 1
+  imageBox: {fileID: 7855027369483820489}
 --- !u!1 &2444467804159681923
 GameObject:
   m_ObjectHideFlags: 0
@@ -5350,7 +5351,7 @@ GameObject:
   - component: {fileID: 4736752625093833302}
   - component: {fileID: 384874402527649910}
   - component: {fileID: 6649414848304792216}
-  - component: {fileID: 7965852082956604797}
+  - component: {fileID: 2145385806}
   m_Layer: 5
   m_Name: Road2
   m_TagString: Untagged
@@ -5411,7 +5412,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &7965852082956604797
+--- !u!114 &2145385806
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5420,13 +5421,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4203850684171862861}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8a02a6c9e65910438d559fba1b32c41, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c58f00d48ad134478291ccaa179c90c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageBox: {fileID: 6649414848304792216}
-  moduleView: 1
-  imageName: path01
+  assetBundleName: cycling/map.ab
   autoLoad: 1
+  next: {fileID: 0}
+  spriteName: path02
+  imageBox: {fileID: 6649414848304792216}
 --- !u!1 &4422842899443506299
 GameObject:
   m_ObjectHideFlags: 0
@@ -6248,7 +6250,7 @@ GameObject:
   - component: {fileID: 1683079243221755031}
   - component: {fileID: 8378974244923666941}
   - component: {fileID: 4057868282352261853}
-  - component: {fileID: 697331938594403886}
+  - component: {fileID: 2145385807}
   m_Layer: 5
   m_Name: Road1
   m_TagString: Untagged
@@ -6309,7 +6311,7 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &697331938594403886
+--- !u!114 &2145385807
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6318,13 +6320,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5478547439972146121}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8a02a6c9e65910438d559fba1b32c41, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c58f00d48ad134478291ccaa179c90c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageBox: {fileID: 4057868282352261853}
-  moduleView: 1
-  imageName: path01
+  assetBundleName: cycling/map.ab
   autoLoad: 1
+  next: {fileID: 0}
+  spriteName: path01
+  imageBox: {fileID: 4057868282352261853}
 --- !u!1 &5717096390476200932
 GameObject:
   m_ObjectHideFlags: 0

@@ -142,5 +142,6 @@ public class TopViewHelper : Singleton<TopViewHelper>
 public enum ModuleViews
 {
     None = 0,
-    Cycling = 1
+    GameStart = 1,
+    Cycling = 2
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 namespace AppGame.Util
 {
@@ -257,7 +258,7 @@ namespace AppGame.Util
                 {
                     string textureName = Path.GetFileName(imagePath);
                     if (!string.IsNullOrEmpty(textureName))
-                        textureName = textureName.Replace(FileTypes.SPRITE, "");
+                        textureName = textureName.Replace(FileTypes.TEXTURE, "");
                     texture.name = textureName;
                     //Debug.LogFormat("<><ResourceUtils.LoadTexture>Path: {0}, Rect: {1}", imagePath, sprite.rect);
                     success(texture);

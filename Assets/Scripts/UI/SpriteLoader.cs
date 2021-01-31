@@ -6,42 +6,20 @@ using UnityEngine.UI;
 /// 图片加载框
 /// </summary>
 [RequireComponent(typeof(Image))]
-public class SpriteLoader : MonoBehaviour
+public class SpriteLoader : ImageLoader
 {
     /************************************************属性与变量命名************************************************/
     [SerializeField]
     private Image imageBox;
-    [SerializeField]
-    private ModuleViews moduleView;
-    [SerializeField]
-    private string imageName;
-    [SerializeField]
-    private bool autoLoad;
-    private string imagePath
-    {
-        get
-        {
-            if (this.moduleView == ModuleViews.None)
-            {
-                Debug.LogErrorFormat("<><SpriteLoader.imagePath>moduleView need to set up, object name: {0}", this.gameObject.name);
-                return "";
-            }
-            return "Texture/" + SpriteHelper.Instance.GetAssetPath(this.moduleView, imageName, ".png");
-        }
-    }
-    public bool AutoLoad
-    {
-        get { return this.autoLoad; }
-    }
     /************************************************Unity方法与事件***********************************************/
     private void Start()
     {
-        //if (this.autoLoad && !string.IsNullOrEmpty(this.imageName) && this.moduleView != ModuleViews.None)
-        //    this.LoadImage();
+        if (this.autoLoad && !string.IsNullOrEmpty(this.imageName) && this.moduleView != ModuleViews.None)
+            this.LoadImage();
     }
     /************************************************自 定 义 方 法************************************************/
     //加载图片
-    public void LoadImage()
+    public override void LoadImage()
     {
         if (string.IsNullOrEmpty(this.imageName))
         {
@@ -57,7 +35,7 @@ public class SpriteLoader : MonoBehaviour
         this.LoadImage(this.imagePath);
     }
     //加载图片
-    public void LoadImage(string imagePath, IResourceUtils resourceUtils = null)
+    public override void LoadImage(string imagePath, IResourceUtils resourceUtils = null)
     {
         //检查并设置组件
         if (this.imageBox == null)

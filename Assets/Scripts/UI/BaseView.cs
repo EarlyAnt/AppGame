@@ -67,14 +67,14 @@ namespace AppGame.UI
 
         protected virtual void LoadStaticImage()
         {
-            //ImageLoader[] imageLoaders = this.GetComponentsInChildren<ImageLoader>();
-            //if (imageLoaders != null)
-            //{
-            //    imageLoaders.ToList().ForEach(t =>
-            //    {
-            //        if (!t.AutoLoad) t.LoadImage();
-            //    });
-            //}
+            ImageLoader[] imageLoaders = this.GetComponentsInChildren<ImageLoader>();
+            if (imageLoaders != null)
+            {
+                imageLoaders.ToList().ForEach(t =>
+                {
+                    if (!t.AutoLoad) t.LoadImage();
+                });
+            }
         }
 
         protected virtual void ClearImageBuffer()

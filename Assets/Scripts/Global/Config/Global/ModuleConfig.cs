@@ -58,7 +58,7 @@ namespace AppGame.Config
                                             {
                                                 Name = xeFile.Attribute("Name"),
                                                 Path = xeFile.Attribute("Path"),
-                                                Type = fileTypes != null ? (FileTypes)fileTypes : FileTypes.Image,
+                                                Type = fileTypes != null ? (FileTypes)fileTypes : FileTypes.Sprite,
                                                 Enable = xeFile.Attribute("Enable") == "1"
                                             });
                                         }

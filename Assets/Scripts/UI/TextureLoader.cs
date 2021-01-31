@@ -6,42 +6,20 @@ using UnityEngine.UI;
 /// 图片加载框
 /// </summary>
 [RequireComponent(typeof(RawImage))]
-public class TextureLoader : MonoBehaviour
+public class TextureLoader : ImageLoader
 {
     /************************************************属性与变量命名************************************************/
     [SerializeField]
     private RawImage imageBox;
-    [SerializeField]
-    private ModuleViews moduleView;
-    [SerializeField]
-    private string imageName;
-    [SerializeField]
-    private bool autoLoad;
-    private string imagePath
-    {
-        get
-        {
-            if (this.moduleView == ModuleViews.None)
-            {
-                Debug.LogErrorFormat("<><TextureLoader.imagePath>moduleView need to set up, object name: {0}", this.gameObject.name);
-                return "";
-            }
-            return "Texture/" + SpriteHelper.Instance.GetAssetPath(this.moduleView, imageName, ".png");
-        }
-    }
-    public bool AutoLoad
-    {
-        get { return this.autoLoad; }
-    }
     /************************************************Unity方法与事件***********************************************/
     private void Start()
     {
-        //if (this.autoLoad && !string.IsNullOrEmpty(this.imageName) && this.moduleView != ModuleViews.None)
-        //    this.LoadImage();
+        if (this.autoLoad && !string.IsNullOrEmpty(this.imageName) && this.moduleView != ModuleViews.None)
+            this.LoadImage();
     }
     /************************************************自 定 义 方 法************************************************/
     //加载图片
-    public void LoadImage()
+    public override void LoadImage()
     {
         if (string.IsNullOrEmpty(this.imageName))
         {
@@ -57,7 +35,7 @@ public class TextureLoader : MonoBehaviour
         this.LoadImage(this.imagePath);
     }
     //加载图片
-    public void LoadImage(string imagePath, IResourceUtils resourceUtils = null)
+    public override void LoadImage(string imagePath, IResourceUtils resourceUtils = null)
     {
         //检查并设置组件
         if (this.imageBox == null)
@@ -88,13 +66,13 @@ public class TextureLoader : MonoBehaviour
         }
         else Debug.LogErrorFormat("<><TextureLoader.LoadImage2>Component 'baseView' is null");
     }
-    [ContextMenu("设置Image组件")]
+    [ContextMenu("设置RawImage组件")]
     private void SetImageBox()
     {
         if (this.imageBox == null)
             this.imageBox = this.GetComponent<RawImage>();
     }
-    [ContextMenu("重新设置Image组件")]
+    [ContextMenu("重新设置RawImage组件")]
     private void ResetImageBox()
     {
         this.imageBox = this.GetComponent<RawImage>();

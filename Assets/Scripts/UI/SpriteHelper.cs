@@ -67,7 +67,12 @@ public class SpriteHelper : BaseView
         if (moduleInfo != null)
         {
             foreach (ModuleFile file in moduleInfo.Files)
-                this.LoadSprite(moduleName, string.Format("Texture/{0}.png", file.Path));
+            {
+                if (file.Type == AppGame.Config.FileTypes.Sprite)
+                    this.LoadSprite(moduleName, string.Format("Texture/{0}.png", file.Path));
+                else if (file.Type == AppGame.Config.FileTypes.Texture)
+                    this.LoadTexture(moduleName, string.Format("Texture/{0}.png", file.Path));
+            }
         }
         else
         {
