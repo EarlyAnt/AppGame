@@ -4,9 +4,18 @@
     <Module Name="Cycling" Desc="骑行游戏">
       <Image Name="nanjing_bg" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
       <Image Name="coord" FileType="Sprite" Path="Cycling/View/coord" Enable="1" />
-      <Image Name="location1" FileType="Sprite" Path="Cycling/View/location1" Enable="1" />
-      <Image Name="location2" FileType="Sprite" Path="Cycling/View/location2" Enable="1" />
-      <Image Name="location3" FileType="Sprite" Path="Cycling/View/location3" Enable="1" />
+      <Image Name="avatar06" FileType="Sprite" Path="Cycling/View/avatar06" Enable="1" />
+      <Image Name="avatar07" FileType="Sprite" Path="Cycling/View/avatar07" Enable="1" />
+      <Image Name="avatar08" FileType="Sprite" Path="Cycling/View/avatar08" Enable="1" />
+      <Image Name="avatar09" FileType="Sprite" Path="Cycling/View/avatar09" Enable="1" />
+      <Image Name="avatar11" FileType="Sprite" Path="Cycling/View/avatar11" Enable="1" />
+      <Image Name="avatar12" FileType="Sprite" Path="Cycling/View/avatar12" Enable="1" />
+      <Image Name="food_chicken_small" FileType="Sprite" Path="Cycling/View/food_chicken_small" Enable="1" />
+      <Image Name="food_flagjuice_small" FileType="Sprite" Path="Cycling/View/food_flagjuice_small" Enable="1" />
+      <Image Name="food_opensandwich_small" FileType="Sprite" Path="Cycling/View/food_opensandwich_small" Enable="1" />
+      <Image Name="food_ricecakefish_small" FileType="Sprite" Path="Cycling/View/food_ricecakefish_small" Enable="1" />
+      <Image Name="food_salad_small" FileType="Sprite" Path="Cycling/View/food_salad_small" Enable="1" />
+      <Image Name="food_spider_cake_small" FileType="Sprite" Path="Cycling/View/food_spider_cake_small" Enable="1" />
       <Image Name="map4" FileType="Sprite" Path="Cycling/View/map4" Enable="1" />
       <Image Name="path01" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
       <Image Name="path02" FileType="Texture2" AB="cycling/nanjing" Enable="1" />

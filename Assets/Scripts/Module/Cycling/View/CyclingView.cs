@@ -66,6 +66,7 @@ namespace AppGame.Module.Cycling
 
                 Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.player.transform.parent);
                 teammate.name = "Teammate_" + teammateData.UserID;
+                teammate.AvatarBox.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/View/{0}.png", teammateData.AvatarID));
                 teammate.MoveToNode(teammateData.MapPointID);
             }
         }
