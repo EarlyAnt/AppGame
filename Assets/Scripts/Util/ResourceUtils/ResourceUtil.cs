@@ -7,7 +7,7 @@ using UnityEngine.Experimental.Rendering;
 
 namespace AppGame.Util
 {
-    class ResourceUtils : IResourceUtils
+    class ResourceUtil : IResourceUtil
     {
         public bool IgnoreFileNotExisted { get; set; }//是否忽略要下载的文件在服务器上不存在(忽略[true]则不中断下载，否则[false]中断下载)
         private string serverPath = "https://rex-qn.gululu-a.com/var/vault_apk_res";//服务器地址

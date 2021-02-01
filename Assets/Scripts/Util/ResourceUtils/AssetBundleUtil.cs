@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace AppGame.Util
 {
-    class AssetBundleUtils : IAssetBundleUtils
+    class AssetBundleUtil : IAssetBundleUtil
     {
         [Inject]
-        public IResourceUtils ResourceUtils { get; set; } 
+        public IResourceUtil ResourceUtils { get; set; } 
         private Dictionary<string, Coroutine> asyncOperations = new Dictionary<string, Coroutine>();
         private Dictionary<string, AssetBundle> assetBundles = new Dictionary<string, AssetBundle>();
         private AssetBundleManifest manifest;

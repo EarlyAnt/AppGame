@@ -29,10 +29,10 @@ namespace AppGame.Global
             injectionBinder.Bind<IPrefabUtil>().To<PrefabUtil>().ToSingleton().CrossContext();
             injectionBinder.Bind<II18NUtil>().To<I18NUtil>().ToSingleton().CrossContext();
 
-            injectionBinder.Bind<IHotUpdateUtils>().To<HotUpdateUtils>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IResourceUtils>().To<ResourceUtils>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IAssetBundleUtils>().To<AssetBundleUtils>().ToSingleton().CrossContext();
-            injectionBinder.Bind<ICommonResourceUtils>().To<CommonResourceUtils>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IHotUpdateUtil>().To<HotUpdateUtil>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IResourceUtil>().To<ResourceUtil>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IAssetBundleUtil>().To<AssetBundleUtil>().ToSingleton().CrossContext();
+            injectionBinder.Bind<ICommonResourceUtil>().To<CommonResourceUtil>().ToSingleton().CrossContext();
 
             injectionBinder.Bind<IFontConfig>().To<FontConfig>().ToSingleton().CrossContext();
             injectionBinder.Bind<ILanConfig>().To<LanConfig>().ToSingleton().CrossContext();

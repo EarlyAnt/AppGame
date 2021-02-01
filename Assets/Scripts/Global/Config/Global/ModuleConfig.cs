@@ -51,14 +51,15 @@ namespace AppGame.Config
                                     ArrayList fileNodes = xeModule.Children;
                                     foreach (SecurityElement xeFile in fileNodes)
                                     {//File节点
-                                        if (xeFile.Tag == "File")
+                                        if (xeFile.Tag == "Image")
                                         {
-                                            object fileTypes = Enum.Parse(typeof(FileTypes), xeFile.Attribute("Type"));
+                                            object fileTypes = Enum.Parse(typeof(FileTypes), xeFile.Attribute("FileType"));
                                             moduleInfo.Files.Add(new ModuleFile()
                                             {
                                                 Name = xeFile.Attribute("Name"),
                                                 Path = xeFile.Attribute("Path"),
-                                                Type = fileTypes != null ? (FileTypes)fileTypes : FileTypes.Sprite,
+                                                AB = xeFile.Attribute("AB"),
+                                                FileType = fileTypes != null ? (FileTypes)fileTypes : FileTypes.Sprite,
                                                 Enable = xeFile.Attribute("Enable") == "1"
                                             });
                                         }

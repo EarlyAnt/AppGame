@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AppGame.Util
 {
-    class CommonResourceUtils : ICommonResourceUtils
+    class CommonResourceUtil : ICommonResourceUtil
     {
         #region 成员属性
         [Inject]
@@ -15,9 +15,9 @@ namespace AppGame.Util
         [Inject]
         public IModuleConfig ModuleConfig { get; set; }//Module配置
         [Inject]
-        public IResourceUtils ResourceUtils { get; set; }//资源工具
+        public IResourceUtil ResourceUtils { get; set; }//资源工具
         [Inject]
-        public IHotUpdateUtils HotUpdateUtils { get; set; }
+        public IHotUpdateUtil HotUpdateUtils { get; set; }
         private List<AssetFile> updateFileList = null;
         #endregion
 
@@ -103,7 +103,12 @@ namespace AppGame.Util
             foreach (var moduleInfo in moduleInfos)
             {
                 foreach (var file in moduleInfo.Files)
-                    assetFiles.Add(new AssetFile() { Path = file.Path, FullPath = string.Format("Texture/{0}.png", file.Path), MD5 = "" });
+                {
+                    if (file.FileType == Config.FileTypes.Sprite || file.FileType == Config.FileTypes.Texture1)
+                        assetFiles.Add(new AssetFile() { Path = file.Path, FullPath = string.Format("Texture/{0}.png", file.Path), MD5 = "" });
+                    else if (file.FileType == Config.FileTypes.Texture2 || file.FileType == Config.FileTypes.Spine)
+                        assetFiles.Add(new AssetFile() { Path = file.Path, FullPath = string.Format("Texture/{0}.ab", file.AB), MD5 = "" });
+                }
             }
             #endregion
 

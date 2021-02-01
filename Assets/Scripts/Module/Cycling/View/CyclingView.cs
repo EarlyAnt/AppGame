@@ -50,7 +50,7 @@ namespace AppGame.Module.Cycling
                 this.canvasGroup.DOFade(1f, 1f);
             }, 1f);
 
-            //this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
+            this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
             //this.DelayInvoke(() => SpriteHelper.Instance.ClearBuffer(ModuleViews.Cycling), 5f);
         }
         private void InitPlayerAndTeammates()

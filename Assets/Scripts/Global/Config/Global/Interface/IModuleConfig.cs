@@ -68,20 +68,22 @@ namespace AppGame.Config
     public enum FileTypes
     {
         Sprite = 0,
-        Texture = 1,
-        Spine = 2
+        Texture1 = 1,
+        Texture2 = 2,
+        Spine = 3
     }
 
     public class ModuleFile
     {
         public string Name { get; set; }
         public string Path { get; set; }
-        public FileTypes Type { get; set; }
+        public string AB { get; set; }
+        public FileTypes FileType { get; set; }
         public bool Enable { get; set; }
 
         public override string ToString()
         {
-            return string.Format("ModuleFile, Name: {0}, Path: {1}, Type: {2}", this.Name, this.Path, this.Type);
+            return string.Format("ModuleFile, Name: {0}, Path: {1}, AB = {2}, Type: {3}", this.Name, this.Path, this.AB, this.FileType);
         }
     }
     #endregion

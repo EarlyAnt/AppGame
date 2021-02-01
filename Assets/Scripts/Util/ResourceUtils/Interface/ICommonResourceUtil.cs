@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AppGame.Util
 {
-    public interface ICommonResourceUtils
+    public interface ICommonResourceUtil
     {
         /// <summary>
         /// 检查资源文件

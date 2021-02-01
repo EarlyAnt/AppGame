@@ -10,7 +10,7 @@ namespace AppGame.Util
         public string Message { get; set; }
     }
 
-    public interface IResourceUtils
+    public interface IResourceUtil
     {
         /// <summary>
         /// 服务器根目录下资源文件目录的根目录

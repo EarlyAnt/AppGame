@@ -4,7 +4,7 @@ using UnityEngine;
 namespace AppGame.Util
 {
     //热更数据获取工具
-    public class HotUpdateUtils : IHotUpdateUtils
+    public class HotUpdateUtil : IHotUpdateUtil
     {
         //[Inject]
         //public IUrlProvider UrlProvider { get; set; }

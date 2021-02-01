@@ -15,7 +15,7 @@ public class SpriteHelper : BaseView
     [Inject]
     public IModuleConfig ModuleConfig { get; set; }
     [Inject]
-    public IResourceUtils ResourceUtils { get; set; }
+    public IResourceUtil ResourceUtils { get; set; }
     [SerializeField, Range(0f, 60f)]
     private float GCDelaySeconds = 10f;
     private List<ModuleInfo> moduleInfos = new List<ModuleInfo>();
@@ -68,9 +68,9 @@ public class SpriteHelper : BaseView
         {
             foreach (ModuleFile file in moduleInfo.Files)
             {
-                if (file.Type == AppGame.Config.FileTypes.Sprite)
+                if (file.FileType == AppGame.Config.FileTypes.Sprite)
                     this.LoadSprite(moduleName, string.Format("Texture/{0}.png", file.Path));
-                else if (file.Type == AppGame.Config.FileTypes.Texture)
+                else if (file.FileType == AppGame.Config.FileTypes.Texture1)
                     this.LoadTexture(moduleName, string.Format("Texture/{0}.png", file.Path));
             }
         }

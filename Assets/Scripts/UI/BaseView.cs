@@ -67,7 +67,7 @@ namespace AppGame.UI
 
         protected virtual void LoadStaticImage()
         {
-            ImageLoader[] imageLoaders = this.GetComponentsInChildren<ImageLoader>();
+            ImageLoader[] imageLoaders = this.GetComponentsInChildren<ImageLoader>(true);
             if (imageLoaders != null)
             {
                 imageLoaders.ToList().ForEach(t =>

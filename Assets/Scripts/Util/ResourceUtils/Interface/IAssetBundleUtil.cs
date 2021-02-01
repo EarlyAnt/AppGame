@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AppGame.Util
 {
-    public interface IAssetBundleUtils
+    public interface IAssetBundleUtil
     {
         /// <summary>
         /// 从AssetBundle包中加载所需要的物体

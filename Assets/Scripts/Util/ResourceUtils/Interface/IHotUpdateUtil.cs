@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AppGame.Util
 {
-    public interface IHotUpdateUtils
+    public interface IHotUpdateUtil
     {
         void GetUpdateInfo(Action<UpdateInfos> callback = null, Action<string> errCallback = null);
         UpdateRecord ReadUpdateRecord();

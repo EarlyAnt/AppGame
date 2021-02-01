@@ -9,34 +9,34 @@ using UnityEngine.UI;
 public class TextureLoader : ImageLoader
 {
     /************************************************属性与变量命名************************************************/
+    [Inject]
+    public IAssetBundleUtil AssetBundleUtil { get; set; }
+    [SerializeField]
+    private string assetbundleName;
     [SerializeField]
     private RawImage imageBox;
     /************************************************Unity方法与事件***********************************************/
-    private void Start()
+    protected override void Start()
     {
-        if (this.autoLoad && !string.IsNullOrEmpty(this.imageName) && this.moduleView != ModuleViews.None)
+        base.Start();
+        if (this.autoLoad && !string.IsNullOrEmpty(this.assetbundleName) && !string.IsNullOrEmpty(this.imageName))
             this.LoadImage();
     }
     /************************************************自 定 义 方 法************************************************/
     //加载图片
     public override void LoadImage()
     {
-        if (string.IsNullOrEmpty(this.imageName))
+        if (string.IsNullOrEmpty(this.assetbundleName))
+        {
+            Debug.LogErrorFormat("<><TextureLoader.LoadImage>Parameter 'assetbundleName' is null or empty, object: {0}", this.gameObject != null ? this.gameObject.name : "");
+            return;
+        }
+        else if (string.IsNullOrEmpty(this.imageName))
         {
             Debug.LogErrorFormat("<><TextureLoader.LoadImage>Parameter 'imageName' is null or empty, object: {0}", this.gameObject != null ? this.gameObject.name : "");
             return;
         }
-        else if (this.moduleView == ModuleViews.None)
-        {
-            Debug.LogErrorFormat("<><TextureLoader.LoadImage>Component 'baseView' is null, object: {0}", this.gameObject != null ? this.gameObject.name : "");
-            return;
-        }
 
-        this.LoadImage(this.imagePath);
-    }
-    //加载图片
-    public override void LoadImage(string imagePath, IResourceUtils resourceUtils = null)
-    {
         //检查并设置组件
         if (this.imageBox == null)
             this.imageBox = this.GetComponent<RawImage>();
@@ -44,27 +44,29 @@ public class TextureLoader : ImageLoader
         //再次检查组件
         if (this.imageBox == null)
         {
-            Debug.LogErrorFormat("<><TextureLoader.LoadImage2>Component 'image' is null");
+            Debug.LogErrorFormat("<><TextureLoader.LoadImage>Component 'image' is null");
             return;
         }
 
         //加载图片
-        if (this.moduleView != ModuleViews.None)
+        //Debug.LogFormat("<><TextureLoader.LoadImage>Object: {0}, Image: {1}", this.gameObject.name, imagePath);
+        this.AssetBundleUtil.LoadAssetBundleAsync(this.assetbundleName, (assetbundle) =>
         {
-            //Debug.LogFormat("<><TextureLoader.SetImage>Object: {0}, Image: {1}", this.gameObject.name, imagePath);
-            SpriteHelper.Instance.LoadTexture(this.moduleView, imagePath,
-                                              (texture) =>
-                                              {
-                                                  this.imageBox.texture = texture;
-                                                  if (this.autoLoad)
-                                                      GameObject.Destroy(this);
-                                              },
-                                              (failureInfo) =>
-                                              {
-                                                  Debug.LogErrorFormat("<><TextureLoader.SetImage>Unknown error: {0}", failureInfo);
-                                              });
-        }
-        else Debug.LogErrorFormat("<><TextureLoader.LoadImage2>Component 'baseView' is null");
+            Texture2D texture = assetbundle.LoadAsset<Texture2D>(this.imageName);
+            if (texture != null)
+            {
+                this.imageBox.texture = texture;
+                if (this.autoLoad)
+                    GameObject.Destroy(this);
+            }
+            else
+            {
+                Debug.LogErrorFormat("<><TextureLoader.LoadImage>Error: can not find texture, texture: {0}, assetbundle: {1}", this.assetbundleName, this.imageName);
+            }
+        }, (failureInfo) =>
+        {
+            Debug.LogErrorFormat("<><TextureLoader.LoadImage>Error: can not find assetbundle, assetbundle: {0}", this.assetbundleName);
+        });
     }
     [ContextMenu("设置RawImage组件")]
     private void SetImageBox()
