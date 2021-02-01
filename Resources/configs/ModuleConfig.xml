@@ -2,13 +2,14 @@
 <Project Name="Gululu" Version="">
   <Modules>
     <Module Name="Cycling" Desc="骑行游戏">
-      <File Name="nanjing_bg" Path="Cycling/View/nanjing_bg" Type="Texture" Enable="1" />
-      <File Name="coord" Path="Cycling/View/coord" Type="Sprite" Enable="1" />
-      <File Name="location1" Path="Cycling/View/location1" Type="Sprite" Enable="1" />
-      <File Name="location2" Path="Cycling/View/location2" Type="Sprite" Enable="1" />
-      <File Name="location3" Path="Cycling/View/location3" Type="Sprite" Enable="1" />
-      <File Name="path01" Path="Cycling/View/path01" Type="Texture" Enable="1" />
-      <File Name="path02" Path="Cycling/View/path02" Type="Texture" Enable="1" />
+      <Image Name="nanjing_bg" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
+      <Image Name="coord" FileType="Sprite" Path="Cycling/View/coord" Enable="1" />
+      <Image Name="location1" FileType="Sprite" Path="Cycling/View/location1" Enable="1" />
+      <Image Name="location2" FileType="Sprite" Path="Cycling/View/location2" Enable="1" />
+      <Image Name="location3" FileType="Sprite" Path="Cycling/View/location3" Enable="1" />
+      <Image Name="map4" FileType="Sprite" Path="Cycling/View/map4" Enable="1" />
+      <Image Name="path01" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
+      <Image Name="path02" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
     </Module>
   </Modules>
 </Project>
