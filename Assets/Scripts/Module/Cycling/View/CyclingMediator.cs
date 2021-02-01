@@ -53,9 +53,9 @@ namespace AppGame.Module.Cycling
         private void GetGameData()
         {
             LocationDatas locationDatas = new LocationDatas();
-            locationDatas.Datas.Add(new LocationData() { UserID = "01", AvatarID = "", MapPointID = "320101 _54" });
-            locationDatas.Datas.Add(new LocationData() { UserID = "02", AvatarID = "avatar09", MapPointID = "320101 _34" });
-            locationDatas.Datas.Add(new LocationData() { UserID = "03", AvatarID = "avatar12", MapPointID = "320101 _12" });
+            locationDatas.Datas.Add(new LocationData() { UserID = "01", AvatarID = "", MapPointID = "320101_01" });
+            locationDatas.Datas.Add(new LocationData() { UserID = "02", AvatarID = "avatar06", MapPointID = "320101_34" });
+            locationDatas.Datas.Add(new LocationData() { UserID = "03", AvatarID = "avatar09", MapPointID = "320101_12" });
             this.View.LocationDatas = locationDatas;
         }
     }

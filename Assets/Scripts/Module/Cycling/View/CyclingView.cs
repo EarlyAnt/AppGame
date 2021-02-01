@@ -14,6 +14,8 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private Player player;
         [SerializeField]
+        private Transform teammateRoot;
+        [SerializeField]
         private Teammate teammatePrefab;
         [SerializeField]
         private List<Teammate> teammates;
@@ -64,7 +66,7 @@ namespace AppGame.Module.Cycling
                 if (teammateData.UserID == AppData.UserID)
                     continue;
 
-                Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.player.transform.parent);
+                Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.teammateRoot);
                 teammate.name = "Teammate_" + teammateData.UserID;
                 teammate.AvatarBox.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/View/{0}.png", teammateData.AvatarID));
                 teammate.MoveToNode(teammateData.MapPointID);
