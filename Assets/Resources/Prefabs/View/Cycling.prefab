@@ -220,7 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.6901961}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2513,7 +2513,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapNode: {fileID: 1166681447}
   player: {fileID: 1517289409620272565}
-  step: 0.5
+  step: 0.2
   mapCanvas: {fileID: 1673776819}
   canvasScale: 0.03
   camera: {fileID: 34381790}
