@@ -1,6 +1,8 @@
 ﻿using AppGame.Config;
+using AppGame.Global;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AppGame.Util
@@ -141,30 +143,30 @@ namespace AppGame.Util
                 #region 服务器数据筛选
                 List<UpdateFileInfo> severFileList = new List<UpdateFileInfo>();//结果数据集
 #if (UNITY_ANDROID) && (!UNITY_EDITOR)
-            if (updateInfos != null && updateInfos.res_list != null)
-            {
-                List<UpdateInfo> updateInfoList = updateInfos.res_list.OrderByDescending(t => t.res_ver_code).ToList();//按照资源版本号倒叙排列历次更新数据
-                foreach (var updateInfo in updateInfoList)
-                {//遍历历次更新数据，并且只关注apk版本号和资源版本号符合要求的数据
-                    Debug.LogFormat("<><CommonResourceUtils.GetUpdateFiles>0 - updateInfo: {0}", updateInfo);
-                    if (updateInfo.apk_ver_code > Gululu.AppInfo.Instance.VersionCode ||
-                        updateInfo.res_ver_code <= updateRecord.ResVersionCode)
-                        continue;
+                if (updateInfos != null && updateInfos.res_list != null)
+                {
+                    List<UpdateInfo> updateInfoList = updateInfos.res_list.OrderByDescending(t => t.res_ver_code).ToList();//按照资源版本号倒叙排列历次更新数据
+                    foreach (var updateInfo in updateInfoList)
+                    {//遍历历次更新数据，并且只关注apk版本号和资源版本号符合要求的数据
+                        Debug.LogFormat("<><CommonResourceUtils.GetUpdateFiles>0 - updateInfo: {0}", updateInfo);
+                        if (updateInfo.apk_ver_code > AppData.VersionCode ||
+                            updateInfo.res_ver_code <= updateRecord.ResVersionCode)
+                            continue;
 
-                    foreach (var updateFileInfo in updateInfo.update_files)
-                    {//遍历某个更新数据中的文件列表，因为已经做过倒叙排列处理，所以这里只记录结果数据集中没有的文件信息
-                        if (!severFileList.Exists(t => t.file == this.GetShortName(updateFileInfo.file)))
-                        {
-                            Debug.LogFormat("<><CommonResourceUtils.GetUpdateFiles>1 - server file name: {0}", updateFileInfo.file);
-                            updateFileInfo.file = this.GetShortName(updateFileInfo.file);
-                            severFileList.Add(updateFileInfo);
-                            Debug.LogFormat("<><CommonResourceUtils.GetUpdateFiles>2 - formatted file name: {0}", updateFileInfo.file);
+                        foreach (var updateFileInfo in updateInfo.update_files)
+                        {//遍历某个更新数据中的文件列表，因为已经做过倒叙排列处理，所以这里只记录结果数据集中没有的文件信息
+                            if (!severFileList.Exists(t => t.file == this.GetShortName(updateFileInfo.file)))
+                            {
+                                Debug.LogFormat("<><CommonResourceUtils.GetUpdateFiles>1 - server file name: {0}", updateFileInfo.file);
+                                updateFileInfo.file = this.GetShortName(updateFileInfo.file);
+                                severFileList.Add(updateFileInfo);
+                                Debug.LogFormat("<><CommonResourceUtils.GetUpdateFiles>2 - formatted file name: {0}", updateFileInfo.file);
+                            }
                         }
+                        Debug.LogFormat("<><CommonResourceUtils.GetUpdateFiles>3 - version file count: {0}", updateInfo.update_files.Count);
                     }
-                    Debug.LogFormat("<><CommonResourceUtils.GetUpdateFiles>3 - version file count: {0}", updateInfo.update_files.Count);
                 }
-            }
-            Debug.LogFormat("<><CommonResourceUtils.GetUpdateFiles>Step2->SeverFileList, count: {0}", severFileList.Count);
+                Debug.LogFormat("<><CommonResourceUtils.GetUpdateFiles>Step2->SeverFileList, count: {0}", severFileList.Count);
 #endif
                 #endregion
                 #region 服务器数据与本地数据整合
