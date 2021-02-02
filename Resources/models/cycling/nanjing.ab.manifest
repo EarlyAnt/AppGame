@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 1805134334
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5c05f74a405a56585081d7320f1c246f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ea5a42e0fd8ea905efa7aa926a3b8944
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/art_assets/Ani/AB/UI/Package/cycling/nanjing/map4.png
+- Assets/art_assets/Ani/AB/UI/Package/cycling/nanjing/nanjing_bg.png
+- Assets/art_assets/Ani/AB/UI/Package/cycling/nanjing/path02.png
+- Assets/art_assets/Ani/AB/UI/Package/cycling/nanjing/path01.png
+Dependencies: []

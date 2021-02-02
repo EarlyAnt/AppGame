@@ -1,0 +1,196 @@
+ManifestFileVersion: 0
+CRC: 401243971
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: role/elk.ab
+      Dependencies:
+        Dependency_0: particle/guangdian_02.ab
+    Info_1:
+      Name: role/christmas hat.ab
+      Dependencies: {}
+    Info_2:
+      Name: role/coin hat.ab
+      Dependencies: {}
+    Info_3:
+      Name: role/xinuo.ab
+      Dependencies: {}
+    Info_4:
+      Name: role/dony.ab
+      Dependencies: {}
+    Info_5:
+      Name: role/antler.ab
+      Dependencies: {}
+    Info_6:
+      Name: role/snowman.ab
+      Dependencies:
+        Dependency_0: particle/guangdian_02.ab
+    Info_7:
+      Name: role/cornu cervi.ab
+      Dependencies: {}
+    Info_8:
+      Name: role/pumpkin.ab
+      Dependencies:
+        Dependency_0: particle/shandian_fx01.ab
+    Info_9:
+      Name: role/yoyo.ab
+      Dependencies: {}
+    Info_10:
+      Name: role/giftbox.ab
+      Dependencies:
+        Dependency_0: particle/hezi_fx.ab
+    Info_11:
+      Name: role/wing.ab
+      Dependencies:
+        Dependency_0: particle/wing01.ab
+    Info_12:
+      Name: role/wing_snow.ab
+      Dependencies:
+        Dependency_0: particle/guangdian_02.ab
+    Info_13:
+      Name: role/fan wing.ab
+      Dependencies: {}
+    Info_14:
+      Name: role/ghost.ab
+      Dependencies:
+        Dependency_0: particle/tuowei_fx01.ab
+    Info_15:
+      Name: role/christmas.ab
+      Dependencies:
+        Dependency_0: particle/guangdian_01.ab
+        Dependency_1: particle/center_fx02.ab
+        Dependency_2: particle/star_fx.ab
+    Info_16:
+      Name: role/cloud_snow.ab
+      Dependencies:
+        Dependency_0: particle/yun.ab
+    Info_17:
+      Name: role/cap.ab
+      Dependencies:
+        Dependency_0: particle/star_fx.ab
+    Info_18:
+      Name: role/mouse spring.ab
+      Dependencies: {}
+    Info_19:
+      Name: role/papercut mice.ab
+      Dependencies: {}
+    Info_20:
+      Name: role/little mouse.ab
+      Dependencies: {}
+    Info_21:
+      Name: particle/guangdian_02.ab
+      Dependencies: {}
+    Info_22:
+      Name: particle/center_fx01.ab
+      Dependencies: {}
+    Info_23:
+      Name: particle/shandian_fx01.ab
+      Dependencies: {}
+    Info_24:
+      Name: particle/yun.ab
+      Dependencies: {}
+    Info_25:
+      Name: particle/hezi_fx.ab
+      Dependencies: {}
+    Info_26:
+      Name: particle/wing01.ab
+      Dependencies: {}
+    Info_27:
+      Name: particle/guangdian_01.ab
+      Dependencies: {}
+    Info_28:
+      Name: particle/center_fx02.ab
+      Dependencies: {}
+    Info_29:
+      Name: particle/star_fx.ab
+      Dependencies: {}
+    Info_30:
+      Name: particle/tuowei_fx01.ab
+      Dependencies: {}
+    Info_31:
+      Name: role/glasses.ab
+      Dependencies: {}
+    Info_32:
+      Name: role/suit_valentine.ab
+      Dependencies: {}
+    Info_33:
+      Name: role/suit_valentine01.ab
+      Dependencies: {}
+    Info_34:
+      Name: role/suit_valentine02.ab
+      Dependencies: {}
+    Info_35:
+      Name: role/lovehat.ab
+      Dependencies: {}
+    Info_36:
+      Name: role/garland.ab
+      Dependencies: {}
+    Info_37:
+      Name: expression/bomb.ab
+      Dependencies: {}
+    Info_38:
+      Name: expression/love.ab
+      Dependencies: {}
+    Info_39:
+      Name: expression/miss_you.ab
+      Dependencies: {}
+    Info_40:
+      Name: expression/octopus.ab
+      Dependencies: {}
+    Info_41:
+      Name: expression/paint.ab
+      Dependencies: {}
+    Info_42:
+      Name: expression/pig.ab
+      Dependencies: {}
+    Info_43:
+      Name: expression/rainbow.ab
+      Dependencies: {}
+    Info_44:
+      Name: expression/tantan.ab
+      Dependencies: {}
+    Info_45:
+      Name: garden/strawberry.ab
+      Dependencies: {}
+    Info_46:
+      Name: garden/gesture.ab
+      Dependencies: {}
+    Info_47:
+      Name: garden/hamimelon.ab
+      Dependencies: {}
+    Info_48:
+      Name: garden/blueberry.ab
+      Dependencies: {}
+    Info_49:
+      Name: garden/watermelon.ab
+      Dependencies: {}
+    Info_50:
+      Name: garden/pitaya.ab
+      Dependencies: {}
+    Info_51:
+      Name: garden/pineapple.ab
+      Dependencies: {}
+    Info_52:
+      Name: garden/raspberry.ab
+      Dependencies: {}
+    Info_53:
+      Name: garden/sow.ab
+      Dependencies: {}
+    Info_54:
+      Name: garden/treasurebox.ab
+      Dependencies: {}
+    Info_55:
+      Name: garden/soil.ab
+      Dependencies: {}
+    Info_56:
+      Name: garden/gardenlevelup.ab
+      Dependencies: {}
+    Info_57:
+      Name: remind/record.ab
+      Dependencies: {}
+    Info_58:
+      Name: remind/clock.ab
+      Dependencies: {}
+    Info_59:
+      Name: cycling/nanjing.ab
+      Dependencies: {}

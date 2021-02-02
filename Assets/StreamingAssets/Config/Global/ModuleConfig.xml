@@ -16,7 +16,7 @@
       <Image Name="food_ricecakefish_small" FileType="Sprite" Path="Cycling/View/food_ricecakefish_small" Enable="1" />
       <Image Name="food_salad_small" FileType="Sprite" Path="Cycling/View/food_salad_small" Enable="1" />
       <Image Name="food_spider_cake_small" FileType="Sprite" Path="Cycling/View/food_spider_cake_small" Enable="1" />
-      <Image Name="map4" FileType="Sprite" Path="Cycling/View/map4" Enable="1" />
+        <Image Name="map4" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
       <Image Name="path01" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
       <Image Name="path02" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
     </Module>

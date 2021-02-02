@@ -1036,8 +1036,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1399181126}
   - component: {fileID: 1399181128}
-  - component: {fileID: 1399181127}
-  - component: {fileID: 1696324049}
+  - component: {fileID: 1873924835}
+  - component: {fileID: 1873924834}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -1072,7 +1072,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1399181125}
   m_CullTransparentMesh: 0
---- !u!114 &1399181127
+--- !u!114 &1873924835
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1081,27 +1081,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1399181125}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c5040649e6e96c547848fe36cd603d4b, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!114 &1696324049
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!114 &1873924834
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1110,13 +1107,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1399181125}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Script: {fileID: 11500000, guid: c8a02a6c9e65910438d559fba1b32c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   imageName: map4
-  autoLoad: 0
-  moduleView: 2
-  imageBox: {fileID: 1399181127}
+  autoLoad: 1
+  assetbundleName: cycling/nanjing
+  imageBox: {fileID: 1873924835}
 --- !u!1 &1532280016
 GameObject:
   m_ObjectHideFlags: 0
@@ -1167,7 +1164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219b5cd21ff78654dabb3396d68fc53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageBox: {fileID: 1399181127}
+  imageBox: {fileID: 0}
   textBox: {fileID: 1738926985}
 --- !u!1 &1645572575
 GameObject:
