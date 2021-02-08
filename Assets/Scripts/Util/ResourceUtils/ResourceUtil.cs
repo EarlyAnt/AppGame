@@ -10,11 +10,11 @@ namespace AppGame.Util
     class ResourceUtil : IResourceUtil
     {
         public bool IgnoreFileNotExisted { get; set; }//是否忽略要下载的文件在服务器上不存在(忽略[true]则不中断下载，否则[false]中断下载)
-        private string serverPath = "https://rex-qn.gululu-a.com/var/vault_apk_res";//服务器地址
+        private string serverPath = "https://rex-qn.gululu-a.com/var/galaxy_apk_res";//服务器地址
         private string localPath = string.Format("file:///{0}", Application.persistentDataPath);//本地路径
         private string[] cacheFolders = new string[] { "Audio", "Texture", "Sprite", "Model" };//本地资源文件相关的路径
         private Dictionary<string, AssetBundle> assetBundleBuffer = new Dictionary<string, AssetBundle>();
-        public string SERVER_ROOT_PATH { get { return "var/vault_apk_res/"; } }
+        public string SERVER_ROOT_PATH { get { return "var/galaxy_apk_res/"; } }
 
         /// <summary>
         /// 设置服务器地址
