@@ -18,7 +18,6 @@ namespace AppGame.Global
 
         public static string Version { get; set; }
         public static int VersionCode { get; set; }
-
         public static VersionTypes VersionType
         {
             get
@@ -30,5 +29,6 @@ namespace AppGame.Global
 #endif
             }
         }
+        public static bool DebugMode { get; set; }
     }
 }

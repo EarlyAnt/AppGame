@@ -1,15 +1,12 @@
+using AppGame.Data.Local;
+using AppGame.Data.Remote;
+using AppGame.Util;
+using BestHTTP;
+using LitJson;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using BestHTTP;
 using UnityEngine;
-using LitJson;
-using Cup.Utils.android;
-using Gululu.LocalData.Agents;
-using Gululu.net;
-using System.Threading;
-using Hank;
-using AppGame.Util;
 
 namespace AppGame.Data.Common
 {
@@ -23,22 +20,21 @@ namespace AppGame.Data.Common
     public class GululuNetwork : IGululuNetwork
     {
         [Inject]
-        public IAuthenticationUtils mAuthenticationUtils { get; set; }
-
+        public ILocalCupAgent LocalCupAgent { get; set; }
         [Inject]
-        public IJsonUtils mJsonUtils { get; set; }
-
+        public IJsonUtils JsonUtils { get; set; }
         [Inject]
-        public ClearLocalDataSignal mClearLocalDataSignal { get; set; }
-
+        public IAuthenticationUtils AuthenticationUtils { get; set; }
+        //[Inject]
+        //public ClearLocalDataSignal ClearLocalDataSignal { get; set; }
         [Inject]
-        public GululuNetworkHelper mGululuNetworkHelper { get; set; }
+        public GululuNetworkHelper GululuNetworkHelper { get; set; }
 
 
-        public void sendRequest(string url, IDictionary<string, string> headrs, string bodyContent, Action<string> callBack, Action<ResponseErroInfo> errCallBack, HTTPMethods methods)
+        public void SendRequest(string url, IDictionary<string, string> headrs, string bodyContent, Action<string> callBack, Action<ResponseErroInfo> errCallBack, HTTPMethods methods)
         {
             string requestInfo = "mothod:" + methods + " url:" + url + " body:" + bodyContent;
-            GuLog.Info("GululuNetwork", requestInfo);
+            Debug.LogFormat("GululuNetwork: {0}", requestInfo);
 
             HTTPRequest hTTPRequest = new HTTPRequest(new Uri(url), methods);
             hTTPRequest.Tag = RequestRetryInfo.allRetryCount;
@@ -53,11 +49,11 @@ namespace AppGame.Data.Common
             hTTPRequest.Send();
         }
 
-        public void sendRequest(string url, IDictionary<string, string> headrs, Action<string> callBack, Action<ResponseErroInfo> errCallBack, HTTPMethods methods)
+        public void SendRequest(string url, IDictionary<string, string> headrs, Action<string> callBack, Action<ResponseErroInfo> errCallBack, HTTPMethods methods)
         {
 
             string requestInfo = "mothod:" + methods + " url:" + url;
-            GuLog.Info("GululuNetwork", requestInfo);
+            Debug.LogFormat("GululuNetwork: {0}", requestInfo);
 
             HTTPRequest hTTPRequest = new HTTPRequest(new Uri(url), methods);
             hTTPRequest.Tag = RequestRetryInfo.allRetryCount;
@@ -80,10 +76,10 @@ namespace AppGame.Data.Common
 
         public void setHeader(HTTPRequest hTTPRequest, IDictionary<string, string> headrs)
         {
-            hTTPRequest.AddHeader("Gululu-Agent", mGululuNetworkHelper.GetAgent());
-            hTTPRequest.AddHeader("udid", mGululuNetworkHelper.GetUdid());
-            hTTPRequest.AddHeader("Accept-Language", mGululuNetworkHelper.GetAcceptLang());
-            string token = mJsonUtils.getToken();
+            hTTPRequest.AddHeader("Gululu-Agent", GululuNetworkHelper.GetAgent());
+            hTTPRequest.AddHeader("udid", GululuNetworkHelper.GetUdid());
+            hTTPRequest.AddHeader("Accept-Language", GululuNetworkHelper.GetAcceptLang());
+            string token = this.LocalCupAgent.GetCupToken();
             if (token != null && token.Length != 0)
             {
                 hTTPRequest.AddHeader("token", token);
@@ -115,7 +111,7 @@ namespace AppGame.Data.Common
                 case HTTPRequestStates.Finished:
                     string requestInfo = "Response url:" + originalRequest.Uri.AbsolutePath + " body:" + response.DataAsText;
 
-                    GuLog.Info(requestInfo);
+                    Debug.Log(requestInfo);
                     if (response.IsSuccess)
                     {
                         callBack(response.DataAsText);
@@ -178,7 +174,7 @@ namespace AppGame.Data.Common
                 if (isResetError(originalRequest, response))
                 {
                     Debug.LogWarning("notify reset");
-                    mClearLocalDataSignal.Dispatch();
+                    //ClearLocalDataSignal.Dispatch();
                 }
 
 
@@ -194,9 +190,7 @@ namespace AppGame.Data.Common
                 if (response.StatusCode == 400)
                 {
                     string info = response.DataAsText;
-
-                    JsonData errorData = mJsonUtils.JsonStr2JsonData(info);
-
+                    JsonData errorData = JsonUtils.JsonStr2JsonData(info);
                     string error_code = (string)errorData["error_code"];
 
                     if (String.Equals(error_code, "C-004"))
@@ -207,9 +201,7 @@ namespace AppGame.Data.Common
             }
             catch
             {
-
             }
-
             return false;
         }
 
@@ -265,7 +257,7 @@ namespace AppGame.Data.Common
 
         public void handleAuthenticatioError(HTTPRequest originalRequest, Action<ResponseErroInfo> errCallBack)
         {
-            mAuthenticationUtils.reNewToken((scuccessrResultBack) =>
+            AuthenticationUtils.reNewToken((scuccessrResultBack) =>
             {
                 string token = scuccessrResultBack.info;
                 reSendRequest(originalRequest, token);

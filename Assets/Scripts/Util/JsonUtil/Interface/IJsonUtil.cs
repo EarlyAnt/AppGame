@@ -1,11 +1,16 @@
+using LitJson;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace AppGame.Util
 {
     public interface IJsonUtils
     {
-        T String2Json<T>(string jsonStr);
+        T String2Json<T>(string jsonString);
+        string Json2String(object jsonObject);
 
-        string Json2String(object json);
+        JsonData JsonStr2JsonData(string jsonString);
+
+        string Dictionary2String(Dictionary<string, string> dictionary);
     }
 }
