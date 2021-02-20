@@ -4,13 +4,6 @@ using System.Linq;
 
 namespace AppGame.Data.Model
 {
-    public class BasicData
-    {
-        public string child_sn { get; set; }
-        public string child_name { get; set; }
-        public string child_avatar { get; set; }
-    }
-
     public class OriginData
     {
         public string child_sn { get; set; }
