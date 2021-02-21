@@ -11,6 +11,11 @@ namespace AppGame.Data.Model
         public int ride { get; set; }
         public int train { get; set; }
         public int learn { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("child_sn: {0}, walk: {1}, ride: {2}, train: {3}, learn: {4}", this.child_sn, this.walk, this.ride, this.train, this.learn);
+        }
     }
 
     public class PlayerData
@@ -28,5 +33,10 @@ namespace AppGame.Data.Model
         public int mp_today { get; set; }
         public int mp_yestoday { get; set; }
         public int hp { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("child_sn: {0}, map_id: {1}, map_position: {2}", this.child_sn, this.map_id, this.map_position);
+        }
     }
 }

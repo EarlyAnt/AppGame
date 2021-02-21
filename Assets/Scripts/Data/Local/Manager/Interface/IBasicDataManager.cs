@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AppGame.Data.Local
 {
-    interface IBasicDataManager
+    public interface IBasicDataManager
     {
         void SaveDataList(List<BasicData> basicDataList);
         List<BasicData> GetAllData();

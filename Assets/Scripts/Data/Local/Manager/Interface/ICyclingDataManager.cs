@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AppGame.Data.Local
 {
-    interface ICyclingDataManager
+    public interface ICyclingDataManager
     {
         void SaveOriginData(OriginData originData);
         OriginData GetOriginData(string childSN);
