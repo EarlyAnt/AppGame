@@ -28,6 +28,7 @@ namespace AppGame.Module.Cycling
             UpdateListeners(true);
             this.BuildTestData();
             this.GetGameData();
+            this.RefreshMpDatas();
             this.InvokeRepeating("GetGameData", 3f, 3f);
             this.InvokeRepeating("RefreshOriginData", 3f, 5f);
             this.InvokeRepeating("RefreshFriendData", 3f, 15f);
@@ -83,10 +84,10 @@ namespace AppGame.Module.Cycling
         {
             //创建基础数据
             List<BasicData> basicDataList = new List<BasicData>();
-            basicDataList.Add(new BasicData() { child_sn = "01", child_name = "樱木花道", child_avatar = "avatar06" });
-            basicDataList.Add(new BasicData() { child_sn = "02", child_name = "仙道彰", child_avatar = "avatar09" });
-            basicDataList.Add(new BasicData() { child_sn = "03", child_name = "流川枫", child_avatar = "avatar09" });
-            basicDataList.Add(new BasicData() { child_sn = "04", child_name = "牧绅一", child_avatar = "avatar06" });
+            basicDataList.Add(new BasicData() { child_sn = "01", child_name = "樱木花道", child_avatar = "avatar06", relation = (int)Relations.Self });
+            basicDataList.Add(new BasicData() { child_sn = "02", child_name = "仙道彰", child_avatar = "avatar09", relation = (int)Relations.Family });
+            basicDataList.Add(new BasicData() { child_sn = "03", child_name = "流川枫", child_avatar = "avatar09", relation = (int)Relations.Friend });
+            basicDataList.Add(new BasicData() { child_sn = "04", child_name = "牧绅一", child_avatar = "avatar06", relation = (int)Relations.Friend });
             this.BasicDataManager.SaveDataList(basicDataList);
             //创建原始数据
             OriginData originData = new OriginData() { child_sn = "01", walk = 10000, ride = 5000, train = 20, learn = 30 };
@@ -114,21 +115,21 @@ namespace AppGame.Module.Cycling
                 child_sn = "02",
                 map_id = "320101",
                 map_position = "320101_15",
-                mp_yestoday = 0
+                mp_yestoday = 20
             });
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "03",
                 map_id = "320101",
                 map_position = "320101_21",
-                mp_yestoday = 0
+                mp_yestoday = 15
             });
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "04",
                 map_id = "320101",
                 map_position = "320101_27",
-                mp_yestoday = 0
+                mp_yestoday = 10
             });
             this.CyclingDataManager.SavePlayerDataList(playerDataList);
         }
@@ -138,6 +139,7 @@ namespace AppGame.Module.Cycling
             this.originData.walk += Random.Range(1000, 5000);
             this.originData.ride += Random.Range(1000, 5000);
             this.CyclingDataManager.SaveOriginData(this.originData);
+            this.RefreshMpDatas();
         }
 
         private void RefreshFriendData()
@@ -148,6 +150,56 @@ namespace AppGame.Module.Cycling
             int position = int.Parse(playerData.map_position.Substring(7, 2));
             playerData.map_position = string.Format("{0}_{1}", playerData.map_id, position + offset);
             this.CyclingDataManager.SavePlayerData(playerData);
+            this.RefreshMpDatas();
+        }
+
+        private void RefreshMpDatas()
+        {
+            List<MpData> mpDatas = new List<MpData>();
+            PlayerData myPlayerData = this.playerDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());
+
+            int mpWalk = (int)((this.originData.walk - myPlayerData.walk_expend) / 500);
+            if (mpWalk > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Value = mpWalk });
+
+            int mpRide = (int)((this.originData.ride - myPlayerData.ride_expend) / 500);
+            if (mpRide > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Value = mpRide });
+
+            int mpTrain = (this.originData.train - myPlayerData.train_expend);
+            if (mpTrain > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Value = mpTrain });
+
+            int mpLearn = (int)((this.originData.learn - myPlayerData.learn_expend) / 5);
+            if (mpLearn > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Value = mpLearn });
+
+            foreach (var playerData in this.playerDataList)
+            {
+                if (playerData.child_sn == this.LocalChildInfoAgent.GetChildSN())
+                    continue;
+
+                BasicData basicData = this.basicDataList.Find(t => t.child_sn == playerData.child_sn);
+                if (basicData == null)
+                {
+                    Debug.LogErrorFormat("<><CyclingMediator.RefreshMpBalls>Can not find the basic data of [0]", playerData.child_sn);
+                    continue;
+                }
+
+                int mpShare = 0;
+                if (basicData.relation == (int)Relations.Family)
+                    mpShare = (int)System.Math.Ceiling(playerData.mp_yestoday * 0.05);
+                else if (basicData.relation == (int)Relations.Friend)
+                    mpShare = (int)System.Math.Ceiling(playerData.mp_yestoday * 0.01);
+
+                if (mpShare > 0)
+                {
+                    mpDatas.Add(new MpData()
+                    {
+                        MpBallType = (basicData.relation == (int)Relations.Family ? MpBallTypes.Family : MpBallTypes.Friend),
+                        Value = mpShare,
+                        FromID = playerData.child_sn,
+                        FromName = basicData.child_name
+                    });
+                }
+            }
+            this.View.RefreshMpBalls(mpDatas);
         }
     }
 }

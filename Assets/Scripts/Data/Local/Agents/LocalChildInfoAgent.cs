@@ -22,15 +22,16 @@ namespace AppGame.Data.Local
 
         public string GetChildSN()
         {
-#if UNITY_EDITOR
-            if (AppData.DebugMode)
-                return "";
+            //#if UNITY_EDITOR
+            //            if (AppData.DebugMode)
+            //                return "";
 
-            this.SaveChildSN(DEFAULT_CHILD_SN);
-#endif
-            this.childSn = LocalDataManager.GetObject<string>(DATA_KEY, "");
-            //Debug.LogFormat("<><LocalChildInfoAgent.GetChildSN>childSn: {0}", this.childSn);
-            return childSn;
+            //            this.SaveChildSN(DEFAULT_CHILD_SN);
+            //#endif
+            //            this.childSn = LocalDataManager.GetObject<string>(DATA_KEY, "");
+            //            //Debug.LogFormat("<><LocalChildInfoAgent.GetChildSN>childSn: {0}", this.childSn);
+            //            return childSn;
+            return "01";
         }
 
         public void Clear()

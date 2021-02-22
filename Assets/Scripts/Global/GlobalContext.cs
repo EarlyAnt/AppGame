@@ -1,4 +1,5 @@
 using AppGame.Config;
+using AppGame.Data.Local;
 using AppGame.Util;
 using strange.extensions.command.api;
 using strange.extensions.command.impl;
@@ -26,6 +27,7 @@ namespace AppGame.Global
             base.mapBindings();
 
             //bind injection
+            injectionBinder.Bind<IJsonUtils>().To<JsonUtils>().ToSingleton().CrossContext();
             injectionBinder.Bind<IPrefabUtil>().To<PrefabUtil>().ToSingleton().CrossContext();
             injectionBinder.Bind<II18NUtil>().To<I18NUtil>().ToSingleton().CrossContext();
 
@@ -42,6 +44,9 @@ namespace AppGame.Global
 
             injectionBinder.Bind<IMapConfig>().To<MapConfig>().ToSingleton().CrossContext();
             injectionBinder.Bind<IScenicConfig>().To<ScenicConfig>().ToSingleton().CrossContext();
+
+            injectionBinder.Bind<ILocalDataManager>().To<LocalDataManager>().ToSingleton().CrossContext();
+            injectionBinder.Bind<ILocalChildInfoAgent>().To<LocalChildInfoAgent>().ToSingleton().CrossContext();
         }
     }
 }

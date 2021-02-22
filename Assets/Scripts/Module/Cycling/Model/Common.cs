@@ -36,6 +36,16 @@ namespace AppGame.Module.Cycling
         FRAGMENT_CLOTH = 5,
         FRAGMENT_FURNITURE = 6
     }
+
+    public enum MpBallTypes
+    {
+        Walk = 0,
+        Ride = 1,
+        Train = 2,
+        Learn = 3,
+        Family = 4,
+        Friend = 5
+    }
     #endregion
 
     #region 自定义类
@@ -48,11 +58,20 @@ namespace AppGame.Module.Cycling
             this.Datas = new List<LocationData>();
         }
     }
+
     public class LocationData
     {
         public string UserID { get; set; }
         public string AvatarID { get; set; }
         public string MapPointID { get; set; }
+    }
+
+    public class MpData
+    {
+        public MpBallTypes MpBallType { get; set; }
+        public string FromID { get; set; }
+        public string FromName { get; set; }
+        public int Value { get; set; }
     }
     #endregion
 }
