@@ -87,9 +87,10 @@ namespace AppGame.Module.Cycling
             //创建基础数据
             List<BasicData> basicDataList = new List<BasicData>();
             basicDataList.Add(new BasicData() { child_sn = "01", child_name = "樱木花道", child_avatar = "avatar06", relation = (int)Relations.Self });
-            basicDataList.Add(new BasicData() { child_sn = "02", child_name = "仙道彰", child_avatar = "avatar09", relation = (int)Relations.Family });
-            basicDataList.Add(new BasicData() { child_sn = "03", child_name = "流川枫", child_avatar = "avatar09", relation = (int)Relations.Friend });
-            basicDataList.Add(new BasicData() { child_sn = "04", child_name = "牧绅一", child_avatar = "avatar06", relation = (int)Relations.Friend });
+            basicDataList.Add(new BasicData() { child_sn = "02", child_name = "赤木晴子", child_avatar = "avatar09", relation = (int)Relations.Family });
+            basicDataList.Add(new BasicData() { child_sn = "03", child_name = "仙道彰", child_avatar = "avatar09", relation = (int)Relations.Friend });
+            basicDataList.Add(new BasicData() { child_sn = "04", child_name = "流川枫", child_avatar = "avatar06", relation = (int)Relations.Friend });
+            basicDataList.Add(new BasicData() { child_sn = "05", child_name = "牧绅一", child_avatar = "avatar06", relation = (int)Relations.Friend });
             this.BasicDataManager.SaveDataList(basicDataList);
             //创建原始数据
             OriginData originData = new OriginData() { child_sn = "01", walk = 10000, ride = 5000, train = 20, learn = 30 };
@@ -117,21 +118,28 @@ namespace AppGame.Module.Cycling
                 child_sn = "02",
                 map_id = "320101",
                 map_position = "320101_15",
-                mp_yestoday = 20
+                mp_yestoday = 50
             });
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "03",
                 map_id = "320101",
                 map_position = "320101_21",
-                mp_yestoday = 15
+                mp_yestoday = 25
             });
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "04",
                 map_id = "320101",
                 map_position = "320101_27",
-                mp_yestoday = 10
+                mp_yestoday = 20
+            });
+            playerDataList.Add(new PlayerData()
+            {
+                child_sn = "05",
+                map_id = "320101",
+                map_position = "320101_33",
+                mp_yestoday = 30
             });
             this.CyclingDataManager.SavePlayerDataList(playerDataList);
         }
