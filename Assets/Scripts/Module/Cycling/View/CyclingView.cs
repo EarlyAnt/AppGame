@@ -41,7 +41,7 @@ namespace AppGame.Module.Cycling
         private MpBall mpBallPrefab2;
         #endregion
         #region 其他变量
-        private float halfWidth = 280f;
+        private float halfWidth = 380f;
         private float halfHeight = 800f;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
@@ -139,7 +139,7 @@ namespace AppGame.Module.Cycling
                     newMpBall.Value = mpData.Value;
                     newMpBall.transform.localRotation = Quaternion.identity;
                     newMpBall.transform.localScale = Vector3.one;
-                    newMpBall.transform.localPosition = new Vector3(Random.Range(-this.halfWidth, this.halfWidth), Random.Range(-this.halfHeight, this.halfHeight), 0);
+                    newMpBall.transform.localPosition = this.GetRandomPosition();
                     this.mpBalls.Add(newMpBall);
                 }
                 else
@@ -147,6 +147,29 @@ namespace AppGame.Module.Cycling
                     mpBall.Value = mpData.Value;
                 }
             }
+        }
+        private Vector3 GetRandomPosition()
+        {
+            Vector3 position = new Vector3(Random.Range(-this.halfWidth, this.halfWidth), Random.Range(-this.halfHeight, this.halfHeight), 0);
+            List<Vector3> positions = new List<Vector3>();
+            positions.Add(this.player.transform.localPosition);
+            this.teammates.ForEach(t => positions.Add(t.transform.localPosition));
+            this.mpBalls.ForEach(t => positions.Add(t.transform.localPosition));
+            positions.ForEach(t => t = this.transform.TransformPoint(t));
+            bool valid = true;
+            foreach (var item in positions)
+            {
+                if (Vector3.Distance(position, item) < 300f)
+                {
+                    valid = false;
+                    break;
+                }
+            }
+
+            if (valid)
+                return position;
+            else
+                return this.GetRandomPosition();
         }
     }
 }

@@ -21,8 +21,29 @@ namespace AppGame.Module.Cycling
         }
         public MpBallTypes MpBallType
         {
-            get { return this.mpBallType; }
-            set { this.mpBallType = value; }
+            get
+            {
+                return this.mpBallType;
+            }
+            set
+            {
+                this.mpBallType = value;
+                switch (value)
+                {
+                    case MpBallTypes.Walk:
+                        this.fromBox.text = "²½ÐÐ";
+                        break;
+                    case MpBallTypes.Ride:
+                        this.fromBox.text = "ÆïÐÐ";
+                        break;
+                    case MpBallTypes.Train:
+                        this.fromBox.text = "×ø×ËÑµÁ·";
+                        break;
+                    case MpBallTypes.Learn:
+                        this.fromBox.text = "×ø×Ë¼à²â";
+                        break;
+                }
+            }
         }
         public string FromID { get; set; }
         public string FromName
