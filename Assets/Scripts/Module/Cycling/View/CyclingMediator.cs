@@ -28,6 +28,8 @@ namespace AppGame.Module.Cycling
             UpdateListeners(true);
             this.BuildTestData();
             this.GetGameData();
+            this.View.RefreshPlayer(this.basicDataList, this.playerDataList);
+            this.View.RefreshTeammates(this.basicDataList, this.playerDataList);
             this.RefreshMpDatas();
             this.InvokeRepeating("GetGameData", 3f, 3f);
             this.InvokeRepeating("RefreshOriginData", 3f, 5f);
@@ -150,7 +152,7 @@ namespace AppGame.Module.Cycling
             int position = int.Parse(playerData.map_position.Substring(7, 2));
             playerData.map_position = string.Format("{0}_{1}", playerData.map_id, position + offset);
             this.CyclingDataManager.SavePlayerData(playerData);
-            this.RefreshMpDatas();
+            this.View.RefreshTeammates(this.basicDataList, this.playerDataList);
         }
 
         private void RefreshMpDatas()
@@ -162,13 +164,13 @@ namespace AppGame.Module.Cycling
             if (mpWalk > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Value = mpWalk });
 
             int mpRide = (int)((this.originData.ride - myPlayerData.ride_expend) / 500);
-            if (mpRide > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Value = mpRide });
+            if (mpRide > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Ride, Value = mpRide });
 
             int mpTrain = (this.originData.train - myPlayerData.train_expend);
-            if (mpTrain > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Value = mpTrain });
+            if (mpTrain > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Train, Value = mpTrain });
 
             int mpLearn = (int)((this.originData.learn - myPlayerData.learn_expend) / 5);
-            if (mpLearn > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Value = mpLearn });
+            if (mpLearn > 0) mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Learn, Value = mpLearn });
 
             foreach (var playerData in this.playerDataList)
             {

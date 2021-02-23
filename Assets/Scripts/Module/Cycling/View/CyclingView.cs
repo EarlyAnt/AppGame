@@ -1,3 +1,5 @@
+using AppGame.Data.Local;
+using AppGame.Data.Model;
 using AppGame.Global;
 using AppGame.UI;
 using DG.Tweening;
@@ -11,13 +13,16 @@ namespace AppGame.Module.Cycling
     {
         /************************************************属性与变量命名************************************************/
         #region 注入接口
-
+        [Inject]
+        public ILocalChildInfoAgent LocalChildInfoAgent { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
         private Image mask;
         [SerializeField]
         private CanvasGroup canvasGroup;
+        [SerializeField]
+        private Player player;
         [SerializeField]
         private Transform teammateRoot;
         [SerializeField]
@@ -38,15 +43,18 @@ namespace AppGame.Module.Cycling
         #region 其他变量
         private float halfWidth = 280f;
         private float halfHeight = 800f;
-        private Player player;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
-        public LocationDatas LocationDatas { get; set; }
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
         {
             base.Awake();
+
+            this.mpBalls = new List<MpBall>();
+
+            while (this.mpBallRoot.childCount > 0)
+                GameObject.DestroyImmediate(this.mpBallRoot.GetChild(0).gameObject);
         }
         protected override void Start()
         {
@@ -62,36 +70,12 @@ namespace AppGame.Module.Cycling
         {
             this.DelayInvoke(() =>
             {
-                this.InitPlayerAndTeammates();
-            }, 0.5f);
-
-            this.DelayInvoke(() =>
-            {
                 this.mask.DOFade(0f, 1f);
                 this.canvasGroup.DOFade(1f, 1f);
             }, 1f);
 
             this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
             //this.DelayInvoke(() => SpriteHelper.Instance.ClearBuffer(ModuleViews.Cycling), 5f);
-        }
-        private void InitPlayerAndTeammates()
-        {
-            LocationData myData = this.LocationDatas.Datas.Find(t => t.UserID == AppData.UserID);
-            this.player.MoveToNode(myData.MapPointID);
-            this.player.name = "Player_" + myData.UserID;
-
-            this.teammates = new List<Teammate>();
-            foreach (var teammateData in this.LocationDatas.Datas)
-            {
-                if (teammateData.UserID == AppData.UserID)
-                    continue;
-
-                Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.teammateRoot);
-                teammate.name = "Teammate_" + teammateData.UserID;
-                teammate.AvatarBox.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/View/{0}.png", teammateData.AvatarID));
-                teammate.MoveToNode(teammateData.MapPointID);
-                this.teammates.Add(teammate);
-            }
         }
         public void MoveForward()
         {
@@ -102,17 +86,46 @@ namespace AppGame.Module.Cycling
             this.player.MoveBack();
         }
 
+        public void RefreshPlayer(List<BasicData> basicDataList, List<PlayerData> playerDataList)
+        {
+            PlayerData myPlayerData = playerDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());
+            this.player.MoveToNode(myPlayerData.map_position);
+            this.player.name = "Player_" + myPlayerData.child_sn;
+        }
+        public void RefreshTeammates(List<BasicData> basicDataList, List<PlayerData> playerDataList)
+        {
+            if (this.teammates == null)
+            {
+                this.teammates = new List<Teammate>();
+                foreach (var teammateData in playerDataList)
+                {
+                    if (teammateData.child_sn == this.LocalChildInfoAgent.GetChildSN())
+                        continue;
+
+                    Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.teammateRoot);
+                    teammate.name = "Teammate_" + teammateData.child_sn;
+                    teammate.AvatarBox.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/View/{0}.png", basicDataList.Find(t => t.child_sn == teammateData.child_sn).child_avatar));
+                    teammate.MoveToNode(teammateData.map_position);
+                    this.teammates.Add(teammate);
+                }
+            }
+            else
+            {
+                foreach (var teammateData in playerDataList)
+                {
+                    if (teammateData.child_sn == this.LocalChildInfoAgent.GetChildSN())
+                        continue;
+
+                    Teammate teammate = this.teammates.Find(t => t.name == "Teammate_" + teammateData.child_sn);
+                    if (teammate != null) teammate.MoveToNode(teammateData.map_position);
+                }
+            }
+        }
         public void RefreshMpBalls(List<MpData> mpDatas)
         {
-            if (this.mpBalls == null)
-                this.mpBalls = new List<MpBall>();
-
-            while (this.mpBallRoot.childCount > 0)
-                GameObject.DestroyImmediate(this.mpBallRoot.GetChild(0).gameObject);
-
             foreach (var mpData in mpDatas)
             {
-                MpBall mpBall = this.mpBalls.Find(t => t.FromID == mpData.FromID);
+                MpBall mpBall = this.mpBalls.Find(t => t.MpBallType == mpData.MpBallType && t.FromID == mpData.FromID);
                 if (mpBall == null)
                 {
                     MpBall prefab = mpData.MpBallType == MpBallTypes.Family || mpData.MpBallType == MpBallTypes.Friend ? this.mpBallPrefab2 : this.mpBallPrefab1;

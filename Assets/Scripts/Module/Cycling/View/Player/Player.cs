@@ -142,7 +142,7 @@ namespace AppGame.Module.Cycling
         {
             Vector3 playerPosition = this.player.position;
             playerPosition.z = this.camera.position.z;
-            if (!this.inRange)
+            if (!this.inRange && this.cameraEdge != null)
             {
                 playerPosition.x = Mathf.Clamp(playerPosition.x, -this.mapRectTransform.sizeDelta.x * this.canvasScale / 2f + this.cameraEdge.Width / 2f, this.mapRectTransform.sizeDelta.x * this.canvasScale / 2f - this.cameraEdge.Width / 2f);
                 playerPosition.y = Mathf.Clamp(playerPosition.y, -this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f + this.cameraEdge.Height / 2f, this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f - this.cameraEdge.Height / 2f);
