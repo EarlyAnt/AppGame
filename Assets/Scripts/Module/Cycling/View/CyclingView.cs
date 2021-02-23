@@ -3,6 +3,7 @@ using AppGame.Data.Model;
 using AppGame.Global;
 using AppGame.UI;
 using DG.Tweening;
+using strange.extensions.signal.impl;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,12 +40,17 @@ namespace AppGame.Module.Cycling
         private MpBall mpBallPrefab1;
         [SerializeField]
         private MpBall mpBallPrefab2;
+        [SerializeField]
+        private Text mpBox;
+        [SerializeField]
+        private Text hpBox;
         #endregion
         #region 其他变量
         private float halfWidth = 380f;
         private float halfHeight = 800f;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
+        public Signal<MpBall> CollectMpSignal = new Signal<MpBall>();
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -126,7 +132,7 @@ namespace AppGame.Module.Cycling
             foreach (var mpData in mpDatas)
             {
                 MpBall mpBall = this.mpBalls.Find(t => t.MpBallType == mpData.MpBallType && t.FromID == mpData.FromID);
-                if (mpBall == null)
+                if (mpBall == null && mpData.Value > 0)
                 {
                     MpBall prefab = mpData.MpBallType == MpBallTypes.Family || mpData.MpBallType == MpBallTypes.Friend ? this.mpBallPrefab2 : this.mpBallPrefab1;
                     MpBall newMpBall = GameObject.Instantiate(prefab, this.mpBallRoot);
@@ -140,13 +146,24 @@ namespace AppGame.Module.Cycling
                     newMpBall.transform.localRotation = Quaternion.identity;
                     newMpBall.transform.localScale = Vector3.one;
                     newMpBall.transform.localPosition = this.GetRandomPosition();
+                    newMpBall.OnCollectMp = this.CollectMp;
                     this.mpBalls.Add(newMpBall);
                 }
-                else
+                else if (mpBall != null)
                 {
                     mpBall.Value = mpData.Value;
+                    if (mpBall.Value <= 0)
+                    {
+                        this.mpBalls.Remove(mpBall);
+                        GameObject.DestroyImmediate(mpBall.gameObject);
+                    }
                 }
             }
+        }
+        public void RefreshMp(int mp, int hp)
+        {
+            this.mpBox.text = mp.ToString();
+            this.hpBox.text = hp.ToString();
         }
         private Vector3 GetRandomPosition()
         {
@@ -170,6 +187,17 @@ namespace AppGame.Module.Cycling
                 return position;
             else
                 return this.GetRandomPosition();
+        }
+        private void CollectMp(MpBall mpBall)
+        {
+            if (mpBall.Value >= 100)
+            {
+                this.CollectMpSignal.Dispatch(mpBall);
+            }
+            else
+            {
+                //Todo: 能量不足100时，弹出提示
+            }
         }
     }
 }

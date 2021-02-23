@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,8 +33,15 @@ namespace AppGame.Module.Cycling
         private string fromName = "";
         public int Value
         {
-            get { return this.mp; }
-            set { this.mp = value; this.mpBox.text = value.ToString(); }
+            get
+            {
+                return this.mp;
+            }
+            set
+            {
+                this.mp = value;
+                this.mpBox.text = value > 999 ? "999" : value.ToString();
+            }
         }
         public MpBallTypes MpBallType
         {
@@ -67,6 +75,7 @@ namespace AppGame.Module.Cycling
             get { return this.fromName; }
             set { this.fromName = value; this.fromBox.text = value; }
         }
+        public Action<MpBall> OnCollectMp { get; set; }
         #endregion
         /************************************************Unity方法与事件***********************************************/
         private void Awake()
@@ -89,7 +98,7 @@ namespace AppGame.Module.Cycling
         public void PlayPingPong()
         {
             this.StopPingPong();
-            if (Random.Range(0, 10) % 2 == 0)
+            if (UnityEngine.Random.Range(0, 10) % 2 == 0)
                 this.PingPong(this.originY, this.destinationY);
             else
                 this.PingPong(this.originY, this.destinationY);
@@ -103,8 +112,16 @@ namespace AppGame.Module.Cycling
         //往返运动
         private void PingPong(float from, float to)
         {
-            this.tweener = this.bubbleTransform.DOLocalMoveY(to, Random.Range(this.durationMin, this.durationMax));
+            this.tweener = this.bubbleTransform.DOLocalMoveY(to, UnityEngine.Random.Range(this.durationMin, this.durationMax));
             this.tweener.onComplete += () => this.PingPong(to, from);
+        }
+        //收取能量
+        public void CollectMp()
+        {
+            if (this.mp >= 100 && this.OnCollectMp != null)
+            {
+                this.OnCollectMp(this);
+            }
         }
     }
 }
