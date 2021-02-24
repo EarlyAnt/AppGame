@@ -28,12 +28,7 @@ namespace AppGame.Module.Cycling
             UpdateListeners(true);
             this.BuildTestData();
             this.GetGameData();
-            this.View.RefreshPlayer(this.basicDataList, this.playerDataList);
-            this.View.RefreshTeammates(this.basicDataList, this.playerDataList);
-            this.RefreshMpDatas();
-            this.InvokeRepeating("GetGameData", 3f, 3f);
-            this.InvokeRepeating("RefreshOriginData", 3f, 5f);
-            this.InvokeRepeating("RefreshFriendData", 3f, 15f);
+            this.Invoke("Initialize", 1f);
         }
 
         public override void OnRemove()
@@ -72,6 +67,16 @@ namespace AppGame.Module.Cycling
             //dispatcher.Dispatch(GameEvent.SHIP_DESTROYED);
         }
 
+        private void Initialize()
+        {
+            this.View.RefreshPlayer(this.basicDataList, this.playerDataList);
+            this.View.RefreshTeammates(this.basicDataList, this.playerDataList);
+            this.RefreshMpDatas();
+            this.InvokeRepeating("GetGameData", 3f, 3f);
+            this.InvokeRepeating("RefreshOriginData", 3f, 5f);
+            this.InvokeRepeating("RefreshFriendData", 3f, 15f);
+        }
+
         private void GetGameData()
         {
             //LocationDatas locationDatas = new LocationDatas();
@@ -89,11 +94,11 @@ namespace AppGame.Module.Cycling
         {
             //创建基础数据
             List<BasicData> basicDataList = new List<BasicData>();
-            basicDataList.Add(new BasicData() { child_sn = "01", child_name = "樱木花道", child_avatar = "avatar06", relation = (int)Relations.Self });
-            basicDataList.Add(new BasicData() { child_sn = "02", child_name = "赤木晴子", child_avatar = "avatar09", relation = (int)Relations.Family });
-            basicDataList.Add(new BasicData() { child_sn = "03", child_name = "仙道彰", child_avatar = "avatar09", relation = (int)Relations.Friend });
-            basicDataList.Add(new BasicData() { child_sn = "04", child_name = "流川枫", child_avatar = "avatar06", relation = (int)Relations.Friend });
-            basicDataList.Add(new BasicData() { child_sn = "05", child_name = "牧绅一", child_avatar = "avatar06", relation = (int)Relations.Friend });
+            basicDataList.Add(new BasicData() { child_sn = "01", child_name = "樱木花道", child_avatar = "6", relation = (int)Relations.Self });
+            basicDataList.Add(new BasicData() { child_sn = "02", child_name = "赤木晴子", child_avatar = "9", relation = (int)Relations.Family });
+            basicDataList.Add(new BasicData() { child_sn = "03", child_name = "仙道彰", child_avatar = "12", relation = (int)Relations.Friend });
+            basicDataList.Add(new BasicData() { child_sn = "04", child_name = "流川枫", child_avatar = "15", relation = (int)Relations.Friend });
+            basicDataList.Add(new BasicData() { child_sn = "05", child_name = "牧绅一", child_avatar = "19", relation = (int)Relations.Friend });
             this.BasicDataManager.SaveDataList(basicDataList);
             //创建原始数据
             OriginData originData = new OriginData() { child_sn = "01", walk = 10000, ride = 5000, train = 20, learn = 30 };

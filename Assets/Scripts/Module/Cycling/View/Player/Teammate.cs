@@ -12,11 +12,10 @@ namespace AppGame.Module.Cycling
 
         #endregion
         #region 页面UI组件
-        [SerializeField]
-        private Image avatarBox;
+
         #endregion
         #region 其他变量
-        public Image AvatarBox { get { return this.avatarBox; } }
+
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()

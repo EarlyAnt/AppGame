@@ -1,3 +1,4 @@
+using AppGame.Config;
 using AppGame.Data.Local;
 using AppGame.Data.Model;
 using AppGame.Global;
@@ -15,7 +16,11 @@ namespace AppGame.Module.Cycling
         /************************************************属性与变量命名************************************************/
         #region 注入接口
         [Inject]
+        public IModuleConfig ModuleConfig { get; set; }
+        [Inject]
         public ILocalChildInfoAgent LocalChildInfoAgent { get; set; }
+        [Inject]
+        public ICommonImageUtils CommonImageUtils { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
@@ -74,11 +79,14 @@ namespace AppGame.Module.Cycling
         /************************************************自 定 义 方 法************************************************/
         private void Initialize()
         {
+            this.CommonImageUtils.Initialize();
+            this.DelayInvoke(() => this.CommonImageUtils.LoadCommonImages(), 1f);
+
             this.DelayInvoke(() =>
             {
                 this.mask.DOFade(0f, 1f);
                 this.canvasGroup.DOFade(1f, 1f);
-            }, 1f);
+            }, 2f);
 
             this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
             //this.DelayInvoke(() => SpriteHelper.Instance.ClearBuffer(ModuleViews.Cycling), 5f);
@@ -95,8 +103,13 @@ namespace AppGame.Module.Cycling
         public void RefreshPlayer(List<BasicData> basicDataList, List<PlayerData> playerDataList)
         {
             PlayerData myPlayerData = playerDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());
+            BasicData myBasicData = basicDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());
             this.player.MoveToNode(myPlayerData.map_position);
             this.player.name = "Player_" + myPlayerData.child_sn;
+            Sprite avatar = this.CommonImageUtils.GetAvatar(myBasicData.child_avatar);
+            this.player.Avatar = avatar;
+            this.avatarBox.sprite = avatar;
+            this.nameBox.text = myBasicData.child_name;
         }
         public void RefreshTeammates(List<BasicData> basicDataList, List<PlayerData> playerDataList)
         {
@@ -109,8 +122,9 @@ namespace AppGame.Module.Cycling
                         continue;
 
                     Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.teammateRoot);
+                    BasicData basicData = basicDataList.Find(t => t.child_sn == teammateData.child_sn);
                     teammate.name = "Teammate_" + teammateData.child_sn;
-                    teammate.AvatarBox.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/View/{0}.png", basicDataList.Find(t => t.child_sn == teammateData.child_sn).child_avatar));
+                    teammate.Avatar = this.CommonImageUtils.GetAvatar(basicData.child_avatar);
                     teammate.MoveToNode(teammateData.map_position);
                     this.teammates.Add(teammate);
                 }

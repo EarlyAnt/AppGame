@@ -18,7 +18,7 @@ namespace AppGame.Module.Cycling
         /************************************************Unity方法与事件***********************************************/
 
         /************************************************自 定 义 方 法************************************************/
-        [ContextMenu("收集地图点")]
+        [ContextMenu("1-收集地图点")]
         private void CollectPoints()
         {
             this.points = new List<Transform>();
@@ -28,7 +28,7 @@ namespace AppGame.Module.Cycling
                 this.points.Add(this.pointRoot.GetChild(i));
             }
         }
-        [ContextMenu("补齐MapNodePoint组件")]
+        [ContextMenu("2-补齐MapNodePoint组件")]
         private void AddNodeScript()
         {
             if (this.points == null || this.points.Count == 0)
@@ -52,7 +52,31 @@ namespace AppGame.Module.Cycling
                 }
             }
         }
-        [ContextMenu("设置节点ID")]
+        [ContextMenu("3-设置节点名称")]
+        private void SetNodeName()
+        {
+            if (this.points == null || this.points.Count == 0)
+            {
+                Debug.LogError("<><MapNode.SetNodeName>Error: parameter 'this.points' is null or empty");
+                return;
+            }
+
+            for (int i = 0; i < this.points.Count; i++)
+            {
+                
+                MapPointNode mapPointNode = this.points[i].GetComponent<MapPointNode>();
+                if (mapPointNode != null)
+                {
+                    this.points[i].name = string.Format("{0}_{1}", mapPointNode.NodeType, i + 1);
+                }
+                else
+                {
+                    Debug.LogErrorFormat("<><MapNode.SetNodeName>Error: no MapPointNode script on this node: {0}", mapPointNode.name);
+                    return;
+                }
+            }
+        }
+        [ContextMenu("4-设置节点ID")]
         private void SetNodeID()
         {
             if (this.points == null || this.points.Count == 0)

@@ -47,6 +47,8 @@ namespace AppGame.Global
 
             injectionBinder.Bind<ILocalDataManager>().To<LocalDataManager>().ToSingleton().CrossContext();
             injectionBinder.Bind<ILocalChildInfoAgent>().To<LocalChildInfoAgent>().ToSingleton().CrossContext();
+
+            injectionBinder.Bind<ICommonImageUtils>().To<CommonImageUtils>().ToSingleton().CrossContext();
         }
     }
 }

@@ -1,5 +1,6 @@
 using AppGame.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace AppGame.Module.Cycling
 {
@@ -10,6 +11,8 @@ namespace AppGame.Module.Cycling
 
         #endregion
         #region 页面UI组件
+        [SerializeField]
+        protected Image avatarBox;
         [SerializeField]
         protected MapNode mapNode;
         [SerializeField]
@@ -26,6 +29,11 @@ namespace AppGame.Module.Cycling
                 return this.mapNode != null && this.mapNode.Points != null && this.mapNode.Points.Count > 0 ?
                        this.mapNode.Points[this.nodeIndex].position : Vector3.zero;
             }
+        }
+        public Sprite Avatar
+        {
+            get { return this.avatarBox.sprite; }
+            set { this.avatarBox.sprite = value; }
         }
         #endregion
         /************************************************Unity方法与事件***********************************************/
