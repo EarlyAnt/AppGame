@@ -115,7 +115,7 @@ namespace AppGame.Module.Cycling
                 while (Vector3.Distance(this.player.position, this.destination) > 0.01f);
                 pointNode = this.mapNode.Points[this.nodeIndex].GetComponent<MapPointNode>();
             }
-            while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode || pointNode.NodeType == NodeTypes.EventNode);
+            while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode);
             yield return new WaitForSeconds(0.35f);
 
             this.scenicNode = this.mapNode.Points[this.nodeIndex].GetComponent<ScenicNode>();
