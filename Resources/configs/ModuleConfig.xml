@@ -50,7 +50,6 @@
       <Image Name="scenicspot_highlight" FileType="Sprite" Path="Cycling/View/scenicspot_highlight" Enable="1" />
       <Image Name="scenicspot_normal" FileType="Sprite" Path="Cycling/View/scenicspot_normal" Enable="1" />
       <Image Name="site_highlight" FileType="Sprite" Path="Cycling/View/site_highlight" Enable="1" />
-      <Image Name="site_normal " FileType="Sprite" Path="Cycling/View/site_normal " Enable="1" />
       <Image Name="site_normal" FileType="Sprite" Path="Cycling/View/site_normal" Enable="1" />
       <Image Name="stars_highlight " FileType="Sprite" Path="Cycling/View/stars_highlight " Enable="1" />
       <Image Name="start_normal " FileType="Sprite" Path="Cycling/View/start_normal " Enable="1" />
