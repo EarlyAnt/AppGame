@@ -31,15 +31,11 @@
     <Module Name="Cycling" Desc="骑行游戏">
       <Image Name="nanjing_bg" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
       <Image Name="path" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
-      <Image Name="nanjing_bg" FileType="Sprite" Path="Cycling/Map/nanjing_bg" Enable="1" />
-      <Image Name="nanjing_demo" FileType="Sprite" Path="Cycling/Map/nanjing_demo" Enable="1" />
-      <Image Name="path" FileType="Sprite" Path="Cycling/Map/path" Enable="1" />
       <Image Name="back" FileType="Sprite" Path="Cycling/View/back" Enable="1" />
       <Image Name="book" FileType="Sprite" Path="Cycling/View/book" Enable="1" />
       <Image Name="coin_border" FileType="Sprite" Path="Cycling/View/coin_border" Enable="1" />
       <Image Name="coord" FileType="Sprite" Path="Cycling/View/coord" Enable="1" />
       <Image Name="coord2" FileType="Sprite" Path="Cycling/View/coord2" Enable="1" />
-      <Image Name="effect" FileType="Sprite" Path="Cycling/View/effect" Enable="1" />
       <Image Name="food_chicken_small" FileType="Sprite" Path="Cycling/View/food_chicken_small" Enable="1" />
       <Image Name="food_flagjuice_small" FileType="Sprite" Path="Cycling/View/food_flagjuice_small" Enable="1" />
       <Image Name="food_opensandwich_small" FileType="Sprite" Path="Cycling/View/food_opensandwich_small" Enable="1" />
