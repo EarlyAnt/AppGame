@@ -23,7 +23,7 @@ namespace AppGame.Global
             get
             {
 #if (UNITY_ANDROID) && (!UNITY_EDITOR)
-                return ServiceType.Release;
+                return VersionTypes.Release;
 #else
                 return VersionTypes.Development;
 #endif

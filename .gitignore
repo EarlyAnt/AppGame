@@ -8,3 +8,5 @@ AppGame.sln
 /*.user
 /Assembly-CSharp-Editor.csproj
 /*.apk
+/Android
+/Android.rar

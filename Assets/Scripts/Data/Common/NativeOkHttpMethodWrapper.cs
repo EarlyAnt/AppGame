@@ -14,28 +14,15 @@ namespace AppGame.Data.Common
         public IGululuNetwork GululuNetwork { set; get; }
         [Inject]
         public INetUtils NetUtils { set; get; }
-        private AndroidJavaObject nativeOkHttpMethodWrapper;
 
         public void post(string url, string headerStr, string body, Action<string> result, Action<ResponseErroInfo> faile)
         {
 #if UNITY_ANDROID && (!UNITY_EDITOR)
-            Debug.Log(string.Format("<><NativeOkHttpMethodWrapper.post>url: {0}, headerStr: {1}, body: {2}", url, headerStr, body));
-            if (nativeOkHttpMethodWrapper == null)
+            Debug.Log(string.Format("<><GululuNetwork.post>url: {0}, headerStr: {1}, body: {2}", url, headerStr, body));
+            GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), body, (response) =>
             {
-                nativeOkHttpMethodWrapper = getOkHttpMethodWrapper();
-            }
-
-            NativeOkHttpMethodWrapperCallBack callBack = new NativeOkHttpMethodWrapperCallBack();
-            callBack.setCallback((resultInfo) =>
-            {
-                Debug.Log(string.Format("<><NativeOkHttpMethodWrapper.post>post back: {0}", resultInfo));
-                result(resultInfo);
-            }, (faileInfo) =>
-            {
-                Debug.Log(string.Format("<><NativeOkHttpMethodWrapper.post>post back error: {0}", faileInfo != null ? faileInfo.ErrorInfo : "empty or null"));
-                faile(faileInfo);
-            });
-            nativeOkHttpMethodWrapper.Call("post", url, headerStr, body, callBack);
+                result(response);
+            }, faile, HTTPMethods.Post);
 
 #elif UNITY_EDITOR
             GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), body, (response) =>
@@ -62,22 +49,11 @@ namespace AppGame.Data.Common
         public void put(string url, string headerStr, string body, Action<string> result, Action<ResponseErroInfo> faile)
         {
 #if UNITY_ANDROID && (!UNITY_EDITOR)
-            Debug.Log(string.Format("<><NativeOkHttpMethodWrapper.put>url: {0}, headerStr: {1}, body: {2}", url, headerStr, body));
-            if (nativeOkHttpMethodWrapper == null)
+            Debug.Log(string.Format("<><GululuNetwork.put>url: {0}, headerStr: {1}, body: {2}", url, headerStr, body));
+            GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), body, (response) =>
             {
-                nativeOkHttpMethodWrapper = getOkHttpMethodWrapper();
-            }
-            NativeOkHttpMethodWrapperCallBack callBack = new NativeOkHttpMethodWrapperCallBack();
-            callBack.setCallback((resultInfo) =>
-            {
-                Debug.Log(string.Format("<><NativeOkHttpMethodWrapper.put>put back: {0}", resultInfo));
-                result(resultInfo);
-            }, (faileInfo) =>
-            {
-                Debug.Log(string.Format("<><NativeOkHttpMethodWrapper.put>put back error: {0}", faileInfo != null ? faileInfo.ErrorInfo : "empty or null"));
-                faile(faileInfo);
-            });
-            nativeOkHttpMethodWrapper.Call("put", url, headerStr, body, callBack);
+                result(response);
+            }, faile, HTTPMethods.Put);
 #elif UNITY_EDITOR
             GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), body, (response) =>
             {
@@ -89,17 +65,11 @@ namespace AppGame.Data.Common
         public void get(string url, string headerStr, Action<string> result, Action<ResponseErroInfo> faile)
         {
 #if UNITY_ANDROID && (!UNITY_EDITOR)
-            Debug.Log("NativeOkHttpMethodWrapper get");
-            if(nativeOkHttpMethodWrapper == null){
-                nativeOkHttpMethodWrapper = getOkHttpMethodWrapper();
-            }
-            NativeOkHttpMethodWrapperCallBack callBack = new NativeOkHttpMethodWrapperCallBack();
-            callBack.setCallback((resultInfo)=>{
-                result(resultInfo);
-            },(faileInfo)=>{
-                faile(faileInfo);
-            });
-            nativeOkHttpMethodWrapper.Call("get",url,headerStr,callBack);
+            Debug.Log("GululuNetwork get");
+            GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), (response) =>
+            {
+                result(response);
+            }, faile, HTTPMethods.Get);
 #elif UNITY_EDITOR
             GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), (response) =>
             {
@@ -111,17 +81,11 @@ namespace AppGame.Data.Common
         public void delete(string url, string headerStr, Action<string> result, Action<ResponseErroInfo> faile)
         {
 #if UNITY_ANDROID && (!UNITY_EDITOR)
-            Debug.Log("NativeOkHttpMethodWrapper delete");
-            if(nativeOkHttpMethodWrapper == null){
-                nativeOkHttpMethodWrapper = getOkHttpMethodWrapper();
-            }
-            NativeOkHttpMethodWrapperCallBack callBack = new NativeOkHttpMethodWrapperCallBack();
-            callBack.setCallback((resultInfo)=>{
-                result(resultInfo);
-            },(faileInfo)=>{
-                faile(faileInfo);
-            });
-            nativeOkHttpMethodWrapper.Call("delete",url,headerStr,callBack);
+            Debug.Log("GululuNetwork delete");
+            GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), (response) =>
+            {
+                result(response);
+            }, faile, HTTPMethods.Delete);
 #elif UNITY_EDITOR
             GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), (response) =>
             {
@@ -133,17 +97,11 @@ namespace AppGame.Data.Common
         public void delete(string url, string headerStr, string body, Action<string> result, Action<ResponseErroInfo> faile)
         {
 #if UNITY_ANDROID && (!UNITY_EDITOR)
-             Debug.Log("NativeOkHttpMethodWrapper delete");
-            if(nativeOkHttpMethodWrapper == null){
-                nativeOkHttpMethodWrapper = getOkHttpMethodWrapper();
-            }
-            NativeOkHttpMethodWrapperCallBack callBack = new NativeOkHttpMethodWrapperCallBack();
-            callBack.setCallback((resultInfo)=>{
-                result(resultInfo);
-            },(faileInfo)=>{
-                faile(faileInfo);
-            });
-            nativeOkHttpMethodWrapper.Call("delete",url,headerStr,body,callBack);
+            Debug.Log("GululuNetwork delete");
+            GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), body, (response) =>
+            {
+                result(response);
+            }, faile, HTTPMethods.Delete);
 #elif UNITY_EDITOR
             GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), body, (response) =>
             {
