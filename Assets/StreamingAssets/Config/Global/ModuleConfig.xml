@@ -2,7 +2,6 @@
 <Project Name="Gululu" Version="">
   <Modules>
     <Module Name="Common" Desc="公共资源">
-      <Image Name="white" FileType="Sprite" Path="Common/white" Enable="1" />
       <Image Name="app-icon-avatar-a001" FileType="Sprite" Path="Common/Avatar/app-icon-avatar-a001" Enable="1" />
       <Image Name="app-icon-avatar-a002" FileType="Sprite" Path="Common/Avatar/app-icon-avatar-a002" Enable="1" />
       <Image Name="app-icon-avatar-a003" FileType="Sprite" Path="Common/Avatar/app-icon-avatar-a003" Enable="1" />
@@ -33,15 +32,14 @@
       <Image Name="path" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
       <Image Name="back" FileType="Sprite" Path="Cycling/View/back" Enable="1" />
       <Image Name="book" FileType="Sprite" Path="Cycling/View/book" Enable="1" />
+      <Image Name="card_back1" FileType="Sprite" Path="Cycling/View/card_back1" Enable="1" />
+      <Image Name="card_back2" FileType="Sprite" Path="Cycling/View/card_back2" Enable="1" />
+      <Image Name="card_bg" FileType="Sprite" Path="Cycling/View/card_bg" Enable="1" />
+      <Image Name="card_place" FileType="Sprite" Path="Cycling/View/card_place" Enable="1" />
+      <Image Name="card_return" FileType="Sprite" Path="Cycling/View/card_return" Enable="1" />
       <Image Name="coin_border" FileType="Sprite" Path="Cycling/View/coin_border" Enable="1" />
       <Image Name="coord" FileType="Sprite" Path="Cycling/View/coord" Enable="1" />
       <Image Name="coord2" FileType="Sprite" Path="Cycling/View/coord2" Enable="1" />
-      <Image Name="food_chicken_small" FileType="Sprite" Path="Cycling/View/food_chicken_small" Enable="1" />
-      <Image Name="food_flagjuice_small" FileType="Sprite" Path="Cycling/View/food_flagjuice_small" Enable="1" />
-      <Image Name="food_opensandwich_small" FileType="Sprite" Path="Cycling/View/food_opensandwich_small" Enable="1" />
-      <Image Name="food_ricecakefish_small" FileType="Sprite" Path="Cycling/View/food_ricecakefish_small" Enable="1" />
-      <Image Name="food_salad_small" FileType="Sprite" Path="Cycling/View/food_salad_small" Enable="1" />
-      <Image Name="food_spider_cake_small" FileType="Sprite" Path="Cycling/View/food_spider_cake_small" Enable="1" />
       <Image Name="go" FileType="Sprite" Path="Cycling/View/go" Enable="1" />
       <Image Name="hp_border" FileType="Sprite" Path="Cycling/View/hp_border" Enable="1" />
       <Image Name="pop_border1" FileType="Sprite" Path="Cycling/View/pop_border1" Enable="1" />
@@ -51,6 +49,7 @@
       <Image Name="scenicspot_normal" FileType="Sprite" Path="Cycling/View/scenicspot_normal" Enable="1" />
       <Image Name="site_highlight" FileType="Sprite" Path="Cycling/View/site_highlight" Enable="1" />
       <Image Name="site_normal" FileType="Sprite" Path="Cycling/View/site_normal" Enable="1" />
+      <Image Name="site_normal2" FileType="Sprite" Path="Cycling/View/site_normal2" Enable="1" />
       <Image Name="stars_highlight " FileType="Sprite" Path="Cycling/View/stars_highlight " Enable="1" />
       <Image Name="start_normal " FileType="Sprite" Path="Cycling/View/start_normal " Enable="1" />
       <Image Name="ticket _highlight" FileType="Sprite" Path="Cycling/View/ticket _highlight" Enable="1" />
