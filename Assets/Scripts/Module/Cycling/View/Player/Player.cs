@@ -116,7 +116,7 @@ namespace AppGame.Module.Cycling
                 pointNode = this.mapNode.Points[this.nodeIndex].GetComponent<MapPointNode>();
             }
             while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode);
-            yield return new WaitForSeconds(0.35f);
+            yield return new WaitForSeconds(1f);
 
             this.scenicNode = this.mapNode.Points[this.nodeIndex].GetComponent<ScenicNode>();
             if (this.scenicNode != null) this.scenicNode.Show();
