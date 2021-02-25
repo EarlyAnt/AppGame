@@ -27,8 +27,8 @@ namespace AppGame.Module.Cycling
         #region 其他变量
         private CameraEdge cameraEdge;
         private RectTransform mapRectTransform;
-        private bool inRange;
         private ScenicNode scenicNode;
+        private bool inRange;
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -80,7 +80,7 @@ namespace AppGame.Module.Cycling
         //向前移动
         public void MoveForward()
         {
-            if (this.nodeIndex + 1 < this.mapNode.Points.Count)
+            if (!this.IsMoving && this.nodeIndex + 1 < this.mapNode.Points.Count)
             {
                 this.StopAllCoroutines();
                 this.StartCoroutine(this.MovePlayer(true));
@@ -89,7 +89,7 @@ namespace AppGame.Module.Cycling
         //向后移动
         public void MoveBack()
         {
-            if (this.nodeIndex > 0)
+            if (!this.IsMoving && this.nodeIndex > 0)
             {
                 this.StopAllCoroutines();
                 this.StartCoroutine(this.MovePlayer(false));
@@ -103,9 +103,10 @@ namespace AppGame.Module.Cycling
             if (this.nodeIndex < 0 || this.nodeIndex >= this.mapNode.Points.Count)
                 yield break;
 
+            this.IsMoving = true;
             MapPointNode pointNode = null;
             do
-            {
+            {//移动玩家至下一个节点
                 this.nodeIndex += forward ? 1 : -1;
                 do
                 {
@@ -116,10 +117,19 @@ namespace AppGame.Module.Cycling
                 pointNode = this.mapNode.Points[this.nodeIndex].GetComponent<MapPointNode>();
             }
             while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode);
-            yield return new WaitForSeconds(1f);
 
+            //检测是否有卡片需要显示
             this.scenicNode = this.mapNode.Points[this.nodeIndex].GetComponent<ScenicNode>();
-            if (this.scenicNode != null) this.scenicNode.Show();
+            if (this.scenicNode != null)
+            {
+                yield return new WaitForSeconds(1f);
+                this.scenicNode.CardViewClosed = this.OnCardViewClosed;
+                this.scenicNode.Show();//显示卡片
+            }
+            else
+            {
+                this.IsMoving = false;//没有卡片
+            }
             Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
         //移动到指定位置
@@ -148,6 +158,11 @@ namespace AppGame.Module.Cycling
                 playerPosition.y = Mathf.Clamp(playerPosition.y, -this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f + this.cameraEdge.Height / 2f, this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f - this.cameraEdge.Height / 2f);
             }
             return playerPosition;
+        }
+        //当卡片页面关闭时
+        private void OnCardViewClosed()
+        {
+            this.IsMoving = false;
         }
     }
 }

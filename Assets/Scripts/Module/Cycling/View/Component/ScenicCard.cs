@@ -12,6 +12,7 @@ namespace AppGame.Module.Cycling
         private Image imageBox;
         [SerializeField]
         private Text textBox;
+        public System.Action ViewClosed { get; set; }
         /************************************************Unity方法与事件***********************************************/
 
         /************************************************自 定 义 方 法************************************************/
@@ -24,6 +25,13 @@ namespace AppGame.Module.Cycling
         public void Hide()
         {
             this.gameObject.SetActive(false);
+            this.OnViewClosed();
+        }
+
+        private void OnViewClosed()
+        {
+            if (this.ViewClosed != null)
+                this.ViewClosed();
         }
     }
 }

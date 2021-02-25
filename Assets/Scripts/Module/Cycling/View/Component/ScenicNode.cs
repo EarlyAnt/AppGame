@@ -12,13 +12,16 @@ namespace AppGame.Module.Cycling
         public II18NConfig I18NConfig { get; set; }
         [SerializeField]
         private ScenicCard scenicCard;
+        public System.Action CardViewClosed { get; set; }
         /************************************************Unity方法与事件***********************************************/
         protected override void Start()
         {
             base.Start();
+            this.scenicCard.ViewClosed += this.OnCardViewClosed;
         }
         protected override void OnDestroy()
         {
+            this.scenicCard.ViewClosed -= this.OnCardViewClosed;
             base.OnDestroy();
         }
         /************************************************自 定 义 方 法************************************************/
@@ -36,6 +39,12 @@ namespace AppGame.Module.Cycling
         public override void Hide()
         {
             this.scenicCard.Hide();
+        }
+
+        private void OnCardViewClosed()
+        {
+            if (this.CardViewClosed != null)
+                this.CardViewClosed();
         }
     }
 }

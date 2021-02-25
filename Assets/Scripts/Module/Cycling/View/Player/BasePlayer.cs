@@ -20,7 +20,7 @@ namespace AppGame.Module.Cycling
         [SerializeField, Range(0f, 5f)]
         protected float step;
         #endregion
-        #region 其他变量
+        #region 其他变量        
         protected int nodeIndex;
         protected Vector3 destination
         {
@@ -35,6 +35,7 @@ namespace AppGame.Module.Cycling
             get { return this.avatarBox.sprite; }
             set { this.avatarBox.sprite = value; }
         }
+        public bool IsMoving { get; protected set; }
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()

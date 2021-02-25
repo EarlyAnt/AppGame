@@ -89,11 +89,17 @@ namespace AppGame.Module.Cycling
         }
         public void MoveForward()
         {
-            this.player.MoveForward();
+            if (!this.player.IsMoving)
+            {
+                this.player.MoveForward();
+            }
         }
         public void MoveBack()
         {
-            this.player.MoveBack();
+            if (!this.player.IsMoving)
+            {
+                this.player.MoveBack();
+            }
         }
 
         public void RefreshPlayer(List<BasicData> basicDataList, List<PlayerData> playerDataList)
