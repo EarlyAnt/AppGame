@@ -79,17 +79,13 @@ namespace AppGame.Module.Cycling
         /************************************************自 定 义 方 法************************************************/
         private void Initialize()
         {
-            this.CommonImageUtils.Initialize();
-            this.DelayInvoke(() => this.CommonImageUtils.LoadCommonImages(), 1f);
-
             this.DelayInvoke(() =>
             {
                 this.mask.DOFade(0f, 1f);
                 this.canvasGroup.DOFade(1f, 1f);
-            }, 2f);
+            }, 1f);
 
             this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
-            //this.DelayInvoke(() => SpriteHelper.Instance.ClearBuffer(ModuleViews.Cycling), 5f);
         }
         public void MoveForward()
         {

@@ -26,9 +26,7 @@ namespace AppGame.Module.Cycling
         public override void OnRegister()
         {
             UpdateListeners(true);
-            this.BuildTestData();
-            this.GetGameData();
-            this.Invoke("Initialize", 1f);
+            this.Initialize();
         }
 
         public override void OnRemove()
@@ -69,6 +67,8 @@ namespace AppGame.Module.Cycling
 
         private void Initialize()
         {
+            this.BuildTestData();
+            this.GetGameData();
             this.View.RefreshPlayer(this.basicDataList, this.playerDataList);
             this.View.RefreshTeammates(this.basicDataList, this.playerDataList);
             this.RefreshMpDatas();

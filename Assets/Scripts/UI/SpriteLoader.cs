@@ -66,8 +66,8 @@ public class SpriteLoader : ImageLoader
                                               (sprite) =>
                                               {
                                                   this.imageBox.sprite = sprite;
-                                                  if (this.autoLoad)
-                                                      GameObject.Destroy(this);
+                                                  //if (this.autoLoad)
+                                                  //    GameObject.Destroy(this);
                                               },
                                               (failureInfo) =>
                                               {

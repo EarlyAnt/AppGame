@@ -1,4 +1,5 @@
 using AppGame.Config;
+using AppGame.Global;
 using AppGame.UI;
 using DG.Tweening;
 using strange.extensions.mediation.impl;
@@ -27,6 +28,8 @@ namespace AppGame.Module.GameStart
         public IMapConfig MapConfig { get; set; }
         [Inject]
         public IScenicConfig ScenicConfig { get; set; }
+        [Inject]
+        public ICommonImageUtils CommonImageUtils { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
@@ -54,7 +57,7 @@ namespace AppGame.Module.GameStart
         /************************************************自 定 义 方 法************************************************/
         //初始化
         private IEnumerator Initialize()
-        {            
+        {
             float progress = Random.Range(0.2f, 0.5f);
             yield return this.StartCoroutine(this.ReadConfig(progress));
             yield return this.StartCoroutine(this.LoadScene(progress, 1f));
@@ -63,7 +66,7 @@ namespace AppGame.Module.GameStart
         private IEnumerator ReadConfig(float endValue)
         {
             float startValue = 0f;
-            float stepValue = endValue / 7f;
+            float stepValue = endValue / 8f;
 
             //read font config
             this.FontConfig.Load();
@@ -104,6 +107,13 @@ namespace AppGame.Module.GameStart
             //read scenic config
             this.ScenicConfig.Load();
             yield return new WaitUntil(() => this.ScenicConfig.IsLoaded());
+            this.SetProgress(startValue += stepValue);
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+
+            //load common images
+            this.CommonImageUtils.Initialize();
+            yield return new WaitForSeconds(1f);
+            this.CommonImageUtils.LoadCommonImages();
             this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
 

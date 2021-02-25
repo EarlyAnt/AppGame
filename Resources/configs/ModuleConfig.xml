@@ -26,6 +26,7 @@
       <Image Name="app-icon-avatar-p0008" FileType="Sprite" Path="Common/Avatar/app-icon-avatar-p0008" Enable="1" />
       <Image Name="app-icon-avatar-p0009" FileType="Sprite" Path="Common/Avatar/app-icon-avatar-p0009" Enable="1" />
       <Image Name="app-icon-avatar-p0010" FileType="Sprite" Path="Common/Avatar/app-icon-avatar-p0010" Enable="1" />
+      <Image Name="bg_circle" FileType="Sprite" Path="Common/Avatar/bg_circle" Enable="1" />
     </Module>
     <Module Name="Cycling" Desc="骑行游戏">
       <Image Name="nanjing_bg" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
