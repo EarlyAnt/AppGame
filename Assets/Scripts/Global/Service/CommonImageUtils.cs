@@ -47,7 +47,7 @@ namespace AppGame.Global
             this.icons.Add("6", SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Common, this.ModuleConfig.GetImagePath(ModuleViews.Common, "app-icon-avatar-p0003")));
             this.icons.Add("7", SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Common, this.ModuleConfig.GetImagePath(ModuleViews.Common, "app-icon-avatar-p0002")));
             this.icons.Add("8", SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Common, this.ModuleConfig.GetImagePath(ModuleViews.Common, "app-icon-avatar-p0001")));
-            this.icons.Add("9", SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Common, this.ModuleConfig.GetImagePath(ModuleViews.Common, "app-icon-avatar-p0003")));
+            this.icons.Add("9", SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Common, this.ModuleConfig.GetImagePath(ModuleViews.Common, "app-icon-avatar-p0004")));
             //this.icons.Add("10", SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Common, this.ModuleConfig.GetImagePath(ModuleViews.Common, "avatar_default")));
             this.icons.Add("11", SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Common, this.ModuleConfig.GetImagePath(ModuleViews.Common, "app-icon-avatar-p0005")));
             this.icons.Add("12", SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Common, this.ModuleConfig.GetImagePath(ModuleViews.Common, "app-icon-avatar-p0006")));

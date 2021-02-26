@@ -209,14 +209,7 @@ namespace AppGame.Module.Cycling
         }
         private void CollectMp(MpBall mpBall)
         {
-            if (mpBall.Value >= 100)
-            {
-                this.CollectMpSignal.Dispatch(mpBall);
-            }
-            else
-            {
-                //Todo: 能量不足100时，弹出提示
-            }
+            this.CollectMpSignal.Dispatch(mpBall);
         }
     }
 }

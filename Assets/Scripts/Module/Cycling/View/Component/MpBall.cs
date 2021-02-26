@@ -118,7 +118,7 @@ namespace AppGame.Module.Cycling
         //收取能量
         public void CollectMp()
         {
-            if (this.mp >= 100 && this.OnCollectMp != null)
+            if (this.OnCollectMp != null)
             {
                 this.OnCollectMp(this);
             }
