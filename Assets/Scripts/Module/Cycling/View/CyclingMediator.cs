@@ -20,6 +20,13 @@ namespace AppGame.Module.Cycling
         private List<BasicData> basicDataList = null;
         private OriginData originData = null;
         private List<PlayerData> playerDataList = null;
+        private PlayerData myPlayerData
+        {
+            get
+            {
+                return this.playerDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());
+            }
+        }
         /************************************************Unity方法与事件***********************************************/
 
         /************************************************自 定 义 方 法************************************************/
@@ -43,10 +50,12 @@ namespace AppGame.Module.Cycling
             if (value)
             {
                 this.View.CollectMpSignal.AddListener(this.CollectMp);
+                this.View.GoSignal.AddListener(this.OnGo);
             }
             else
             {
                 this.View.CollectMpSignal.RemoveListener(this.CollectMp);
+                this.View.GoSignal.RemoveListener(this.OnGo);
             }
         }
 
@@ -71,6 +80,7 @@ namespace AppGame.Module.Cycling
             this.GetGameData();
             this.View.RefreshPlayer(this.basicDataList, this.playerDataList);
             this.View.RefreshTeammates(this.basicDataList, this.playerDataList);
+            this.View.RefreshMp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
             this.RefreshMpDatas();
             this.InvokeRepeating("GetGameData", 3f, 3f);
             this.InvokeRepeating("RefreshOriginData", 3f, 5f);
@@ -174,18 +184,17 @@ namespace AppGame.Module.Cycling
         private void RefreshMpDatas()
         {
             List<MpData> mpDatas = new List<MpData>();
-            PlayerData myPlayerData = this.playerDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());
 
-            int mpWalk = (int)((this.originData.walk - myPlayerData.walk_expend) / 500);
+            int mpWalk = (int)((this.originData.walk - this.myPlayerData.walk_expend) / 500);
             mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Value = mpWalk });
 
-            int mpRide = (int)((this.originData.ride - myPlayerData.ride_expend) / 500);
+            int mpRide = (int)((this.originData.ride - this.myPlayerData.ride_expend) / 500);
             mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Ride, Value = mpRide });
 
-            int mpTrain = (this.originData.train - myPlayerData.train_expend);
+            int mpTrain = (this.originData.train - this.myPlayerData.train_expend);
             mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Train, Value = mpTrain });
 
-            int mpLearn = (int)((this.originData.learn - myPlayerData.learn_expend) / 5);
+            int mpLearn = (int)((this.originData.learn - this.myPlayerData.learn_expend) / 5);
             mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Learn, Value = mpLearn });
 
             foreach (var playerData in this.playerDataList)
@@ -223,22 +232,21 @@ namespace AppGame.Module.Cycling
         private void CollectMp(MpBall mpBall)
         {
             int mpIncrease = mpBall.Value;//计算收取了多少能量
-            PlayerData myPlayerData = this.playerDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());//查找自己的游戏数据
 
             //记录好用的原始数据(步行，骑行，坐姿及能量分成)
             switch (mpBall.MpBallType)
             {
                 case MpBallTypes.Walk:
-                    myPlayerData.walk_expend += mpIncrease * 500;
+                    this.myPlayerData.walk_expend += mpIncrease * 500;
                     break;
                 case MpBallTypes.Ride:
-                    myPlayerData.ride_expend += mpIncrease * 500;
+                    this.myPlayerData.ride_expend += mpIncrease * 500;
                     break;
                 case MpBallTypes.Train:
-                    myPlayerData.train_expend += mpIncrease;
+                    this.myPlayerData.train_expend += mpIncrease;
                     break;
                 case MpBallTypes.Learn:
-                    myPlayerData.learn_expend += mpIncrease * 5;
+                    this.myPlayerData.learn_expend += mpIncrease * 5;
                     break;
                 case MpBallTypes.Family:
                     //Todo: 记录已收取此家人的能量分成
@@ -248,17 +256,28 @@ namespace AppGame.Module.Cycling
                     break;
             }
 
-            myPlayerData.mp += mpIncrease;//记录增加的能量值
-            int hpIncrease = (int)((myPlayerData.mp - myPlayerData.mp_expend) / 100);//计算能量值是否可转换成行动点数
+            this.myPlayerData.mp += mpIncrease;//记录增加的能量值
+            int hpIncrease = (int)((this.myPlayerData.mp - myPlayerData.mp_expend) / 100);//计算能量值是否可转换成行动点数
             if (hpIncrease > 0)//每满100可转换成1点行动点数
             {
-                myPlayerData.mp_expend += hpIncrease * 100;//记录好用的能量
-                myPlayerData.hp += hpIncrease;//记录增加的行动点数
+                this.myPlayerData.mp_expend += hpIncrease * 100;//记录好用的能量
+                this.myPlayerData.hp += hpIncrease;//记录增加的行动点数
             }
 
-            this.CyclingDataManager.SavePlayerData(myPlayerData);//保存数据
+            this.CyclingDataManager.SavePlayerData(this.myPlayerData);//保存数据
             this.RefreshMpDatas();//刷新能量气泡
-            this.View.RefreshMp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
+            this.View.RefreshMp(this.myPlayerData.mp - this.myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
+        }
+
+        private void OnGo()
+        {
+            int hp = this.myPlayerData.hp;
+            if (hp > 0)
+            {
+                this.myPlayerData.hp -= 1;
+                this.CyclingDataManager.SavePlayerData(this.myPlayerData);
+            }
+            this.View.Move(hp > 0, this.myPlayerData.hp);
         }
     }
 }

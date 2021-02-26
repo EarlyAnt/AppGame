@@ -56,6 +56,7 @@ namespace AppGame.Module.Cycling
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
         public Signal<MpBall> CollectMpSignal = new Signal<MpBall>();
+        public Signal GoSignal = new Signal();
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -87,21 +88,23 @@ namespace AppGame.Module.Cycling
 
             this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
         }
-        public void MoveForward()
+        public void Go()
         {
             if (!this.player.IsMoving)
+                this.GoSignal.Dispatch();
+        }
+        public void Move(bool canMove, int hp)
+        {
+            if (canMove)
             {
+                this.hpBox.text = hp.ToString();
                 this.player.MoveForward();
             }
-        }
-        public void MoveBack()
-        {
-            if (!this.player.IsMoving)
+            else
             {
-                this.player.MoveBack();
+                //Todo: 显示行动点数不足的提示
             }
         }
-
         public void RefreshPlayer(List<BasicData> basicDataList, List<PlayerData> playerDataList)
         {
             PlayerData myPlayerData = playerDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());
