@@ -51,6 +51,7 @@ namespace AppGame.Module.Cycling
         private Text hpBox;
         #endregion
         #region 其他变量
+        private bool hideMpBalls = false;
         private float halfWidth = 380f;
         private float halfHeight = 800f;
         private List<Teammate> teammates;
@@ -72,9 +73,11 @@ namespace AppGame.Module.Cycling
         {
             base.Start();
             this.Initialize();
+            this.player.Stopped += this.OnPlayerStopped;
         }
         protected override void OnDestroy()
         {
+            this.player.Stopped -= this.OnPlayerStopped;
             base.OnDestroy();
         }
         /************************************************自 定 义 方 法************************************************/
@@ -91,17 +94,22 @@ namespace AppGame.Module.Cycling
         public void Go()
         {
             if (!this.player.IsMoving)
+            {
                 this.GoSignal.Dispatch();
+            }
         }
         public void Move(bool canMove, int hp)
         {
             if (canMove)
             {
+                this.hideMpBalls = true;
+                this.mpBalls.ForEach(t => t.SetStatus(false));
                 this.hpBox.text = hp.ToString();
                 this.player.MoveForward();
             }
             else
             {
+                this.OnPlayerStopped();
                 //Todo: 显示行动点数不足的提示
             }
         }
@@ -148,6 +156,9 @@ namespace AppGame.Module.Cycling
         }
         public void RefreshMpBalls(List<MpData> mpDatas)
         {
+            if (this.player.IsMoving)
+                return;
+
             foreach (var mpData in mpDatas)
             {
                 MpBall mpBall = this.mpBalls.Find(t => t.MpBallType == mpData.MpBallType && t.FromID == mpData.FromID);
@@ -163,9 +174,10 @@ namespace AppGame.Module.Cycling
                     }
                     newMpBall.Value = mpData.Value;
                     newMpBall.transform.localRotation = Quaternion.identity;
-                    newMpBall.transform.localScale = Vector3.one;
+                    newMpBall.transform.localScale = Vector3.one * Random.Range(0.7f, 1.0f);
                     newMpBall.transform.localPosition = this.GetRandomPosition();
                     newMpBall.OnCollectMp = this.CollectMp;
+                    newMpBall.SetStatus(!this.hideMpBalls);
                     this.mpBalls.Add(newMpBall);
                 }
                 else if (mpBall != null)
@@ -175,6 +187,10 @@ namespace AppGame.Module.Cycling
                     {
                         this.mpBalls.Remove(mpBall);
                         GameObject.DestroyImmediate(mpBall.gameObject);
+                    }
+                    else if (!this.hideMpBalls)
+                    {
+                        mpBall.SetStatus(true);
                     }
                 }
             }
@@ -210,6 +226,12 @@ namespace AppGame.Module.Cycling
         private void CollectMp(MpBall mpBall)
         {
             this.CollectMpSignal.Dispatch(mpBall);
+        }
+        private void OnPlayerStopped()
+        {
+            this.hideMpBalls = false;
+            this.CancelAllDelayInvoke();
+            this.DelayInvoke(() => this.mpBalls.ForEach(t => t.SetStatus(true)), 0.75f);
         }
     }
 }

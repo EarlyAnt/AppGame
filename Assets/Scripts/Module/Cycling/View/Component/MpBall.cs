@@ -27,7 +27,8 @@ namespace AppGame.Module.Cycling
         private float durationMax = 2f;
         #endregion
         #region 其他变量
-        private Tweener tweener;
+        private Tweener fadeTweener;
+        private Tweener pingPongTweener;
         private float originY;
         private int mp = 0;
         private string fromName = "";
@@ -88,11 +89,19 @@ namespace AppGame.Module.Cycling
             this.destinationY += this.originY;
             this.PlayPingPong();
         }
+        private void OnDestroy()
+        {
+            if (this.fadeTweener != null)
+                this.fadeTweener.Kill();
+
+            if (this.pingPongTweener != null)
+                this.pingPongTweener.Kill();
+        }
         /************************************************自 定 义 方 法************************************************/
         //设置是否可见
         public void SetStatus(bool visible)
         {
-            this.canvasGroup.DOFade(visible ? 1f : 0f, visible ? 0.2f : 0f);
+            this.fadeTweener = this.canvasGroup.DOFade(visible ? 1f : 0f, visible ? 0.375f : 0f);
         }
         //开始播放
         public void PlayPingPong()
@@ -106,14 +115,14 @@ namespace AppGame.Module.Cycling
         //停止播放
         public void StopPingPong()
         {
-            if (this.tweener != null)
-                this.tweener.Kill();
+            if (this.pingPongTweener != null)
+                this.pingPongTweener.Kill();
         }
         //往返运动
         private void PingPong(float from, float to)
         {
-            this.tweener = this.bubbleTransform.DOLocalMoveY(to, UnityEngine.Random.Range(this.durationMin, this.durationMax));
-            this.tweener.onComplete += () => this.PingPong(to, from);
+            this.pingPongTweener = this.bubbleTransform.DOLocalMoveY(to, UnityEngine.Random.Range(this.durationMin, this.durationMax));
+            this.pingPongTweener.onComplete += () => this.PingPong(to, from);
         }
         //收取能量
         public void CollectMp()

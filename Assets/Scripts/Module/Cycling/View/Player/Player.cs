@@ -19,8 +19,8 @@ namespace AppGame.Module.Cycling
         private float canvasScale = 0.04f;
         [SerializeField]
         private Transform camera;
-        [SerializeField, Range(0f, 5f)]
-        private float lerp = 0.5f;
+        [SerializeField, Range(0f, 1f)]
+        private float lerp = 0.1f;
         [SerializeField]
         private bool showGizmos;
         #endregion
@@ -29,6 +29,7 @@ namespace AppGame.Module.Cycling
         private RectTransform mapRectTransform;
         private ScenicNode scenicNode;
         private bool inRange;
+        public System.Action Stopped { get; set; }
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -56,7 +57,7 @@ namespace AppGame.Module.Cycling
                            this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
                            this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomLeft, this.canvasScale);
             //根据玩家的位置调整相机的位置，使相机可视区域不超出地图
-            this.camera.DOMove(this.GetCameraPosition(), this.lerp);
+            this.camera.transform.position = Vector3.Lerp(this.camera.transform.position, this.GetCameraPosition(), this.lerp);
         }
         private void OnDrawGizmos()
         {
@@ -129,6 +130,7 @@ namespace AppGame.Module.Cycling
             else
             {
                 this.IsMoving = false;//没有卡片
+                this.OnStopped();
             }
             Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
@@ -159,10 +161,17 @@ namespace AppGame.Module.Cycling
             }
             return playerPosition;
         }
+        //当玩家移动停止时
+        private void OnStopped()
+        {
+            if (this.Stopped != null)
+                this.Stopped();
+        }
         //当卡片页面关闭时
         private void OnCardViewClosed()
         {
             this.IsMoving = false;
+            this.OnStopped();
         }
     }
 }
