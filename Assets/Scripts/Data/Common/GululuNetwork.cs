@@ -27,9 +27,6 @@ namespace AppGame.Data.Common
         public IAuthenticationUtils AuthenticationUtils { get; set; }
         //[Inject]
         //public ClearLocalDataSignal ClearLocalDataSignal { get; set; }
-        [Inject]
-        public GululuNetworkHelper GululuNetworkHelper { get; set; }
-
 
         public void SendRequest(string url, IDictionary<string, string> headrs, string bodyContent, Action<string> callBack, Action<ResponseErroInfo> errCallBack, HTTPMethods methods)
         {
@@ -257,7 +254,7 @@ namespace AppGame.Data.Common
 
         public void handleAuthenticatioError(HTTPRequest originalRequest, Action<ResponseErroInfo> errCallBack)
         {
-            AuthenticationUtils.reNewToken((scuccessrResultBack) =>
+            AuthenticationUtils.GetToken((scuccessrResultBack) =>
             {
                 string token = scuccessrResultBack.info;
                 reSendRequest(originalRequest, token);

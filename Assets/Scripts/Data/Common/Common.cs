@@ -19,9 +19,4 @@ namespace AppGame.Data.Common
     {
         public string status { get; set; }
     }
-
-    public class TokenResponseData : DataBase
-    {
-        public string token;
-    }
 }

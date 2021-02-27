@@ -1,5 +1,6 @@
 using AppGame.Data.Local;
 using AppGame.Data.Model;
+using AppGame.Data.Remote;
 using strange.extensions.mediation.impl;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,12 @@ namespace AppGame.Module.Cycling
         public IBasicDataManager BasicDataManager { get; set; }
         [Inject]
         public ICyclingDataManager CyclingDataManager { get; set; }
+        [Inject]
+        public IAuthenticationUtils AuthenticationUtils { get; set; }
+        [Inject]
+        public ICyclingDataUtil CyclingDataUtil { get; set; }
+
+
         private List<BasicData> basicDataList = null;
         private OriginData originData = null;
         private List<PlayerData> playerDataList = null;
@@ -34,6 +41,22 @@ namespace AppGame.Module.Cycling
         {
             UpdateListeners(true);
             this.Initialize();
+
+            this.AuthenticationUtils.GetToken((success) =>
+            {
+                Debug.LogFormat("<><CyclingMediator.OnRegister>Success: {0}", success.info);
+            }, (failure) =>
+            {
+                Debug.LogFormat("<><CyclingMediator.OnRegister>Failure: {0}", failure.info);
+            });
+
+            this.CyclingDataUtil.GetBasicData((basicDataList) =>
+            {
+                Debug.LogFormat("<><CyclingMediator.OnRegister>Success: {0}", basicDataList);
+            }, (errorText) =>
+            {
+                Debug.LogFormat("<><CyclingMediator.OnRegister>Failure: {0}", errorText);
+            });
         }
 
         public override void OnRemove()

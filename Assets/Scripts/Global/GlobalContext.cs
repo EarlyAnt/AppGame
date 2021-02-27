@@ -1,5 +1,7 @@
 using AppGame.Config;
+using AppGame.Data.Common;
 using AppGame.Data.Local;
+using AppGame.Data.Remote;
 using AppGame.Util;
 using strange.extensions.command.api;
 using strange.extensions.command.impl;
@@ -47,8 +49,15 @@ namespace AppGame.Global
 
             injectionBinder.Bind<ILocalDataManager>().To<LocalDataManager>().ToSingleton().CrossContext();
             injectionBinder.Bind<ILocalChildInfoAgent>().To<LocalChildInfoAgent>().ToSingleton().CrossContext();
+            injectionBinder.Bind<ILocalCupAgent>().To<LocalCupAgent>().ToSingleton().CrossContext();
 
             injectionBinder.Bind<ICommonImageUtils>().To<CommonImageUtils>().ToSingleton().CrossContext();
+
+            injectionBinder.Bind<IUrlProvider>().To<UrlProvider>().ToSingleton().CrossContext();
+            injectionBinder.Bind<INetUtils>().To<NetUtils>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IGululuNetwork>().To<GululuNetwork>().ToSingleton().CrossContext();
+            injectionBinder.Bind<INativeOkHttpMethodWrapper>().To<NativeOkHttpMethodWrapper>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IAuthenticationUtils>().To<AuthenticationUtils>().ToSingleton().CrossContext();
         }
     }
 }

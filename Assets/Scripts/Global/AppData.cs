@@ -22,11 +22,13 @@ namespace AppGame.Global
         {
             get
             {
-#if (UNITY_ANDROID) && (!UNITY_EDITOR)
                 return VersionTypes.Release;
-#else
-                return VersionTypes.Development;
-#endif
+
+                //#if (UNITY_ANDROID) && (!UNITY_EDITOR)
+                //                return VersionTypes.Release;
+                //#else
+                //                return VersionTypes.Development;
+                //#endif
             }
         }
         public static bool DebugMode { get; set; }
