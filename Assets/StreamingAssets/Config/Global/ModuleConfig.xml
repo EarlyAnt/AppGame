@@ -31,6 +31,15 @@
     <Module Name="Cycling" Desc="骑行游戏">
       <Image Name="nanjing_bg" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
       <Image Name="path" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
+      <Image Name="card_nanjing01" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing01" Enable="1" />
+      <Image Name="card_nanjing02" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing02" Enable="1" />
+      <Image Name="card_nanjing03" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing03" Enable="1" />
+      <Image Name="card_nanjing04" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing04" Enable="1" />
+      <Image Name="card_nanjing05" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing05" Enable="1" />
+      <Image Name="card_nanjing06" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing06" Enable="1" />
+      <Image Name="card_nanjing07" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing07" Enable="1" />
+      <Image Name="card_nanjing08" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing08" Enable="1" />
+      <Image Name="card_nanjing09" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing09" Enable="1" />
       <Image Name="back" FileType="Sprite" Path="Cycling/View/back" Enable="1" />
       <Image Name="book" FileType="Sprite" Path="Cycling/View/book" Enable="1" />
       <Image Name="card_back1" FileType="Sprite" Path="Cycling/View/card_back1" Enable="1" />
@@ -40,7 +49,7 @@
       <Image Name="card_return" FileType="Sprite" Path="Cycling/View/card_return" Enable="1" />
       <Image Name="coin_border" FileType="Sprite" Path="Cycling/View/coin_border" Enable="1" />
       <Image Name="coord" FileType="Sprite" Path="Cycling/View/coord" Enable="1" />
-      <Image Name="coord2" FileType="Sprite" Path="Cycling/View/coord2" Enable="1" />
+      <Image Name="coord_friend" FileType="Sprite" Path="Cycling/View/coord_friend" Enable="1" />
       <Image Name="go" FileType="Sprite" Path="Cycling/View/go" Enable="1" />
       <Image Name="hp_border" FileType="Sprite" Path="Cycling/View/hp_border" Enable="1" />
       <Image Name="pop_border1" FileType="Sprite" Path="Cycling/View/pop_border1" Enable="1" />

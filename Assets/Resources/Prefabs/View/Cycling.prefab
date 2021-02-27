@@ -4021,7 +4021,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f006a1120fb385e4abe2a8b6eff24479, type: 3}
+  m_Sprite: {fileID: 21300000, guid: eb9e2a6b230ecfc4486b00951dd60ffd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4424,7 +4424,8 @@ MonoBehaviour:
   back: {fileID: 349332361}
   rotateDuration: 0.7
   imageBox: {fileID: 1387628452}
-  textBox: {fileID: 1738926985}
+  placeNameBox: {fileID: 7122080463657125671}
+  descriptionBox: {fileID: 1738926985}
 --- !u!1 &1572464181
 GameObject:
   m_ObjectHideFlags: 0
@@ -9700,7 +9701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: coord2
+  imageName: coord_friend
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 7385763324553056261}
@@ -12856,7 +12857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: coord2
+  imageName: coord
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 8717633110518921604}

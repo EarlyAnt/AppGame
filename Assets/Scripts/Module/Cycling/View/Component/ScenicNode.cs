@@ -1,5 +1,6 @@
 using AppGame.Config;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace AppGame.Module.Cycling
 {
@@ -33,7 +34,9 @@ namespace AppGame.Module.Cycling
                 Debug.LogErrorFormat("<><ScenicNode.Show>Error: can not find scenic named '{0}'", this.ID);
                 return;
             }
-            this.scenicCard.Show(null, this.I18NConfig.GetText(scenicInfo.Text));
+
+            Sprite image = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/Site/{0}", scenicInfo.Image));
+            this.scenicCard.Show(image, scenicInfo.Name, this.I18NConfig.GetText(scenicInfo.Text));
         }
 
         public override void Hide()
