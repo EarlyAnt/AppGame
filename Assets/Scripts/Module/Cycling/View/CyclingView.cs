@@ -3,6 +3,7 @@ using AppGame.Data.Local;
 using AppGame.Data.Model;
 using AppGame.Global;
 using AppGame.UI;
+using AppGame.Util;
 using DG.Tweening;
 using strange.extensions.signal.impl;
 using System.Collections.Generic;
@@ -56,6 +57,7 @@ namespace AppGame.Module.Cycling
         private float halfHeight = 800f;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
+        private UnityMessageManager unityMessageManager;
         public Signal<MpBall> CollectMpSignal = new Signal<MpBall>();
         public Signal GoSignal = new Signal();
         #endregion
@@ -74,9 +76,13 @@ namespace AppGame.Module.Cycling
             base.Start();
             this.Initialize();
             this.player.Stopped += this.OnPlayerStopped;
+            this.unityMessageManager = GameObject.FindObjectOfType<UnityMessageManager>();
+            this.unityMessageManager.OnMessage += this.OnReceiveMessage;
+            this.unityMessageManager.SendMessageToFlutter("ha ha, unity loaded ! ! !");
         }
         protected override void OnDestroy()
         {
+            this.unityMessageManager.OnMessage -= this.OnReceiveMessage;
             this.player.Stopped -= this.OnPlayerStopped;
             base.OnDestroy();
         }
@@ -232,6 +238,10 @@ namespace AppGame.Module.Cycling
             this.hideMpBalls = false;
             this.CancelAllDelayInvoke();
             this.DelayInvoke(() => this.mpBalls.ForEach(t => t.SetStatus(true)), 0.75f);
+        }
+        private void OnReceiveMessage(string message)
+        {
+            Debug.LogFormat("<><CyclingView.OnReceiveMessage>message: {0}", message);
         }
     }
 }
