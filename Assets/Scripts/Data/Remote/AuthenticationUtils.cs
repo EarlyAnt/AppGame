@@ -60,11 +60,11 @@ namespace AppGame.Data.Remote
             //string strBody = JsonUtils.Dictionary2String(body);
             //hTTPRequest.RawData = Encoding.UTF8.GetBytes(strBody);
 
-            //hTTPRequest.AddHeader("Gululu-Agent", GululuNetworkHelper.GetAgent());
-            //hTTPRequest.AddHeader("udid", GululuNetworkHelper.GetUdid());
-            //hTTPRequest.AddHeader("Accept-Language", GululuNetworkHelper.GetAcceptLang());
-            //hTTPRequest.SetHeader("Content-Type", "application/json");
-            //hTTPRequest.Send();
+            hTTPRequest.AddHeader("Gululu-Agent", GululuNetworkHelper.GetAgent());
+            hTTPRequest.AddHeader("udid", GululuNetworkHelper.GetUdid());
+            hTTPRequest.AddHeader("Accept-Language", GululuNetworkHelper.GetAcceptLang());
+            hTTPRequest.SetHeader("Content-Type", "application/json");
+            hTTPRequest.Send();
         }
     }
 }

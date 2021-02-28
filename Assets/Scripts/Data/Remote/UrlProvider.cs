@@ -58,7 +58,7 @@ namespace AppGame.Data.Remote
 
     public class ApiUrls
     {
-        public const string BASE_URL = "http://api.gululu-a.com:9000/api/v3/m/";
+        public const string BASE_URL = "https://m.api.gululu-a.com:9443/api/v3/m/";
         public const string LOG_URL = "http://api.gululu-a.com:9000/api/v3/cd/";
         public const string DEV_BASE_URL = "http://dev.mygululu.com:9000/api/v3/m/";
         public const string DEV2_BASE_URL = "http://dev2.mygululu.com:9000/api/v3/m/";
