@@ -20,7 +20,9 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private Image imageBox;//景点图片框
         [SerializeField]
-        private Text placeNameBox;//景点名字文字框
+        private Text cityNameBox;//城市名字文字框
+        [SerializeField]
+        private Text scenicNameBox;//景点名字文字框
         [SerializeField]
         private Text descriptionBox;//景点介绍文字框
         private Vector3 middleAngle = new Vector3(0f, 90f, 0f);//卡片90度角
@@ -30,11 +32,12 @@ namespace AppGame.Module.Cycling
 
         /************************************************自 定 义 方 法************************************************/
         //显示卡片
-        public void Show(Sprite sprite, string placeName, string description)
+        public void Show(Sprite sprite, string cityName, string scenicName, string description)
         {
             this.Reset();
             this.imageBox.sprite = sprite;
-            this.placeNameBox.text = placeName;
+            this.cityNameBox.text = cityName;
+            this.scenicNameBox.text = scenicName;
             this.descriptionBox.text = description;
             this.gameObject.SetActive(true);
         }

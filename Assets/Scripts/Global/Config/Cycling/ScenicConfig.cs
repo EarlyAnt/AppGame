@@ -46,7 +46,7 @@ namespace AppGame.Config
                                     {
                                         ID = xeScenic.Attribute("ID"),
                                         Name = xeScenic.Attribute("Name"),
-                                        MapID = xeScenic.Attribute("Name"),
+                                        MapID = xeScenic.Attribute("MapID"),
                                         Image = xeScenic.Attribute("Image"),
                                         Text = xeScenic.Attribute("Text")
                                     };
