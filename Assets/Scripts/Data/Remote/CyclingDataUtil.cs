@@ -46,20 +46,25 @@ namespace AppGame.Data.Remote
         private ActionData lastMakeFriendActionData = null;
 
         //获取朋友列表
-        public void GetBasicData(Action<List<BasicData>> callback = null, Action<string> errCallback = null)
+        public void GetBasicData(Action<BasicData> callback = null, Action<string> errCallback = null)
         {
             string url = this.UrlProvider.GetBasicDataUrl(this.LocalChildInfoAgent.GetChildSN());
             Debug.LogFormat("<><CyclingDataUtil.GetBasicData>ChildSN: {0}, Url: {1}", this.LocalChildInfoAgent.GetChildSN(), url);
 
-            this.NativeOkHttpMethodWrapper.get(url, "", (result) =>
+            Header header = new Header();
+            header.headers.Add(new HeaderData() { key = "token", value = this.LocalTokenAgent.GetToken() });
+            string headerString = this.JsonUtils.Json2String(header);
+
+            this.NativeOkHttpMethodWrapper.get(url, headerString, (result) =>
             {
                 Debug.LogFormat("<><CyclingDataUtil.GetBasicData>Result: {0}", result);
                 GetBasicDataResponse response = this.JsonUtils.String2Json<GetBasicDataResponse>(result);
                 if (response != null && !string.IsNullOrEmpty(response.status) && response.status.ToUpper() == "OK")
                 {
                     Debug.LogFormat("<><CyclingDataUtil.GetBasicData>Response data is valid: {0}", result);
-                    //this.BasicDataManager.SaveData(response.child);
-                    //if (callback != null) callback(new List<BasicData>() { response.child });
+                    BasicData basicData = response.child.ToBasicData();
+                    this.BasicDataManager.SaveData(basicData);
+                    if (callback != null) callback(basicData);
                 }
             },
             (errorInfo) =>
@@ -72,21 +77,27 @@ namespace AppGame.Data.Remote
         public void GetGameData(Action<List<PlayerData>> callback = null, Action<string> errCallback = null)
         {
             string url = this.UrlProvider.GetGameDataUrl(this.LocalChildInfoAgent.GetChildSN());
-            //Debug.LogFormat("<><CyclingDataUtil.GetWorldFriends>ChildSN: {0}, Url: {1}", this.LocalChildInfoAgent.getChildSN(), url);
+            //Debug.LogFormat("<><CyclingDataUtil.GetGameData>ChildSN: {0}, Url: {1}", this.LocalChildInfoAgent.getChildSN(), url);
 
-            this.NativeOkHttpMethodWrapper.get(url, "", (result) =>
+            Header header = new Header();
+            header.headers.Add(new HeaderData() { key = "token", value = this.LocalTokenAgent.GetToken() });
+            string headerString = this.JsonUtils.Json2String(header);
+
+            this.NativeOkHttpMethodWrapper.get(url, headerString, (result) =>
             {
-                Debug.LogFormat("<><CyclingDataUtil.GetWorldFriends>Result: {0}", result);
-                //GetWorldFriendsResponse response = this.JsonUtils.String2Json<GetWorldFriendsResponse>(result);
-                //if (response != null && !string.IsNullOrEmpty(response.status) && response.status.ToUpper() == "OK")
-                //{
-                //    //Debug.LogFormat("<><CyclingDataUtil.GetWorldFriends>Response data is valid: {0}", result);
-                //    if (callback != null) callback(response);
-                //}
+                Debug.LogFormat("<><CyclingDataUtil.GetGameData>Result: {0}", result);
+                GetGameDataResponse response = this.JsonUtils.String2Json<GetGameDataResponse>(result);
+                if (response != null && !string.IsNullOrEmpty(response.status) && response.status.ToUpper() == "OK")
+                {
+                    Debug.LogFormat("<><CyclingDataUtil.GetGameData>Response data is valid: {0}", result);
+                    List<PlayerData> playerDataList = response.ToPlayerDataList();
+                    this.CyclingDataManager.SavePlayerDataList(playerDataList);
+                    if (callback != null) callback(playerDataList);
+                }
             },
             (errorInfo) =>
             {
-                Debug.LogErrorFormat("<><CyclingDataUtil.GetWorldFriends>Error: {0}", errorInfo.ErrorInfo);
+                Debug.LogErrorFormat("<><CyclingDataUtil.GetGameData>Error: {0}", errorInfo.ErrorInfo);
                 if (errCallback != null) errCallback(errorInfo.ErrorInfo);
             });
         }
