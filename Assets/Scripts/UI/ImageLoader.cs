@@ -12,7 +12,7 @@ public abstract class ImageLoader : BaseView
     [SerializeField]
     protected string imageName;
     [SerializeField]
-    protected bool autoLoad;
+    protected bool autoLoad = true;
     public bool AutoLoad
     {
         get { return this.autoLoad; }
