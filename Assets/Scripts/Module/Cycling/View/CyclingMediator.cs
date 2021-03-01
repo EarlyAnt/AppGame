@@ -111,7 +111,7 @@ namespace AppGame.Module.Cycling
             basicDataList.Add(new BasicData() { child_sn = "05", child_name = "牧绅一", child_avatar = "19", relation = (int)Relations.Friend });
             this.BasicDataManager.SaveDataList(basicDataList);
             //创建原始数据
-            OriginData originData = new OriginData() { child_sn = "01", walk = 10000, ride = 5000, train = 20, learn = 30 };
+            OriginData originData = new OriginData() { child_sn = "01", walk = 10000, ride = 0, train = 0, learn = 0 };
             this.CyclingDataManager.SaveOriginData(originData);
             //创建游戏数据
             List<PlayerData> playerDataList = new List<PlayerData>();
@@ -122,7 +122,7 @@ namespace AppGame.Module.Cycling
                 map_position = "320101_09",
                 walk_expend = 5000,
                 walk_today = 5000,
-                ride_expend = 1000,
+                ride_expend = 0,
                 train_expend = 0,
                 learn_expend = 0,
                 mp = 0,
@@ -164,8 +164,8 @@ namespace AppGame.Module.Cycling
 
         private void RefreshOriginData()
         {
-            this.originData.walk += Random.Range(1000, 5000) * 10;
-            this.originData.ride += Random.Range(1000, 5000) * 10;
+            this.originData.walk += Random.Range(1000, 5000) * 3;
+            this.originData.ride += Random.Range(1000, 5000) * 3;
             this.CyclingDataManager.SaveOriginData(this.originData);
             this.RefreshMpDatas();
         }

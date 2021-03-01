@@ -6353,11 +6353,11 @@ MonoBehaviour:
   avatarBox: {fileID: 1999059211}
   mapNode: {fileID: 1166681447}
   player: {fileID: 1517289409620272565}
-  step: 0.375
+  step: 0.12
   mapCanvas: {fileID: 1673776819}
   canvasScale: 0.1
   camera: {fileID: 34381790}
-  lerp: 0.075
+  lerp: 0.5
   showGizmos: 0
 --- !u!1 &384474239125250671
 GameObject:
