@@ -20,7 +20,7 @@ namespace AppGame.Data.Common
     public class GululuNetwork : IGululuNetwork
     {
         [Inject]
-        public ILocalCupAgent LocalCupAgent { get; set; }
+        public ILocalTokenAgent LocalCupAgent { get; set; }
         [Inject]
         public IJsonUtils JsonUtils { get; set; }
         [Inject]
@@ -76,7 +76,7 @@ namespace AppGame.Data.Common
             hTTPRequest.AddHeader("Gululu-Agent", GululuNetworkHelper.GetAgent());
             hTTPRequest.AddHeader("udid", GululuNetworkHelper.GetUdid());
             hTTPRequest.AddHeader("Accept-Language", GululuNetworkHelper.GetAcceptLang());
-            string token = this.LocalCupAgent.GetCupToken();
+            string token = this.LocalCupAgent.GetToken();
             if (token != null && token.Length != 0)
             {
                 hTTPRequest.AddHeader("token", token);

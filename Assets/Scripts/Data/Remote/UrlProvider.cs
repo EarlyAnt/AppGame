@@ -54,6 +54,16 @@ namespace AppGame.Data.Remote
             string putGameDataUrl = ApiUrls.PUT_GAME_DATA.Replace("<child_sn>", child_sn);
             return AddServerPrefix(putGameDataUrl);
         }
+
+        public string GetVerifyCodeUrl()
+        {
+            return AddServerPrefix(ApiUrls.GET_VERIFY_CODE);
+        }
+
+        public string LoginUrl()
+        {
+            return AddServerPrefix(ApiUrls.LOGIN);
+        }
     }
 
     public class ApiUrls
@@ -62,6 +72,9 @@ namespace AppGame.Data.Remote
         public const string LOG_URL = "http://api.gululu-a.com:9000/api/v3/cd/";
         public const string DEV_BASE_URL = "http://dev.mygululu.com:9000/api/v3/m/";
         public const string DEV2_BASE_URL = "http://dev2.mygululu.com:9000/api/v3/m/";
+
+        public const string GET_VERIFY_CODE = "auth/sms/verify_code";
+        public const string LOGIN = "auth/session";
 
         public const string GET_TOKEN = "auth/<x_user_sn>/token";
         public const string REGISTER_USER = "auth/session";

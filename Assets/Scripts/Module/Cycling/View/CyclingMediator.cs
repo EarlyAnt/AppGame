@@ -35,27 +35,52 @@ namespace AppGame.Module.Cycling
             }
         }
         /************************************************Unity方法与事件***********************************************/
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                LoginTestData loginTestData = GameObject.FindObjectOfType<LoginTestData>();
+                this.AuthenticationUtils.GetVerifyCode(loginTestData.Phone, (success) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, success: {0}", success.info);
+                }, (failure) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, failure: {0}", failure.ErrorInfo);
+                });
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                LoginTestData loginTestData = GameObject.FindObjectOfType<LoginTestData>();
+                LoginData loginData = new LoginData()
+                {
+                    Name = "早起的蚂蚁",
+                    Password = "bobo123456",
+                    Email = "54763755@qq.com",
+                    Phone = loginTestData.Phone,
+                    VerifyCode = loginTestData.VerifyCode
+                };
 
+                this.AuthenticationUtils.Login(loginData, (success) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>Login, success: {0}", success.info);
+                }, (failure) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>Login, failure: {0}", failure.ErrorInfo);
+                });
+            }
+        }
         /************************************************自 定 义 方 法************************************************/
         public override void OnRegister()
         {
             UpdateListeners(true);
             this.Initialize();
 
-            this.AuthenticationUtils.GetToken((success) =>
-            {
-                Debug.LogFormat("<><CyclingMediator.OnRegister>Success: {0}", success.info);
-            }, (failure) =>
-            {
-                Debug.LogFormat("<><CyclingMediator.OnRegister>Failure: {0}", failure.info);
-            });
-
             this.CyclingDataUtil.GetBasicData((basicDataList) =>
             {
-                Debug.LogFormat("<><CyclingMediator.OnRegister>Success: {0}", basicDataList);
+                Debug.LogFormat("<><CyclingMediator.OnRegister>GetBasicData, success: {0}", basicDataList);
             }, (errorText) =>
             {
-                Debug.LogFormat("<><CyclingMediator.OnRegister>Failure: {0}", errorText);
+                Debug.LogFormat("<><CyclingMediator.OnRegister>GetBasicData, failure: {0}", errorText);
             });
         }
 

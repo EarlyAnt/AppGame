@@ -31,6 +31,8 @@ namespace AppGame.Data.Remote
         [Inject]
         public ILocalChildInfoAgent LocalChildInfoAgent { get; set; }
         [Inject]
+        public ILocalTokenAgent LocalTokenAgent { get; set; }
+        [Inject]
         public IBasicDataManager BasicDataManager { get; set; }
         [Inject]
         public ICyclingDataManager CyclingDataManager { get; set; }
