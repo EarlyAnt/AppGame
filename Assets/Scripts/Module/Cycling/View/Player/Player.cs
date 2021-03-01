@@ -120,18 +120,27 @@ namespace AppGame.Module.Cycling
             while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode);
 
             //检测是否有卡片需要显示
-            this.scenicNode = this.mapNode.Points[this.nodeIndex].GetComponent<ScenicNode>();
-            if (this.scenicNode != null)
+            if (pointNode.NodeType == NodeTypes.EndNode)
             {
-                yield return new WaitForSeconds(1f);
-                this.scenicNode.CardViewClosed = this.OnCardViewClosed;
-                this.scenicNode.Show();//显示卡片
+                CityStation cityStation = pointNode.GetComponent<CityStation>();
+                if (cityStation != null)
+                    cityStation.Show(this.mapNode.ID);
+                yield break;
             }
             else
             {
-                this.IsMoving = false;//没有卡片
-                this.OnStopped();
+                this.scenicNode = pointNode.GetComponent<ScenicNode>();
+                if (this.scenicNode != null)
+                {
+                    yield return new WaitForSeconds(1f);
+                    this.scenicNode.CardViewClosed = this.OnCardViewClosed;
+                    this.scenicNode.Show();//显示卡片
+                    yield break;
+                }
             }
+
+            this.IsMoving = false;//没有卡片
+            this.OnStopped();
             Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
         //移动到指定位置

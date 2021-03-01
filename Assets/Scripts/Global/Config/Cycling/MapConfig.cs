@@ -49,7 +49,8 @@ namespace AppGame.Config
                                         ProvinceID = xeMap.Attribute("ProvinceID"),
                                         ProvinceName = xeMap.Attribute("ProvinceName"),
                                         CityID = xeMap.Attribute("CityID"),
-                                        CityName = xeMap.Attribute("CityName")
+                                        CityName = xeMap.Attribute("CityName"),
+                                        NextMap = xeMap.Attribute("NextMap")
                                     };
                                     this.configs.Add(mapInfo);
                                 }
