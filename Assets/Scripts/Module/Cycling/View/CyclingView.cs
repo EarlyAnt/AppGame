@@ -4,6 +4,7 @@ using AppGame.Data.Model;
 using AppGame.Global;
 using AppGame.UI;
 using DG.Tweening;
+using strange.extensions.dispatcher.eventdispatcher.api;
 using strange.extensions.signal.impl;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +18,8 @@ namespace AppGame.Module.Cycling
         #region 注入接口
         [Inject]
         public IModuleConfig ModuleConfig { get; set; }
+        [Inject]
+        public IMapConfig MapConfig { get; set; }
         [Inject]
         public ILocalChildInfoAgent LocalChildInfoAgent { get; set; }
         [Inject]
@@ -49,15 +52,18 @@ namespace AppGame.Module.Cycling
         private Text mpBox;
         [SerializeField]
         private Text hpBox;
+        [SerializeField]
+        private ScenicCard scenicCard;
+        [SerializeField]
+        private CityStation cityStation;
         #endregion
         #region 其他变量
+        private bool playerCanGo = true;
         private bool hideMpBalls = false;
         private float halfWidth = 380f;
         private float halfHeight = 800f;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
-        public Signal<MpBall> CollectMpSignal = new Signal<MpBall>();
-        public Signal GoSignal = new Signal();
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -73,11 +79,11 @@ namespace AppGame.Module.Cycling
         {
             base.Start();
             this.Initialize();
-            this.player.Stopped += this.OnPlayerStopped;
+            this.UpdateDispatcher(true);
         }
         protected override void OnDestroy()
         {
-            this.player.Stopped -= this.OnPlayerStopped;
+            this.UpdateDispatcher(false);
             base.OnDestroy();
         }
         /************************************************自 定 义 方 法************************************************/
@@ -93,23 +99,24 @@ namespace AppGame.Module.Cycling
         }
         public void Go()
         {
-            if (!this.player.IsMoving)
+            if (this.playerCanGo)
             {
-                this.GoSignal.Dispatch();
+                this.playerCanGo = false;
+                this.dispatcher.Dispatch(GameEvent.GO_CLICK);
             }
         }
         public void Move(bool canMove, int hp)
         {
             if (canMove)
             {
-                this.hideMpBalls = true;
-                this.mpBalls.ForEach(t => t.SetStatus(false));
+                this.SetMpBallVisible(false);
                 this.hpBox.text = hp.ToString();
                 this.player.MoveForward();
             }
             else
             {
-                this.OnPlayerStopped();
+                this.playerCanGo = true;
+                this.SetMpBallVisible(true);
                 //Todo: 显示行动点数不足的提示
             }
         }
@@ -200,6 +207,12 @@ namespace AppGame.Module.Cycling
             this.mpBox.text = mp.ToString();
             this.hpBox.text = hp.ToString();
         }
+        private void UpdateDispatcher(bool register)
+        {
+            this.dispatcher.UpdateListener(register, GameEvent.INTERACTION, this.OnPlayerStopped);
+            this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
+            this.dispatcher.UpdateListener(register, GameEvent.CITY_STATION_CLOSE, this.OnCityStationClosed);
+        }
         private Vector3 GetRandomPosition()
         {
             Vector3 position = new Vector3(Random.Range(-this.halfWidth, this.halfWidth), Random.Range(-this.halfHeight, this.halfHeight), 0);
@@ -223,15 +236,98 @@ namespace AppGame.Module.Cycling
             else
                 return this.GetRandomPosition();
         }
+        private void SetMpBallVisible(bool visible)
+        {
+            this.hideMpBalls = !visible;
+            this.CancelAllDelayInvoke();
+
+            if (visible)
+                this.DelayInvoke(() => this.mpBalls.ForEach(t => t.SetStatus(true)), 0.75f);
+            else
+                this.mpBalls.ForEach(t => t.SetStatus(false));
+        }
         private void CollectMp(MpBall mpBall)
         {
-            this.CollectMpSignal.Dispatch(mpBall);
+            this.dispatcher.Dispatch(GameEvent.COLLECT_MP, mpBall);
         }
-        private void OnPlayerStopped()
+        private void OnPlayerStopped(IEvent evt)
         {
-            this.hideMpBalls = false;
-            this.CancelAllDelayInvoke();
-            this.DelayInvoke(() => this.mpBalls.ForEach(t => t.SetStatus(true)), 0.75f);
+            if (evt == null || evt.data == null)
+            {
+                Debug.LogError("<><CyclingView.OnPlayerStopped>Error: parameter 'evt' or 'evt.data' is null");
+                return;
+            }
+
+            MapPointNode mapPointNode = evt.data as MapPointNode;
+            if (mapPointNode == null)
+            {
+                Debug.LogError("<><CyclingView.OnPlayerStopped>Error: parameter 'evt.data' is not the type MapPointNode");
+                return;
+            }
+
+            //检测是否有卡片需要显示
+            if (mapPointNode.NodeType == NodeTypes.EndNode)
+            {
+                this.cityStation.Show(this.player.MapNode.ID);
+            }
+            else if (mapPointNode.NodeType == NodeTypes.SiteNode)
+            {
+                InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
+                if (interactionData != null && interactionData.Interacton == Interactions.KNOWLEDGE_LANDMARK)
+                {
+                    this.scenicCard.Show(interactionData.ID);//显示卡片
+                }
+            }
+            else
+            {
+                this.playerCanGo = true;
+                this.SetMpBallVisible(true);
+            }
+        }
+        private void OnScenicCardClosed(IEvent evt)
+        {
+            this.playerCanGo = true;
+            this.SetMpBallVisible(true);
+        }
+        private void OnCityStationClosed(IEvent evt)
+        {
+            if (evt == null || evt.data == null)
+            {
+                Debug.LogError("<><CyclingView.OnCityStationClosed>Error: parameter 'evt' or 'evt.data' is null");
+                return;
+            }
+
+            Ticket ticket = evt.data as Ticket;
+            if (ticket == null)
+            {
+                Debug.LogError("<><CyclingView.OnCityStationClosed>Error: parameter 'evt.data' is not the type Ticket");
+                return;
+            }
+
+            if (ticket.Go)
+            {
+                Debug.LogFormat("<><CyclingView.OnCityStationClosed>Data, from[{0}], to[{1}], coin[{2}], step[{3}]", ticket.FromMapID, ticket.ToMapID, ticket.Coin, ticket.Step);
+                MapNode mapNode = this.player.MapNode;
+                if (mapNode == null)
+                {
+                    Debug.LogError("<><CyclingView.OnCityStationClosed>Error: parameter 'mapNode' is null");
+                    return;
+                }
+
+                MapInfo mapInfo = this.MapConfig.GetMap(mapNode.ID);
+                if (mapInfo == null)
+                {
+                    Debug.LogError("<><CyclingView.OnCityStationClosed>Error: parameter 'mapInfo' is null");
+                    return;
+                }
+
+                //Todo: 获取下一个地图的ID，并进行跳转
+                string nextMapID = mapInfo.NextMap;
+            }
+            else
+            {
+                this.playerCanGo = true;
+            }
         }
     }
 }

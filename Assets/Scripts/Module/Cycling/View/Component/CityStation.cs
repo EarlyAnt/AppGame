@@ -49,19 +49,22 @@ namespace AppGame.Module.Cycling
         //ÂÃÐÐ
         public void Travel(Vehicle vehicle)
         {
-            this.OnViewClosed(true, vehicle.Coin, vehicle.Step);
+            this.dispatcher.Dispatch(GameEvent.CITY_STATION_CLOSE, new Ticket()
+            {
+                Go = true,
+                Coin = vehicle.Coin,
+                Step = vehicle.Step
+            });
+            this.gameObject.SetActive(false);
         }
         //Òþ²Ø¿¨Æ¬
         public void Stay()
-        {
+        {            
+            this.dispatcher.Dispatch(GameEvent.CITY_STATION_CLOSE, new Ticket()
+            {
+                Go = false
+            });
             this.gameObject.SetActive(false);
-            this.OnViewClosed(false, 0, 0);
-        }
-        //µ±¿¨Æ¬¹Ø±ÕÊ±
-        private void OnViewClosed(bool travel, int coin, int step)
-        {
-            if (this.ViewClosed != null)
-                this.ViewClosed(travel, coin, step);
         }
     }
 }

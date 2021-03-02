@@ -40,6 +40,8 @@ namespace AppGame.Module.GameStart
         private float durationMin = 3f;
         [SerializeField, Range(3f, 30f)]
         private float durationMax = 5f;
+        [SerializeField, Range(0f, 1f)]
+        private float speedRate = 1f;
         #endregion
         #region 其他变量
         private Tweener tweener;
@@ -72,7 +74,7 @@ namespace AppGame.Module.GameStart
             this.FontConfig.Load();
             yield return new WaitUntil(() => this.FontConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
-            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
 
             //read language config
             this.LanConfig.Load();
@@ -84,38 +86,38 @@ namespace AppGame.Module.GameStart
             this.I18NConfig.Load();
             yield return new WaitUntil(() => this.I18NConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
-            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
 
             //read audio config
             this.AudioConfig.Load();
             yield return new WaitUntil(() => this.AudioConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
-            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
 
             //read module config
             this.ModuleConfig.Load();
             yield return new WaitUntil(() => this.ModuleConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
-            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
 
             //read map config
             this.MapConfig.Load();
             yield return new WaitUntil(() => this.MapConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
-            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
 
             //read scenic config
             this.ScenicConfig.Load();
             yield return new WaitUntil(() => this.ScenicConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
-            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
 
             //load common images
             this.CommonImageUtils.Initialize();
             yield return new WaitForSeconds(1f);
             this.CommonImageUtils.LoadCommonImages();
             this.SetProgress(startValue += stepValue);
-            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f));
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
 
             #region 测试代码
             //bool complete = false;
@@ -148,7 +150,7 @@ namespace AppGame.Module.GameStart
 
             this.progressBar.fillAmount = endValue;
             this.progressValue.text = endValue * 100 + "%";
-            yield return new WaitForSeconds(Random.Range(1f, 2f));
+            yield return new WaitForSeconds(Random.Range(1f, 2f) * this.speedRate);
             async.allowSceneActivation = true;
         }
     }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AppGame.Module.Cycling
 {
-    public abstract class BaseInteraction : BaseView
+    public class InteractionData : MonoBehaviour
     {
         /************************************************属性与变量命名************************************************/
         [SerializeField]
@@ -12,12 +12,8 @@ namespace AppGame.Module.Cycling
         private Interactions interaction;
         public string ID { get { return this.id; } }
         public Interactions Interacton { get { return this.interaction; } }
-        public bool Complete { get; protected set; }
         /************************************************Unity方法与事件***********************************************/
 
         /************************************************自 定 义 方 法************************************************/
-        public abstract void Show();
-
-        public abstract void Hide();
     }
 }

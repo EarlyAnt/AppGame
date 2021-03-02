@@ -27,9 +27,22 @@ namespace AppGame.Module.Cycling
         #region 其他变量
         private CameraEdge cameraEdge;
         private RectTransform mapRectTransform;
-        private ScenicNode scenicNode;
         private bool inRange;
-        public System.Action Stopped { get; set; }
+        public MapPointNode CurrentNode
+        {
+            get
+            {
+                if (this.nodeIndex >= 0 && this.nodeIndex < this.mapNode.Points.Count)
+                {
+                    return this.mapNode.Points[this.nodeIndex].GetComponent<MapPointNode>();
+                }
+                else
+                {
+                    Debug.LogError("<><Player.CurrentNode>Error: nodeIndex is out of range");
+                    return null;
+                }
+            }
+        }
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -99,8 +112,6 @@ namespace AppGame.Module.Cycling
         //玩家移动
         private IEnumerator MovePlayer(bool forward)
         {
-            if (this.scenicNode != null) this.scenicNode.Hide();
-
             if (this.nodeIndex < 0 || this.nodeIndex >= this.mapNode.Points.Count)
                 yield break;
 
@@ -119,27 +130,6 @@ namespace AppGame.Module.Cycling
             }
             while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode);
 
-            //检测是否有卡片需要显示
-            if (pointNode.NodeType == NodeTypes.EndNode)
-            {
-                CityStation cityStation = pointNode.GetComponent<CityStation>();
-                if (cityStation != null)
-                    cityStation.Show(this.mapNode.ID);
-                yield break;
-            }
-            else
-            {
-                this.scenicNode = pointNode.GetComponent<ScenicNode>();
-                if (this.scenicNode != null)
-                {
-                    yield return new WaitForSeconds(1f);
-                    this.scenicNode.CardViewClosed = this.OnCardViewClosed;
-                    this.scenicNode.Show();//显示卡片
-                    yield break;
-                }
-            }
-
-            this.IsMoving = false;//没有卡片
             this.OnStopped();
             Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
@@ -173,14 +163,13 @@ namespace AppGame.Module.Cycling
         //当玩家移动停止时
         private void OnStopped()
         {
-            if (this.Stopped != null)
-                this.Stopped();
-        }
-        //当卡片页面关闭时
-        private void OnCardViewClosed()
-        {
             this.IsMoving = false;
-            this.OnStopped();
+
+            MapPointNode mapPointNode = this.mapNode.Points[this.nodeIndex].GetComponent<MapPointNode>();
+            if (mapPointNode != null)
+                this.dispatcher.Dispatch(GameEvent.INTERACTION, mapPointNode);
+            else
+                Debug.LogError("<><Player.OnStopped>Error: can not find the component 'MapPointNode'");
         }
     }
 }

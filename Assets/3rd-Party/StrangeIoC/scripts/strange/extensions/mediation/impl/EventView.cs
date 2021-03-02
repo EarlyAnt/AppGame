@@ -26,15 +26,16 @@
  */
 
 using System;
+using strange.extensions.context.api;
 using strange.extensions.dispatcher.eventdispatcher.api;
 
 namespace strange.extensions.mediation.impl
 {
-	public class EventView : View
-	{
-		[Inject]
-		public IEventDispatcher dispatcher{ get; set;}
+    public class EventView : View
+    {
+        [Inject(ContextKeys.CONTEXT_DISPATCHER)]
+        public IEventDispatcher dispatcher { get; set; }
 
-	}
+    }
 }
 

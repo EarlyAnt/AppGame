@@ -9,6 +9,15 @@ namespace AppGame.Module.Cycling
     public class ScenicCard : BaseView
     {
         /************************************************属性与变量命名************************************************/
+        #region 注入接口
+        [Inject]
+        public IMapConfig MapConfig { get; set; }
+        [Inject]
+        public IScenicConfig ScenicConfig { get; set; }
+        [Inject]
+        public II18NConfig I18NConfig { get; set; }
+        #endregion
+        #region 页面UI组件
         [SerializeField]
         private Transform root;//卡片面板根物体
         [SerializeField]
@@ -25,20 +34,39 @@ namespace AppGame.Module.Cycling
         private Text scenicNameBox;//景点名字文字框
         [SerializeField]
         private Text descriptionBox;//景点介绍文字框
+        #endregion
+        #region 其他变量
         private Vector3 middleAngle = new Vector3(0f, 90f, 0f);//卡片90度角
         private Vector3 foreAngle = new Vector3(0f, 180f, 0f);//卡片翻转角度
-        public System.Action ViewClosed { get; set; }//卡片关闭时委托
+        #endregion
         /************************************************Unity方法与事件***********************************************/
 
         /************************************************自 定 义 方 法************************************************/
         //显示卡片
-        public void Show(Sprite sprite, string cityName, string scenicName, string description)
+        public void Show(string scenicID)
         {
             this.Reset();
-            this.imageBox.sprite = sprite;
-            this.cityNameBox.text = cityName;
-            this.scenicNameBox.text = scenicName;
-            this.descriptionBox.text = description;
+            //查询地图和景点数据数据
+            ScenicInfo scenicInfo = this.ScenicConfig.GetScenic(scenicID);
+            if (scenicInfo == null)
+            {
+
+                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find scenic named '{0}'", scenicID);
+                return;
+            }
+
+            MapInfo mapInfo = this.MapConfig.GetMap(scenicInfo.MapID);
+            if (mapInfo == null)
+            {
+
+                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find city named '{0}'", scenicInfo.MapID);
+                return;
+            }
+            //设置页面内容
+            this.imageBox.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/Site/{0}", scenicInfo.Image)); ;
+            this.cityNameBox.text = mapInfo.CityName;
+            this.scenicNameBox.text = scenicInfo.Name;
+            this.descriptionBox.text = this.I18NConfig.GetText(scenicInfo.Text);
             this.gameObject.SetActive(true);
         }
         //隐藏卡片
@@ -70,8 +98,7 @@ namespace AppGame.Module.Cycling
         //当卡片关闭时
         private void OnViewClosed()
         {
-            if (this.ViewClosed != null)
-                this.ViewClosed();
+            this.dispatcher.Dispatch(GameEvent.SCENIC_CARD_CLOSE);
         }
     }
 }

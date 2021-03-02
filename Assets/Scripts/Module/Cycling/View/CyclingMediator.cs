@@ -1,5 +1,6 @@
 using AppGame.Data.Local;
 using AppGame.Data.Model;
+using strange.extensions.dispatcher.eventdispatcher.api;
 using strange.extensions.mediation.impl;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,22 +42,10 @@ namespace AppGame.Module.Cycling
             UpdateListeners(false);
         }
 
-        private void UpdateListeners(bool value)
+        private void UpdateListeners(bool register)
         {
-            //dispatcher.UpdateListener(value, GameEvent.GAME_START, this.onGameStart);
-            //dispatcher.UpdateListener(value, GameEvent.GAME_OVER, onGameOver);
-            //view.dispatcher.UpdateListener(value, GameStartView.CLICK_EVENT, onViewClicked);
-
-            if (value)
-            {
-                this.View.CollectMpSignal.AddListener(this.CollectMp);
-                this.View.GoSignal.AddListener(this.OnGo);
-            }
-            else
-            {
-                this.View.CollectMpSignal.RemoveListener(this.CollectMp);
-                this.View.GoSignal.RemoveListener(this.OnGo);
-            }
+            this.dispatcher.UpdateListener(register, GameEvent.COLLECT_MP, this.CollectMp);
+            this.dispatcher.UpdateListener(register, GameEvent.GO_CLICK, this.OnGo);
         }
 
         private void onGameStart()
@@ -119,7 +108,7 @@ namespace AppGame.Module.Cycling
             {
                 child_sn = "01",
                 map_id = "320101",
-                map_position = "320101_09",
+                map_position = "320101_01",
                 walk_expend = 5000,
                 walk_today = 5000,
                 ride_expend = 1000,
@@ -229,8 +218,21 @@ namespace AppGame.Module.Cycling
             this.View.RefreshMpBalls(mpDatas);
         }
 
-        private void CollectMp(MpBall mpBall)
+        private void CollectMp(IEvent evt)
         {
+            if (evt == null || evt.data == null)
+            {
+                Debug.LogError("<><CyclingMediator.CollectMp>Error: parameter 'evt' or 'evt.data' is null");
+                return;
+            }
+
+            MpBall mpBall = evt.data as MpBall;
+            if (mpBall == null)
+            {
+                Debug.LogError("<><CyclingMediator.CollectMp>Error: parameter 'evt.data' is not the type MpBall");
+                return;
+            }
+
             int mpIncrease = mpBall.Value;//计算收取了多少能量
 
             //记录好用的原始数据(步行，骑行，坐姿及能量分成)

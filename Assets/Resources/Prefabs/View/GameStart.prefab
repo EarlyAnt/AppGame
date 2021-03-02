@@ -356,3 +356,4 @@ MonoBehaviour:
   progressValue: {fileID: 858122552}
   durationMin: 3
   durationMax: 5
+  speedRate: 0.2

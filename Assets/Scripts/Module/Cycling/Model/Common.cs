@@ -6,9 +6,18 @@ namespace AppGame.Module.Cycling
     #region 自定义枚举
     public enum GameEvent
     {
+        //普通事件
         GAME_START,
         GAME_OVER,
-        COLLECT_MP
+        COLLECT_MP,
+        GO_CLICK,
+        MOVE_FORWARD,
+        INTERACTION,
+
+
+        //页面关闭事件
+        SCENIC_CARD_CLOSE,
+        CITY_STATION_CLOSE
     }
 
     public enum NodeTypes
@@ -66,6 +75,15 @@ namespace AppGame.Module.Cycling
         public string FromID { get; set; }
         public string FromName { get; set; }
         public int Value { get; set; }
+    }
+
+    public class Ticket
+    {
+        public bool Go { get; set; }//true-跳转到下一地图，false-留在原地
+        public string FromMapID { get; set; }
+        public string ToMapID { get; set; }
+        public int Coin { get; set; }
+        public int Step { get; set; }
     }
     #endregion
 }

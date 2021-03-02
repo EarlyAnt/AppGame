@@ -101,6 +101,9 @@ namespace AppGame.Module.Cycling
         //设置是否可见
         public void SetStatus(bool visible)
         {
+            if (this.fadeTweener != null)
+                this.fadeTweener.Kill();
+
             this.fadeTweener = this.canvasGroup.DOFade(visible ? 1f : 0f, visible ? 0.375f : 0f);
         }
         //开始播放
