@@ -29,7 +29,13 @@ namespace AppGame.Module.Cycling
             }
         }
         /************************************************Unity方法与事件***********************************************/
-
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                this.CyclingDataManager.ClearMpCollection();
+            }
+        }
         /************************************************自 定 义 方 法************************************************/
         public override void OnRegister()
         {
@@ -199,21 +205,21 @@ namespace AppGame.Module.Cycling
                 }
 
                 int mpShare = 0;
-                if (basicData.relation == (int)Relations.Family)
-                    mpShare = (int)System.Math.Ceiling(playerData.mp_yestoday * 0.05);
-                else if (basicData.relation == (int)Relations.Friend)
-                    mpShare = (int)System.Math.Ceiling(playerData.mp_yestoday * 0.01);
-
-                if (mpShare > 0)
-                {
-                    mpDatas.Add(new MpData()
-                    {
-                        MpBallType = (basicData.relation == (int)Relations.Family ? MpBallTypes.Family : MpBallTypes.Friend),
-                        Value = mpShare,
-                        FromID = playerData.child_sn,
-                        FromName = basicData.child_name
-                    });
+                if (!this.CyclingDataManager.MpCollected(playerData.child_sn))
+                {//今日没有收取此家人或朋友的能量分成，才计算其的能量分成
+                    if (basicData.relation == (int)Relations.Family)
+                        mpShare = (int)System.Math.Ceiling(playerData.mp_yestoday * 0.05);
+                    else if (basicData.relation == (int)Relations.Friend)
+                        mpShare = (int)System.Math.Ceiling(playerData.mp_yestoday * 0.01);
                 }
+
+                mpDatas.Add(new MpData()
+                {
+                    MpBallType = (basicData.relation == (int)Relations.Family ? MpBallTypes.Family : MpBallTypes.Friend),
+                    Value = mpShare,
+                    FromID = playerData.child_sn,
+                    FromName = basicData.child_name
+                });
             }
             this.View.RefreshMpBalls(mpDatas);
         }
@@ -235,7 +241,7 @@ namespace AppGame.Module.Cycling
 
             int mpIncrease = mpBall.Value;//计算收取了多少能量
 
-            //记录好用的原始数据(步行，骑行，坐姿及能量分成)
+            //记录耗用的原始数据(步行，骑行，坐姿及能量分成)
             switch (mpBall.MpBallType)
             {
                 case MpBallTypes.Walk:
@@ -251,10 +257,10 @@ namespace AppGame.Module.Cycling
                     this.myPlayerData.learn_expend += mpIncrease * 5;
                     break;
                 case MpBallTypes.Family:
-                    //Todo: 记录已收取此家人的能量分成
-                    break;
                 case MpBallTypes.Friend:
-                    //Todo: 记录已收取此朋友的能量分成
+                    //记录已收取此家人或朋友的能量分成
+                    if (!this.CyclingDataManager.MpCollected(mpBall.FromID))
+                        this.CyclingDataManager.SaveMpCollection(mpBall.FromID);
                     break;
             }
 
@@ -262,7 +268,7 @@ namespace AppGame.Module.Cycling
             int hpIncrease = (int)((this.myPlayerData.mp - myPlayerData.mp_expend) / 100);//计算能量值是否可转换成行动点数
             if (hpIncrease > 0)//每满100可转换成1点行动点数
             {
-                this.myPlayerData.mp_expend += hpIncrease * 100;//记录好用的能量
+                this.myPlayerData.mp_expend += hpIncrease * 100;//记录耗用的能量
                 this.myPlayerData.hp += hpIncrease;//记录增加的行动点数
             }
 

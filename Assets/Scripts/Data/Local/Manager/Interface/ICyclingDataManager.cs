@@ -13,5 +13,9 @@ namespace AppGame.Data.Local
 
         void SavePlayerData(PlayerData playerData);
         PlayerData GetPlayerData(string childSN);
+
+        void SaveMpCollection(string childSN);
+        bool MpCollected(string childSN);
+        void ClearMpCollection();
     }
 }

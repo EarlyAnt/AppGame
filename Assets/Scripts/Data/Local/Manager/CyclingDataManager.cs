@@ -1,4 +1,5 @@
 ﻿using AppGame.Data.Model;
+using AppGame.Util;
 using System;
 using System.Collections.Generic;
 
@@ -6,8 +7,15 @@ namespace AppGame.Data.Local
 {
     class CyclingDataManager : ICyclingDataManager
     {
+        [Inject]
+        public ILocalDataManager LocalDataManager { get; set; }
+        [Inject]
+        public IJsonUtils JsonUtils { get; set; }
+
         private OriginData originData = null;
         private List<PlayerData> playerDataList = null;
+        private Dictionary<string, DateTime> mpCollections = null;
+        private const string COLLECT_MP_DATA_KEY = "collect_mp";
 
         /// <summary>
         /// 保存玩家的原始数据(健康数据)
@@ -77,6 +85,49 @@ namespace AppGame.Data.Local
                 return this.playerDataList.Find(t => t.child_sn == childSN);
             else
                 return null;
+        }
+
+        /// <summary>
+        /// 保存已收取的家人及好友的能量分成
+        /// </summary>
+        /// <param name="childSN"></param>
+        public void SaveMpCollection(string childSN)
+        {
+            if (this.mpCollections == null)
+                this.mpCollections = new Dictionary<string, DateTime>();
+
+            if (this.mpCollections.ContainsKey(childSN))
+                this.mpCollections[childSN] = DateTime.Today;
+            else
+                this.mpCollections.Add(childSN, DateTime.Today);
+
+            string dataString = this.JsonUtils.Json2String(this.mpCollections);
+            this.LocalDataManager.SaveObject<string>(COLLECT_MP_DATA_KEY, dataString);
+        }
+        /// <summary>
+        /// 判断今日是否已经收取了某个家人或好友的能量分成
+        /// </summary>
+        /// <param name="childSN"></param>
+        /// <returns></returns>
+        public bool MpCollected(string childSN)
+        {
+            string dataString = this.LocalDataManager.GetObject<string>(COLLECT_MP_DATA_KEY);
+            this.mpCollections = this.JsonUtils.String2Json<Dictionary<string, DateTime>>(dataString);
+
+            if (this.mpCollections != null && this.mpCollections.ContainsKey(childSN) && this.mpCollections[childSN] == DateTime.Today)
+                return true;
+            else
+                return false;
+        }
+        /// <summary>
+        /// 清空本地记录的家人及好友能量分成的收取
+        /// </summary>
+        public void ClearMpCollection()
+        {
+            if (this.mpCollections != null)
+                this.mpCollections.Clear();
+
+            this.LocalDataManager.SaveObject<string>(COLLECT_MP_DATA_KEY, "");
         }
     }
 }
