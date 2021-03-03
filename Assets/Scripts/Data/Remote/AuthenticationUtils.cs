@@ -20,7 +20,7 @@ namespace AppGame.Data.Remote
         [Inject]
         public INativeOkHttpMethodWrapper NativeOkHttpMethodWrapper { get; set; }
         [Inject]
-        public ILocalTokenAgent LocalTokenAgent { get; set; }
+        public ITokenManager TokenManager { get; set; }
 
         public void GetVerifyCode(string phone, Action<Result> callBack, Action<ResponseErroInfo> errCallBack)
         {
@@ -90,7 +90,7 @@ namespace AppGame.Data.Remote
                     if (response.IsSuccess)
                     {
                         LoginResponseData data = JsonUtils.String2Json<LoginResponseData>(response.DataAsText);
-                        if (data != null) this.LocalTokenAgent.SaveToken(data.token);
+                        if (data != null) this.TokenManager.SaveToken(data.token);
                         if (callBack != null) callBack(Result.Success(response.Message));
                     }
                     else
@@ -158,7 +158,7 @@ namespace AppGame.Data.Remote
             hTTPRequest.AddHeader("Gululu-Agent", GululuNetworkHelper.GetAgent());
             hTTPRequest.AddHeader("udid", GululuNetworkHelper.GetUdid());
             hTTPRequest.AddHeader("Accept-Language", GululuNetworkHelper.GetAcceptLang());
-            hTTPRequest.AddHeader("token", this.LocalTokenAgent.GetToken());
+            hTTPRequest.AddHeader("token", this.TokenManager.GetToken());
             hTTPRequest.SetHeader("Content-Type", "application/json");
             hTTPRequest.Send();
         }

@@ -2,7 +2,7 @@ using AppGame.Util;
 
 namespace AppGame.Data.Local
 {
-    public class LocalTokenAgent : ILocalTokenAgent
+    public class TokenManager : ITokenManager
     {
         [Inject]
         public ILocalDataManager LocalDataManager { set; get; }

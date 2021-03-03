@@ -31,7 +31,7 @@ namespace AppGame.Data.Remote
         [Inject]
         public IChildInfoManager ChildInfoManager { get; set; }
         [Inject]
-        public ILocalTokenAgent LocalTokenAgent { get; set; }
+        public ITokenManager TokenManager { get; set; }
         [Inject]
         public IBasicDataManager BasicDataManager { get; set; }
         [Inject]
@@ -50,7 +50,7 @@ namespace AppGame.Data.Remote
             Debug.LogFormat("<><CyclingDataUtil.GetBasicData>ChildSN: {0}, Url: {1}", this.ChildInfoManager.GetChildSN(), url);
 
             Header header = new Header();
-            header.headers.Add(new HeaderData() { key = "token", value = this.LocalTokenAgent.GetToken() });
+            header.headers.Add(new HeaderData() { key = "token", value = this.TokenManager.GetToken() });
             string headerString = this.JsonUtil.Json2String(header);
 
             this.NativeOkHttpMethodWrapper.get(url, headerString, (result) =>
@@ -78,7 +78,7 @@ namespace AppGame.Data.Remote
             //Debug.LogFormat("<><CyclingDataUtil.GetGameData>ChildSN: {0}, Url: {1}", this.LocalChildInfoAgent.getChildSN(), url);
 
             Header header = new Header();
-            header.headers.Add(new HeaderData() { key = "token", value = this.LocalTokenAgent.GetToken() });
+            header.headers.Add(new HeaderData() { key = "token", value = this.TokenManager.GetToken() });
             string headerString = this.JsonUtil.Json2String(header);
 
             this.NativeOkHttpMethodWrapper.get(url, headerString, (result) =>
