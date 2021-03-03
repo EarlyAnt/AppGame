@@ -34,21 +34,21 @@ namespace AppGame.Config
 
                     xmlDoc.LoadXml(www.text);
                     ArrayList allNodes = xmlDoc.ToXml().Children;
-                    foreach (SecurityElement xeModules in allNodes)
+                    foreach (SecurityElement seModules in allNodes)
                     {//根节点
-                        if (xeModules.Tag == "Modules")
+                        if (seModules.Tag == "Modules")
                         {//Modules节点
-                            ArrayList moduleNodes = xeModules.Children;
-                            foreach (SecurityElement xeModule in moduleNodes)
+                            ArrayList moduleNodes = seModules.Children;
+                            foreach (SecurityElement seModule in moduleNodes)
                             {//Module节点
-                                if (xeModule.Tag == "Module")
+                                if (seModule.Tag == "Module")
                                 {
                                     ModuleInfo moduleInfo = new ModuleInfo()
                                     {
-                                        Name = xeModule.Attribute("Name"),
+                                        Name = seModule.Attribute("Name"),
                                     };
 
-                                    ArrayList fileNodes = xeModule.Children;
+                                    ArrayList fileNodes = seModule.Children;
                                     foreach (SecurityElement xeFile in fileNodes)
                                     {//File节点
                                         if (xeFile.Tag == "Image")

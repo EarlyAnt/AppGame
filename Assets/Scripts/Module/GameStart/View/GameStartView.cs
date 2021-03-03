@@ -25,9 +25,13 @@ namespace AppGame.Module.GameStart
         [Inject]
         public IModuleConfig ModuleConfig { get; set; }
         [Inject]
+        public IItemConfig ItemConfig { get; set; }
+        [Inject]
         public IMapConfig MapConfig { get; set; }
         [Inject]
         public IScenicConfig ScenicConfig { get; set; }
+        [Inject]
+        public ICardConfig CardConfig { get; set; }
         [Inject]
         public ICommonImageUtils CommonImageUtils { get; set; }
         #endregion
@@ -68,7 +72,7 @@ namespace AppGame.Module.GameStart
         private IEnumerator ReadConfig(float endValue)
         {
             float startValue = 0f;
-            float stepValue = endValue / 8f;
+            float stepValue = endValue / 10f;
 
             //read font config
             this.FontConfig.Load();
@@ -100,6 +104,12 @@ namespace AppGame.Module.GameStart
             this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
 
+            //read item config
+            this.ItemConfig.Load();
+            yield return new WaitUntil(() => this.ItemConfig.IsLoaded());
+            this.SetProgress(startValue += stepValue);
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
+
             //read map config
             this.MapConfig.Load();
             yield return new WaitUntil(() => this.MapConfig.IsLoaded());
@@ -109,6 +119,12 @@ namespace AppGame.Module.GameStart
             //read scenic config
             this.ScenicConfig.Load();
             yield return new WaitUntil(() => this.ScenicConfig.IsLoaded());
+            this.SetProgress(startValue += stepValue);
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
+
+            //read card config
+            this.CardConfig.Load();
+            yield return new WaitUntil(() => this.CardConfig.IsLoaded());
             this.SetProgress(startValue += stepValue);
             yield return new WaitForSeconds(Random.Range(0.5f, 1.5f) * this.speedRate);
 

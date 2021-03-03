@@ -9,16 +9,15 @@ using UnityEngine;
 namespace AppGame.Config
 {
     /// <summary>
-    /// 字体配置读取类
+    /// 物品配置读取类
     /// </summary>
-    public class FontConfig : BaseConfig, IFontConfig
+    public class ItemConfig : BaseConfig, IItemConfig
     {
         /************************************************属性与变量命名************************************************/
-        public const string DEFAULT_FONT = "Arial";
-        //字体配置数据字典
-        private Dictionary<string, string> configs = new Dictionary<string, string>();
+        //物品配置数据字典
+        private List<Item> configs = new List<Item>();
         /************************************************私  有  方  法************************************************/
-        //读取字体配置文件
+        //读取物品配置文件
         private void ReadConfig(WWW www)
         {
             if (!string.IsNullOrEmpty(www.error))
@@ -36,16 +35,24 @@ namespace AppGame.Config
 
                     xmlDoc.LoadXml(www.text);
                     ArrayList allNodes = xmlDoc.ToXml().Children;
-                    foreach (SecurityElement seFonts in allNodes)
+                    foreach (SecurityElement seItems in allNodes)
                     {
-                        if (seFonts.Tag == "Fonts")
+                        if (seItems.Tag == "Items")
                         {
-                            ArrayList fontNodes = seFonts.Children;
-                            foreach (SecurityElement seFont in fontNodes)
+                            ArrayList itemsNode = seItems.Children;
+                            foreach (SecurityElement seItem in itemsNode)
                             {
-                                if (seFont.Tag == "Font")
+                                if (seItem.Tag == "Item")
                                 {
-                                    this.configs.Add(seFont.Attribute("Name"), seFont.Attribute("FullName"));
+                                    Item item = new Item()
+                                    {
+                                        ItemID = seItem.Attribute("ItemID"),
+                                        ItemType = seItem.Attribute("ItemType"),
+                                        ItemName = seItem.Attribute("ItemName"),
+                                        ItemIcon = seItem.Attribute("ItemIcon"),
+                                        Desc = seItem.Attribute("Desc")
+                                    };
+                                    this.configs.Add(item);
                                 }
                             }
                         }
@@ -61,40 +68,46 @@ namespace AppGame.Config
         }
         /************************************************公  共  方  法************************************************/
         /// <summary>
-        /// 加载字体配置数据
+        /// 加载物品配置数据
         /// </summary>
         public void Load()
         {
             if (this.isLoaded)
                 return;
             this.configs.Clear();
-            ConfigLoader.Instance.LoadConfig("Config/Global/FontConfig.xml", this.ReadConfig);
+            ConfigLoader.Instance.LoadConfig("Config/Global/ItemConfig.xml", this.ReadConfig);
         }
         /// <summary>
-        /// 获取字体完整名称
-        /// </summary>
-        /// <param name="fontShortName">字体简称</param>
-        /// <returns>如果配置项中能找到简称对应的字体则返回该字体全程，否则返回Unity默认字体Arial</returns>
-        public string GetFontFullName(string fontShortName)
-        {
-            return this.configs != null && this.configs.ContainsKey(fontShortName) ? this.configs[fontShortName] : DEFAULT_FONT;
-        }
-        /// <summary>
-        /// 判断字体是否合法
-        /// </summary>
-        /// <param name="fontShortName">字体简称</param>
-        /// <returns></returns>
-        public bool IsValid(string fontShortName)
-        {
-            return this.configs != null && this.configs.ContainsKey(fontShortName);
-        }
-        /// <summary>
-        /// 获取所有字体的完整名称
+        /// 获取所有物品
         /// </summary>
         /// <returns></returns>
-        public List<string> GetAllFont()
+        public List<Item> GetAllItems()
         {
-            return this.configs != null && this.configs.Count > 0 ? this.configs.Values.ToList() : null;
+            return this.configs;
+        }
+        /// <summary>
+        /// 获取指定物品
+        /// </summary>
+        /// <param name="itemID">物品ID</param>
+        /// <returns></returns>
+        public Item GetItem(string itemID)
+        {
+            if (this.configs != null)
+                return this.configs.Find(t => t.ItemID == itemID);
+            else
+                return null;
+        }
+        /// <summary>
+        /// 判断物品是否合法
+        /// </summary>
+        /// <param name="itemID">物品ID</param>
+        /// <returns></returns>
+        public bool HasItem(string itemID)
+        {
+            if (this.configs != null)
+                return this.configs.Exists(t => t.ItemID == itemID);
+            else
+                return false;
         }
         /// <summary>
         /// 获取配置文件是否已经加载完

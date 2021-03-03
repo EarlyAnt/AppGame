@@ -57,20 +57,20 @@ namespace AppGame.Config
 
                     xmlDoc.LoadXml(www.text);
                     ArrayList allNodes = xmlDoc.ToXml().Children;
-                    foreach (SecurityElement xeLanguages in allNodes)
+                    foreach (SecurityElement seLanguages in allNodes)
                     {
-                        if (xeLanguages.Tag == "Languages")
+                        if (seLanguages.Tag == "Languages")
                         {
-                            ArrayList languageNodes = xeLanguages.Children;
-                            foreach (SecurityElement xeLanguage in languageNodes)
+                            ArrayList languageNodes = seLanguages.Children;
+                            foreach (SecurityElement seLanguage in languageNodes)
                             {
-                                if (xeLanguage.Tag == "Language")
+                                if (seLanguage.Tag == "Language")
                                 {
                                     Language language = new Language()
                                     {
-                                        Name = xeLanguage.Attribute("Name"),
-                                        Text = xeLanguage.Attribute("Text"),
-                                        Default = Convert.ToBoolean(xeLanguage.Attribute("Default"))
+                                        Name = seLanguage.Attribute("Name"),
+                                        Text = seLanguage.Attribute("Text"),
+                                        Default = Convert.ToBoolean(seLanguage.Attribute("Default"))
                                     };
                                     this.configs.Add(language.Name, language);
                                 }

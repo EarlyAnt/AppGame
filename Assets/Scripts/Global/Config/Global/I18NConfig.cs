@@ -40,40 +40,40 @@ namespace AppGame.Config
 
                     xmlDoc.LoadXml(www.text);
                     ArrayList allNodes = xmlDoc.ToXml().Children;
-                    foreach (SecurityElement xeResConfigs in allNodes)
+                    foreach (SecurityElement seResConfigs in allNodes)
                     {//根节点
-                        if (xeResConfigs.Tag == "ResConfigs")
+                        if (seResConfigs.Tag == "ResConfigs")
                         {//ResConfigs节点
-                            ArrayList resConfigNodes = xeResConfigs.Children;
-                            foreach (SecurityElement xeResConfig in resConfigNodes)
+                            ArrayList resConfigNodes = seResConfigs.Children;
+                            foreach (SecurityElement seResConfig in resConfigNodes)
                             {//ResConfig节点
-                                if (xeResConfig.Tag == "ResConfig")
+                                if (seResConfig.Tag == "ResConfig")
                                 {
-                                    string language = xeResConfig.Attribute("Language");
+                                    string language = seResConfig.Attribute("Language");
                                     if (this.LanConfig.IsValid(language))
                                     {
                                         ResConfig resConfig = new ResConfig() { Language = language };
-                                        ArrayList elementNodes = xeResConfig.Children;
-                                        foreach (SecurityElement xeElement in elementNodes)
+                                        ArrayList elementNodes = seResConfig.Children;
+                                        foreach (SecurityElement seElement in elementNodes)
                                         {
-                                            if (xeElement.Tag == "Text")
+                                            if (seElement.Tag == "Text")
                                             {//TextElement节点
-                                                TextElement textElement = new TextElement() { Key = xeElement.Attribute("Key"), Value = xeElement.Attribute("Value").Replace("\\n", "\n") };
+                                                TextElement textElement = new TextElement() { Key = seElement.Attribute("Key"), Value = seElement.Attribute("Value").Replace("\\n", "\n") };
                                                 resConfig.TextElements.Add(textElement);
                                             }
-                                            else if (xeElement.Tag == "Image")
+                                            else if (seElement.Tag == "Image")
                                             {//ImageElement节点
-                                                ImageElement imageElement = new ImageElement() { Key = xeElement.Attribute("Key"), Value = xeElement.Attribute("Value") };
+                                                ImageElement imageElement = new ImageElement() { Key = seElement.Attribute("Key"), Value = seElement.Attribute("Value") };
                                                 resConfig.ImageElements.Add(imageElement);
                                             }
-                                            else if (xeElement.Tag == "Animation")
+                                            else if (seElement.Tag == "Animation")
                                             {//AnimationElement节点
-                                                AnimationElement animationElement = new AnimationElement() { Key = xeElement.Attribute("Key"), Value = xeElement.Attribute("Value") };
+                                                AnimationElement animationElement = new AnimationElement() { Key = seElement.Attribute("Key"), Value = seElement.Attribute("Value") };
                                                 resConfig.AnimationElements.Add(animationElement);
                                             }
-                                            else if (xeElement.Tag == "Audio")
+                                            else if (seElement.Tag == "Audio")
                                             {//AudioElement节点
-                                                AudioElement audioElement = new AudioElement() { Key = xeElement.Attribute("Key"), Value = xeElement.Attribute("Value") };
+                                                AudioElement audioElement = new AudioElement() { Key = seElement.Attribute("Key"), Value = seElement.Attribute("Value") };
                                                 resConfig.AudioElements.Add(audioElement);
                                             }
                                         }

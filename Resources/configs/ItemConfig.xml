@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Project Name="Gululu" Version="">
+  <Items>
+    <Item ItemID="10000" ItemType="10" ItemName="Coin" ItemIcon="" ItemDesc="" />
+    <Item ItemID="200100001" ItemType="20" ItemName="中山陵" ItemIcon="" ItemDesc="" />
+    <Item ItemID="200100002" ItemType="20" ItemName="总统府" ItemIcon="" ItemDesc="" />
+    <Item ItemID="200100003" ItemType="20" ItemName="夫子庙" ItemIcon="" ItemDesc="" />
+    <Item ItemID="200100004" ItemType="20" ItemName="瞻园" ItemIcon="" ItemDesc="" />
+    <Item ItemID="200100005" ItemType="20" ItemName="玄武湖公园" ItemIcon="" ItemDesc="" />
+    <Item ItemID="200100006" ItemType="20" ItemName="明孝陵" ItemIcon="" ItemDesc="" />
+    <Item ItemID="200100007" ItemType="20" ItemName="美龄宫" ItemIcon="" ItemDesc="" />
+    <Item ItemID="200100008" ItemType="20" ItemName="南京大屠杀纪念馆" ItemIcon="" ItemDesc="" />
+    <Item ItemID="200100009" ItemType="20" ItemName="栖霞山" ItemIcon="" ItemDesc="" />
+  </Items>
+</Project>

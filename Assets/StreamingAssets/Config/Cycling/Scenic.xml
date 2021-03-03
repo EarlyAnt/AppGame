@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Project Name="Gululu" Version="">
   <Scenics>
-    <Scenic ID="32010101" Name="中山陵" MapID="320101" Image="NanJing/card_nanjing01" Text="中山陵介绍" />
-    <Scenic ID="32010102" Name="总统府" MapID="320101" Image="NanJing/card_nanjing02" Text="总统府介绍" />
-    <Scenic ID="32010103" Name="夫子庙" MapID="320101" Image="NanJing/card_nanjing03" Text="夫子庙介绍" />
-    <Scenic ID="32010104" Name="瞻园" MapID="320101" Image="NanJing/card_nanjing04" Text="瞻园介绍" />
-    <Scenic ID="32010105" Name="玄武湖公园" MapID="320101" Image="NanJing/card_nanjing05" Text="玄武湖公园介绍" />
-    <Scenic ID="32010106" Name="明孝陵" MapID="320101" Image="NanJing/card_nanjing06" Text="明孝陵介绍" />
-    <Scenic ID="32010107" Name="美龄宫" MapID="320101" Image="NanJing/card_nanjing07" Text="美龄宫介绍" />
-    <Scenic ID="32010108" Name="南京大屠杀纪念馆" MapID="320101" Image="NanJing/card_nanjing08" Text="南京大屠杀纪念馆介绍" />
-    <Scenic ID="32010109" Name="栖霞山" MapID="320101" Image="NanJing/card_nanjing09" Text="栖霞山介绍" />
+    <Scenic ID="32010101" Name="中山陵" MapID="320101" CardID="200100001" />
+    <Scenic ID="32010102" Name="总统府" MapID="320101" CardID="200100002" />
+    <Scenic ID="32010103" Name="夫子庙" MapID="320101" CardID="200100003" />
+    <Scenic ID="32010104" Name="瞻园" MapID="320101" CardID="200100004" />
+    <Scenic ID="32010105" Name="玄武湖公园" MapID="320101" CardID="200100005" />
+    <Scenic ID="32010106" Name="明孝陵" MapID="320101" CardID="200100006" />
+    <Scenic ID="32010107" Name="美龄宫" MapID="320101" CardID="200100007" />
+    <Scenic ID="32010108" Name="南京大屠杀纪念馆" MapID="320101" CardID="200100008" />
+    <Scenic ID="32010109" Name="栖霞山" MapID="320101" CardID="200100009" />
   </Scenics>
 </Project>

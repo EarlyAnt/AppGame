@@ -15,6 +15,8 @@ namespace AppGame.Module.Cycling
         [Inject]
         public IScenicConfig ScenicConfig { get; set; }
         [Inject]
+        public ICardConfig CardConfig { get; set; }
+        [Inject]
         public II18NConfig I18NConfig { get; set; }
         #endregion
         #region 页面UI组件
@@ -51,7 +53,7 @@ namespace AppGame.Module.Cycling
             if (scenicInfo == null)
             {
 
-                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find scenic named '{0}'", scenicID);
+                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find scenic[{0}]", scenicID);
                 return;
             }
 
@@ -59,14 +61,23 @@ namespace AppGame.Module.Cycling
             if (mapInfo == null)
             {
 
-                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find city named '{0}'", scenicInfo.MapID);
+                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find map[{0}]", scenicInfo.MapID);
                 return;
             }
+
+            CardInfo card = this.CardConfig.GetCard(scenicInfo.CardID);
+            if (card == null)
+            {
+
+                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find card[{0}]", scenicInfo.CardID);
+                return;
+            }
+
             //设置页面内容
-            this.imageBox.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/Site/{0}", scenicInfo.Image)); ;
+            this.imageBox.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/Site/{0}", card.Image));
             this.cityNameBox.text = mapInfo.CityName;
             this.scenicNameBox.text = scenicInfo.Name;
-            this.descriptionBox.text = this.I18NConfig.GetText(scenicInfo.Text);
+            this.descriptionBox.text = this.I18NConfig.GetText(card.Text);
             this.gameObject.SetActive(true);
         }
         //隐藏卡片

@@ -33,24 +33,24 @@ namespace AppGame.Config
 
                     xmlDoc.LoadXml(www.text);
                     ArrayList allNodes = xmlDoc.ToXml().Children;
-                    foreach (SecurityElement xeResConfigs in allNodes)
+                    foreach (SecurityElement seResConfigs in allNodes)
                     {//根节点
-                        if (xeResConfigs.Tag == "Maps")
+                        if (seResConfigs.Tag == "Maps")
                         {
-                            ArrayList mapNodes = xeResConfigs.Children;
-                            foreach (SecurityElement xeMap in mapNodes)
+                            ArrayList mapNodes = seResConfigs.Children;
+                            foreach (SecurityElement se in mapNodes)
                             {
-                                if (xeMap.Tag == "Map")
+                                if (se.Tag == "Map")
                                 {
                                     MapInfo mapInfo = new MapInfo()
                                     {
-                                        ID = xeMap.Attribute("ID"),
-                                        Name = xeMap.Attribute("Name"),
-                                        ProvinceID = xeMap.Attribute("ProvinceID"),
-                                        ProvinceName = xeMap.Attribute("ProvinceName"),
-                                        CityID = xeMap.Attribute("CityID"),
-                                        CityName = xeMap.Attribute("CityName"),
-                                        NextMap = xeMap.Attribute("NextMap")
+                                        ID = se.Attribute("ID"),
+                                        Name = se.Attribute("Name"),
+                                        ProvinceID = se.Attribute("ProvinceID"),
+                                        ProvinceName = se.Attribute("ProvinceName"),
+                                        CityID = se.Attribute("CityID"),
+                                        CityName = se.Attribute("CityName"),
+                                        NextMap = se.Attribute("NextMap")
                                     };
                                     this.configs.Add(mapInfo);
                                 }

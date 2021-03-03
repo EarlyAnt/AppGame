@@ -33,22 +33,21 @@ namespace AppGame.Config
 
                     xmlDoc.LoadXml(www.text);
                     ArrayList allNodes = xmlDoc.ToXml().Children;
-                    foreach (SecurityElement xeResConfigs in allNodes)
+                    foreach (SecurityElement seResConfigs in allNodes)
                     {//根节点
-                        if (xeResConfigs.Tag == "Scenics")
+                        if (seResConfigs.Tag == "Scenics")
                         {
-                            ArrayList scenicNodes = xeResConfigs.Children;
-                            foreach (SecurityElement xeScenic in scenicNodes)
+                            ArrayList scenicNodes = seResConfigs.Children;
+                            foreach (SecurityElement seScenic in scenicNodes)
                             {
-                                if (xeScenic.Tag == "Scenic")
+                                if (seScenic.Tag == "Scenic")
                                 {
                                     ScenicInfo mapInfo = new ScenicInfo()
                                     {
-                                        ID = xeScenic.Attribute("ID"),
-                                        Name = xeScenic.Attribute("Name"),
-                                        MapID = xeScenic.Attribute("MapID"),
-                                        Image = xeScenic.Attribute("Image"),
-                                        Text = xeScenic.Attribute("Text")
+                                        ID = seScenic.Attribute("ID"),
+                                        Name = seScenic.Attribute("Name"),
+                                        MapID = seScenic.Attribute("MapID"),
+                                        CardID = seScenic.Attribute("CardID")
                                     };
                                     this.configs.Add(mapInfo);
                                 }

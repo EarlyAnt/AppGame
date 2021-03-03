@@ -34,9 +34,12 @@ namespace AppGame.Global
             injectionBinder.Bind<II18NConfig>().To<I18NConfig>().ToSingleton().CrossContext();
             injectionBinder.Bind<IAudioConfig>().To<AudioConfig>().ToSingleton().CrossContext();
             injectionBinder.Bind<IModuleConfig>().To<ModuleConfig>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IItemConfig>().To<ItemConfig>().ToSingleton().CrossContext();
+
             injectionBinder.Bind<IMapConfig>().To<MapConfig>().ToSingleton().CrossContext();
             injectionBinder.Bind<IScenicConfig>().To<ScenicConfig>().ToSingleton().CrossContext();
-            
+            injectionBinder.Bind<ICardConfig>().To<CardConfig>().ToSingleton().CrossContext();
+
             injectionBinder.Bind<ILocalDataHelper>().To<LocalDataHelper>().ToSingleton().CrossContext();
             injectionBinder.Bind<IChildInfoManager>().To<ChildInfoManager>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGameDataHelper>().To<GameDataHelper>().ToSingleton().CrossContext();

@@ -40,22 +40,22 @@ namespace AppGame.Config
 
                     xmlDoc.LoadXml(www.text);
                     ArrayList allNodes = xmlDoc.ToXml().Children;
-                    foreach (SecurityElement xeAudios in allNodes)
+                    foreach (SecurityElement seAudios in allNodes)
                     {
-                        if (xeAudios.Tag == "Audios")
+                        if (seAudios.Tag == "Audios")
                         {
-                            ArrayList audioNodes = xeAudios.Children;
-                            foreach (SecurityElement xeAudio in audioNodes)
+                            ArrayList audioNodes = seAudios.Children;
+                            foreach (SecurityElement seAudio in audioNodes)
                             {
-                                if (xeAudio.Tag == "Audio")
+                                if (seAudio.Tag == "Audio")
                                 {
                                     Audio audio = new Audio()
                                     {
-                                        Name = xeAudio.Attribute("Name"),
-                                        Storage = xeAudio.Attribute("Storage"),
-                                        Des = xeAudio.Attribute("Des")
+                                        Name = seAudio.Attribute("Name"),
+                                        Storage = seAudio.Attribute("Storage"),
+                                        Des = seAudio.Attribute("Des")
                                     };
-                                    ArrayList fileNodes = xeAudio.Children;
+                                    ArrayList fileNodes = seAudio.Children;
                                     foreach (SecurityElement xeFile in fileNodes)
                                     {
                                         if (xeFile.Tag == "File")
