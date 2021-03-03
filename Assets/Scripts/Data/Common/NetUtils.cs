@@ -7,7 +7,7 @@ namespace AppGame.Data.Common
     public class NetUtils : INetUtils
     {
         [Inject]
-        public IJsonUtils mJsonUtils { get; set; }
+        public IJsonUtil mJsonUtils { get; set; }
 
         public bool isNetworkEnable()
         {

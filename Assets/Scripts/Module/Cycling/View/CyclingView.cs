@@ -21,7 +21,7 @@ namespace AppGame.Module.Cycling
         [Inject]
         public IMapConfig MapConfig { get; set; }
         [Inject]
-        public ILocalChildInfoAgent LocalChildInfoAgent { get; set; }
+        public IChildInfoManager ChildInfoManager { get; set; }
         [Inject]
         public ICommonImageUtils CommonImageUtils { get; set; }
         #endregion
@@ -122,8 +122,8 @@ namespace AppGame.Module.Cycling
         }
         public void RefreshPlayer(List<BasicData> basicDataList, List<PlayerData> playerDataList)
         {
-            PlayerData myPlayerData = playerDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());
-            BasicData myBasicData = basicDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());
+            PlayerData myPlayerData = playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
+            BasicData myBasicData = basicDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
             this.player.MoveToNode(myPlayerData.map_position);
             this.player.name = "Player_" + myPlayerData.child_sn;
             Sprite avatar = this.CommonImageUtils.GetAvatar(myBasicData.child_avatar);
@@ -138,7 +138,7 @@ namespace AppGame.Module.Cycling
                 this.teammates = new List<Teammate>();
                 foreach (var teammateData in playerDataList)
                 {
-                    if (teammateData.child_sn == this.LocalChildInfoAgent.GetChildSN())
+                    if (teammateData.child_sn == this.ChildInfoManager.GetChildSN())
                         continue;
 
                     Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.teammateRoot);
@@ -153,7 +153,7 @@ namespace AppGame.Module.Cycling
             {
                 foreach (var teammateData in playerDataList)
                 {
-                    if (teammateData.child_sn == this.LocalChildInfoAgent.GetChildSN())
+                    if (teammateData.child_sn == this.ChildInfoManager.GetChildSN())
                         continue;
 
                     Teammate teammate = this.teammates.Find(t => t.name == "Teammate_" + teammateData.child_sn);

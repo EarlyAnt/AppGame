@@ -14,7 +14,7 @@ namespace AppGame.Data.Remote
         [Inject]
         public IUrlProvider UrlProvider { get; set; }
         [Inject]
-        public IJsonUtils JsonUtils { get; set; }
+        public IJsonUtil JsonUtils { get; set; }
         [Inject]
         public ILocalCupAgent LocalCupAgent { get; set; }
         [Inject]

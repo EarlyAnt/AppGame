@@ -3,10 +3,10 @@ using System;
 
 namespace AppGame.Data.Local
 {
-    public interface ILocalChildInfoAgent
+    public interface IChildInfoManager
     {
         ILocalDataManager LocalDataManager { get; set; }
-        IJsonUtils JsonUtils { get; set; }
+        IJsonUtil JsonUtils { get; set; }
 
         void SaveChildSN(string currentChildSN);
         string GetChildSN();

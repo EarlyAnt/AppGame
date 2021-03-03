@@ -6,7 +6,7 @@ namespace AppGame.Data.Common
     public abstract class BaseService
     {
         [Inject]
-        public IJsonUtils JsonUtils { set; get; }
+        public IJsonUtil JsonUtils { set; get; }
 
         [Inject]
         public IUrlProvider UrlProvider { set; get; }

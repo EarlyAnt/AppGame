@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AppGame.Util
 {
-    public interface IJsonUtils
+    public interface IJsonUtil
     {
         T String2Json<T>(string jsonString);
         string Json2String(object jsonObject);

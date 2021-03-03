@@ -10,7 +10,7 @@ namespace AppGame.Data.Local
         [Inject]
         public ILocalDataManager LocalDataManager { get; set; }
         [Inject]
-        public IJsonUtils JsonUtils { get; set; }
+        public IJsonUtil JsonUtils { get; set; }
 
         private OriginData originData = null;
         private List<PlayerData> playerDataList = null;

@@ -22,7 +22,7 @@ namespace AppGame.Data.Common
         [Inject]
         public ILocalCupAgent LocalCupAgent { get; set; }
         [Inject]
-        public IJsonUtils JsonUtils { get; set; }
+        public IJsonUtil JsonUtils { get; set; }
         [Inject]
         public IAuthenticationUtils AuthenticationUtils { get; set; }
         //[Inject]

@@ -13,7 +13,7 @@ namespace AppGame.Module.Cycling
         [Inject]
         public CyclingView View { get; set; }
         [Inject]
-        public ILocalChildInfoAgent LocalChildInfoAgent { get; set; }
+        public IChildInfoManager ChildInfoManager { get; set; }
         [Inject]
         public IBasicDataManager BasicDataManager { get; set; }
         [Inject]
@@ -25,7 +25,7 @@ namespace AppGame.Module.Cycling
         {
             get
             {
-                return this.playerDataList.Find(t => t.child_sn == this.LocalChildInfoAgent.GetChildSN());
+                return this.playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
             }
         }
         /************************************************Unity方法与事件***********************************************/
@@ -91,7 +91,7 @@ namespace AppGame.Module.Cycling
             //this.View.LocationDatas = locationDatas;
 
             this.basicDataList = this.BasicDataManager.GetAllData();
-            this.originData = this.CyclingDataManager.GetOriginData(this.LocalChildInfoAgent.GetChildSN());
+            this.originData = this.CyclingDataManager.GetOriginData(this.ChildInfoManager.GetChildSN());
             this.playerDataList = this.CyclingDataManager.GetAllPlayerData();
         }
 
@@ -194,7 +194,7 @@ namespace AppGame.Module.Cycling
 
             foreach (var playerData in this.playerDataList)
             {
-                if (playerData.child_sn == this.LocalChildInfoAgent.GetChildSN())
+                if (playerData.child_sn == this.ChildInfoManager.GetChildSN())
                     continue;
 
                 BasicData basicData = this.basicDataList.Find(t => t.child_sn == playerData.child_sn);

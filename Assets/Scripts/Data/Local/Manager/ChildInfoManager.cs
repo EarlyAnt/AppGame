@@ -3,12 +3,12 @@ using AppGame.Util;
 
 namespace AppGame.Data.Local
 {
-    public class LocalChildInfoAgent : ILocalChildInfoAgent
+    public class ChildInfoManager : IChildInfoManager
     {
         [Inject]
         public ILocalDataManager LocalDataManager { get; set; }
         [Inject]
-        public IJsonUtils JsonUtils { get; set; }
+        public IJsonUtil JsonUtils { get; set; }
         private const string DATA_KEY = "user_child_sn";
         private const string DEFAULT_CHILD_SN = "gululu_2021";
         private string childSn;

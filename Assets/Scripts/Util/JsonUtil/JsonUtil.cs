@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AppGame.Util
 {
-    public class JsonUtils : IJsonUtils
+    public class JsonUtil : IJsonUtil
     {
         JsonSerializerSettings settings = new JsonSerializerSettings();
 

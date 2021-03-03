@@ -9,14 +9,14 @@ namespace AppGame.Data.Local
     {
         private IFileManager fileManager;
         private IPreferencesUtils preferences;
-        private JsonUtils jsonUtils;
+        private JsonUtil jsonUtil;
         private static readonly string DONT_DELETE_LIST_KEY = "DONT_DELETE_LIST_KEY";
 
         public LocalDataManager()
         {
             this.fileManager = new FileManager();
             this.preferences = new PreferenceUtils();
-            this.jsonUtils = new JsonUtils();
+            this.jsonUtil = new JsonUtil();
         }
 
         public T GetObject<T>(string key, object defaultObj)

@@ -6,7 +6,7 @@ namespace AppGame.Data.Local
     public class PreferenceUtils : IPreferencesUtils
     {
         [Inject]
-        public IJsonUtils JsonUtils { get; set; }
+        public IJsonUtil JsonUtils { get; set; }
 
         public T GetObject<T>(string key, object objDefault)
         {
