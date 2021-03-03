@@ -56,6 +56,8 @@ namespace AppGame.Module.Cycling
         private ScenicCard scenicCard;
         [SerializeField]
         private CityStation cityStation;
+        [SerializeField]
+        private PayBill payBill;
         #endregion
         #region 其他变量
         private bool playerCanGo = true;
@@ -85,6 +87,13 @@ namespace AppGame.Module.Cycling
         {
             this.UpdateDispatcher(false);
             base.OnDestroy();
+        }
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+                this.payBill.Show(5, 5, true);
+            if (Input.GetKeyDown(KeyCode.O))
+                this.payBill.Show(19, 19, false);
         }
         /************************************************自 定 义 方 法************************************************/
         private void Initialize()

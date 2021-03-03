@@ -17,7 +17,8 @@ namespace AppGame.Module.Cycling
 
         //页面关闭事件
         SCENIC_CARD_CLOSE,
-        CITY_STATION_CLOSE
+        CITY_STATION_CLOSE,
+        PAY_BILL_CLOSE
     }
 
     public enum NodeTypes

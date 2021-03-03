@@ -54,8 +54,13 @@
       <Image Name="coord" FileType="Sprite" Path="Cycling/View/coord" Enable="1" />
       <Image Name="coord_friend" FileType="Sprite" Path="Cycling/View/coord_friend" Enable="1" />
       <Image Name="cost_panel" FileType="Sprite" Path="Cycling/View/cost_panel" Enable="1" />
+      <Image Name="disable_button" FileType="Sprite" Path="Cycling/View/disable_button" Enable="1" />
+      <Image Name="enable_button" FileType="Sprite" Path="Cycling/View/enable_button" Enable="1" />
       <Image Name="go" FileType="Sprite" Path="Cycling/View/go" Enable="1" />
       <Image Name="hp_border" FileType="Sprite" Path="Cycling/View/hp_border" Enable="1" />
+      <Image Name="pay_border" FileType="Sprite" Path="Cycling/View/pay_border" Enable="1" />
+      <Image Name="pay_panel" FileType="Sprite" Path="Cycling/View/pay_panel" Enable="1" />
+      <Image Name="pay_line" FileType="Sprite" Path="Cycling/View/pay_line" Enable="1" />
       <Image Name="pop_border1" FileType="Sprite" Path="Cycling/View/pop_border1" Enable="1" />
       <Image Name="pop_border2" FileType="Sprite" Path="Cycling/View/pop_border2" Enable="1" />
       <Image Name="progress" FileType="Sprite" Path="Cycling/View/progress" Enable="1" />
@@ -67,10 +72,10 @@
       <Image Name="stars_highlight " FileType="Sprite" Path="Cycling/View/stars_highlight " Enable="1" />
       <Image Name="start_normal " FileType="Sprite" Path="Cycling/View/start_normal " Enable="1" />
       <Image Name="station_panel" FileType="Sprite" Path="Cycling/View/station_panel" Enable="1" />
-      <Image Name="stay_button" FileType="Sprite" Path="Cycling/View/stay_button" Enable="1" />
       <Image Name="ticket _highlight" FileType="Sprite" Path="Cycling/View/ticket _highlight" Enable="1" />
       <Image Name="ticket_normal " FileType="Sprite" Path="Cycling/View/ticket_normal " Enable="1" />
       <Image Name="timer" FileType="Sprite" Path="Cycling/View/timer" Enable="1" />
+      <Image Name="tip_error" FileType="Sprite" Path="Cycling/View/tip_error" Enable="1" />
       <Image Name="title_border" FileType="Sprite" Path="Cycling/View/title_border" Enable="1" />
       <Image Name="train1" FileType="Sprite" Path="Cycling/View/train1" Enable="1" />
       <Image Name="train2" FileType="Sprite" Path="Cycling/View/train2" Enable="1" />
