@@ -1,4 +1,5 @@
-﻿using AppGame.Data.Model;
+﻿using AppGame.Data.Common;
+using AppGame.Data.Model;
 using AppGame.Util;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace AppGame.Data.Local
     class CyclingDataManager : ICyclingDataManager
     {
         [Inject]
-        public ILocalDataManager LocalDataManager { get; set; }
+        public IGameDataHelper GameDataHelper { get; set; }
         [Inject]
         public IJsonUtil JsonUtils { get; set; }
 
@@ -102,7 +103,7 @@ namespace AppGame.Data.Local
                 this.mpCollections.Add(childSN, DateTime.Today);
 
             string dataString = this.JsonUtils.Json2String(this.mpCollections);
-            this.LocalDataManager.SaveObject<string>(COLLECT_MP_DATA_KEY, dataString);
+            this.GameDataHelper.SaveObject<string>(COLLECT_MP_DATA_KEY, dataString);
         }
         /// <summary>
         /// 判断今日是否已经收取了某个家人或好友的能量分成
@@ -111,7 +112,7 @@ namespace AppGame.Data.Local
         /// <returns></returns>
         public bool MpCollected(string childSN)
         {
-            string dataString = this.LocalDataManager.GetObject<string>(COLLECT_MP_DATA_KEY);
+            string dataString = this.GameDataHelper.GetObject<string>(COLLECT_MP_DATA_KEY);
             this.mpCollections = this.JsonUtils.String2Json<Dictionary<string, DateTime>>(dataString);
 
             if (this.mpCollections != null && this.mpCollections.ContainsKey(childSN) && this.mpCollections[childSN] == DateTime.Today)
@@ -127,7 +128,7 @@ namespace AppGame.Data.Local
             if (this.mpCollections != null)
                 this.mpCollections.Clear();
 
-            this.LocalDataManager.SaveObject<string>(COLLECT_MP_DATA_KEY, "");
+            this.GameDataHelper.Clear(COLLECT_MP_DATA_KEY);
         }
     }
 }

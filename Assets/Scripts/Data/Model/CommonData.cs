@@ -4,6 +4,20 @@ using System.Linq;
 
 namespace AppGame.Data.Model
 {
+    #region 自定义枚举
+    public enum Relations
+    {
+        Self = 0,
+        Family = 1,
+        Friend = 2
+    }
+    #endregion
+    #region 自定义类
+    public class GameData
+    {
+        
+    }
+
     public class BasicData
     {
         public string child_sn { get; set; }
@@ -18,11 +32,5 @@ namespace AppGame.Data.Model
             return string.Format("child_sn: {0}, child_name: {1}, child_avatar: {2}, relation: {3}", this.child_sn, this.child_name, this.child_avatar, this.relation);
         }
     }
-
-    public enum Relations
-    {
-        Self = 0,
-        Family = 1,
-        Friend = 2
-    }
+    #endregion
 }

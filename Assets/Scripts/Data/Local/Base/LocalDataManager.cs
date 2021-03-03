@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace AppGame.Data.Local
 {
-    public class LocalDataManager : ILocalDataManager
+    public class LocalDataHelper : ILocalDataHelper
     {
         private IFileManager fileManager;
         private IPreferencesUtils preferences;
         private JsonUtil jsonUtil;
         private static readonly string DONT_DELETE_LIST_KEY = "DONT_DELETE_LIST_KEY";
 
-        public LocalDataManager()
+        public LocalDataHelper()
         {
             this.fileManager = new FileManager();
             this.preferences = new PreferenceUtils();

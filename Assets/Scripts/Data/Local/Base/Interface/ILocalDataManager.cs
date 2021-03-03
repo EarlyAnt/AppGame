@@ -2,7 +2,7 @@ using System;
 
 namespace AppGame.Data.Local
 {
-    public interface ILocalDataManager
+    public interface ILocalDataHelper
     {
         void SaveObject<T>(string key, T t);
         void RemoveObject(string key);
