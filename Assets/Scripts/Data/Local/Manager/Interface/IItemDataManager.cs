@@ -5,13 +5,12 @@ namespace Hank
 {
     public interface IItemDataManager
     {
-        void SetItem(int itemId, int itemCount);
-        void AddItem(int itemId, int count = 1);
-        bool HasItem(int itemId, int count = 1);
-        bool ReduceItem(int itemId, int count = 1);
+        void SetItem(string itemID, int itemCount);
+        void AddItem(string itemID, int count = 1);
+        bool HasItem(string itemID, int count = 1);
+        bool ReduceItem(string itemID, int count = 1);
 
-        int GetItemCount(int itemId);
-        List<int> GetAllItems();
+        int GetItemCount(string itemID);
 
         void SaveItemDatas();
         void LoadItemDatas();

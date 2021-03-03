@@ -40,7 +40,7 @@ namespace AppGame.Config
     public class Item
     {
         public string ItemID { get; set; }
-        public string ItemType { get; set; }
+        public ItemTypes ItemType { get; set; }
         public string ItemName { get; set; }
         public string ItemIcon { get; set; }
         public string Desc { get; set; }

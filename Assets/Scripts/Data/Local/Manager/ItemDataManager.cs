@@ -1,4 +1,5 @@
-﻿using AppGame.Data.Common;
+﻿using AppGame.Config;
+using AppGame.Data.Common;
 using AppGame.Data.Local;
 using AppGame.Data.Model;
 using AppGame.Util;
@@ -18,14 +19,14 @@ namespace Hank
         public IChildInfoManager ChildInfoManager { get; set; }
         //[Inject]
         //public StartPostGameDataCommandSignal startPostGameDataCommand { get; set; }
-        //[Inject]
-        //public IItemConfig ItemConifg { get; set; }
-        public const string itemsKey = "ItemsData";
-        Dictionary<int, int> itemsInfo = new Dictionary<int, int>();
+        [Inject]
+        public IItemConfig ItemConifg { get; set; }
+        public const string ITEM_DATA_KEY = "ItemData";
+        Dictionary<string, int> itemInfos = new Dictionary<string, int>();
 
         struct ItemInfo
         {
-            public int itemId;
+            public string itemID;
             public int itemCount;
         }
 
@@ -35,118 +36,112 @@ namespace Hank
             LoadItemDatas();
         }
 
-        public void SetItem(int itemId, int itemCount)
+        public void SetItem(string itemID, int itemCount)
         {
-            Debug.LogFormat("--------{0}-------ItemsDataManager.SetItem: {1}, {2}", System.DateTime.Now, itemId, itemCount);
+            Debug.LogFormat("--------{0}-------ItemDataManager.SetItem: {1}, {2}", System.DateTime.Now, itemID, itemCount);
             int count = 0;
-            if (itemsInfo.TryGetValue(itemId, out count))
+            if (itemInfos.TryGetValue(itemID, out count))
             {
-                itemsInfo.Remove(itemId);
+                itemInfos.Remove(itemID);
             }
 
             if (itemCount > 0)
             {
-                itemsInfo.Add(itemId, itemCount);
+                itemInfos.Add(itemID, itemCount);
             }
         }
 
-        public void AddItem(int itemId, int itemCount = 1)
+        public void AddItem(string itemID, int itemCount = 1)
         {
             int currentCount = 0;
-            if (itemsInfo.ContainsKey(itemId))
+            if (itemInfos.ContainsKey(itemID))
             {
-                currentCount = itemsInfo[itemId] + itemCount;
-                itemsInfo[itemId] = this.GetValidCount(itemId, currentCount);
+                currentCount = itemInfos[itemID] + itemCount;
+                itemInfos[itemID] = this.GetValidCount(itemID, currentCount);
             }
             else
             {
                 currentCount = itemCount;
-                itemsInfo.Add(itemId, this.GetValidCount(itemId, currentCount));
+                itemInfos.Add(itemID, this.GetValidCount(itemID, currentCount));
             }
 
             SaveItemDatas();
-            SyncItemsData2Server(itemId, currentCount);
+            SyncItemsData2Server(itemID, currentCount);
         }
 
-        public bool HasItem(int itemId, int itemCount = 1)
+        public bool HasItem(string itemID, int itemCount = 1)
         {
             int count = 0;
-            if (itemsInfo.TryGetValue(itemId, out count))
+            if (itemInfos.TryGetValue(itemID, out count))
             {
                 return count >= itemCount;
             }
             return false;
         }
 
-        public bool ReduceItem(int itemId, int count = 1)
+        public bool ReduceItem(string itemID, int count = 1)
         {
-            //Item item = this.ItemConifg.GetItemById(itemId);
-            //if (item.Type != (int)ItemTypes.Expression && item.Type != (int)ItemTypes.Plant)
-            //{//目前只有表情类资源可被扣减
-            //    Debug.LogErrorFormat("<><ItemsDataManager.ReduceItem>only expression and plant can be reduced, itemId: {0}, itemType: {1}, count: {2}", itemId, item.Type, count);
-            //    return false;
-            //}
-
-            //int currentCount = itemsInfo.ContainsKey(itemId) ? itemsInfo[itemId] : 0;//获取当前数量
-            //if (currentCount >= count)
-            //{//扣减当前数量
-            //    currentCount -= count;
-            //}
-            //else
-            //{//余额不足，不予操作
-            //    Debug.LogErrorFormat("<><ItemsDataManager.ReduceItem>no enough item, itemId: {0}, count: {1}, currentCount: {2}", itemId, count, currentCount);
-            //    return false;
-            //}
-
-            //if (itemsInfo.ContainsKey(itemId))
-            //    itemsInfo[itemId] = currentCount;
-            //else
-            //    itemsInfo.Add(itemId, currentCount);
-
-            //try
-            //{
-            //    SaveItemDatas();
-            //    SyncItemsData2Server(itemId, currentCount);
-            //    return true;
-            //}
-            //catch (System.Exception ex)
-            //{
-            //    Debug.LogErrorFormat("<><ItemsDataManager.ReduceItem>Error: {0}, itemId: {1}, count: {2}, currentCount: {3}", ex.Message, itemId, count, currentCount);
+            Item item = this.ItemConifg.GetItem(itemID);
+            if (item.ItemType != ItemTypes.Coin)
+            {//目前只有表情类资源可被扣减
+                Debug.LogErrorFormat("<><ItemDataManager.ReduceItem>only coin can be reduced, itemID: {0}, itemType: {1}, count: {2}", itemID, item.ItemType, count);
                 return false;
-            //}
+            }
+
+            int currentCount = itemInfos.ContainsKey(itemID) ? itemInfos[itemID] : 0;//获取当前数量
+            if (currentCount >= count)
+            {//扣减当前数量
+                currentCount -= count;
+            }
+            else
+            {//余额不足，不予操作
+                Debug.LogErrorFormat("<><ItemDataManager.ReduceItem>no enough item, itemId: {0}, count: {1}, currentCount: {2}", itemID, count, currentCount);
+                return false;
+            }
+
+            if (itemInfos.ContainsKey(itemID))
+                itemInfos[itemID] = currentCount;
+            else
+                itemInfos.Add(itemID, currentCount);
+
+            try
+            {
+                SaveItemDatas();
+                SyncItemsData2Server(itemID, currentCount);
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogErrorFormat("<><ItemDataManager.ReduceItem>Error: {0}, itemId: {1}, count: {2}, currentCount: {3}", ex.Message, itemID, count, currentCount);
+                return false;
+            }
         }
 
-        public int GetItemCount(int itemId)
+        public int GetItemCount(string itemID)
         {
             int itemCount;
-            if (itemsInfo.TryGetValue(itemId, out itemCount))
+            if (itemInfos.TryGetValue(itemID, out itemCount))
             {
                 return itemCount;
             }
             return 0;
-
-        }
-
-        public List<int> GetAllItems()
-        {
-            return this.itemsInfo == null ? null : this.itemsInfo.Keys.ToList();
         }
 
         public void SaveItemDatas()
         {
             List<ItemInfo> listInfos = Convert2List();
-            GameDataHelper.SaveObject<List<ItemInfo>>(itemsKey, listInfos);
+            this.GameDataHelper.SaveObject<List<ItemInfo>>(ITEM_DATA_KEY, listInfos);
         }
 
         public void LoadItemDatas()
         {
-            itemsInfo.Clear();
-            List<ItemInfo> listInfos = GameDataHelper.GetObject<List<ItemInfo>>(itemsKey);
+            itemInfos.Clear();
+            List<ItemInfo> listInfos = this.GameDataHelper.GetObject<List<ItemInfo>>(ITEM_DATA_KEY);
             if (listInfos != null)
             {
                 foreach (var info in listInfos)
                 {
-                    itemsInfo.Add(info.itemId, info.itemCount);
+                    itemInfos.Add(info.itemID, info.itemCount);
                 }
             }
         }
@@ -157,7 +152,7 @@ namespace Hank
             ////StringBuilder strbContent = new StringBuilder();
             //foreach (var pair in itemsInfo)
             //{
-            //    Item item = ItemConifg.GetItemById(pair.Key);
+            //    Item item = this.ItemConifg.GetItemById(pair.Key);
             //    if (item != null)
             //    {
             //        items.Add(new ItemsDataBean
@@ -171,7 +166,7 @@ namespace Hank
             //    }
             //}
             //SendItemsData(items);
-            ////Debug.LogFormat("<><ItemsDataManager.SendAllItemsData>Datas: {0}", strbContent.ToString());
+            ////Debug.LogFormat("<><ItemDataManager.SendAllItemsData>Datas: {0}", strbContent.ToString());
         }
 
         public void SetValuesLong(GameData datas)
@@ -186,7 +181,6 @@ namespace Hank
             //}
         }
 
-
         //private void SendItemsData(List<ItemsDataBean> dataItems)
         //{
         //    GameData datas = GameData.getGameDataBuilder()
@@ -195,26 +189,26 @@ namespace Hank
         //        .build();
         //    string jsonData = JsonUtil.Json2String(datas);
         //    startPostGameDataCommand.Dispatch(jsonData);
-        //    Debug.LogFormat("----{0}====ItemsDataManager.SendItemsData: {1}", System.DateTime.Now, jsonData);
+        //    Debug.LogFormat("----{0}====ItemDataManager.SendItemsData: {1}", System.DateTime.Now, jsonData);
         //}
 
         private List<ItemInfo> Convert2List()
         {
             List<ItemInfo> listInfos = new List<ItemInfo>();
-            foreach (var pair in itemsInfo)
+            foreach (var pair in itemInfos)
             {
                 listInfos.Add(new ItemInfo
                 {
-                    itemId = pair.Key,
+                    itemID = pair.Key,
                     itemCount = pair.Value
                 });
             }
             return listInfos;
         }
 
-        private void SyncItemsData2Server(int itemId, int itemCount)
+        private void SyncItemsData2Server(string itemID, int itemCount)
         {
-            //Item item = ItemConifg.GetItemById(itemId);
+            //Item item = this.ItemConifg.GetItem(itemID);
             //if (item != null)
             //{
             //    List<ItemsDataBean> items = new List<ItemsDataBean>();
@@ -229,33 +223,19 @@ namespace Hank
             //}
         }
 
-        private int GetValidCount(int itemId, int itemCount)
+        private int GetValidCount(string itemID, int itemCount)
         {
             int maxCount = 1;
-            //Item item = ItemConifg.GetItemById(itemId);
-            //if (item != null)
-            //{
-            //    switch (item.Type)
-            //    {
-            //        case (int)ItemTypes.ExpCoinCrown:
-            //            if (itemId == 10003 || itemId == 10004 || itemId == 10005)
-            //                maxCount = 999;
-            //            break;
-            //        case (int)ItemTypes.Nim:
-            //        case (int)ItemTypes.TreasureBox:
-            //        case (int)ItemTypes.Dress:
-            //            maxCount = 1;
-            //            break;
-            //        case (int)ItemTypes.Coin:
-            //            maxCount = 99999;
-            //            break;
-            //        case (int)ItemTypes.Food:
-            //        case (int)ItemTypes.Expression:
-            //        case (int)ItemTypes.Plant:
-            //            maxCount = 99;
-            //            break;
-            //    }
-            //}
+            Item item = this.ItemConifg.GetItem(itemID);
+            if (item != null)
+            {
+                switch (item.ItemType)
+                {
+                    case ItemTypes.Coin:
+                        maxCount = 99999;
+                        break;
+                }
+            }
             return Mathf.Clamp(itemCount, 0, maxCount);
         }
     }

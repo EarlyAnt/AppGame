@@ -47,7 +47,7 @@ namespace AppGame.Config
                                     Item item = new Item()
                                     {
                                         ItemID = seItem.Attribute("ItemID"),
-                                        ItemType = seItem.Attribute("ItemType"),
+                                        ItemType = (ItemTypes)int.Parse(seItem.Attribute("ItemType")),
                                         ItemName = seItem.Attribute("ItemName"),
                                         ItemIcon = seItem.Attribute("ItemIcon"),
                                         Desc = seItem.Attribute("Desc")
