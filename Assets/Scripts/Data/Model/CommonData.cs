@@ -9,6 +9,8 @@ namespace AppGame.Data.Model
         public string child_sn { get; set; }
         public string child_name { get; set; }
         public string child_avatar { get; set; }
+        public string gender { get; set; }
+        public string birthday { get; set; }
         public int relation { get; set; }
 
         public override string ToString()

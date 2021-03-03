@@ -16,20 +16,22 @@ namespace AppGame.Data.Remote
         [Inject]
         public IJsonUtil JsonUtils { get; set; }
         [Inject]
-        public ILocalCupAgent LocalCupAgent { get; set; }
+        public IChildInfoManager ChildInfoManager { get; set; }
         [Inject]
-        public GululuNetworkHelper mGululuNetworkHelper { get; set; }
+        public INativeOkHttpMethodWrapper NativeOkHttpMethodWrapper { get; set; }
+        [Inject]
+        public ILocalTokenAgent LocalTokenAgent { get; set; }
 
-        public void reNewToken(Action<Result> callBack, Action<Result> errCallBack)
+        public void GetVerifyCode(string phone, Action<Result> callBack, Action<ResponseErroInfo> errCallBack)
         {
             Dictionary<string, string> body = new Dictionary<string, string>();
-            body.Add("access_cup", CupBuild.getCupSn());
+            body.Add("phone", phone);
 
-            HTTPRequest hTTPRequest = new HTTPRequest(new Uri(UrlProvider.GetCupTokenUrl(CupBuild.getCupSn())), HTTPMethods.Post, (request, response) =>
+            HTTPRequest hTTPRequest = new HTTPRequest(new Uri(this.UrlProvider.GetVerifyCodeUrl()), HTTPMethods.Post, (request, response) =>
             {
                 if (request != null && response != null)
                 {
-                    Debug.LogFormat("--------AuthenticationUtils.reNewToken.GotResponse--------");
+                    Debug.LogFormat("--------AuthenticationUtils.GetVerifyCode.GotResponse--------");
                     Debug.LogFormat("response.IsSuccess: {0}", response.IsSuccess);
                     Debug.LogFormat("response.DataAsText: {0}", response.DataAsText);
                     Debug.LogFormat("response.Message: {0}", response.Message);
@@ -37,14 +39,108 @@ namespace AppGame.Data.Remote
 
                     if (response.IsSuccess)
                     {
-                        TokenResponseData mTokenResponseData = JsonUtils.String2Json<TokenResponseData>(response.DataAsText);
-                        string token = mTokenResponseData.token;
-                        this.LocalCupAgent.SaveCupToken(CupBuild.getCupSn(), token);
+                        DataBase data = JsonUtils.String2Json<DataBase>(response.DataAsText);
+                        if (callBack != null) callBack(Result.Success(response.Message));
+                    }
+                    else
+                    {
+                        if (errCallBack != null) errCallBack(ResponseErroInfo.GetErrorInfo(0, "<>Error: parameter 'request' or 'response' is null"));
+                    }
+                }
+                else if (response == null)
+                {
+                    Debug.LogError("<><AuthenticationUtils.GetVerifyCode>callback 'response' is null");
+                    return;
+                }
+                else if (request == null)
+                {
+                    Debug.LogError("<><AuthenticationUtils.GetVerifyCode>callback 'request' is null");
+                    return;
+                }
+            });
+
+            string strBody = JsonUtils.Dictionary2String(body);
+            hTTPRequest.RawData = Encoding.UTF8.GetBytes(strBody);
+            hTTPRequest.AddHeader("Gululu-Agent", GululuNetworkHelper.GetAgent());
+            hTTPRequest.AddHeader("udid", GululuNetworkHelper.GetUdid());
+            hTTPRequest.AddHeader("Accept-Language", GululuNetworkHelper.GetAcceptLang());
+            hTTPRequest.SetHeader("Content-Type", "application/json");
+            hTTPRequest.Send();
+        }
+
+        public void Login(LoginData loginData, Action<Result> callBack, Action<ResponseErroInfo> errCallBack)
+        {
+            Dictionary<string, string> body = new Dictionary<string, string>();
+            body.Add("phone", loginData.Phone);
+            body.Add("verify_code", loginData.VerifyCode);
+            body.Add("name", loginData.Name);
+            body.Add("user_email", loginData.Email);
+            body.Add("user_password", loginData.Password);
+
+            HTTPRequest hTTPRequest = new HTTPRequest(new Uri(this.UrlProvider.LoginUrl()), HTTPMethods.Post, (request, response) =>
+            {
+                if (request != null && response != null)
+                {
+                    Debug.LogFormat("--------AuthenticationUtils.Login.GotResponse--------");
+                    Debug.LogFormat("response.IsSuccess: {0}", response.IsSuccess);
+                    Debug.LogFormat("response.DataAsText: {0}", response.DataAsText);
+                    Debug.LogFormat("response.Message: {0}", response.Message);
+                    Debug.LogFormat("request.State: {0}", request.State);
+
+                    if (response.IsSuccess)
+                    {
+                        LoginResponseData data = JsonUtils.String2Json<LoginResponseData>(response.DataAsText);
+                        if (data != null) this.LocalTokenAgent.SaveToken(data.token);
+                        if (callBack != null) callBack(Result.Success(response.Message));
+                    }
+                    else
+                    {
+                        if (errCallBack != null) errCallBack(ResponseErroInfo.GetErrorInfo(0, "<>Error: parameter 'request' or 'response' is null"));
+                    }
+                }
+                else if (response == null)
+                {
+                    Debug.LogError("<><AuthenticationUtils.Login>callback 'response' is null");
+                    return;
+                }
+                else if (request == null)
+                {
+                    Debug.LogError("<><AuthenticationUtils.Login>callback 'request' is null");
+                    return;
+                }
+            });
+
+            string strBody = JsonUtils.Dictionary2String(body);
+            hTTPRequest.RawData = Encoding.UTF8.GetBytes(strBody);
+            hTTPRequest.AddHeader("Gululu-Agent", GululuNetworkHelper.GetAgent());
+            hTTPRequest.AddHeader("udid", GululuNetworkHelper.GetUdid());
+            hTTPRequest.AddHeader("Accept-Language", GululuNetworkHelper.GetAcceptLang());
+            hTTPRequest.SetHeader("Content-Type", "application/json");
+            hTTPRequest.Send();
+        }
+
+        public void GetToken(Action<Result> callBack, Action<ResponseErroInfo> errCallBack)
+        {
+            HTTPRequest hTTPRequest = new HTTPRequest(new Uri(this.UrlProvider.GetTokenUrl(this.ChildInfoManager.GetChildSN())), HTTPMethods.Get, (request, response) =>
+            {
+                if (request != null && response != null)
+                {
+                    Debug.LogFormat("--------AuthenticationUtils.GetToken.GotResponse--------");
+                    Debug.LogFormat("response.IsSuccess: {0}", response.IsSuccess);
+                    Debug.LogFormat("response.DataAsText: {0}", response.DataAsText);
+                    Debug.LogFormat("response.Message: {0}", response.Message);
+                    Debug.LogFormat("request.State: {0}", request.State);
+
+                    if (response.IsSuccess)
+                    {
+                        GetTokenResponseData tokenResponseData = JsonUtils.String2Json<GetTokenResponseData>(response.DataAsText);
+                        string token = tokenResponseData.token;
+                        //this.LocalCupAgent.SaveCupToken(CupBuild.getCupSn(), token);
                         if (callBack != null) callBack(Result.Success(token));
                     }
                     else
                     {
-                        if (errCallBack != null) errCallBack(Result.Error());
+                        if (errCallBack != null) errCallBack(ResponseErroInfo.GetErrorInfo(0, "<>Error: parameter 'request' or 'response' is null"));
                     }
                 }
                 else if (response == null)
@@ -59,17 +155,12 @@ namespace AppGame.Data.Remote
                 }
             });
 
-            string strBody = JsonUtils.Dictionary2String(body);
-            hTTPRequest.RawData = Encoding.UTF8.GetBytes(strBody);
-
-            hTTPRequest.AddHeader("Gululu-Agent", mGululuNetworkHelper.GetAgent());
-            hTTPRequest.AddHeader("udid", mGululuNetworkHelper.GetUdid());
-            hTTPRequest.AddHeader("Accept-Language", mGululuNetworkHelper.GetAcceptLang());
+            hTTPRequest.AddHeader("Gululu-Agent", GululuNetworkHelper.GetAgent());
+            hTTPRequest.AddHeader("udid", GululuNetworkHelper.GetUdid());
+            hTTPRequest.AddHeader("Accept-Language", GululuNetworkHelper.GetAcceptLang());
+            hTTPRequest.AddHeader("token", this.LocalTokenAgent.GetToken());
             hTTPRequest.SetHeader("Content-Type", "application/json");
             hTTPRequest.Send();
         }
-
-
     }
-
 }

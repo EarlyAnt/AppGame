@@ -43,7 +43,7 @@ namespace AppGame.Data.Common
         private AndroidJavaObject getOkHttpMethodWrapper()
         {
             AndroidJavaClass okHttpMethodWrapperBuilder = new AndroidJavaClass("com.bowhead.hank.network.OKHttpMethodWrapperBuilder");
-            return okHttpMethodWrapperBuilder.CallStatic<AndroidJavaObject>("getOkHttpMethodWrapper", UrlProvider.GetCupTokenUrl(CupBuild.getCupSn()));
+            return okHttpMethodWrapperBuilder.CallStatic<AndroidJavaObject>("getOkHttpMethodWrapper", UrlProvider.GetTokenUrl(CupBuild.getCupSn()));
         }
 
         public void put(string url, string headerStr, string body, Action<string> result, Action<ResponseErroInfo> faile)

@@ -52,23 +52,6 @@ namespace AppGame.Module.Cycling
     #endregion
 
     #region 自定义类
-    public class LocationDatas
-    {
-        public List<LocationData> Datas { get; set; }
-
-        public LocationDatas()
-        {
-            this.Datas = new List<LocationData>();
-        }
-    }
-
-    public class LocationData
-    {
-        public string UserID { get; set; }
-        public string AvatarID { get; set; }
-        public string MapPointID { get; set; }
-    }
-
     public class MpData
     {
         public MpBallTypes MpBallType { get; set; }

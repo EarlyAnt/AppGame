@@ -1,5 +1,6 @@
 using AppGame.Data.Local;
 using AppGame.Data.Model;
+using AppGame.Data.Remote;
 using strange.extensions.dispatcher.eventdispatcher.api;
 using strange.extensions.mediation.impl;
 using System.Collections.Generic;
@@ -18,6 +19,10 @@ namespace AppGame.Module.Cycling
         public IBasicDataManager BasicDataManager { get; set; }
         [Inject]
         public ICyclingDataManager CyclingDataManager { get; set; }
+        [Inject]
+        public IAuthenticationUtils AuthenticationUtils { get; set; }
+        [Inject]
+        public ICyclingDataUtil CyclingDataUtil { get; set; }
         private List<BasicData> basicDataList = null;
         private OriginData originData = null;
         private List<PlayerData> playerDataList = null;
@@ -35,12 +40,59 @@ namespace AppGame.Module.Cycling
             {
                 this.CyclingDataManager.ClearMpCollection();
             }
+            else if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                LoginTestData loginTestData = GameObject.FindObjectOfType<LoginTestData>();
+                this.AuthenticationUtils.GetVerifyCode(loginTestData.Phone, (success) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, success: {0}", success.info);
+                }, (failure) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, failure: {0}", failure.ErrorInfo);
+                });
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                LoginTestData loginTestData = GameObject.FindObjectOfType<LoginTestData>();
+                LoginData loginData = new LoginData()
+                {
+                    Name = "早起的蚂蚁",
+                    Password = "bobo123456",
+                    Email = "54763755@qq.com",
+                    Phone = loginTestData.Phone,
+                    VerifyCode = loginTestData.VerifyCode
+                };
+
+                this.AuthenticationUtils.Login(loginData, (success) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>Login, success: {0}", success.info);
+                }, (failure) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>Login, failure: {0}", failure.ErrorInfo);
+                });
+            }
         }
         /************************************************自 定 义 方 法************************************************/
         public override void OnRegister()
         {
             UpdateListeners(true);
             this.Initialize();
+
+            //this.CyclingDataUtil.GetBasicData((basicData) =>
+            //{
+            //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetBasicData, success: {0}", basicData);
+            //}, (errorText) =>
+            //{
+            //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetBasicData, failure: {0}", errorText);
+            //});
+
+            //this.CyclingDataUtil.GetGameData((playerDataList) =>
+            //{
+            //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetGameData, success: {0}", playerDataList != null ? playerDataList.Count : 0);
+            //}, (errorText) =>
+            //{
+            //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetGameData, failure: {0}", errorText);
+            //});
         }
 
         public override void OnRemove()
@@ -52,21 +104,6 @@ namespace AppGame.Module.Cycling
         {
             this.dispatcher.UpdateListener(register, GameEvent.COLLECT_MP, this.CollectMp);
             this.dispatcher.UpdateListener(register, GameEvent.GO_CLICK, this.OnGo);
-        }
-
-        private void onGameStart()
-        {
-            OnRegister();
-        }
-
-        private void onGameOver()
-        {
-            OnRemove();
-        }
-
-        private void onViewClicked()
-        {
-            //dispatcher.Dispatch(GameEvent.SHIP_DESTROYED);
         }
 
         private void Initialize()
@@ -84,12 +121,6 @@ namespace AppGame.Module.Cycling
 
         private void GetGameData()
         {
-            //LocationDatas locationDatas = new LocationDatas();
-            //locationDatas.Datas.Add(new LocationData() { UserID = "01", AvatarID = "", MapPointID = "320101_01" });
-            //locationDatas.Datas.Add(new LocationData() { UserID = "02", AvatarID = "avatar06", MapPointID = "320101_34" });
-            //locationDatas.Datas.Add(new LocationData() { UserID = "03", AvatarID = "avatar09", MapPointID = "320101_12" });
-            //this.View.LocationDatas = locationDatas;
-
             this.basicDataList = this.BasicDataManager.GetAllData();
             this.originData = this.CyclingDataManager.GetOriginData(this.ChildInfoManager.GetChildSN());
             this.playerDataList = this.CyclingDataManager.GetAllPlayerData();
@@ -97,22 +128,23 @@ namespace AppGame.Module.Cycling
 
         private void BuildTestData()
         {
+            string childSN = this.ChildInfoManager.GetChildSN();
             //创建基础数据
             List<BasicData> basicDataList = new List<BasicData>();
-            basicDataList.Add(new BasicData() { child_sn = "01", child_name = "樱木花道", child_avatar = "6", relation = (int)Relations.Self });
+            basicDataList.Add(new BasicData() { child_sn = childSN, child_name = "樱木花道", child_avatar = "6", relation = (int)Relations.Self });
             basicDataList.Add(new BasicData() { child_sn = "02", child_name = "赤木晴子", child_avatar = "9", relation = (int)Relations.Family });
             basicDataList.Add(new BasicData() { child_sn = "03", child_name = "仙道彰", child_avatar = "12", relation = (int)Relations.Friend });
             basicDataList.Add(new BasicData() { child_sn = "04", child_name = "流川枫", child_avatar = "15", relation = (int)Relations.Friend });
             basicDataList.Add(new BasicData() { child_sn = "05", child_name = "牧绅一", child_avatar = "19", relation = (int)Relations.Friend });
             this.BasicDataManager.SaveDataList(basicDataList);
             //创建原始数据
-            OriginData originData = new OriginData() { child_sn = "01", walk = 10000, ride = 5000, train = 20, learn = 30 };
+            OriginData originData = new OriginData() { child_sn = childSN, walk = 10000, ride = 5000, train = 20, learn = 30 };
             this.CyclingDataManager.SaveOriginData(originData);
             //创建游戏数据
             List<PlayerData> playerDataList = new List<PlayerData>();
             playerDataList.Add(new PlayerData()
             {
-                child_sn = "01",
+                child_sn = childSN,
                 map_id = "320101",
                 map_position = "320101_01",
                 walk_expend = 5000,

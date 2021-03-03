@@ -7,6 +7,7 @@ namespace AppGame.Data.Common
     public class Header
     {
         public List<HeaderData> headers { get; set; }
+        public Header() { this.headers = new List<HeaderData>(); }
     }
 
     public class HeaderData
@@ -18,10 +19,5 @@ namespace AppGame.Data.Common
     public class DataBase
     {
         public string status { get; set; }
-    }
-
-    public class TokenResponseData : DataBase
-    {
-        public string token;
     }
 }

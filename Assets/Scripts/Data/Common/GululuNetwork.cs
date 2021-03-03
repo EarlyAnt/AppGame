@@ -20,16 +20,13 @@ namespace AppGame.Data.Common
     public class GululuNetwork : IGululuNetwork
     {
         [Inject]
-        public ILocalCupAgent LocalCupAgent { get; set; }
+        public ILocalTokenAgent LocalCupAgent { get; set; }
         [Inject]
         public IJsonUtil JsonUtils { get; set; }
         [Inject]
         public IAuthenticationUtils AuthenticationUtils { get; set; }
         //[Inject]
         //public ClearLocalDataSignal ClearLocalDataSignal { get; set; }
-        [Inject]
-        public GululuNetworkHelper GululuNetworkHelper { get; set; }
-
 
         public void SendRequest(string url, IDictionary<string, string> headrs, string bodyContent, Action<string> callBack, Action<ResponseErroInfo> errCallBack, HTTPMethods methods)
         {
@@ -79,7 +76,7 @@ namespace AppGame.Data.Common
             hTTPRequest.AddHeader("Gululu-Agent", GululuNetworkHelper.GetAgent());
             hTTPRequest.AddHeader("udid", GululuNetworkHelper.GetUdid());
             hTTPRequest.AddHeader("Accept-Language", GululuNetworkHelper.GetAcceptLang());
-            string token = this.LocalCupAgent.GetCupToken();
+            string token = this.LocalCupAgent.GetToken();
             if (token != null && token.Length != 0)
             {
                 hTTPRequest.AddHeader("token", token);
@@ -257,7 +254,7 @@ namespace AppGame.Data.Common
 
         public void handleAuthenticatioError(HTTPRequest originalRequest, Action<ResponseErroInfo> errCallBack)
         {
-            AuthenticationUtils.reNewToken((scuccessrResultBack) =>
+            AuthenticationUtils.GetToken((scuccessrResultBack) =>
             {
                 string token = scuccessrResultBack.info;
                 reSendRequest(originalRequest, token);

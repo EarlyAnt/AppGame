@@ -4,8 +4,13 @@ namespace AppGame.Data.Remote
 {
     public interface IUrlProvider
     {
-        string GetCupTokenUrl(string cup_hw_sn);
-        string GetRegisterUrl(string prod_name, string cup_hw_sn);
-        string GetGameDataUrl(string child_sn, string game_name, string cup_hw_sn);
+        string GetVerifyCodeUrl();
+        string LoginUrl();
+
+        string GetTokenUrl(string child_sn);
+        string GetRegisterUserUrl(string prod_name, string cup_hw_sn);
+        string GetBasicDataUrl(string child_sn);
+        string GetGameDataUrl(string child_sn);
+        string PutGameDataUrl(string child_sn);
     }
 }

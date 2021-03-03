@@ -6,24 +6,24 @@ using UnityEngine;
 
 namespace AppGame.Data.Common
 {
-    public class GululuNetworkHelper
+    public static class GululuNetworkHelper
     {
-        public string GetAgent()
+        public static string GetAgent()
         {
             return "GululuCupHank/" + CupBuild.getAppVersionName() + ";" + "Unity/" + SystemInfo.operatingSystem + ";" + SystemInfo.deviceName + "/" + SystemInfo.deviceModel;
         }
 
-        public string GetUdid()
+        public static string GetUdid()
         {
             return SystemInfo.deviceUniqueIdentifier;
         }
 
-        public string GetAcceptLang()
+        public static string GetAcceptLang()
         {
-            return this.GetLanguageToAgentKey();
+            return GetLanguageToAgentKey();
         }
 
-        private string GetLanguageToAgentKey()
+        private static string GetLanguageToAgentKey()
         {
             string key = "en";
             switch (AppData.Language.ToUpper())
