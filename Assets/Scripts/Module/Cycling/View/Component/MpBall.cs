@@ -135,5 +135,16 @@ namespace AppGame.Module.Cycling
                 this.OnCollectMp(this);
             }
         }
+        //×ª»»³ÉMpData
+        public MpData ToMpData()
+        {
+            return new MpData()
+            {
+                MpBallType = this.MpBallType,
+                FromID = this.FromID,
+                FromName = this.FromName,
+                Mp = this.Value
+            };
+        }
     }
 }

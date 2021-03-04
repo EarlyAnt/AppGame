@@ -15,24 +15,24 @@ namespace AppGame.Data.Common
 
         public T GetObject<T>(string key)
         {
-            T t = LocalDataHelper.GetObject<T>(this.ChildInfoManager.GetChildSN() + key);
+            T t = this.LocalDataHelper.GetObject<T>(this.ChildInfoManager.GetChildSN() + key);
             //Debug.LogFormat("<><GameDataHelper.GetObject>Key: {0}, Value: {1}", this.ChildInfoManager.GetChildSN() + key, t.ToString());
             return t;
         }
         public T GetObject<T>(string key, object defaultObj)
         {
-            T t = LocalDataHelper.GetObject<T>(this.ChildInfoManager.GetChildSN() + key, defaultObj);
+            T t = this.LocalDataHelper.GetObject<T>(this.ChildInfoManager.GetChildSN() + key, defaultObj);
             //Debug.LogFormat("<><GameDataHelper.GetObject>Key: {0}, Value: {1}", this.ChildInfoManager.GetChildSN() + key, t.ToString());
             return t;
         }
         public void SaveObject<T>(string key, T t)
         {
-            LocalDataHelper.SaveObject<T>(this.ChildInfoManager.GetChildSN() + key, t);
+            this.LocalDataHelper.SaveObject<T>(this.ChildInfoManager.GetChildSN() + key, t);
             //Debug.LogFormat("<><GameDataHelper.SaveObject>Key: {0}, Value: {1}", this.ChildInfoManager.GetChildSN() + key, t.ToString());
         }
         public void Clear(string key)
         {
-            LocalDataHelper.RemoveObject(this.ChildInfoManager.GetChildSN() + key);
+            this.LocalDataHelper.RemoveObject(this.ChildInfoManager.GetChildSN() + key);
         }
     }
 }

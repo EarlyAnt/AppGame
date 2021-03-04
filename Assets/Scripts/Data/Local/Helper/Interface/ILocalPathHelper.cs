@@ -2,7 +2,7 @@ using System;
 
 namespace AppGame.Data.Local
 {
-    public interface ILocalPathManager
+    public interface ILocalPathHelper
     {
         string GetStreamingFilePath(string filename);
 

@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
-public class LoginTestData : MonoBehaviour
+public class TestData : MonoBehaviour
 {
     public string Phone;
     public string VerifyCode;
+    public int Coin;
 
     void Start()
     {

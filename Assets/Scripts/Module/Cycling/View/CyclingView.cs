@@ -21,9 +21,9 @@ namespace AppGame.Module.Cycling
         [Inject]
         public IMapConfig MapConfig { get; set; }
         [Inject]
-        public IChildInfoManager ChildInfoManager { get; set; }
-        [Inject]
         public ICommonImageUtils CommonImageUtils { get; set; }
+        [Inject]
+        public IChildInfoManager ChildInfoManager { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
@@ -66,6 +66,11 @@ namespace AppGame.Module.Cycling
         private float halfHeight = 800f;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
+        public int Coin
+        {
+            get { return int.Parse(this.coinBox.text); }
+            set { this.coinBox.text = value.ToString(); }
+        }
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -91,9 +96,9 @@ namespace AppGame.Module.Cycling
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.P))
-                this.payBill.Show(5, 5, true);
+                this.payBill.Show(new MpData() { Mp = 5, Coin = 5, CoinEnough = true });
             if (Input.GetKeyDown(KeyCode.O))
-                this.payBill.Show(19, 19, false);
+                this.payBill.Show(new MpData() { Mp = 19, Coin = 19, CoinEnough = false });
         }
         /************************************************自 定 义 方 法************************************************/
         private void Initialize()
@@ -129,7 +134,7 @@ namespace AppGame.Module.Cycling
                 //Todo: 显示行动点数不足的提示
             }
         }
-        public void RefreshPlayer(List<BasicData> basicDataList, List<PlayerData> playerDataList)
+        public void RefreshPlayer(List<BasicData> basicDataList, List<PlayerData> playerDataList, int coin)
         {
             PlayerData myPlayerData = playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
             BasicData myBasicData = basicDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
@@ -139,6 +144,7 @@ namespace AppGame.Module.Cycling
             this.player.Avatar = avatar;
             this.avatarBox.sprite = avatar;
             this.nameBox.text = myBasicData.child_name;
+            this.coinBox.text = coin.ToString();
         }
         public void RefreshTeammates(List<BasicData> basicDataList, List<PlayerData> playerDataList)
         {
@@ -178,7 +184,7 @@ namespace AppGame.Module.Cycling
             foreach (var mpData in mpDatas)
             {
                 MpBall mpBall = this.mpBalls.Find(t => t.MpBallType == mpData.MpBallType && t.FromID == mpData.FromID);
-                if (mpBall == null && mpData.Value > 0)
+                if (mpBall == null && mpData.Mp > 0)
                 {
                     MpBall prefab = mpData.MpBallType == MpBallTypes.Family || mpData.MpBallType == MpBallTypes.Friend ? this.mpBallPrefab2 : this.mpBallPrefab1;
                     MpBall newMpBall = GameObject.Instantiate(prefab, this.mpBallRoot);
@@ -188,7 +194,7 @@ namespace AppGame.Module.Cycling
                         newMpBall.FromID = mpData.FromID;
                         newMpBall.FromName = mpData.FromName;
                     }
-                    newMpBall.Value = mpData.Value;
+                    newMpBall.Value = mpData.Mp;
                     newMpBall.transform.localRotation = Quaternion.identity;
                     newMpBall.transform.localScale = Vector3.one * Random.Range(0.7f, 1.0f);
                     newMpBall.transform.localPosition = this.GetRandomPosition();
@@ -198,7 +204,7 @@ namespace AppGame.Module.Cycling
                 }
                 else if (mpBall != null)
                 {
-                    mpBall.Value = mpData.Value;
+                    mpBall.Value = mpData.Mp;
                     if (mpBall.Value <= 0)
                     {
                         this.mpBalls.Remove(mpBall);
@@ -216,11 +222,16 @@ namespace AppGame.Module.Cycling
             this.mpBox.text = mp.ToString();
             this.hpBox.text = hp.ToString();
         }
+        public void ShowPayBill(MpData mpData)
+        {
+            this.payBill.Show(mpData);
+        }
         private void UpdateDispatcher(bool register)
         {
             this.dispatcher.UpdateListener(register, GameEvent.INTERACTION, this.OnPlayerStopped);
             this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
             this.dispatcher.UpdateListener(register, GameEvent.CITY_STATION_CLOSE, this.OnCityStationClosed);
+            this.dispatcher.UpdateListener(register, GameEvent.PAY_BILL_CLOSE, this.OnPayBillClosed);
         }
         private Vector3 GetRandomPosition()
         {
@@ -257,7 +268,7 @@ namespace AppGame.Module.Cycling
         }
         private void CollectMp(MpBall mpBall)
         {
-            this.dispatcher.Dispatch(GameEvent.COLLECT_MP, mpBall);
+            this.dispatcher.Dispatch(GameEvent.MP_CLICK, mpBall);
         }
         private void OnPlayerStopped(IEvent evt)
         {
@@ -337,6 +348,23 @@ namespace AppGame.Module.Cycling
             {
                 this.playerCanGo = true;
             }
+        }
+        private void OnPayBillClosed(IEvent evt)
+        {
+            if (evt == null || evt.data == null)
+            {
+                Debug.LogError("<><CyclingView.OnPayBillClosed>Error: parameter 'evt' or 'evt.data' is null");
+                return;
+            }
+
+            MpData mpData = evt.data as MpData;
+            if (mpData == null)
+            {
+                Debug.LogError("<><CyclingView.OnPayBillClosed>Error: parameter 'evt.data' is not the type CollectMp");
+                return;
+            }
+
+            this.dispatcher.Dispatch(GameEvent.COLLECT_MP, mpData);
         }
     }
 }

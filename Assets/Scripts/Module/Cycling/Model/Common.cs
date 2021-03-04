@@ -9,6 +9,7 @@ namespace AppGame.Module.Cycling
         //ÆÕÍ¨ÊÂ¼þ
         GAME_START,
         GAME_OVER,
+        MP_CLICK,
         COLLECT_MP,
         GO_CLICK,
         MOVE_FORWARD,
@@ -58,7 +59,9 @@ namespace AppGame.Module.Cycling
         public MpBallTypes MpBallType { get; set; }
         public string FromID { get; set; }
         public string FromName { get; set; }
-        public int Value { get; set; }
+        public int Mp { get; set; }
+        public int Coin { get; set; }
+        public bool CoinEnough { get; set; }
     }
 
     public class Ticket

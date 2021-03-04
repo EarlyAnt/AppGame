@@ -1,6 +1,6 @@
-using DG.Tweening;
 using AppGame.Config;
 using AppGame.UI;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +25,8 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private Transform root;//卡片面板根物体
         [SerializeField]
+        private CanvasGroup tipPanel;//错误提示面板
+        [SerializeField]
         private Text titleBox;//标题文字框
         [SerializeField]
         private Text tipBox;//说明文字框
@@ -36,33 +38,50 @@ namespace AppGame.Module.Cycling
         private Image buttonBox;//费用边框
         #endregion
         #region 其他变量
+        private MpData mpData = null;
+        private Tweener fadeTweener = null;
+        private Tweener moveTweener = null;
+        private float tipPanelShowY = 0f;
+        private float tipPanelHideY = 0f;
         #endregion
         /************************************************Unity方法与事件***********************************************/
-
+        protected override void Awake()
+        {
+            this.tipPanelShowY = this.tipPanel.transform.localPosition.y;
+            this.tipPanelHideY = 2436f / 2f + this.tipPanel.GetComponent<RectTransform>().sizeDelta.y;
+            this.tipPanel.transform.DOLocalMoveY(this.tipPanelHideY, 0f);
+        }
         /************************************************自 定 义 方 法************************************************/
         //显示卡片
-        public void Show(int mp, int coin, bool coinEnough)
+        public void Show(MpData mpData)
         {
+            this.mpData = mpData;
             //设置页面内容
-            this.mpBox.text = mp.ToString();
-            this.feepBox.text = coin.ToString();
+            this.mpBox.text = mpData.Mp.ToString();
+            this.feepBox.text = mpData.Coin.ToString();
             //this.titleBox.text = "";//Todo: 后续补上国际化的功能
             //this.tipBox.text = "";//Todo: 后续补上国际化的功能
-            Sprite sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, this.ModuleConfig.GetImagePath(ModuleViews.Cycling, coinEnough ? "enable_button" : "disable_button"));
+            Sprite sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, this.ModuleConfig.GetImagePath(ModuleViews.Cycling, mpData.CoinEnough ? "enable_button" : "disable_button"));
             this.buttonBox.sprite = sprite;
-            this.buttonBox.raycastTarget = coinEnough;
+            this.buttonBox.raycastTarget = mpData.CoinEnough;
             this.gameObject.SetActive(true);
+            this.SetErrorPanel(!mpData.CoinEnough);
+            if (!mpData.CoinEnough) this.DelayInvoke(() => this.SetErrorPanel(false), 2f);
         }
         //隐藏卡片
-        public void Hide()
+        public void Hide(bool pay)
         {
+            this.SetErrorPanel(false);
             this.gameObject.SetActive(false);
-            this.OnViewClosed();
+            if (pay) this.dispatcher.Dispatch(GameEvent.PAY_BILL_CLOSE, this.mpData);
         }
-        //当卡片关闭时
-        private void OnViewClosed()
+        //设置错误提示面板
+        public void SetErrorPanel(bool visible)
         {
-            this.dispatcher.Dispatch(GameEvent.PAY_BILL_CLOSE);
+            if (this.fadeTweener != null) this.fadeTweener.Kill();
+            if (this.moveTweener != null) this.moveTweener.Kill();
+            this.fadeTweener = this.tipPanel.DOFade(visible ? 1f : 0f, visible ? 0.75f : 0.375f);
+            this.moveTweener = this.tipPanel.transform.DOLocalMoveY(visible ? this.tipPanelShowY : this.tipPanelHideY, visible ? 0.75f : 0.375f);
         }
     }
 }

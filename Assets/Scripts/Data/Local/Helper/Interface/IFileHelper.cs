@@ -2,7 +2,7 @@ using System;
 
 namespace AppGame.Data.Local
 {
-    public interface IFileManager
+    public interface IFileHelper
     {
         void WriteFile(string path, string name, string info);
 

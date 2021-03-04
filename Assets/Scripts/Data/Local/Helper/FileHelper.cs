@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AppGame.Data.Local
 {
-    public class FileManager : IFileManager
+    public class FileHelper : IFileHelper
     {
         private static readonly object obj = new object();
 

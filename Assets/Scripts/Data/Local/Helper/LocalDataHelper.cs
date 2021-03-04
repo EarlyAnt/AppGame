@@ -1,42 +1,38 @@
-using AppGame.Util;
-using System;
+using AppGame.Data.Common;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace AppGame.Data.Local
 {
     public class LocalDataHelper : ILocalDataHelper
     {
-        private IFileManager fileManager;
-        private IPreferencesUtils preferences;
-        private JsonUtil jsonUtil;
+        [Inject]
+        public IPreferenceHelper PreferencesUtil { get; set; }
+        private IFileHelper fileHelper;
         private static readonly string DONT_DELETE_LIST_KEY = "DONT_DELETE_LIST_KEY";
 
         public LocalDataHelper()
         {
-            this.fileManager = new FileManager();
-            this.preferences = new PreferenceUtils();
-            this.jsonUtil = new JsonUtil();
+            this.fileHelper = new FileHelper();
         }
 
         public T GetObject<T>(string key, object defaultObj)
         {
-            return this.preferences.GetObject<T>(key, defaultObj);
+            return this.PreferencesUtil.GetObject<T>(key, defaultObj);
         }
 
         public T GetObject<T>(string key)
         {
-            return this.preferences.GetObject<T>(key);
+            return this.PreferencesUtil.GetObject<T>(key);
         }
 
         public void SaveObject<T>(string key, T t)
         {
-            this.preferences.SaveObject<T>(key, t);
+            this.PreferencesUtil.SaveObject<T>(key, t);
         }
 
         public void RemoveObject(string key)
         {
-            this.preferences.DeleteObject(key);
+            this.PreferencesUtil.DeleteObject(key);
         }
 
         public void DeleteAll()
@@ -48,32 +44,32 @@ namespace AppGame.Data.Local
         {
             if (isRealDeleteAll)
             {
-                this.preferences.DeleteAll();
+                this.PreferencesUtil.DeleteAll();
             }
             else
             {
-                List<string> dontDeleteKeyList = this.preferences.GetObject<List<string>>(DONT_DELETE_LIST_KEY);
+                List<string> dontDeleteKeyList = this.PreferencesUtil.GetObject<List<string>>(DONT_DELETE_LIST_KEY);
                 if (dontDeleteKeyList == null || dontDeleteKeyList.Count == 0)
                 {
-                    this.preferences.DeleteAll();
+                    this.PreferencesUtil.DeleteAll();
                 }
                 else
                 {
                     List<DontDeleteDataItem> saveDontDeleteList = new List<DontDeleteDataItem>();
                     foreach (string key in dontDeleteKeyList)
                     {
-                        DontDeleteDataItem dontDeleteDataItem = this.preferences.GetObject<DontDeleteDataItem>(key);
+                        DontDeleteDataItem dontDeleteDataItem = this.PreferencesUtil.GetObject<DontDeleteDataItem>(key);
                         saveDontDeleteList.Add(dontDeleteDataItem);
                     }
-                    this.preferences.DeleteAll();
+                    this.PreferencesUtil.DeleteAll();
                     dontDeleteKeyList.Clear();
 
                     foreach (DontDeleteDataItem item in saveDontDeleteList)
                     {
-                        this.preferences.SaveObject(item.Key, item);
+                        this.PreferencesUtil.SaveObject(item.Key, item);
                         dontDeleteKeyList.Add(item.Key);
                     }
-                    this.preferences.SaveObject(DONT_DELETE_LIST_KEY, dontDeleteKeyList);
+                    this.PreferencesUtil.SaveObject(DONT_DELETE_LIST_KEY, dontDeleteKeyList);
                 }
             }
         }

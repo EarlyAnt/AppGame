@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace AppGame.Data.Local
 {
-    public class PreferenceUtils : IPreferencesUtils
+    public class PreferenceHelper : IPreferenceHelper
     {
         [Inject]
-        public IJsonUtil JsonUtils { get; set; }
+        public IJsonUtil JsonUtil { get; set; }
 
         public T GetObject<T>(string key, object objDefault)
         {
@@ -48,7 +48,7 @@ namespace AppGame.Data.Local
                 {
                     return default(T);
                 }
-                T obj = JsonUtils.String2Json<T>(info);
+                T obj = this.JsonUtil.String2Json<T>(info);
 
                 return obj;
             }
@@ -94,7 +94,7 @@ namespace AppGame.Data.Local
                 {
                     return default(T);
                 }
-                T obj = JsonUtils.String2Json<T>(info);
+                T obj = this.JsonUtil.String2Json<T>(info);
 
                 return obj;
             }
@@ -139,7 +139,7 @@ namespace AppGame.Data.Local
             }
             else
             {
-                string info = JsonUtils.Json2String(t);
+                string info = this.JsonUtil.Json2String(t);
                 PlayerPrefs.SetString(key, info);
             }
             PlayerPrefs.Save();

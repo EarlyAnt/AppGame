@@ -1,7 +1,7 @@
 ﻿using AppGame.Data.Model;
 using System.Collections.Generic;
 
-namespace Hank
+namespace AppGame.Data.Local
 {
     public interface IItemDataManager
     {
@@ -17,6 +17,11 @@ namespace Hank
 
         void SendAllItemData(bool force);
         void SetValuesLong(GameData datas);
+    }
+
+    public static class Items
+    {
+        public const string COIN = "10000";
     }
 }
 

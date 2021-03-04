@@ -40,12 +40,13 @@ namespace AppGame.Global
             injectionBinder.Bind<IScenicConfig>().To<ScenicConfig>().ToSingleton().CrossContext();
             injectionBinder.Bind<ICardConfig>().To<CardConfig>().ToSingleton().CrossContext();
 
+            injectionBinder.Bind<IJsonUtil>().To<JsonUtil>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IPreferenceHelper>().To<PreferenceHelper>().ToSingleton().CrossContext();
             injectionBinder.Bind<ILocalDataHelper>().To<LocalDataHelper>().ToSingleton().CrossContext();
             injectionBinder.Bind<IChildInfoManager>().To<ChildInfoManager>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGameDataHelper>().To<GameDataHelper>().ToSingleton().CrossContext();
             injectionBinder.Bind<ITokenManager>().To<TokenManager>().ToSingleton().CrossContext();
-
-            injectionBinder.Bind<IJsonUtil>().To<JsonUtil>().ToSingleton().CrossContext();
+            
             injectionBinder.Bind<IPrefabUtil>().To<PrefabUtil>().ToSingleton().CrossContext();
             injectionBinder.Bind<II18NUtil>().To<I18NUtil>().ToSingleton().CrossContext();
             injectionBinder.Bind<IHotUpdateUtil>().To<HotUpdateUtil>().ToSingleton().CrossContext();
@@ -59,6 +60,9 @@ namespace AppGame.Global
             injectionBinder.Bind<IGululuNetwork>().To<GululuNetwork>().ToSingleton().CrossContext();
             injectionBinder.Bind<INativeOkHttpMethodWrapper>().To<NativeOkHttpMethodWrapper>().ToSingleton().CrossContext();
             injectionBinder.Bind<IAuthenticationUtils>().To<AuthenticationUtils>().ToSingleton().CrossContext();
+
+            injectionBinder.Bind<IDeviceInfoManager>().To<DeviceInfoManager>().ToSingleton().CrossContext();
+            injectionBinder.Bind<IItemDataManager>().To<ItemDataManager>().ToSingleton().CrossContext();
         }
     }
 }

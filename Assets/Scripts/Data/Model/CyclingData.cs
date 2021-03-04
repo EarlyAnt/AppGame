@@ -31,6 +31,7 @@ namespace AppGame.Data.Model
         public int mp { get; set; }
         public int mp_expend { get; set; }
         public int mp_today { get; set; }
+        public DateTime mp_date { get; set; }
         public int mp_yestoday { get; set; }
         public int hp { get; set; }
 
@@ -38,5 +39,12 @@ namespace AppGame.Data.Model
         {
             return string.Format("child_sn: {0}, map_id: {1}, map_position: {2}", this.child_sn, this.map_id, this.map_position);
         }
+    }
+
+    public class MpData
+    {
+        public DateTime Date { get; set; }
+        public int Mp { get; set; }
+        public bool Uploaded { get; set; }
     }
 }

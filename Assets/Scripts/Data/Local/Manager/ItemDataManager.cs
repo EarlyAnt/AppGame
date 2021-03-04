@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Hank
+namespace AppGame.Data.Local
 {
     public class ItemDataManager : IItemDataManager
     {
@@ -38,41 +38,57 @@ namespace Hank
 
         public void SetItem(string itemID, int itemCount)
         {
-            Debug.LogFormat("--------{0}-------ItemDataManager.SetItem: {1}, {2}", System.DateTime.Now, itemID, itemCount);
+            Debug.LogFormat("<><ItemDataManager.SetItem>ItemID: {0}, ItemCount: {1}", itemID, itemCount);
             int count = 0;
-            if (itemInfos.TryGetValue(itemID, out count))
+            if (this.itemInfos.TryGetValue(itemID, out count))
             {
-                itemInfos.Remove(itemID);
+                this.itemInfos.Remove(itemID);
             }
 
-            if (itemCount > 0)
+            if (itemCount >= 0)
             {
-                itemInfos.Add(itemID, itemCount);
+                this.itemInfos.Add(itemID, itemCount);
+                try
+                {
+                    this.SaveItemDatas();
+                    this.SyncItemsData2Server(itemID, itemCount);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogErrorFormat("<><ItemDataManager.SetItem>Error: {0}, itemId: {1}, count: {2}, currentCount: {3}", ex.Message, itemID, count, itemCount);
+                }
             }
         }
 
         public void AddItem(string itemID, int itemCount = 1)
         {
             int currentCount = 0;
-            if (itemInfos.ContainsKey(itemID))
+            if (this.itemInfos.ContainsKey(itemID))
             {
-                currentCount = itemInfos[itemID] + itemCount;
-                itemInfos[itemID] = this.GetValidCount(itemID, currentCount);
+                currentCount = this.itemInfos[itemID] + itemCount;
+                this.itemInfos[itemID] = this.GetValidCount(itemID, currentCount);
             }
             else
             {
                 currentCount = itemCount;
-                itemInfos.Add(itemID, this.GetValidCount(itemID, currentCount));
+                this.itemInfos.Add(itemID, this.GetValidCount(itemID, currentCount));
             }
 
-            SaveItemDatas();
-            SyncItemsData2Server(itemID, currentCount);
+            try
+            {
+                this.SaveItemDatas();
+                this.SyncItemsData2Server(itemID, currentCount);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogErrorFormat("<><ItemDataManager.AddItem>Error: {0}, itemId: {1}, count: {2}, currentCount: {3}", ex.Message, itemID, itemCount, currentCount);
+            }
         }
 
         public bool HasItem(string itemID, int itemCount = 1)
         {
             int count = 0;
-            if (itemInfos.TryGetValue(itemID, out count))
+            if (this.itemInfos.TryGetValue(itemID, out count))
             {
                 return count >= itemCount;
             }
@@ -88,7 +104,7 @@ namespace Hank
                 return false;
             }
 
-            int currentCount = itemInfos.ContainsKey(itemID) ? itemInfos[itemID] : 0;//获取当前数量
+            int currentCount = this.itemInfos.ContainsKey(itemID) ? this.itemInfos[itemID] : 0;//获取当前数量
             if (currentCount >= count)
             {//扣减当前数量
                 currentCount -= count;
@@ -99,15 +115,15 @@ namespace Hank
                 return false;
             }
 
-            if (itemInfos.ContainsKey(itemID))
-                itemInfos[itemID] = currentCount;
+            if (this.itemInfos.ContainsKey(itemID))
+                this.itemInfos[itemID] = currentCount;
             else
-                itemInfos.Add(itemID, currentCount);
+                this.itemInfos.Add(itemID, currentCount);
 
             try
             {
-                SaveItemDatas();
-                SyncItemsData2Server(itemID, currentCount);
+                this.SaveItemDatas();
+                this.SyncItemsData2Server(itemID, currentCount);
                 return true;
             }
             catch (System.Exception ex)
@@ -120,7 +136,7 @@ namespace Hank
         public int GetItemCount(string itemID)
         {
             int itemCount;
-            if (itemInfos.TryGetValue(itemID, out itemCount))
+            if (this.itemInfos.TryGetValue(itemID, out itemCount))
             {
                 return itemCount;
             }
@@ -135,13 +151,13 @@ namespace Hank
 
         public void LoadItemDatas()
         {
-            itemInfos.Clear();
+            this.itemInfos.Clear();
             List<ItemInfo> listInfos = this.GameDataHelper.GetObject<List<ItemInfo>>(ITEM_DATA_KEY);
             if (listInfos != null)
             {
                 foreach (var info in listInfos)
                 {
-                    itemInfos.Add(info.itemID, info.itemCount);
+                    this.itemInfos.Add(info.itemID, info.itemCount);
                 }
             }
         }
@@ -195,7 +211,7 @@ namespace Hank
         private List<ItemInfo> Convert2List()
         {
             List<ItemInfo> listInfos = new List<ItemInfo>();
-            foreach (var pair in itemInfos)
+            foreach (var pair in this.itemInfos)
             {
                 listInfos.Add(new ItemInfo
                 {

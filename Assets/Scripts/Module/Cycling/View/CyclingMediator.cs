@@ -11,18 +11,25 @@ namespace AppGame.Module.Cycling
     public class CyclingMediator : EventMediator
     {
         /************************************************属性与变量命名************************************************/
+        #region 注入接口
         [Inject]
         public CyclingView View { get; set; }
-        [Inject]
-        public IChildInfoManager ChildInfoManager { get; set; }
-        [Inject]
-        public IBasicDataManager BasicDataManager { get; set; }
-        [Inject]
-        public ICyclingDataManager CyclingDataManager { get; set; }
         [Inject]
         public IAuthenticationUtils AuthenticationUtils { get; set; }
         [Inject]
         public ICyclingDataUtil CyclingDataUtil { get; set; }
+        [Inject]
+        public IChildInfoManager ChildInfoManager { get; set; }
+        [Inject]
+        public IDeviceInfoManager DeviceInfoManager { get; set; }
+        [Inject]
+        public IItemDataManager ItemDataManager { get; set; }
+        [Inject]
+        public IBasicDataManager BasicDataManager { get; set; }
+        [Inject]
+        public ICyclingDataManager CyclingDataManager { get; set; }
+        #endregion
+        #region 其他变量
         private List<BasicData> basicDataList = null;
         private OriginData originData = null;
         private List<PlayerData> playerDataList = null;
@@ -33,6 +40,7 @@ namespace AppGame.Module.Cycling
                 return this.playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
             }
         }
+        #endregion
         /************************************************Unity方法与事件***********************************************/
         private void Update()
         {
@@ -40,10 +48,16 @@ namespace AppGame.Module.Cycling
             {
                 this.CyclingDataManager.ClearMpCollection();
             }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                int coin = GameObject.FindObjectOfType<TestData>().Coin;
+                this.ItemDataManager.SetItem(Items.COIN, coin);
+                this.View.Coin = coin;
+            }
             else if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                LoginTestData loginTestData = GameObject.FindObjectOfType<LoginTestData>();
-                this.AuthenticationUtils.GetVerifyCode(loginTestData.Phone, (success) =>
+                TestData testData = GameObject.FindObjectOfType<TestData>();
+                this.AuthenticationUtils.GetVerifyCode(testData.Phone, (success) =>
                 {
                     Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, success: {0}", success.info);
                 }, (failure) =>
@@ -53,7 +67,7 @@ namespace AppGame.Module.Cycling
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                LoginTestData loginTestData = GameObject.FindObjectOfType<LoginTestData>();
+                TestData loginTestData = GameObject.FindObjectOfType<TestData>();
                 LoginData loginData = new LoginData()
                 {
                     Name = "早起的蚂蚁",
@@ -73,6 +87,7 @@ namespace AppGame.Module.Cycling
             }
         }
         /************************************************自 定 义 方 法************************************************/
+        //注册
         public override void OnRegister()
         {
             UpdateListeners(true);
@@ -94,23 +109,24 @@ namespace AppGame.Module.Cycling
             //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetGameData, failure: {0}", errorText);
             //});
         }
-
+        //取消注册
         public override void OnRemove()
         {
             UpdateListeners(false);
         }
-
+        //注册事件监听
         private void UpdateListeners(bool register)
         {
-            this.dispatcher.UpdateListener(register, GameEvent.COLLECT_MP, this.CollectMp);
+            this.dispatcher.UpdateListener(register, GameEvent.MP_CLICK, this.OnMpBallClick);
             this.dispatcher.UpdateListener(register, GameEvent.GO_CLICK, this.OnGo);
+            this.dispatcher.UpdateListener(register, GameEvent.COLLECT_MP, this.OnCollectMp);
         }
-
+        //初始化
         private void Initialize()
         {
             this.BuildTestData();
             this.GetGameData();
-            this.View.RefreshPlayer(this.basicDataList, this.playerDataList);
+            this.View.RefreshPlayer(this.basicDataList, this.playerDataList, this.ItemDataManager.GetItemCount(Items.COIN));
             this.View.RefreshTeammates(this.basicDataList, this.playerDataList);
             this.View.RefreshMp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
             this.RefreshMpDatas();
@@ -118,14 +134,14 @@ namespace AppGame.Module.Cycling
             this.InvokeRepeating("RefreshOriginData", 3f, 5f);
             this.InvokeRepeating("RefreshFriendData", 3f, 15f);
         }
-
+        //获取游戏数据
         private void GetGameData()
         {
             this.basicDataList = this.BasicDataManager.GetAllData();
             this.originData = this.CyclingDataManager.GetOriginData(this.ChildInfoManager.GetChildSN());
             this.playerDataList = this.CyclingDataManager.GetAllPlayerData();
         }
-
+        //创建模拟数据
         private void BuildTestData()
         {
             string childSN = this.ChildInfoManager.GetChildSN();
@@ -155,6 +171,7 @@ namespace AppGame.Module.Cycling
                 mp = 0,
                 mp_expend = 0,
                 mp_today = 0,
+                mp_date = System.DateTime.Today,
                 mp_yestoday = 0,
                 hp = 5
             });
@@ -188,15 +205,15 @@ namespace AppGame.Module.Cycling
             });
             this.CyclingDataManager.SavePlayerDataList(playerDataList);
         }
-
+        //刷新健康数据
         private void RefreshOriginData()
         {
-            this.originData.walk += Random.Range(1000, 5000) * 10;
-            this.originData.ride += Random.Range(1000, 5000) * 10;
+            this.originData.walk += Random.Range(1000, 5000) * 30;
+            this.originData.ride += Random.Range(1000, 5000) * 30;
             this.CyclingDataManager.SaveOriginData(this.originData);
             this.RefreshMpDatas();
         }
-
+        //刷新亲友数据
         private void RefreshFriendData()
         {
             int index = 1 + Random.Range(0, 10) % 3;
@@ -207,22 +224,22 @@ namespace AppGame.Module.Cycling
             this.CyclingDataManager.SavePlayerData(playerData);
             this.View.RefreshTeammates(this.basicDataList, this.playerDataList);
         }
-
+        //刷新能量数据
         private void RefreshMpDatas()
         {
             List<MpData> mpDatas = new List<MpData>();
 
             int mpWalk = (int)((this.originData.walk - this.myPlayerData.walk_expend) / 500);
-            mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Value = mpWalk });
+            mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Mp = mpWalk });
 
             int mpRide = (int)((this.originData.ride - this.myPlayerData.ride_expend) / 500);
-            mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Ride, Value = mpRide });
+            mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Ride, Mp = mpRide });
 
             int mpTrain = (this.originData.train - this.myPlayerData.train_expend);
-            mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Train, Value = mpTrain });
+            mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Train, Mp = mpTrain });
 
             int mpLearn = (int)((this.originData.learn - this.myPlayerData.learn_expend) / 5);
-            mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Learn, Value = mpLearn });
+            mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Learn, Mp = mpLearn });
 
             foreach (var playerData in this.playerDataList)
             {
@@ -248,55 +265,93 @@ namespace AppGame.Module.Cycling
                 mpDatas.Add(new MpData()
                 {
                     MpBallType = (basicData.relation == (int)Relations.Family ? MpBallTypes.Family : MpBallTypes.Friend),
-                    Value = mpShare,
+                    Mp = mpShare,
                     FromID = playerData.child_sn,
                     FromName = basicData.child_name
                 });
             }
             this.View.RefreshMpBalls(mpDatas);
         }
-
-        private void CollectMp(IEvent evt)
+        //当能量球被点击时
+        private void OnMpBallClick(IEvent evt)
         {
             if (evt == null || evt.data == null)
             {
-                Debug.LogError("<><CyclingMediator.CollectMp>Error: parameter 'evt' or 'evt.data' is null");
+                Debug.LogError("<><CyclingMediator.OnMpBallClick>Error: parameter 'evt' or 'evt.data' is null");
                 return;
             }
 
             MpBall mpBall = evt.data as MpBall;
             if (mpBall == null)
             {
-                Debug.LogError("<><CyclingMediator.CollectMp>Error: parameter 'evt.data' is not the type MpBall");
+                Debug.LogError("<><CyclingMediator.OnMpBallClick>Error: parameter 'evt.data' is not the type MpBall");
                 return;
             }
 
-            int mpIncrease = mpBall.Value;//计算收取了多少能量
+            if (this.myPlayerData.mp_today > this.DeviceInfoManager.GetMpLimit())
+            {
+                int coin = this.ItemDataManager.GetItemCount(Items.COIN);
+                int min = Mathf.Min(coin, mpBall.Value);
+                MpData mpData = mpBall.ToMpData();
+                mpData.Mp = min;
+                mpData.Coin = min;
+                mpData.CoinEnough = min > 0;
+                this.View.ShowPayBill(mpData);
+            }
+            else
+            {
+                this.dispatcher.Dispatch(GameEvent.COLLECT_MP, mpBall.ToMpData());
+            }
+        }
+        //收取能量
+        private void OnCollectMp(IEvent evt)
+        {
+            if (evt == null || evt.data == null)
+            {
+                Debug.LogError("<><CyclingMediator.OnCollectMp>Error: parameter 'evt' or 'evt.data' is null");
+                return;
+            }
+
+            MpData mpData = evt.data as MpData;
+            if (mpData == null)
+            {
+                Debug.LogError("<><CyclingMediator.OnCollectMp>Error: parameter 'evt.data' is not the type MpData");
+                return;
+            }
+
+            //扣减相应的金币
+            if (mpData.Coin > 0)
+            {
+                this.ItemDataManager.ReduceItem(Items.COIN, mpData.Coin);
+                this.View.Coin = this.ItemDataManager.GetItemCount(Items.COIN);
+            }
 
             //记录耗用的原始数据(步行，骑行，坐姿及能量分成)
-            switch (mpBall.MpBallType)
+            switch (mpData.MpBallType)
             {
                 case MpBallTypes.Walk:
-                    this.myPlayerData.walk_expend += mpIncrease * 500;
+                    this.myPlayerData.walk_expend += mpData.Mp * 500;
                     break;
                 case MpBallTypes.Ride:
-                    this.myPlayerData.ride_expend += mpIncrease * 500;
+                    this.myPlayerData.ride_expend += mpData.Mp * 500;
                     break;
                 case MpBallTypes.Train:
-                    this.myPlayerData.train_expend += mpIncrease;
+                    this.myPlayerData.train_expend += mpData.Mp;
                     break;
                 case MpBallTypes.Learn:
-                    this.myPlayerData.learn_expend += mpIncrease * 5;
+                    this.myPlayerData.learn_expend += mpData.Mp * 5;
                     break;
                 case MpBallTypes.Family:
                 case MpBallTypes.Friend:
                     //记录已收取此家人或朋友的能量分成
-                    if (!this.CyclingDataManager.MpCollected(mpBall.FromID))
-                        this.CyclingDataManager.SaveMpCollection(mpBall.FromID);
+                    if (!this.CyclingDataManager.MpCollected(mpData.FromID))
+                        this.CyclingDataManager.SaveMpCollection(mpData.FromID);
                     break;
             }
 
-            this.myPlayerData.mp += mpIncrease;//记录增加的能量值
+            this.myPlayerData.mp += mpData.Mp;//记录增加的能量值
+            if (this.myPlayerData.mp_date == System.DateTime.Today)
+                this.myPlayerData.mp_today += mpData.Mp;//记录增加的能量值
             int hpIncrease = (int)((this.myPlayerData.mp - myPlayerData.mp_expend) / 100);//计算能量值是否可转换成行动点数
             if (hpIncrease > 0)//每满100可转换成1点行动点数
             {
@@ -308,7 +363,7 @@ namespace AppGame.Module.Cycling
             this.RefreshMpDatas();//刷新能量气泡
             this.View.RefreshMp(this.myPlayerData.mp - this.myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
         }
-
+        //当Go按钮被点击时
         private void OnGo()
         {
             int hp = this.myPlayerData.hp;
@@ -321,4 +376,3 @@ namespace AppGame.Module.Cycling
         }
     }
 }
-

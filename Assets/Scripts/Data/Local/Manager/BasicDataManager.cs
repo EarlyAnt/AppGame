@@ -1,4 +1,5 @@
-﻿using AppGame.Data.Model;
+﻿using AppGame.Data.Common;
+using AppGame.Data.Model;
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +7,9 @@ namespace AppGame.Data.Local
 {
     public class BasicDataManager : IBasicDataManager
     {
-        private List<BasicData> basicDataList = null;
+        [Inject]
+        public IGameDataHelper GameDataHelper { get; set; }
+        private const string BASIC_DATA_DATA_KEY = "basic_data";
 
         /// <summary>
         /// 保存一组玩家的基础数据
@@ -15,7 +18,7 @@ namespace AppGame.Data.Local
         public void SaveDataList(List<BasicData> basicDataList)
         {
             if (basicDataList != null)
-                this.basicDataList = basicDataList;
+                this.GameDataHelper.SaveObject<List<BasicData>>(BASIC_DATA_DATA_KEY, basicDataList);
             else
                 throw new ArgumentException("<><BasicDataManager.SaveDataList>Error: parameter 'basicDataList' is null");
         }
@@ -25,7 +28,7 @@ namespace AppGame.Data.Local
         /// <returns></returns>
         public List<BasicData> GetAllData()
         {
-            return this.basicDataList;
+            return this.GameDataHelper.GetObject<List<BasicData>>(BASIC_DATA_DATA_KEY);
         }
 
         /// <summary>
@@ -34,14 +37,16 @@ namespace AppGame.Data.Local
         /// <param name="basicData"></param>
         public void SaveData(BasicData basicData)
         {
-            if (this.basicDataList == null)
-                this.basicDataList = new List<BasicData>();
+            List<BasicData> basicDataList = this.GameDataHelper.GetObject<List<BasicData>>(BASIC_DATA_DATA_KEY);
+            if (basicDataList == null)
+                basicDataList = new List<BasicData>();
 
-            int index = this.basicDataList.FindIndex(t => t.child_sn == basicData.child_sn);
-            if (index >= 0 && index < this.basicDataList.Count)
-                this.basicDataList.RemoveAt(index);
+            int index = basicDataList.FindIndex(t => t.child_sn == basicData.child_sn);
+            if (index >= 0 && index < basicDataList.Count)
+                basicDataList.RemoveAt(index);
 
-            this.basicDataList.Add(basicData);
+            basicDataList.Add(basicData);
+            this.GameDataHelper.SaveObject<List<BasicData>>(BASIC_DATA_DATA_KEY, basicDataList);
         }
         /// <summary>
         /// 根据编号获取玩家的基础数据
@@ -50,8 +55,9 @@ namespace AppGame.Data.Local
         /// <returns></returns>
         public BasicData GetData(string childSN)
         {
-            if (this.basicDataList != null)
-                return this.basicDataList.Find(t => t.child_sn == childSN);
+            List<BasicData> basicDataList = this.GameDataHelper.GetObject<List<BasicData>>(BASIC_DATA_DATA_KEY);
+            if (basicDataList != null)
+                return basicDataList.Find(t => t.child_sn == childSN);
             else
                 return null;
         }

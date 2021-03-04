@@ -11414,7 +11414,6 @@ GameObject:
   - component: {fileID: 7556835954872597982}
   - component: {fileID: 1274107315195634889}
   - component: {fileID: 6127674142382252568}
-  - component: {fileID: 5264653103657597918}
   m_Layer: 5
   m_Name: Pay
   m_TagString: Untagged
@@ -11524,31 +11523,15 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1130529733}
         m_MethodName: Hide
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
---- !u!114 &5264653103657597918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2528598146795659551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  imageName: enable_button
-  autoLoad: 1
-  moduleView: 3
-  imageBox: {fileID: 1274107315195634889}
 --- !u!1 &2567506758356077298
 GameObject:
   m_ObjectHideFlags: 0
@@ -14247,6 +14230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   root: {fileID: 5030103379646899455}
+  tipPanel: {fileID: 379753631}
   titleBox: {fileID: 518142281444586081}
   tipBox: {fileID: 6071554156902934161}
   mpBox: {fileID: 4048206261741764943}
@@ -14881,13 +14865,14 @@ GameObject:
   - component: {fileID: 480763507464476229}
   - component: {fileID: 1130529729}
   - component: {fileID: 1130529728}
+  - component: {fileID: 379753631}
   m_Layer: 5
   m_Name: Error
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5079193988434401396
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14987,7 +14972,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 480763507464476229}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1130529733}
+        m_MethodName: SetErrorPanel
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1130529728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15000,10 +14996,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: 
+  imageName: tip_error
   autoLoad: 1
-  moduleView: 0
-  imageBox: {fileID: 0}
+  moduleView: 3
+  imageBox: {fileID: 480763507464476229}
+--- !u!225 &379753631
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6324433996638660412}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6340585010552492122
 GameObject:
   m_ObjectHideFlags: 0
@@ -17291,7 +17299,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1130529733}
         m_MethodName: Hide
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

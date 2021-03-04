@@ -4,6 +4,12 @@ using System.Linq;
 
 namespace AppGame.Data.Common
 {
+    public class DontDeleteDataItem
+    {
+        public string Key { get; set; }
+        public string ItemInfo { get; set; }
+    }
+
     public class Header
     {
         public List<HeaderData> headers { get; set; }

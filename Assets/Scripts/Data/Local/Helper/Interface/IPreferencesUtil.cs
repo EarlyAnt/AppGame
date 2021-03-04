@@ -2,7 +2,7 @@ using System;
 
 namespace AppGame.Data.Local
 {
-    public interface IPreferencesUtils
+    public interface IPreferenceHelper
     {
         T GetObject<T>(string key, object defaultObj);
         T GetObject<T>(string key);
