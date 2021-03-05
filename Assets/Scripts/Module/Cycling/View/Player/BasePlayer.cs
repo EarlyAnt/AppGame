@@ -35,7 +35,11 @@ namespace AppGame.Module.Cycling
             get { return this.avatarBox.sprite; }
             set { this.avatarBox.sprite = value; }
         }
-        public MapNode MapNode { get { return this.mapNode; } }
+        public MapNode MapNode
+        {
+            get { return this.mapNode; }
+            set { this.mapNode = value; }
+        }
         public bool IsMoving { get; protected set; }
         #endregion
         /************************************************Unity方法与事件***********************************************/

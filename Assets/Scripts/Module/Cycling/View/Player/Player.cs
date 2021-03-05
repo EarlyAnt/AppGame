@@ -208,7 +208,8 @@ namespace AppGame.Module.Cycling
             while (index <= this.nodeIndex)
             {
                 MapPointNode mapPointNode = this.mapNode.Points[index].GetComponent<MapPointNode>();
-                if (mapPointNode != null) mapPointNode.LightIcon();
+                if (mapPointNode != null && mapPointNode.NodeType != NodeTypes.EmptyNode)
+                    mapPointNode.LightIcon();
                 index += 1;
             }
         }

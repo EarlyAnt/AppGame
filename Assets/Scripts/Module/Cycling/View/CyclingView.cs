@@ -3,6 +3,7 @@ using AppGame.Data.Local;
 using AppGame.Data.Model;
 using AppGame.Global;
 using AppGame.UI;
+using AppGame.Util;
 using DG.Tweening;
 using strange.extensions.dispatcher.eventdispatcher.api;
 using strange.extensions.signal.impl;
@@ -24,6 +25,8 @@ namespace AppGame.Module.Cycling
         public ICommonImageUtils CommonImageUtils { get; set; }
         [Inject]
         public IChildInfoManager ChildInfoManager { get; set; }
+        [Inject]
+        public IPrefabUtil PrefabUtil { get; set; }
         #endregion
         #region Ò³ÃæUI×é¼þ
         [SerializeField]
@@ -49,6 +52,10 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private MpBall mpBallPrefab2;
         [SerializeField]
+        private Transform mapRoot;
+        [SerializeField]
+        private MapNode mapPrefab;
+        [SerializeField]
         private Text mpBox;
         [SerializeField]
         private Text hpBox;
@@ -64,6 +71,8 @@ namespace AppGame.Module.Cycling
         private bool hideMpBalls = false;
         private float halfWidth = 380f;
         private float halfHeight = 800f;
+        private MapNode mapNode;
+        private PlayerData myPlayerData;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
         public int Coin
@@ -111,6 +120,18 @@ namespace AppGame.Module.Cycling
 
             this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
         }
+        private MapNode LoadMap()
+        {
+            if (this.mapNode == null)
+            {
+                this.mapNode = this.PrefabUtil.CreateGameObject("Cycling/Road", this.myPlayerData.map_id).GetComponent<MapNode>();
+                this.mapNode.transform.SetParent(this.mapRoot);
+                this.mapNode.transform.localPosition = Vector3.zero;
+                this.mapNode.transform.localRotation = Quaternion.identity;
+                this.mapNode.transform.localScale = Vector3.one;
+            }
+            return this.mapNode;
+        }
         public void Go()
         {
             if (this.playerCanGo)
@@ -136,18 +157,23 @@ namespace AppGame.Module.Cycling
         }
         public void RefreshPlayer(List<BasicData> basicDataList, List<PlayerData> playerDataList, int coin)
         {
-            PlayerData myPlayerData = playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
             BasicData myBasicData = basicDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
-            this.player.MoveToNode(myPlayerData.map_position);
-            this.player.name = "Player_" + myPlayerData.child_sn;
+            this.myPlayerData = playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
+            this.player.MapNode = this.LoadMap();
+            this.player.MoveToNode(this.myPlayerData.map_position);
+            this.player.name = "Player_" + this.myPlayerData.child_sn;
             Sprite avatar = this.CommonImageUtils.GetAvatar(myBasicData.child_avatar);
             this.player.Avatar = avatar;
             this.avatarBox.sprite = avatar;
             this.nameBox.text = myBasicData.child_name;
             this.coinBox.text = coin.ToString();
+
         }
         public void RefreshTeammates(List<BasicData> basicDataList, List<PlayerData> playerDataList)
         {
+            if (this.mapNode == null)
+                this.LoadMap();
+
             if (this.teammates == null)
             {
                 this.teammates = new List<Teammate>();
@@ -160,6 +186,7 @@ namespace AppGame.Module.Cycling
                     BasicData basicData = basicDataList.Find(t => t.child_sn == teammateData.child_sn);
                     teammate.name = "Teammate_" + teammateData.child_sn;
                     teammate.Avatar = this.CommonImageUtils.GetAvatar(basicData.child_avatar);
+                    teammate.MapNode = this.LoadMap();
                     teammate.MoveToNode(teammateData.map_position);
                     this.teammates.Add(teammate);
                 }
