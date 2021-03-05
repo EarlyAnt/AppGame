@@ -146,12 +146,26 @@ namespace AppGame.Module.Cycling
         //移动到指定位置
         public override void MoveToNode(string nodeID, bool lerp = false)
         {
-            int index = this.mapNode.Points.FindIndex(t => t.GetComponent<MapPointNode>().ID == nodeID);
-            if (index >= 0 && index < this.mapNode.Points.Count)
+            int targetNodeIndex = this.mapNode.Points.FindIndex(t => t.GetComponent<MapPointNode>().ID == nodeID);
+            if (targetNodeIndex >= 0 && targetNodeIndex < this.mapNode.Points.Count)
             {
-                this.nodeIndex = index;
-                this.player.position = this.mapNode.Points[this.nodeIndex].position;
-                this.camera.position = this.GetCameraPosition();
+                this.lastPos = this.player.position = this.mapNode.Points[0].position;
+                while (this.nodeIndex < targetNodeIndex)
+                {
+                    this.nodeIndex += 1;
+                    int index = 0;
+                    int count = this.nodeIndex == 0 ? 1 : 36;
+                    Vector3 lastNode = this.nodeIndex == 0 ? this.mapNode.Points[this.nodeIndex].position : this.mapNode.Points[this.nodeIndex - 1].position;
+                    Vector3 offset = this.nodeIndex == 0 ? Vector3.zero : (this.mapNode.Points[this.nodeIndex].position - lastNode) / count;
+                    while (index < count)
+                    {
+                        index++;
+                        this.lastPos = this.player.position;
+                        this.player.position = lastNode + offset * index;
+                        this.roadRenderer.DrawPoint(this.player.position, this.directon, this.DirectionChanged());
+                    }
+                    this.camera.position = this.GetCameraPosition();
+                }
             }
             else
             {

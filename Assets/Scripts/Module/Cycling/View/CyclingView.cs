@@ -107,7 +107,7 @@ namespace AppGame.Module.Cycling
             {
                 this.mask.DOFade(0f, 1f);
                 this.canvasGroup.DOFade(1f, 1f);
-            }, 1f);
+            }, 0.5f);
 
             this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
         }

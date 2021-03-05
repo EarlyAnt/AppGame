@@ -162,7 +162,7 @@ namespace AppGame.Module.Cycling
             {
                 child_sn = childSN,
                 map_id = "320101",
-                map_position = "320101_01",
+                map_position = "320101_30",
                 walk_expend = 5000,
                 walk_today = 5000,
                 ride_expend = 1000,
