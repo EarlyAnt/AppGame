@@ -15,7 +15,7 @@ namespace AppGame.Module.GameStart
 
         public override void Execute()
         {
-            GameObject view = this.PrefabUtil.CreateGameObject("View", "GameStart");
+            GameObject view = this.PrefabUtil.CreateGameObject("GameStart", "GameStart");
             view.transform.SetParent(this.contextView.transform);
             view.transform.localPosition = Vector3.zero;
             view.transform.localRotation = Quaternion.identity;

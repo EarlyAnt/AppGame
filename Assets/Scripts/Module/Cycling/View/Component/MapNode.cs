@@ -10,8 +10,6 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private string id;
         [SerializeField]
-        private Transform pointRoot;
-        [SerializeField]
         private List<Transform> points;
         public string ID { get { return this.id; } }
         public List<Transform> Points { get { return this.points; } }
@@ -22,10 +20,9 @@ namespace AppGame.Module.Cycling
         private void CollectPoints()
         {
             this.points = new List<Transform>();
-            for (int i = 0; i < this.pointRoot.childCount; i++)
+            for (int i = 0; i < this.transform.childCount; i++)
             {
-                this.pointRoot.GetChild(i).name = string.Format("Point_{0}", i + 1);
-                this.points.Add(this.pointRoot.GetChild(i));
+                this.points.Add(this.transform.GetChild(i));
             }
         }
         [ContextMenu("2-²¹ÆëMapNodePoint×é¼þ")]

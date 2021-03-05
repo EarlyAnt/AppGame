@@ -15,19 +15,27 @@ namespace AppGame.Module.Cycling
         #region 页面UI组件
         [SerializeField]
         private RectTransform mapCanvas;
+        [SerializeField]
+        private RectTransform scenicCanvas;
         [SerializeField, Range(0f, 1f)]
         private float canvasScale = 0.04f;
+        [SerializeField]
+        private RectTransform mapRectTransform;
         [SerializeField]
         private Transform camera;
         [SerializeField, Range(0f, 1f)]
         private float lerp = 0.1f;
         [SerializeField]
         private bool showGizmos;
+        [SerializeField]
+        private RoadRenderer roadRenderer;
         #endregion
         #region 其他变量
         private CameraEdge cameraEdge;
-        private RectTransform mapRectTransform;
         private bool inRange;
+        private Vector3 lastPos;
+        private int directon = 0;
+        private int lastDirection = 0;
         public MapPointNode CurrentNode
         {
             get
@@ -49,7 +57,7 @@ namespace AppGame.Module.Cycling
         {
             base.Awake();
             this.mapCanvas.localScale = new Vector3(this.canvasScale, this.canvasScale, 1);
-            this.mapRectTransform = this.mapNode.GetComponent<RectTransform>();
+            this.scenicCanvas.localScale = new Vector3(this.canvasScale, this.canvasScale, 1);
         }
         protected override void Start()
         {
@@ -122,7 +130,9 @@ namespace AppGame.Module.Cycling
                 this.nodeIndex += forward ? 1 : -1;
                 do
                 {
+                    this.lastPos = this.player.position;
                     this.player.position = Vector3.MoveTowards(this.player.position, this.destination, this.step);
+                    this.roadRenderer.DrawPoint(this.player.position, this.directon, this.DirectionChanged());
                     yield return new WaitForEndOfFrame();
                 }
                 while (Vector3.Distance(this.player.position, this.destination) > 0.01f);
@@ -159,6 +169,21 @@ namespace AppGame.Module.Cycling
                 playerPosition.y = Mathf.Clamp(playerPosition.y, -this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f + this.cameraEdge.Height / 2f, this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f - this.cameraEdge.Height / 2f);
             }
             return playerPosition;
+        }
+        //判断是否已改变方向
+        private bool DirectionChanged()
+        {
+            if (this.player.position.x == this.lastPos.x)
+                this.directon = 0;
+            else if (this.player.position.y == this.lastPos.y)
+                this.directon = 1;
+
+            if (this.lastDirection != this.directon)
+            {
+                this.lastDirection = this.directon;
+                return true;
+            }
+            else return false;
         }
         //当玩家移动停止时
         private void OnStopped()

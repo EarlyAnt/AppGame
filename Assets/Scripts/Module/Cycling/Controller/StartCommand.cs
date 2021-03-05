@@ -15,7 +15,7 @@ namespace AppGame.Module.Cycling
 
         public override void Execute()
         {
-            GameObject view = this.PrefabUtil.CreateGameObject("View", "Cycling");
+            GameObject view = this.PrefabUtil.CreateGameObject("Cycling", "Cycling");
             view.transform.SetParent(this.contextView.transform);
             view.transform.localPosition = Vector3.zero;
             view.transform.localRotation = Quaternion.identity;
