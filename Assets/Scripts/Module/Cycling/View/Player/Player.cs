@@ -132,7 +132,7 @@ namespace AppGame.Module.Cycling
                 {
                     this.lastPos = this.player.position;
                     this.player.position = Vector3.MoveTowards(this.player.position, this.destination, this.step);
-                    this.roadRenderer.DrawPoint(this.player.position, this.directon, this.DirectionChanged());
+                    this.roadRenderer.DrawPoint(this.player.position, this.directon, this.DirectionChanged(this.player.position, this.lastPos));
                     yield return new WaitForEndOfFrame();
                 }
                 while (Vector3.Distance(this.player.position, this.destination) > 0.01f);
@@ -149,27 +149,27 @@ namespace AppGame.Module.Cycling
             int targetNodeIndex = this.mapNode.Points.FindIndex(t => t.GetComponent<MapPointNode>().ID == nodeID);
             if (targetNodeIndex >= 0 && targetNodeIndex < this.mapNode.Points.Count)
             {
-                this.lastPos = this.player.position = this.mapNode.Points[0].position;
-                while (this.nodeIndex < targetNodeIndex)
-                {
-                    this.nodeIndex += 1;
-                    int index = 0;
-                    int count = this.nodeIndex == 0 ? 1 : 36;
-                    Vector3 lastNode = this.nodeIndex == 0 ? this.mapNode.Points[this.nodeIndex].position : this.mapNode.Points[this.nodeIndex - 1].position;
-                    Vector3 offset = this.nodeIndex == 0 ? Vector3.zero : (this.mapNode.Points[this.nodeIndex].position - lastNode) / count;
-                    while (index < count)
-                    {
-                        index++;
-                        this.lastPos = this.player.position;
-                        this.player.position = lastNode + offset * index;
-                        this.roadRenderer.DrawPoint(this.player.position, this.directon, this.DirectionChanged());
-                    }
-                    this.camera.position = this.GetCameraPosition();
-                }
+                this.nodeIndex = targetNodeIndex;
+                this.player.position = this.mapNode.Points[this.nodeIndex].position;
+                this.camera.position = this.GetCameraPosition();
             }
             else
             {
                 Debug.LogErrorFormat("<><Player.MoveToNode>Error: can not find the node named '{0}'", nodeID);
+            }
+
+            int index = 0;
+            Vector3 lastNode = this.mapNode.Points[0].position;
+            Vector3 currentNode = this.mapNode.Points[0].position;
+            while (index <= targetNodeIndex)
+            {
+                currentNode = this.mapNode.Points[index].position;
+                if (this.DirectionChanged(currentNode, lastNode))
+                    this.roadRenderer.DrawPoint(lastNode, this.directon, true, false);
+                this.roadRenderer.DrawPoint(currentNode, this.directon, false);
+
+                lastNode = this.mapNode.Points[index].position;
+                index += 1;
             }
         }
         //获取相机的合理位置(不超出地图)
@@ -185,11 +185,11 @@ namespace AppGame.Module.Cycling
             return playerPosition;
         }
         //判断是否已改变方向
-        private bool DirectionChanged()
+        private bool DirectionChanged(Vector3 pos1, Vector3 pos2)
         {
-            if (this.player.position.x == this.lastPos.x)
+            if (pos1.x == pos2.x)
                 this.directon = 0;
-            else if (this.player.position.y == this.lastPos.y)
+            else if (pos1.y == pos2.y)
                 this.directon = 1;
 
             if (this.lastDirection != this.directon)
