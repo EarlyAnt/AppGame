@@ -91,6 +91,8 @@ MonoBehaviour:
   id: 320101_17
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &8434498093627213485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +200,8 @@ MonoBehaviour:
   id: 320101_27
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &1747354958134036615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,6 +309,8 @@ MonoBehaviour:
   id: 320101_42
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &6656500821666478536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,6 +418,8 @@ MonoBehaviour:
   id: 320101_06
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &8753215059800758078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,6 +527,8 @@ MonoBehaviour:
   id: 320101_10
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &6451700361030765957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -626,6 +636,8 @@ MonoBehaviour:
   id: 320101_31
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &6102943474556148471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733,6 +745,8 @@ MonoBehaviour:
   id: 320101_26
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &3555528617720972914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -840,6 +854,8 @@ MonoBehaviour:
   id: 320101_33
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &6961953275971017628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -947,6 +963,8 @@ MonoBehaviour:
   id: 320101_20
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &6133342805575011591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1198,6 +1216,8 @@ MonoBehaviour:
   id: 320101_44
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &2016264830074896007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1305,6 +1325,8 @@ MonoBehaviour:
   id: 320101_39
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &273717228649928210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1412,6 +1434,8 @@ MonoBehaviour:
   id: 320101_46
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &267769556282856603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1519,6 +1543,8 @@ MonoBehaviour:
   id: 320101_03
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &7601447987562241033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1627,6 +1653,8 @@ MonoBehaviour:
   id: 320101_05
   idLock: 1
   nodeType: 3
+  normalImageName: scenicspot_normal
+  lightImageName: scenicspot_highlight
 --- !u!114 &4702913810257432859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1748,6 +1776,8 @@ MonoBehaviour:
   id: 320101_40
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &7111079559663713318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1855,6 +1885,8 @@ MonoBehaviour:
   id: 320101_36
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &4011889475606806586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1962,6 +1994,8 @@ MonoBehaviour:
   id: 320101_29
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &3988468402949835116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2069,6 +2103,8 @@ MonoBehaviour:
   id: 320101_12
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &3207785971812450255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2176,6 +2212,8 @@ MonoBehaviour:
   id: 320101_19
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &4459584896116104061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2284,6 +2322,8 @@ MonoBehaviour:
   id: 320101_13
   idLock: 1
   nodeType: 3
+  normalImageName: scenicspot_normal
+  lightImageName: scenicspot_highlight
 --- !u!114 &1608346230290072386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2405,6 +2445,8 @@ MonoBehaviour:
   id: 320101_07
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &5657770068619547298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2512,6 +2554,8 @@ MonoBehaviour:
   id: 320101_47
   idLock: 1
   nodeType: 4
+  normalImageName: 'ticket_normal '
+  lightImageName: ticket _highlight
 --- !u!114 &2757916161164984818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2619,6 +2663,8 @@ MonoBehaviour:
   id: 320101_24
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &1395400387373215966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2726,6 +2772,8 @@ MonoBehaviour:
   id: 320101_04
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &1137264391261277247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2834,6 +2882,8 @@ MonoBehaviour:
   id: 320101_08
   idLock: 1
   nodeType: 3
+  normalImageName: scenicspot_normal
+  lightImageName: scenicspot_highlight
 --- !u!114 &7666753501912648595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2956,6 +3006,8 @@ MonoBehaviour:
   id: 320101_34
   idLock: 1
   nodeType: 3
+  normalImageName: scenicspot_normal
+  lightImageName: scenicspot_highlight
 --- !u!114 &1733647763400608064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3077,6 +3129,8 @@ MonoBehaviour:
   id: 320101_14
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &2547456230725858828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3185,6 +3239,8 @@ MonoBehaviour:
   id: 320101_28
   idLock: 1
   nodeType: 3
+  normalImageName: scenicspot_normal
+  lightImageName: scenicspot_highlight
 --- !u!114 &7303194569454702475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3306,6 +3362,8 @@ MonoBehaviour:
   id: 320101_11
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &8808122582632178240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3413,6 +3471,8 @@ MonoBehaviour:
   id: 320101_02
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &4360670026639718675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3520,6 +3580,8 @@ MonoBehaviour:
   id: 320101_16
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &533606294362942833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3627,6 +3689,8 @@ MonoBehaviour:
   id: 320101_32
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &4202034468661544328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3734,6 +3798,8 @@ MonoBehaviour:
   id: 320101_25
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &650400006620633844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3841,6 +3907,8 @@ MonoBehaviour:
   id: 320101_45
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &5221512828098357263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3948,6 +4016,8 @@ MonoBehaviour:
   id: 320101_37
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &2882628988698221769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4055,6 +4125,8 @@ MonoBehaviour:
   id: 320101_35
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &4701755373503458009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4162,6 +4234,8 @@ MonoBehaviour:
   id: 320101_21
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &6748585974251074774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4270,6 +4344,8 @@ MonoBehaviour:
   id: 320101_18
   idLock: 1
   nodeType: 3
+  normalImageName: scenicspot_normal
+  lightImageName: scenicspot_highlight
 --- !u!114 &7369235396702794040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4391,6 +4467,8 @@ MonoBehaviour:
   id: 320101_41
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &434673322558716116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4499,6 +4577,8 @@ MonoBehaviour:
   id: 320101_43
   idLock: 1
   nodeType: 3
+  normalImageName: scenicspot_normal
+  lightImageName: scenicspot_highlight
 --- !u!114 &7688140793531544113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4620,6 +4700,8 @@ MonoBehaviour:
   id: 320101_01
   idLock: 1
   nodeType: 0
+  normalImageName: 'start_normal '
+  lightImageName: 'stars_highlight '
 --- !u!114 &9092039811220996715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4728,6 +4810,8 @@ MonoBehaviour:
   id: 320101_38
   idLock: 1
   nodeType: 3
+  normalImageName: scenicspot_normal
+  lightImageName: scenicspot_highlight
 --- !u!114 &3687094107579725791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4850,6 +4934,8 @@ MonoBehaviour:
   id: 320101_23
   idLock: 1
   nodeType: 3
+  normalImageName: scenicspot_normal
+  lightImageName: scenicspot_highlight
 --- !u!114 &6161218647438169823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4971,6 +5057,8 @@ MonoBehaviour:
   id: 320101_22
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &8450120966837317783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5078,6 +5166,8 @@ MonoBehaviour:
   id: 320101_09
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &8214636783846644956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5185,6 +5275,8 @@ MonoBehaviour:
   id: 320101_30
   idLock: 1
   nodeType: 1
+  normalImageName: 
+  lightImageName: 
 --- !u!114 &5996459968866689413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5292,6 +5384,8 @@ MonoBehaviour:
   id: 320101_15
   idLock: 1
   nodeType: 2
+  normalImageName: site_normal
+  lightImageName: site_highlight
 --- !u!114 &5816059553979427518
 MonoBehaviour:
   m_ObjectHideFlags: 0

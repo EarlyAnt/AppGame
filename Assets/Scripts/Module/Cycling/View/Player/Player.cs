@@ -140,6 +140,7 @@ namespace AppGame.Module.Cycling
             }
             while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode);
 
+            this.LightPointIcon();
             this.OnStopped();
             Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
@@ -152,6 +153,7 @@ namespace AppGame.Module.Cycling
                 this.nodeIndex = targetNodeIndex;
                 this.player.position = this.mapNode.Points[this.nodeIndex].position;
                 this.camera.position = this.GetCameraPosition();
+                this.LightPointIcon();
             }
             else
             {
@@ -198,6 +200,17 @@ namespace AppGame.Module.Cycling
                 return true;
             }
             else return false;
+        }
+        //点亮已经过的点的图标
+        private void LightPointIcon()
+        {
+            int index = 0;
+            while (index <= this.nodeIndex)
+            {
+                MapPointNode mapPointNode = this.mapNode.Points[index].GetComponent<MapPointNode>();
+                if (mapPointNode != null) mapPointNode.LightIcon();
+                index += 1;
+            }
         }
         //当玩家移动停止时
         private void OnStopped()

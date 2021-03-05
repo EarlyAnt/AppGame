@@ -13,6 +13,11 @@ namespace AppGame.Module.Cycling
         private bool idLock;
         [SerializeField]
         private NodeTypes nodeType;
+        [SerializeField]
+        private string normalImageName;
+        [SerializeField]
+        private string lightImageName;
+        private SpriteLoader spriteLoader;
         public string ID { get { return this.id; } }
         public NodeTypes NodeType { get { return this.nodeType; } }
         private static Color START_NODE_COLOR = new Color(0.286f, 1f, 0.357f, 1f);
@@ -37,6 +42,15 @@ namespace AppGame.Module.Cycling
                 this.id = id;
                 this.idLock = true;
             }
+        }
+        //点亮图标
+        public void LightIcon()
+        {
+            if (this.spriteLoader == null)
+                this.spriteLoader = this.GetComponent<SpriteLoader>();
+
+            if (this.spriteLoader != null)
+                this.spriteLoader.LoadImage(this.lightImageName);
         }
         //更改节点类型
         public void ChangeNodeType(NodeTypes nodeType)
@@ -68,6 +82,29 @@ namespace AppGame.Module.Cycling
                         image.color = START_NODE_COLOR;
                         break;
                 }
+            }
+        }
+        [ContextMenu("设置图标名字")]
+        public void SetIconName()
+        {
+            switch (this.nodeType)
+            {
+                case NodeTypes.StartNode:
+                    this.normalImageName = "start_normal ";
+                    this.lightImageName = "stars_highlight ";
+                    break;
+                case NodeTypes.EventNode:
+                    this.normalImageName = "site_normal";
+                    this.lightImageName = "site_highlight";
+                    break;
+                case NodeTypes.SiteNode:
+                    this.normalImageName = "scenicspot_normal";
+                    this.lightImageName = "scenicspot_highlight";
+                    break;
+                case NodeTypes.EndNode:
+                    this.normalImageName = "ticket_normal ";
+                    this.lightImageName = "ticket _highlight";
+                    break;
             }
         }
     }
