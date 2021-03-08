@@ -30,7 +30,6 @@ namespace AppGame.Module.Cycling
         public ICyclingDataManager CyclingDataManager { get; set; }
         #endregion
         #region 其他变量
-        private List<BasicData> basicDataList = null;
         private OriginData originData = null;
         private List<PlayerData> playerDataList = null;
         private PlayerData myPlayerData
@@ -126,8 +125,9 @@ namespace AppGame.Module.Cycling
         {
             this.BuildTestData();
             this.GetGameData();
-            this.View.RefreshPlayer(this.basicDataList, this.playerDataList, this.ItemDataManager.GetItemCount(Items.COIN));
-            this.View.RefreshTeammates(this.basicDataList, this.playerDataList);
+            this.View.LoadMap(this.myPlayerData.map_id);
+            this.View.RefreshPlayer(this.playerDataList, this.ItemDataManager.GetItemCount(Items.COIN));
+            this.View.RefreshTeammates(this.playerDataList);
             this.View.RefreshMp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
             this.RefreshMpDatas();
             this.InvokeRepeating("GetGameData", 3f, 3f);
@@ -137,7 +137,6 @@ namespace AppGame.Module.Cycling
         //获取游戏数据
         private void GetGameData()
         {
-            this.basicDataList = this.BasicDataManager.GetAllData();
             this.originData = this.CyclingDataManager.GetOriginData(this.ChildInfoManager.GetChildSN());
             this.playerDataList = this.CyclingDataManager.GetAllPlayerData();
         }
@@ -145,14 +144,6 @@ namespace AppGame.Module.Cycling
         private void BuildTestData()
         {
             string childSN = this.ChildInfoManager.GetChildSN();
-            //创建基础数据
-            List<BasicData> basicDataList = new List<BasicData>();
-            basicDataList.Add(new BasicData() { child_sn = childSN, child_name = "樱木花道", child_avatar = "6", relation = (int)Relations.Self });
-            basicDataList.Add(new BasicData() { child_sn = "02", child_name = "赤木晴子", child_avatar = "9", relation = (int)Relations.Family });
-            basicDataList.Add(new BasicData() { child_sn = "03", child_name = "仙道彰", child_avatar = "12", relation = (int)Relations.Friend });
-            basicDataList.Add(new BasicData() { child_sn = "04", child_name = "流川枫", child_avatar = "15", relation = (int)Relations.Friend });
-            basicDataList.Add(new BasicData() { child_sn = "05", child_name = "牧绅一", child_avatar = "19", relation = (int)Relations.Friend });
-            this.BasicDataManager.SaveDataList(basicDataList);
             //创建原始数据
             OriginData originData = new OriginData() { child_sn = childSN, walk = 10000, ride = 5000, train = 20, learn = 30 };
             this.CyclingDataManager.SaveOriginData(originData);
@@ -161,6 +152,9 @@ namespace AppGame.Module.Cycling
             playerDataList.Add(new PlayerData()
             {
                 child_sn = childSN,
+                child_name = "樱木花道",
+                child_avatar = "6",
+                relation = (int)Relations.Self,
                 map_id = "320101",
                 map_position = "320101_35",
                 walk_expend = 5000,
@@ -178,6 +172,9 @@ namespace AppGame.Module.Cycling
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "02",
+                child_name = "赤木晴子",
+                child_avatar = "9",
+                relation = (int)Relations.Family,
                 map_id = "320101",
                 map_position = "320101_15",
                 mp_yestoday = 50
@@ -185,6 +182,9 @@ namespace AppGame.Module.Cycling
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "03",
+                child_name = "仙道彰",
+                child_avatar = "12",
+                relation = (int)Relations.Friend,
                 map_id = "320101",
                 map_position = "320101_21",
                 mp_yestoday = 25
@@ -192,6 +192,9 @@ namespace AppGame.Module.Cycling
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "04",
+                child_name = "流川枫",
+                child_avatar = "15",
+                relation = (int)Relations.Friend,
                 map_id = "320101",
                 map_position = "320101_27",
                 mp_yestoday = 20
@@ -199,6 +202,9 @@ namespace AppGame.Module.Cycling
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "05",
+                child_name = "牧绅一",
+                child_avatar = "19",
+                relation = (int)Relations.Friend,
                 map_id = "320101",
                 map_position = "320101_33",
                 mp_yestoday = 30
@@ -222,7 +228,7 @@ namespace AppGame.Module.Cycling
             int position = int.Parse(playerData.map_position.Substring(7, 2));
             playerData.map_position = string.Format("{0}_{1}", playerData.map_id, position + offset);
             this.CyclingDataManager.SavePlayerData(playerData);
-            this.View.RefreshTeammates(this.basicDataList, this.playerDataList);
+            this.View.RefreshTeammates(this.playerDataList);
         }
         //刷新能量数据
         private void RefreshMpDatas()
@@ -246,28 +252,21 @@ namespace AppGame.Module.Cycling
                 if (playerData.child_sn == this.ChildInfoManager.GetChildSN())
                     continue;
 
-                BasicData basicData = this.basicDataList.Find(t => t.child_sn == playerData.child_sn);
-                if (basicData == null)
-                {
-                    Debug.LogErrorFormat("<><CyclingMediator.RefreshMpBalls>Can not find the basic data of [0]", playerData.child_sn);
-                    continue;
-                }
-
                 int mpShare = 0;
                 if (!this.CyclingDataManager.MpCollected(playerData.child_sn))
                 {//今日没有收取此家人或朋友的能量分成，才计算其的能量分成
-                    if (basicData.relation == (int)Relations.Family)
+                    if (playerData.relation == (int)Relations.Family)
                         mpShare = (int)System.Math.Ceiling(playerData.mp_yestoday * 0.05);
-                    else if (basicData.relation == (int)Relations.Friend)
+                    else if (playerData.relation == (int)Relations.Friend)
                         mpShare = (int)System.Math.Ceiling(playerData.mp_yestoday * 0.01);
                 }
 
                 mpDatas.Add(new MpData()
                 {
-                    MpBallType = (basicData.relation == (int)Relations.Family ? MpBallTypes.Family : MpBallTypes.Friend),
+                    MpBallType = (playerData.relation == (int)Relations.Family ? MpBallTypes.Family : MpBallTypes.Friend),
                     Mp = mpShare,
                     FromID = playerData.child_sn,
-                    FromName = basicData.child_name
+                    FromName = playerData.child_name
                 });
             }
             this.View.RefreshMpBalls(mpDatas);

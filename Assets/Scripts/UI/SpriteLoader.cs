@@ -76,6 +76,12 @@ public class SpriteLoader : ImageLoader
         }
         else Debug.LogErrorFormat("<><SpriteLoader.LoadImage>Component 'baseView' is null");
     }
+    //加载图片
+    public void LoadImage(string newImageName)
+    {
+        this.imageName = newImageName;
+        this.LoadImage();
+    }
     [ContextMenu("0-设置Image组件和图片名字")]
     private void SetAll()
     {

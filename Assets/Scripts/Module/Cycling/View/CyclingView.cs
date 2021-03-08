@@ -34,6 +34,14 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private CanvasGroup canvasGroup;
         [SerializeField]
+        private TextureLoader mapBox;
+        [SerializeField]
+        private TextureLoader pathBox;
+        [SerializeField]
+        private Transform mapRoot;
+        [SerializeField]
+        private MapNode mapPrefab;
+        [SerializeField]
         private Player player;
         [SerializeField]
         private Transform teammateRoot;
@@ -51,10 +59,6 @@ namespace AppGame.Module.Cycling
         private MpBall mpBallPrefab1;
         [SerializeField]
         private MpBall mpBallPrefab2;
-        [SerializeField]
-        private Transform mapRoot;
-        [SerializeField]
-        private MapNode mapPrefab;
         [SerializeField]
         private Text mpBox;
         [SerializeField]
@@ -120,17 +124,25 @@ namespace AppGame.Module.Cycling
 
             this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
         }
-        private MapNode LoadMap()
+        public void LoadMap(string mapID)
         {
+            MapInfo mapInfo = this.MapConfig.GetMap(mapID);
+            if (mapInfo == null)
+            {
+                Debug.LogErrorFormat("<><CyclingView.LoadMap>Can not find the map[{0}]", mapID);
+                return;
+            }
+            this.mapBox.LoadImage(mapInfo.Prefab, mapInfo.MapImage);
+            this.pathBox.LoadImage(mapInfo.Prefab, mapInfo.PathImage);
+
             if (this.mapNode == null)
             {
-                this.mapNode = this.PrefabUtil.CreateGameObject("Cycling/Road", this.myPlayerData.map_id).GetComponent<MapNode>();
+                this.mapNode = this.PrefabUtil.CreateGameObject("Cycling/Road", mapID).GetComponent<MapNode>();
                 this.mapNode.transform.SetParent(this.mapRoot);
                 this.mapNode.transform.localPosition = Vector3.zero;
                 this.mapNode.transform.localRotation = Quaternion.identity;
                 this.mapNode.transform.localScale = Vector3.one;
             }
-            return this.mapNode;
         }
         public void Go()
         {
@@ -155,25 +167,21 @@ namespace AppGame.Module.Cycling
                 //Todo: 显示行动点数不足的提示
             }
         }
-        public void RefreshPlayer(List<BasicData> basicDataList, List<PlayerData> playerDataList, int coin)
+        public void RefreshPlayer(List<PlayerData> playerDataList, int coin)
         {
-            BasicData myBasicData = basicDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
             this.myPlayerData = playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
-            this.player.MapNode = this.LoadMap();
+            this.player.MapNode = this.mapNode;
             this.player.MoveToNode(this.myPlayerData.map_position);
             this.player.name = "Player_" + this.myPlayerData.child_sn;
-            Sprite avatar = this.CommonImageUtils.GetAvatar(myBasicData.child_avatar);
+            Sprite avatar = this.CommonImageUtils.GetAvatar(myPlayerData.child_avatar);
             this.player.Avatar = avatar;
             this.avatarBox.sprite = avatar;
-            this.nameBox.text = myBasicData.child_name;
+            this.nameBox.text = myPlayerData.child_name;
             this.coinBox.text = coin.ToString();
 
         }
-        public void RefreshTeammates(List<BasicData> basicDataList, List<PlayerData> playerDataList)
+        public void RefreshTeammates(List<PlayerData> playerDataList)
         {
-            if (this.mapNode == null)
-                this.LoadMap();
-
             if (this.teammates == null)
             {
                 this.teammates = new List<Teammate>();
@@ -183,10 +191,9 @@ namespace AppGame.Module.Cycling
                         continue;
 
                     Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.teammateRoot);
-                    BasicData basicData = basicDataList.Find(t => t.child_sn == teammateData.child_sn);
                     teammate.name = "Teammate_" + teammateData.child_sn;
-                    teammate.Avatar = this.CommonImageUtils.GetAvatar(basicData.child_avatar);
-                    teammate.MapNode = this.LoadMap();
+                    teammate.Avatar = this.CommonImageUtils.GetAvatar(teammateData.child_avatar);
+                    teammate.MapNode = this.mapNode;
                     teammate.MoveToNode(teammateData.map_position);
                     this.teammates.Add(teammate);
                 }

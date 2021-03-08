@@ -66,12 +66,18 @@ namespace AppGame.Data.Remote
         public string gender { get; set; }
         public string birthday { get; set; }
         public int avatar_index { get; set; }
+        public int relation { get; set; }
 
         public PlayerData ToPlayerData()
         {
             return new PlayerData()
             {
-                child_sn = this.child_sn
+                child_sn = this.child_sn,
+                child_name = this.nickname,
+                child_avatar = this.avatar_index.ToString(),
+                birthday = this.birthday,
+                gender = this.gender,
+                relation = this.relation
             };
         }
     }

@@ -2892,7 +2892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageName: nanjing_bg
-  autoLoad: 1
+  autoLoad: 0
   assetbundleName: cycling/nanjing
   imageBox: {fileID: 6060263608380743074}
 --- !u!1 &1192521318
@@ -8829,7 +8829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageName: path
-  autoLoad: 1
+  autoLoad: 0
   assetbundleName: cycling/nanjing
   imageBox: {fileID: 4057868282352261853}
 --- !u!1 &5601356601823458225
@@ -10322,6 +10322,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mask: {fileID: 8873641227983445751}
   canvasGroup: {fileID: 191638086}
+  mapBox: {fileID: 2041042005}
+  pathBox: {fileID: 2041042004}
+  mapRoot: {fileID: 2136893580907109432}
+  mapPrefab: {fileID: 0}
   player: {fileID: 3426731691915991781}
   teammateRoot: {fileID: 3756884527034899971}
   teammatePrefab: {fileID: 4571723518360878356}
@@ -10331,8 +10335,6 @@ MonoBehaviour:
   mpBallRoot: {fileID: 6565917087103419358}
   mpBallPrefab1: {fileID: 1235089652550000898}
   mpBallPrefab2: {fileID: 3475206375509341008}
-  mapRoot: {fileID: 2136893580907109432}
-  mapPrefab: {fileID: 0}
   mpBox: {fileID: 8637776220327525781}
   hpBox: {fileID: 7264009693637511558}
   scenicCard: {fileID: 1532280018}

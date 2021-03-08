@@ -61,12 +61,19 @@ public class TextureLoader : ImageLoader
             }
             else
             {
-                Debug.LogErrorFormat("<><TextureLoader.LoadImage>Error: can not find texture, texture: {0}, assetbundle: {1}", this.assetbundleName, this.imageName);
+                Debug.LogErrorFormat("<><TextureLoader.LoadImage>Error: can not find texture, assetbundle: {0}, texture: {1}", this.assetbundleName, this.imageName);
             }
         }, (failureInfo) =>
         {
             Debug.LogErrorFormat("<><TextureLoader.LoadImage>Error: can not find assetbundle, assetbundle: {0}", this.assetbundleName);
         });
+    }
+    //加载图片
+    public void LoadImage(string assetbundleName, string newImageName)
+    {
+        this.assetbundleName = assetbundleName;
+        this.imageName = newImageName;
+        this.LoadImage();
     }
     [ContextMenu("设置RawImage组件")]
     private void SetImageBox()

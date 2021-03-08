@@ -21,6 +21,11 @@ namespace AppGame.Data.Model
     public class PlayerData
     {
         public string child_sn { get; set; }
+        public string child_name { get; set; }
+        public string child_avatar { get; set; }
+        public string gender { get; set; }
+        public string birthday { get; set; }
+        public int relation { get; set; }
         public string map_id { get; set; }
         public string map_position { get; set; }
         public int walk_expend { get; set; }

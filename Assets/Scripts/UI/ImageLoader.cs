@@ -22,10 +22,4 @@ public abstract class ImageLoader : BaseView
     /************************************************自 定 义 方 法************************************************/
     //加载图片
     public abstract void LoadImage();
-    //加载图片
-    public virtual void LoadImage(string newImageName)
-    {
-        this.imageName = newImageName;
-        this.LoadImage();
-    }
 }

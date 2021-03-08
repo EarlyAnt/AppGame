@@ -50,6 +50,9 @@ namespace AppGame.Config
                                         ProvinceName = se.Attribute("ProvinceName"),
                                         CityID = se.Attribute("CityID"),
                                         CityName = se.Attribute("CityName"),
+                                        Prefab = se.Attribute("Prefab"),
+                                        MapImage = se.Attribute("MapImage"),
+                                        PathImage = se.Attribute("PathImage"),
                                         NextMap = se.Attribute("NextMap")
                                     };
                                     this.configs.Add(mapInfo);
