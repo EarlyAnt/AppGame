@@ -9349,6 +9349,7 @@ MonoBehaviour:
   mpBox: {fileID: 4048206261741764943}
   feepBox: {fileID: 6551391557709919350}
   buttonBox: {fileID: 1274107315195634889}
+  noMoneyColor: {r: 0.26666668, g: 0.26666668, b: 0.26666668, a: 1}
 --- !u!1 &5791011564680040455
 GameObject:
   m_ObjectHideFlags: 0

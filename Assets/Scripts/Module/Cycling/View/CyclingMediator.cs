@@ -287,8 +287,8 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            if (this.myPlayerData.mp_today > this.DeviceInfoManager.GetMpLimit())
-            {
+            if (this.myPlayerData.mp_today >= this.DeviceInfoManager.GetMpLimit())
+            {//超出每日能量收取上限时，弹出支付手续费页面
                 int coin = this.ItemDataManager.GetItemCount(Items.COIN);
                 int min = Mathf.Min(coin, mpBall.Value);
                 MpData mpData = mpBall.ToMpData();
@@ -298,8 +298,14 @@ namespace AppGame.Module.Cycling
                 this.View.ShowPayBill(mpData);
             }
             else
-            {
-                this.dispatcher.Dispatch(GameEvent.COLLECT_MP, mpBall.ToMpData());
+            {//没有超出每日能量收取上限时，也要检查当日已经收取了多少能量，还能收取多少能量
+                int validMp = Mathf.Min(mpBall.Value, this.DeviceInfoManager.GetMpLimit() - this.myPlayerData.mp_today);
+                MpData mpData = mpBall.ToMpData();
+                mpData.Mp = validMp;
+                this.dispatcher.Dispatch(GameEvent.COLLECT_MP, mpData);
+                Debug.LogFormat("<><>mp_today: {0}, mpLimit: {1}, leftMp: {2}, validMp: {3}",
+                                this.myPlayerData.mp_today, this.DeviceInfoManager.GetMpLimit(),
+                                this.DeviceInfoManager.GetMpLimit() - this.myPlayerData.mp_today, validMp);
             }
         }
         //收取能量

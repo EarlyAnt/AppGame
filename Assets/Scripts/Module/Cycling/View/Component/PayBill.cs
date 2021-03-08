@@ -36,6 +36,8 @@ namespace AppGame.Module.Cycling
         private Text feepBox;//费用文字框
         [SerializeField]
         private Image buttonBox;//费用边框
+        [SerializeField]
+        private Color noMoneyColor;//金币不足时按钮上数字的颜色
         #endregion
         #region 其他变量
         private MpData mpData = null;
@@ -59,6 +61,7 @@ namespace AppGame.Module.Cycling
             //设置页面内容
             this.mpBox.text = mpData.Mp.ToString();
             this.feepBox.text = mpData.Coin.ToString();
+            this.feepBox.color = mpData.CoinEnough ? Color.white : this.noMoneyColor;
             //this.titleBox.text = "";//Todo: 后续补上国际化的功能
             //this.tipBox.text = "";//Todo: 后续补上国际化的功能
             Sprite sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, this.ModuleConfig.GetImagePath(ModuleViews.Cycling, mpData.CoinEnough ? "enable_button" : "disable_button"));
