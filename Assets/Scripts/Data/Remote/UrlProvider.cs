@@ -33,7 +33,6 @@ namespace AppGame.Data.Remote
         public string GetRegisterUserUrl(string prod_name, string cup_hw_sn)
         {
             string registerUrl = ApiUrls.REGISTER_USER.Replace("<prod_name>", prod_name).Replace("<cup_hw_sn>", cup_hw_sn);
-
             return AddServerPrefix(registerUrl);
         }
 
@@ -64,6 +63,12 @@ namespace AppGame.Data.Remote
         {
             return AddServerPrefix(ApiUrls.LOGIN);
         }
+
+        public string GetUpdateInfo(string cup_hw_sn)
+        {
+            string getUpdateInfoUrl = ApiUrls.CUP_GET_UPDATE_INFO.Replace("<cup_hw_sn>", cup_hw_sn);
+            return this.AddServerPrefix(getUpdateInfoUrl);
+        }
     }
 
     public class ApiUrls
@@ -81,5 +86,6 @@ namespace AppGame.Data.Remote
         public const string GET_BASIC_DATA = "child/<child_sn>/info";
         public const string GET_GAME_DATA = "child/<child_sn>/friends_data";
         public const string PUT_GAME_DATA = "child/<child_sn>/gamedata";
+        public const string CUP_GET_UPDATE_INFO = "cup/<cup_hw_sn>/upgrade_res_metas";
     }
 }

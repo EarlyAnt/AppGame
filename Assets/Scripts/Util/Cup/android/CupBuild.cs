@@ -20,7 +20,7 @@ namespace AppGame.Util
         public static string getCupSn()
         {
 #if UNITY_EDITOR
-            CUP_SN = "";//ServiceConfig.defaultCupHwSn;
+            CUP_SN = "22190408001909G";//ServiceConfig.defaultCupHwSn;
 #else
             if(CUP_SN == ""){
                 CUP_SN = CupBaseInfoManager.CallStatic<string>("getCupSN").Trim();

@@ -68,8 +68,8 @@ namespace AppGame.Util
         {
             //if (NativeWifiManager.Instance.IsConnected())
             //{
-            //    this.CheckResources(null);
-            //    Debug.Log("<><CommonResourceUtils.GetUpdateFileList>Check resources again");
+            this.CheckResources(null);
+            Debug.Log("<><CommonResourceUtils.GetUpdateFileList>Check resources again");
             //}
             return this.updateFileList;
         }
@@ -84,21 +84,21 @@ namespace AppGame.Util
             assetFiles.Add(new AssetFile() { Path = "Android", FullPath = "Model/Android", MD5 = "" });
             #endregion
             #region 统计AudioClip文件
-            List<Audio> allAudios = this.AudioConfig.GetAllAudios();
-            if (allAudios != null && allAudios.Count > 0)
-            {
-                foreach (Audio audio in allAudios)
-                {
-                    if (audio.Storage.ToUpper() == AppGame.Config.AudioConfig.StorageTypes.REMOTE.ToUpper())
-                    {
-                        foreach (AudioFile audioFile in audio.Files)
-                        {
-                            string path = this.I18NConfig.GetAudioPath(audioFile.Path);
-                            assetFiles.Add(new AssetFile() { Path = path, FullPath = string.Format("Audio/{0}/{1}.mp3", audio.Module, path), MD5 = "" });
-                        }
-                    }
-                }
-            }
+            //List<Audio> allAudios = this.AudioConfig.GetAllAudios();
+            //if (allAudios != null && allAudios.Count > 0)
+            //{
+            //    foreach (Audio audio in allAudios)
+            //    {
+            //        if (audio.Storage.ToUpper() == AppGame.Config.AudioConfig.StorageTypes.REMOTE.ToUpper())
+            //        {
+            //            foreach (AudioFile audioFile in audio.Files)
+            //            {
+            //                string path = this.I18NConfig.GetAudioPath(audioFile.Path);
+            //                assetFiles.Add(new AssetFile() { Path = path, FullPath = string.Format("Audio/{0}/{1}.mp3", audio.Module, path), MD5 = "" });
+            //            }
+            //        }
+            //    }
+            //}
             #endregion
             #region 统计每个模块中的图片文件
             List<ModuleInfo> moduleInfos = this.ModuleConfig.GetAllModules();
@@ -109,19 +109,14 @@ namespace AppGame.Util
                     if (file.FileType == Config.FileTypes.Sprite || file.FileType == Config.FileTypes.Texture1)
                         assetFiles.Add(new AssetFile() { Path = file.Path, FullPath = string.Format("Texture/{0}.png", file.Path), MD5 = "" });
                     else if (file.FileType == Config.FileTypes.Texture2 || file.FileType == Config.FileTypes.Spine)
-                        assetFiles.Add(new AssetFile() { Path = file.Path, FullPath = string.Format("Texture/{0}.ab", file.AB), MD5 = "" });
+                        assetFiles.Add(new AssetFile() { Path = file.Path, FullPath = string.Format("Model/{0}.ab", file.AB), MD5 = "" });
                 }
             }
             #endregion
-
             #region 统计其余的AssetBundle文件
-            assetFiles.Add(new AssetFile() { Path = "garden/gesture", FullPath = "Model/garden/gesture.ab", MD5 = "" });
-            assetFiles.Add(new AssetFile() { Path = "garden/sow", FullPath = "Model/garden/soil.ab", MD5 = "" });
-            assetFiles.Add(new AssetFile() { Path = "garden/treasurebox", FullPath = "Model/garden/treasurebox.ab", MD5 = "" });
-            #endregion
-            #region 统计饮水提醒功能相关的AssetBundle文件
-            assetFiles.Add(new AssetFile() { Path = "remind/record", FullPath = "Model/remind/clock.ab", MD5 = "" });
-            assetFiles.Add(new AssetFile() { Path = "remind/record", FullPath = "Model/remind/record.ab", MD5 = "" });
+            //assetFiles.Add(new AssetFile() { Path = "garden/gesture", FullPath = "Model/garden/gesture.ab", MD5 = "" });
+            //assetFiles.Add(new AssetFile() { Path = "garden/sow", FullPath = "Model/garden/soil.ab", MD5 = "" });
+            //assetFiles.Add(new AssetFile() { Path = "garden/treasurebox", FullPath = "Model/garden/treasurebox.ab", MD5 = "" });
             #endregion
             return assetFiles;
         }

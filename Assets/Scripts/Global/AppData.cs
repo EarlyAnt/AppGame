@@ -16,6 +16,7 @@ namespace AppGame.Global
         public static string Language = LanConfig.Languages.ChineseSimplified;
         public static string UserID { get; set; }
 
+        public static string Channel { get { return "GALAXY"; } }
         public static string Version { get; set; }
         public static int VersionCode { get; set; }
         public static VersionTypes VersionType

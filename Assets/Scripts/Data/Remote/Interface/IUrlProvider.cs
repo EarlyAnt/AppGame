@@ -12,5 +12,6 @@ namespace AppGame.Data.Remote
         string GetBasicDataUrl(string child_sn);
         string GetGameDataUrl(string child_sn);
         string PutGameDataUrl(string child_sn);
+        string GetUpdateInfo(string cup_hw_sn);
     }
 }
