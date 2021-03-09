@@ -23,11 +23,25 @@ namespace AppGame.Config
         /// <returns></returns>
         List<ScenicInfo> GetAllScenics();
         /// <summary>
+        /// 获取指定地图上的所有景点
+        /// </summary>
+        /// <param name="mapID">地图编号</param>
+        /// <returns></returns>
+        List<ScenicInfo> GetScenics(string mapID);
+        /// <summary>
+        /// 获取指定地图上的景点数量
+        /// </summary>
+        /// <param name="mapID">地图编号</param>
+        /// <returns></returns>
+        int GetScenicCount(string mapID);
+        /// <summary>
         /// 获取指定景点
         /// </summary>
         /// <param name="scenicID">景点ID</param>
         /// <returns></returns>
         ScenicInfo GetScenic(string scenicID);
+
+
     }
 
     public class ScenicInfo

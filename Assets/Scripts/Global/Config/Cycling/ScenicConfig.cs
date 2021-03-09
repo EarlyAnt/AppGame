@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using UnityEngine;
 
@@ -93,6 +94,31 @@ namespace AppGame.Config
         public List<ScenicInfo> GetAllScenics()
         {
             return this.configs;
+        }
+        /// <summary>
+        /// 获取指定地图上的所有景点
+        /// </summary>
+        /// <param name="mapID">地图编号</param>
+        /// <returns></returns>
+        public List<ScenicInfo> GetScenics(string mapID)
+        {
+            if (this.configs != null && this.configs.Exists(t => t.MapID == mapID))
+                return this.configs.FindAll(t => t.MapID == mapID).ToList();
+            else
+                return null;
+        }
+        /// <summary>
+        /// 获取指定地图上的景点数量
+        /// </summary>
+        /// <param name="mapID">地图编号</param>
+        /// <returns></returns>
+        public int GetScenicCount(string mapID)
+        {
+            List<ScenicInfo> scenicInfos = this.GetScenics(mapID);
+            if (scenicInfos != null)
+                return scenicInfos.Count;
+            else
+                return 0;
         }
         /// <summary>
         /// 获取指定景点

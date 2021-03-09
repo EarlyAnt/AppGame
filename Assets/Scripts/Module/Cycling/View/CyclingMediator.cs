@@ -1,3 +1,4 @@
+using AppGame.Config;
 using AppGame.Data.Local;
 using AppGame.Data.Model;
 using AppGame.Data.Remote;
@@ -14,6 +15,12 @@ namespace AppGame.Module.Cycling
         #region 注入接口
         [Inject]
         public CyclingView View { get; set; }
+        [Inject]
+        public IMapConfig MapConfig { get; set; }
+        [Inject]
+        public IScenicConfig ScenicConfig { get; set; }
+        [Inject]
+        public ICardConfig CardConfig { get; set; }
         [Inject]
         public IAuthenticationUtils AuthenticationUtils { get; set; }
         [Inject]
@@ -46,6 +53,12 @@ namespace AppGame.Module.Cycling
             if (Input.GetKeyDown(KeyCode.C))
             {
                 this.CyclingDataManager.ClearMpCollection();
+                this.ItemDataManager.Clear(true);
+            }
+            else if (Input.GetKeyDown(KeyCode.R))
+            {
+                this.BuildTestData();
+                this.Initialize();
             }
             else if (Input.GetKeyDown(KeyCode.D))
             {
@@ -119,12 +132,14 @@ namespace AppGame.Module.Cycling
             this.dispatcher.UpdateListener(register, GameEvent.MP_CLICK, this.OnMpBallClick);
             this.dispatcher.UpdateListener(register, GameEvent.GO_CLICK, this.OnGo);
             this.dispatcher.UpdateListener(register, GameEvent.COLLECT_MP, this.OnCollectMp);
+            this.dispatcher.UpdateListener(register, GameEvent.INTERACTION, this.OnPlayerStopped);
+            this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
         }
         //初始化
         private void Initialize()
         {
-            this.BuildTestData();
             this.GetGameData();
+            this.RefreshMapInfo();
             this.View.LoadMap(this.myPlayerData.map_id);
             this.View.RefreshPlayer(this.playerDataList, this.ItemDataManager.GetItemCount(Items.COIN));
             this.View.RefreshTeammates(this.playerDataList);
@@ -156,7 +171,7 @@ namespace AppGame.Module.Cycling
                 child_avatar = "6",
                 relation = (int)Relations.Self,
                 map_id = "320101",
-                map_position = "320101_35",
+                map_position = "320101_01",
                 walk_expend = 5000,
                 walk_today = 5000,
                 ride_expend = 1000,
@@ -271,6 +286,32 @@ namespace AppGame.Module.Cycling
             }
             this.View.RefreshMpBalls(mpDatas);
         }
+        //刷新地图信息
+        private void RefreshMapInfo()
+        {
+            MapInfo mapInfo = this.MapConfig.GetMap(this.myPlayerData.map_id);
+            if (mapInfo == null)
+            {
+                Debug.LogErrorFormat("<><CyclingMediator.RefreshMapInfo>Error: can not find the map [{0}]", this.myPlayerData.map_id);
+                return;
+            }
+
+            List<ScenicInfo> scenicInfos = this.ScenicConfig.GetScenics(this.myPlayerData.map_id);
+            if (scenicInfos == null || scenicInfos.Count == 0)
+            {
+                Debug.LogErrorFormat("<><CyclingMediator.RefreshMapInfo>Error: can not find scenics of the map [{0}]", this.myPlayerData.map_id);
+                return;
+            }
+
+            int scenicCount = scenicInfos.Count;
+            int cardCount = 0;
+            scenicInfos.ForEach(t =>
+            {
+                if (this.ItemDataManager.HasItem(t.CardID))
+                    cardCount += 1;
+            });
+            this.View.RefreshMapProgress(mapInfo.CityName, cardCount, scenicCount);
+        }
         //当能量球被点击时
         private void OnMpBallClick(IEvent evt)
         {
@@ -367,6 +408,59 @@ namespace AppGame.Module.Cycling
             this.CyclingDataManager.SavePlayerData(this.myPlayerData);//保存数据
             this.RefreshMpDatas();//刷新能量气泡
             this.View.RefreshMp(this.myPlayerData.mp - this.myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
+        }
+        //当玩家前进停止时
+        private void OnPlayerStopped(IEvent evt)
+        {
+            if (evt == null || evt.data == null)
+            {
+                Debug.LogError("<><CyclingMediator.OnPlayerStopped>Error: parameter 'evt' or 'evt.data' is null");
+                return;
+            }
+
+            MapPointNode mapPointNode = evt.data as MapPointNode;
+            if (mapPointNode == null)
+            {
+                Debug.LogError("<><CyclingMediator.OnPlayerStopped>Error: parameter 'evt.data' is not the type MapPointNode");
+                return;
+            }
+
+            //检测是否有卡片需要显示
+            if (mapPointNode.NodeType == NodeTypes.EndNode)
+            {
+                //Todo: 处理到站时的数据逻辑
+                this.View.Interact(mapPointNode);
+            }
+            else if (mapPointNode.NodeType == NodeTypes.SiteNode)
+            {
+                InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
+                if (interactionData != null && interactionData.Interacton == Interactions.KNOWLEDGE_LANDMARK)
+                {//记录卡片进度
+                    CardInfo cardInfo = this.CardConfig.GetCardByScenicID(interactionData.ID);
+                    if (cardInfo != null)
+                    {
+                        this.ItemDataManager.SetItem(cardInfo.CardID, 1);
+                        this.View.Interact(mapPointNode);
+                    }
+                    else
+                    {
+                        Debug.LogErrorFormat("<><CyclingMediator.OnPlayerStopped>Error: can not find the card that its scenicID is {0}", interactionData.ID);
+                    }
+                }
+                else
+                {
+                    Debug.LogErrorFormat("<><CyclingMediator.OnPlayerStopped>Error: can not find the scenic that its scenicID is {0}", interactionData.ID);
+                }
+            }
+            else
+            {
+                this.View.Interact(mapPointNode);
+            }
+        }
+        //当景点卡片关闭时
+        private void OnScenicCardClosed(IEvent evt)
+        {
+            this.RefreshMapInfo();
         }
         //当Go按钮被点击时
         private void OnGo()

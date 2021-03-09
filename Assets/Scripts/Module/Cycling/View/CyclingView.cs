@@ -48,6 +48,8 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private Teammate teammatePrefab;
         [SerializeField]
+        private Text progressBox;
+        [SerializeField]
         private Image avatarBox;
         [SerializeField]
         private Text nameBox;
@@ -142,7 +144,7 @@ namespace AppGame.Module.Cycling
                 this.mapNode.transform.localPosition = Vector3.zero;
                 this.mapNode.transform.localRotation = Quaternion.identity;
                 this.mapNode.transform.localScale = Vector3.one;
-            }
+            }            
         }
         public void Go()
         {
@@ -166,6 +168,10 @@ namespace AppGame.Module.Cycling
                 this.SetMpBallVisible(true);
                 //Todo: 显示行动点数不足的提示
             }
+        }
+        public void RefreshMapProgress(string mapName, int cardCount, int scenicCount)
+        {
+            this.progressBox.text = string.Format("{0} {1}/{2}", mapName, cardCount, scenicCount);
         }
         public void RefreshPlayer(List<PlayerData> playerDataList, int coin)
         {
@@ -262,7 +268,6 @@ namespace AppGame.Module.Cycling
         }
         private void UpdateDispatcher(bool register)
         {
-            this.dispatcher.UpdateListener(register, GameEvent.INTERACTION, this.OnPlayerStopped);
             this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
             this.dispatcher.UpdateListener(register, GameEvent.CITY_STATION_CLOSE, this.OnCityStationClosed);
             this.dispatcher.UpdateListener(register, GameEvent.PAY_BILL_CLOSE, this.OnPayBillClosed);
@@ -304,15 +309,8 @@ namespace AppGame.Module.Cycling
         {
             this.dispatcher.Dispatch(GameEvent.MP_CLICK, mpBall);
         }
-        private void OnPlayerStopped(IEvent evt)
+        public void Interact(MapPointNode mapPointNode)
         {
-            if (evt == null || evt.data == null)
-            {
-                Debug.LogError("<><CyclingView.OnPlayerStopped>Error: parameter 'evt' or 'evt.data' is null");
-                return;
-            }
-
-            MapPointNode mapPointNode = evt.data as MapPointNode;
             if (mapPointNode == null)
             {
                 Debug.LogError("<><CyclingView.OnPlayerStopped>Error: parameter 'evt.data' is not the type MapPointNode");

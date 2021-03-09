@@ -17,6 +17,8 @@ namespace AppGame.Data.Local
 
         void SendAllItemData(bool force);
         void SetValuesLong(GameData datas);
+
+        void Clear(bool confirm = false);
     }
 
     public static class Items

@@ -39,49 +39,49 @@ namespace AppGame.Data.Local
         public void SetItem(string itemID, int itemCount)
         {
             Debug.LogFormat("<><ItemDataManager.SetItem>ItemID: {0}, ItemCount: {1}", itemID, itemCount);
-            int count = 0;
-            if (this.itemInfos.TryGetValue(itemID, out count))
-            {
-                this.itemInfos.Remove(itemID);
-            }
-
-            if (itemCount >= 0)
-            {
-                this.itemInfos.Add(itemID, itemCount);
-                try
-                {
-                    this.SaveItemDatas();
-                    this.SyncItemsData2Server(itemID, itemCount);
-                }
-                catch (System.Exception ex)
-                {
-                    Debug.LogErrorFormat("<><ItemDataManager.SetItem>Error: {0}, itemId: {1}, count: {2}, currentCount: {3}", ex.Message, itemID, count, itemCount);
-                }
-            }
-        }
-
-        public void AddItem(string itemID, int itemCount = 1)
-        {
-            int currentCount = 0;
+            itemCount = this.GetValidCount(itemID, itemCount);
             if (this.itemInfos.ContainsKey(itemID))
             {
-                currentCount = this.itemInfos[itemID] + itemCount;
-                this.itemInfos[itemID] = this.GetValidCount(itemID, currentCount);
+                this.itemInfos[itemID] = itemCount;
             }
             else
             {
-                currentCount = itemCount;
-                this.itemInfos.Add(itemID, this.GetValidCount(itemID, currentCount));
+                this.itemInfos.Add(itemID, itemCount);
             }
 
             try
             {
                 this.SaveItemDatas();
-                this.SyncItemsData2Server(itemID, currentCount);
+                this.SyncItemsData2Server(itemID, itemCount);
             }
             catch (System.Exception ex)
             {
-                Debug.LogErrorFormat("<><ItemDataManager.AddItem>Error: {0}, itemId: {1}, count: {2}, currentCount: {3}", ex.Message, itemID, itemCount, currentCount);
+                Debug.LogErrorFormat("<><ItemDataManager.SetItem>Error: {0}, itemId: {1}, itemCount: {2}", ex.Message, itemID, itemCount);
+            }
+        }
+
+        public void AddItem(string itemID, int itemCount = 1)
+        {
+            int newItemCount = 0;
+            if (this.itemInfos.ContainsKey(itemID))
+            {
+                newItemCount = this.GetValidCount(itemID, this.itemInfos[itemID] + itemCount);
+                this.itemInfos[itemID] = newItemCount;
+            }
+            else
+            {
+                newItemCount = this.GetValidCount(itemID, itemCount);
+                this.itemInfos.Add(itemID, newItemCount);
+            }
+
+            try
+            {
+                this.SaveItemDatas();
+                this.SyncItemsData2Server(itemID, newItemCount);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogErrorFormat("<><ItemDataManager.AddItem>Error: {0}, itemId: {1}, count: {2}, currentCount: {3}", ex.Message, itemID, itemCount, newItemCount);
             }
         }
 
@@ -250,9 +250,18 @@ namespace AppGame.Data.Local
                     case ItemTypes.Coin:
                         maxCount = 99999;
                         break;
+                    case ItemTypes.Card:
+                        maxCount = 1;
+                        break;
                 }
             }
             return Mathf.Clamp(itemCount, 0, maxCount);
+        }
+
+        public void Clear(bool confirm = false)
+        {
+            if (confirm)
+                this.GameDataHelper.Clear(ITEM_DATA_KEY);
         }
     }
 }

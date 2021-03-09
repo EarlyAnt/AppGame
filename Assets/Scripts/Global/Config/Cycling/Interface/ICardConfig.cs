@@ -17,11 +17,17 @@ namespace AppGame.Config
         /// <returns></returns>
         List<CardInfo> GetAllCards();
         /// <summary>
-        /// 获取指定名称的卡片
+        /// 获取指定编码的卡片
         /// </summary>
         /// <param name="cardID">卡片编码</param>
         /// <returns></returns>
         CardInfo GetCard(string cardID);
+        /// <summary>
+        /// 获取指定景点的卡片
+        /// </summary>
+        /// <param name="scenicID">景点编码</param>
+        /// <returns></returns>
+        CardInfo GetCardByScenicID(string scenicID);
     }
 
     public static class CardTypes

@@ -87,7 +87,7 @@ namespace AppGame.Config
             return this.configs;
         }
         /// <summary>
-        /// 获取指定名称的卡片
+        /// 获取指定编码的卡片
         /// </summary>
         /// <param name="cardID">卡片编码</param>
         /// <returns></returns>
@@ -95,6 +95,18 @@ namespace AppGame.Config
         {
             if (this.configs != null)
                 return this.configs.Find(t => t.CardID == cardID);
+            else
+                return null;
+        }
+        /// <summary>
+        /// 获取指定景点的卡片
+        /// </summary>
+        /// <param name="scenicID">景点编码</param>
+        /// <returns></returns>
+        public CardInfo GetCardByScenicID(string scenicID)
+        {
+            if (this.configs != null)
+                return this.configs.Find(t => t.ScenicID == scenicID);
             else
                 return null;
         }
