@@ -50,7 +50,7 @@ namespace AppGame.Module.Cycling
         public void Clear()
         {
             while (this.transform.childCount > 0)
-                GameObject.DestroyImmediate(this.transform.GetChild(0));
+                GameObject.DestroyImmediate(this.transform.GetChild(0).gameObject);
         }
         private void DrawCorner(int axis, int flag, bool cornerPlus)
         {

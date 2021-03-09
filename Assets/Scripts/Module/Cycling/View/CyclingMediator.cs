@@ -54,10 +54,11 @@ namespace AppGame.Module.Cycling
             {
                 this.CyclingDataManager.ClearMpCollection();
                 this.ItemDataManager.Clear(true);
+                this.BuildTestData();
             }
             else if (Input.GetKeyDown(KeyCode.R))
             {
-                this.BuildTestData();
+                this.View.Restart();
                 this.Initialize();
             }
             else if (Input.GetKeyDown(KeyCode.D))
@@ -145,6 +146,7 @@ namespace AppGame.Module.Cycling
             this.View.RefreshTeammates(this.playerDataList);
             this.View.RefreshMp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
             this.RefreshMpDatas();
+            this.CancelInvoke();
             this.InvokeRepeating("GetGameData", 3f, 3f);
             this.InvokeRepeating("RefreshOriginData", 3f, 5f);
             this.InvokeRepeating("RefreshFriendData", 3f, 15f);
@@ -241,7 +243,7 @@ namespace AppGame.Module.Cycling
             int offset = Random.Range(1, 5);
             PlayerData playerData = this.playerDataList[index];
             int position = int.Parse(playerData.map_position.Substring(7, 2));
-            playerData.map_position = string.Format("{0}_{1}", playerData.map_id, position + offset);
+            playerData.map_position = string.Format("{0}_{1:d2}", playerData.map_id, position + offset);
             this.CyclingDataManager.SavePlayerData(playerData);
             this.View.RefreshTeammates(this.playerDataList);
         }
@@ -424,6 +426,10 @@ namespace AppGame.Module.Cycling
                 Debug.LogError("<><CyclingMediator.OnPlayerStopped>Error: parameter 'evt.data' is not the type MapPointNode");
                 return;
             }
+
+            //记录玩家当前位置
+            this.myPlayerData.map_position = mapPointNode.ID;
+            this.CyclingDataManager.SavePlayerData(this.myPlayerData);
 
             //检测是否有卡片需要显示
             if (mapPointNode.NodeType == NodeTypes.EndNode)

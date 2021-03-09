@@ -5,6 +5,7 @@ using AppGame.Global;
 using AppGame.UI;
 using AppGame.Util;
 using DG.Tweening;
+using Spine.Unity;
 using strange.extensions.dispatcher.eventdispatcher.api;
 using strange.extensions.signal.impl;
 using System.Collections.Generic;
@@ -22,11 +23,13 @@ namespace AppGame.Module.Cycling
         [Inject]
         public IMapConfig MapConfig { get; set; }
         [Inject]
-        public ICommonImageUtils CommonImageUtils { get; set; }
-        [Inject]
         public IChildInfoManager ChildInfoManager { get; set; }
         [Inject]
+        public ICommonImageUtils CommonImageUtils { get; set; }
+        [Inject]
         public IPrefabUtil PrefabUtil { get; set; }
+        [Inject]
+        public IAssetBundleUtil AssetBundleUtil { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
@@ -81,6 +84,8 @@ namespace AppGame.Module.Cycling
         private PlayerData myPlayerData;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
+        private string trafficAB = "cycling/traffic";
+        private SkeletonGraphic traffic;
         public int Coin
         {
             get { return int.Parse(this.coinBox.text); }
@@ -108,23 +113,25 @@ namespace AppGame.Module.Cycling
             this.UpdateDispatcher(false);
             base.OnDestroy();
         }
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.P))
-                this.payBill.Show(new MpData() { Mp = 5, Coin = 5, CoinEnough = true });
-            if (Input.GetKeyDown(KeyCode.O))
-                this.payBill.Show(new MpData() { Mp = 19, Coin = 19, CoinEnough = false });
-        }
         /************************************************自 定 义 方 法************************************************/
         private void Initialize()
         {
+            this.Restart();
+            this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
+            this.LoadTraffic();
+        }
+        public void Restart()
+        {
+            this.playerCanGo = true;
+            this.hideMpBalls = false;
+            this.mask.DOFade(1f, 0f);
+            this.canvasGroup.DOFade(0f, 0f);
+
             this.DelayInvoke(() =>
             {
                 this.mask.DOFade(0f, 1f);
                 this.canvasGroup.DOFade(1f, 1f);
             }, 0.5f);
-
-            this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
         }
         public void LoadMap(string mapID)
         {
@@ -144,7 +151,7 @@ namespace AppGame.Module.Cycling
                 this.mapNode.transform.localPosition = Vector3.zero;
                 this.mapNode.transform.localRotation = Quaternion.identity;
                 this.mapNode.transform.localScale = Vector3.one;
-            }            
+            }
         }
         public void Go()
         {
@@ -304,6 +311,33 @@ namespace AppGame.Module.Cycling
                 this.DelayInvoke(() => this.mpBalls.ForEach(t => t.SetStatus(true)), 0.75f);
             else
                 this.mpBalls.ForEach(t => t.SetStatus(false));
+        }
+        private void LoadTraffic()
+        {
+            //this.AssetBundleUtil.LoadAssetBundleAsync(this.trafficAB, (assetBundle) =>
+            //{
+            //    Object spineObject = assetBundle.LoadAsset("Traffic_Prefab");
+            //    Object materialObject = assetBundle.LoadAsset(SpineParameters.MATERIAL_NAME);
+            //    Material material = materialObject as Material;
+            //    Shader shader = Shader.Find(SpineParameters.SHADER_NAME);
+            //    material.shader = shader;
+            //    GameObject temp = spineObject as GameObject;
+            //    this.spine = temp;
+            //    SkeletonGraphic prefabSpine = (spineObject as GameObject).GetComponent<SkeletonGraphic>();
+            //    prefabSpine.material = material;
+            //    GameObject trafficObject = GameObject.Instantiate(spineObject) as GameObject;
+            //    trafficObject.name = "Traffic";
+            //    trafficObject.transform.SetParent(this.mask.transform);
+            //    trafficObject.transform.localPosition = Vector3.zero;
+            //    trafficObject.transform.localRotation = Quaternion.identity;
+            //    trafficObject.transform.localScale = Vector3.one * 0.25f;
+            //    this.traffic = trafficObject.GetComponent<SkeletonGraphic>();
+            //    this.traffic.gameObject.SetActive(false);
+            //},
+            //(errorText) =>
+            //{
+            //    Debug.LogErrorFormat("<><CyclingView.LoadTraffic>Error: {0}", errorText);
+            //});
         }
         private void CollectMp(MpBall mpBall)
         {

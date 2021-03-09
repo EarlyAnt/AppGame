@@ -260,6 +260,9 @@ namespace AppGame.Data.Local
 
         public void Clear(bool confirm = false)
         {
+            if (this.itemInfos != null)
+                this.itemInfos.Clear();
+
             if (confirm)
                 this.GameDataHelper.Clear(ITEM_DATA_KEY);
         }

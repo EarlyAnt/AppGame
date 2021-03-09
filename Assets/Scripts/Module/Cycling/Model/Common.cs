@@ -54,6 +54,12 @@ namespace AppGame.Module.Cycling
     #endregion
 
     #region 自定义类
+    public static class SpineParameters
+    {
+        public const string MATERIAL_NAME = "SkeletonGraphicDefault";
+        public const string SHADER_NAME = "Spine/Skeleton";
+    }
+
     public class MpData
     {
         public MpBallTypes MpBallType { get; set; }

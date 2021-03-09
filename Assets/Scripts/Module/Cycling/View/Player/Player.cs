@@ -140,20 +140,22 @@ namespace AppGame.Module.Cycling
             }
             while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode);
 
-            this.LightPointIcon();
+            this.SetPointIcon(true);
             this.OnStopped();
             Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
         //移动到指定位置
         public override void MoveToNode(string nodeID, bool lerp = false)
         {
+            this.SetPointIcon(false);
+            this.roadRenderer.Clear();
             int targetNodeIndex = this.mapNode.Points.FindIndex(t => t.GetComponent<MapPointNode>().ID == nodeID);
             if (targetNodeIndex >= 0 && targetNodeIndex < this.mapNode.Points.Count)
             {
                 this.nodeIndex = targetNodeIndex;
                 this.player.position = this.mapNode.Points[this.nodeIndex].position;
                 this.camera.position = this.GetCameraPosition();
-                this.LightPointIcon();
+                this.SetPointIcon(true);
             }
             else
             {
@@ -202,15 +204,27 @@ namespace AppGame.Module.Cycling
             else return false;
         }
         //点亮已经过的点的图标
-        private void LightPointIcon()
+        private void SetPointIcon(bool light)
         {
-            int index = 0;
-            while (index <= this.nodeIndex)
+            if (light)
             {
-                MapPointNode mapPointNode = this.mapNode.Points[index].GetComponent<MapPointNode>();
-                if (mapPointNode != null && mapPointNode.NodeType != NodeTypes.EmptyNode)
-                    mapPointNode.LightIcon();
-                index += 1;
+                int index = 0;
+                while (index <= this.nodeIndex)
+                {
+                    MapPointNode mapPointNode = this.mapNode.Points[index].GetComponent<MapPointNode>();
+                    if (mapPointNode != null && mapPointNode.NodeType != NodeTypes.EmptyNode)
+                        mapPointNode.SetIcon(true);
+                    index += 1;
+                }
+            }
+            else
+            {
+                this.mapNode.Points.ForEach(t =>
+                {
+                    MapPointNode mapPointNode = t.GetComponent<MapPointNode>();
+                    if (mapPointNode != null && mapPointNode.NodeType != NodeTypes.EmptyNode)
+                        mapPointNode.SetIcon(false);
+                });
             }
         }
         //当玩家移动停止时

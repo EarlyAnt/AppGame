@@ -44,13 +44,13 @@ namespace AppGame.Module.Cycling
             }
         }
         //点亮图标
-        public void LightIcon()
+        public void SetIcon(bool light)
         {
             if (this.spriteLoader == null)
                 this.spriteLoader = this.GetComponent<SpriteLoader>();
 
             if (this.spriteLoader != null)
-                this.spriteLoader.LoadImage(this.lightImageName);
+                this.spriteLoader.LoadImage(light ? this.lightImageName : this.normalImageName);
         }
         //更改节点类型
         public void ChangeNodeType(NodeTypes nodeType)
