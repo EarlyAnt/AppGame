@@ -10,3 +10,5 @@ AppGame.sln
 /*.apk
 /Android
 /*.rar
+/spine-unity.csproj
+/spine-unity-editor.csproj
