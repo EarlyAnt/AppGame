@@ -150,7 +150,7 @@ namespace AppGame.Module.Cycling
             this.RefreshMpDatas();
             this.CancelInvoke();
             this.InvokeRepeating("GetGameData", 3f, 3f);
-            this.InvokeRepeating("RefreshOriginData", 3f, 10f);
+            this.InvokeRepeating("RefreshOriginData", 3f, 3f);
             this.InvokeRepeating("RefreshFriendData", 3f, 15f);
         }
         //获取游戏数据

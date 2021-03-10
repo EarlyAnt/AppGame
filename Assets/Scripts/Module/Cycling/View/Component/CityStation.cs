@@ -36,7 +36,7 @@ namespace AppGame.Module.Cycling
             }
 
             MapInfo nextMapInfo = this.MapConfig.GetMap(mapInfo.NextMap);
-            if (mapInfo == null)
+            if (nextMapInfo == null)
             {
                 Debug.LogErrorFormat("<><CityStation.Show>Error: can not find the next map[{0}]", mapInfo.NextMap);
                 return;

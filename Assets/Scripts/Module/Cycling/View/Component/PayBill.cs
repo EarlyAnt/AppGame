@@ -67,7 +67,7 @@ namespace AppGame.Module.Cycling
             Sprite sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, this.ModuleConfig.GetImagePath(ModuleViews.Cycling, mpData.CoinEnough ? "enable_button" : "disable_button"));
             this.buttonBox.sprite = sprite;
             this.buttonBox.raycastTarget = mpData.CoinEnough;
-            this.gameObject.SetActive(true);
+            this.root.gameObject.SetActive(true);
             this.SetErrorPanel(!mpData.CoinEnough);
             if (!mpData.CoinEnough) this.DelayInvoke(() => this.SetErrorPanel(false), 2f);
         }
@@ -75,7 +75,7 @@ namespace AppGame.Module.Cycling
         public void Hide(bool pay)
         {
             this.SetErrorPanel(false);
-            this.gameObject.SetActive(false);
+            this.root.gameObject.SetActive(false);
             if (pay) this.dispatcher.Dispatch(GameEvent.PAY_BILL_CLOSE, this.mpData);
         }
         //设置错误提示面板
