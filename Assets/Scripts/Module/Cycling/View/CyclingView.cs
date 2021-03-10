@@ -5,9 +5,7 @@ using AppGame.Global;
 using AppGame.UI;
 using AppGame.Util;
 using DG.Tweening;
-using Spine.Unity;
 using strange.extensions.dispatcher.eventdispatcher.api;
-using strange.extensions.signal.impl;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,8 +26,6 @@ namespace AppGame.Module.Cycling
         public ICommonImageUtils CommonImageUtils { get; set; }
         [Inject]
         public IPrefabUtil PrefabUtil { get; set; }
-        [Inject]
-        public IAssetBundleUtil AssetBundleUtil { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
@@ -69,11 +65,13 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private Text hpBox;
         [SerializeField]
+        private PayBill payBill;
+        [SerializeField]
         private ScenicCard scenicCard;
         [SerializeField]
         private CityStation cityStation;
         [SerializeField]
-        private PayBill payBill;
+        private TrafficLoading trafficLoading;
         #endregion
         #region 其他变量
         private bool playerCanGo = true;
@@ -84,8 +82,6 @@ namespace AppGame.Module.Cycling
         private PlayerData myPlayerData;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
-        private string trafficAB = "cycling/traffic";
-        private SkeletonGraphic traffic;
         public int Coin
         {
             get { return int.Parse(this.coinBox.text); }
@@ -118,7 +114,6 @@ namespace AppGame.Module.Cycling
         {
             this.Restart();
             this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
-            this.LoadTraffic();
         }
         public void Restart()
         {
@@ -144,14 +139,11 @@ namespace AppGame.Module.Cycling
             this.mapBox.LoadImage(mapInfo.Prefab, mapInfo.MapImage);
             this.pathBox.LoadImage(mapInfo.Prefab, mapInfo.PathImage);
 
-            if (this.mapNode == null)
-            {
-                this.mapNode = this.PrefabUtil.CreateGameObject("Cycling/Road", mapID).GetComponent<MapNode>();
-                this.mapNode.transform.SetParent(this.mapRoot);
-                this.mapNode.transform.localPosition = Vector3.zero;
-                this.mapNode.transform.localRotation = Quaternion.identity;
-                this.mapNode.transform.localScale = Vector3.one;
-            }
+            this.mapNode = this.PrefabUtil.CreateGameObject("Cycling/Road", mapID).GetComponent<MapNode>();
+            this.mapNode.transform.SetParent(this.mapRoot);
+            this.mapNode.transform.localPosition = Vector3.zero;
+            this.mapNode.transform.localRotation = Quaternion.identity;
+            this.mapNode.transform.localScale = Vector3.one;
         }
         public void Go()
         {
@@ -200,7 +192,8 @@ namespace AppGame.Module.Cycling
                 this.teammates = new List<Teammate>();
                 foreach (var teammateData in playerDataList)
                 {
-                    if (teammateData.child_sn == this.ChildInfoManager.GetChildSN())
+                    if (teammateData.child_sn == this.ChildInfoManager.GetChildSN() ||
+                        teammateData.map_id != this.myPlayerData.map_id)
                         continue;
 
                     Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.teammateRoot);
@@ -276,7 +269,6 @@ namespace AppGame.Module.Cycling
         private void UpdateDispatcher(bool register)
         {
             this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
-            this.dispatcher.UpdateListener(register, GameEvent.CITY_STATION_CLOSE, this.OnCityStationClosed);
             this.dispatcher.UpdateListener(register, GameEvent.PAY_BILL_CLOSE, this.OnPayBillClosed);
         }
         private Vector3 GetRandomPosition()
@@ -312,33 +304,6 @@ namespace AppGame.Module.Cycling
             else
                 this.mpBalls.ForEach(t => t.SetStatus(false));
         }
-        private void LoadTraffic()
-        {
-            //this.AssetBundleUtil.LoadAssetBundleAsync(this.trafficAB, (assetBundle) =>
-            //{
-            //    Object spineObject = assetBundle.LoadAsset("Traffic_Prefab");
-            //    Object materialObject = assetBundle.LoadAsset(SpineParameters.MATERIAL_NAME);
-            //    Material material = materialObject as Material;
-            //    Shader shader = Shader.Find(SpineParameters.SHADER_NAME);
-            //    material.shader = shader;
-            //    GameObject temp = spineObject as GameObject;
-            //    this.spine = temp;
-            //    SkeletonGraphic prefabSpine = (spineObject as GameObject).GetComponent<SkeletonGraphic>();
-            //    prefabSpine.material = material;
-            //    GameObject trafficObject = GameObject.Instantiate(spineObject) as GameObject;
-            //    trafficObject.name = "Traffic";
-            //    trafficObject.transform.SetParent(this.mask.transform);
-            //    trafficObject.transform.localPosition = Vector3.zero;
-            //    trafficObject.transform.localRotation = Quaternion.identity;
-            //    trafficObject.transform.localScale = Vector3.one * 0.25f;
-            //    this.traffic = trafficObject.GetComponent<SkeletonGraphic>();
-            //    this.traffic.gameObject.SetActive(false);
-            //},
-            //(errorText) =>
-            //{
-            //    Debug.LogErrorFormat("<><CyclingView.LoadTraffic>Error: {0}", errorText);
-            //});
-        }
         private void CollectMp(MpBall mpBall)
         {
             this.dispatcher.Dispatch(GameEvent.MP_CLICK, mpBall);
@@ -370,50 +335,26 @@ namespace AppGame.Module.Cycling
                 this.SetMpBallVisible(true);
             }
         }
-        private void OnScenicCardClosed(IEvent evt)
+        public void ShowLoading(Ticket ticket)
         {
-            this.playerCanGo = true;
-            this.SetMpBallVisible(true);
-        }
-        private void OnCityStationClosed(IEvent evt)
-        {
-            if (evt == null || evt.data == null)
+            if (ticket != null && ticket.Go)
             {
-                Debug.LogError("<><CyclingView.OnCityStationClosed>Error: parameter 'evt' or 'evt.data' is null");
-                return;
-            }
-
-            Ticket ticket = evt.data as Ticket;
-            if (ticket == null)
-            {
-                Debug.LogError("<><CyclingView.OnCityStationClosed>Error: parameter 'evt.data' is not the type Ticket");
-                return;
-            }
-
-            if (ticket.Go)
-            {
-                Debug.LogFormat("<><CyclingView.OnCityStationClosed>Data, from[{0}], to[{1}], coin[{2}], step[{3}]", ticket.FromMapID, ticket.ToMapID, ticket.Coin, ticket.Step);
-                MapNode mapNode = this.player.MapNode;
-                if (mapNode == null)
-                {
-                    Debug.LogError("<><CyclingView.OnCityStationClosed>Error: parameter 'mapNode' is null");
-                    return;
-                }
-
-                MapInfo mapInfo = this.MapConfig.GetMap(mapNode.ID);
-                if (mapInfo == null)
-                {
-                    Debug.LogError("<><CyclingView.OnCityStationClosed>Error: parameter 'mapInfo' is null");
-                    return;
-                }
-
-                //Todo: 获取下一个地图的ID，并进行跳转
-                string nextMapID = mapInfo.NextMap;
+                this.trafficLoading.Show(ticket);
             }
             else
             {
                 this.playerCanGo = true;
             }
+        }
+        public void HideLoading()
+        {
+            this.Restart();
+            this.DelayInvoke(this.trafficLoading.Hide, 0.5f);
+        }
+        private void OnScenicCardClosed(IEvent evt)
+        {
+            this.playerCanGo = true;
+            this.SetMpBallVisible(true);
         }
         private void OnPayBillClosed(IEvent evt)
         {

@@ -19,7 +19,8 @@ namespace AppGame.Module.Cycling
         //页面关闭事件
         SCENIC_CARD_CLOSE,
         CITY_STATION_CLOSE,
-        PAY_BILL_CLOSE
+        PAY_BILL_CLOSE,
+        TRAFFIC_LOADING_CLOSE
     }
 
     public enum NodeTypes
@@ -57,7 +58,6 @@ namespace AppGame.Module.Cycling
     public static class SpineParameters
     {
         public const string MATERIAL_NAME = "SkeletonGraphicDefault";
-        public const string SHADER_NAME = "Spine/Skeleton";
     }
 
     public class MpData
@@ -70,11 +70,24 @@ namespace AppGame.Module.Cycling
         public bool CoinEnough { get; set; }
     }
 
+    public static class Vehicles
+    {
+        public const string BUS = "bus";
+        public const string TRAIN = "train";
+        public const string CRH = "hsr";
+        public const string PLANE = "plane";
+    }
+
     public class Ticket
     {
         public bool Go { get; set; }//true-跳转到下一地图，false-留在原地
         public string FromMapID { get; set; }
+        public string FromCityName { get; set; }
+        public string FromCityPinYin { get; set; }
         public string ToMapID { get; set; }
+        public string ToCityName { get; set; }
+        public string ToCityPinYin { get; set; }
+        public string Vehicle { get; set; }//交通工具
         public int Coin { get; set; }
         public int Step { get; set; }
     }

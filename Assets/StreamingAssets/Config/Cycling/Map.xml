@@ -2,6 +2,6 @@
 <Project Name="Gululu" Version="">
   <Maps>
     <Map ID="320101" Name="江苏01" ProvinceID="32" ProvinceName="江苏" CityID="3201" CityName="南京" Prefab="cycling/nanjing" MapImage="nanjing_bg" PathImage="path" NextMap="320102" />
-    <Map ID="320102" Name="江苏02" ProvinceID="32" ProvinceName="江苏" CityID="3202" CityName="镇江" Prefab="cycling/zhenjiang" MapImage="nanjing_bg" PathImage="path" NextMap="" />
+    <Map ID="320102" Name="江苏02" ProvinceID="32" ProvinceName="江苏" CityID="3202" CityName="镇江" Prefab="cycling/zhenjiang" MapImage="zhenjiang_bg" PathImage="path" NextMap="" />
   </Maps>
 </Project>

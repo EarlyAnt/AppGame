@@ -21,7 +21,9 @@ namespace AppGame.Module.Cycling
         #endregion
         #region 页面UI组件
         [SerializeField]
-        private Transform root;//卡片面板根物体
+        private GameObject root;
+        [SerializeField]
+        private Transform panelRoot;//卡片面板根物体
         [SerializeField]
         private GameObject fore;//卡片正面
         [SerializeField]
@@ -78,31 +80,31 @@ namespace AppGame.Module.Cycling
             this.cityNameBox.text = mapInfo.CityName;
             this.scenicNameBox.text = scenicInfo.Name;
             this.descriptionBox.text = this.I18NConfig.GetText(card.Text);
-            this.gameObject.SetActive(true);
+            this.root.gameObject.SetActive(true);
         }
         //隐藏卡片
         public void Hide()
         {
-            this.gameObject.SetActive(false);
+            this.root.gameObject.SetActive(false);
             this.Reset();
             this.OnViewClosed();
         }
         //旋转卡片
         public void Rotate()
         {
-            this.root.DOScale(1, this.rotateDuration);
-            this.root.DOLocalRotate(this.middleAngle, this.rotateDuration / 2).onComplete = () =>
+            this.panelRoot.DOScale(1, this.rotateDuration);
+            this.panelRoot.DOLocalRotate(this.middleAngle, this.rotateDuration / 2).onComplete = () =>
             {
                 this.back.SetActive(false);
                 this.fore.SetActive(true);
-                this.root.DOLocalRotate(this.foreAngle, this.rotateDuration / 2);
+                this.panelRoot.DOLocalRotate(this.foreAngle, this.rotateDuration / 2);
             };
         }
         //重设卡片状态
         private void Reset()
         {
-            this.root.localEulerAngles = Vector3.zero;
-            this.root.localScale = Vector3.one * 0.7f;
+            this.panelRoot.localEulerAngles = Vector3.zero;
+            this.panelRoot.localScale = Vector3.one * 0.7f;
             this.fore.SetActive(false);
             this.back.SetActive(true);
         }

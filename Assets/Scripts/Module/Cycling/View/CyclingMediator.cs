@@ -2,6 +2,7 @@ using AppGame.Config;
 using AppGame.Data.Local;
 using AppGame.Data.Model;
 using AppGame.Data.Remote;
+using AppGame.UI;
 using strange.extensions.dispatcher.eventdispatcher.api;
 using strange.extensions.mediation.impl;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace AppGame.Module.Cycling
 {
-    public class CyclingMediator : EventMediator
+    public class CyclingMediator : BaseMediator
     {
         /************************************************属性与变量命名************************************************/
         #region 注入接口
@@ -135,6 +136,7 @@ namespace AppGame.Module.Cycling
             this.dispatcher.UpdateListener(register, GameEvent.COLLECT_MP, this.OnCollectMp);
             this.dispatcher.UpdateListener(register, GameEvent.INTERACTION, this.OnPlayerStopped);
             this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
+            this.dispatcher.UpdateListener(register, GameEvent.CITY_STATION_CLOSE, this.OnCityStationClosed);
         }
         //初始化
         private void Initialize()
@@ -173,7 +175,7 @@ namespace AppGame.Module.Cycling
                 child_avatar = "6",
                 relation = (int)Relations.Self,
                 map_id = "320101",
-                map_position = "320101_01",
+                map_position = "320101_46",
                 walk_expend = 5000,
                 walk_today = 5000,
                 ride_expend = 1000,
@@ -467,6 +469,29 @@ namespace AppGame.Module.Cycling
         private void OnScenicCardClosed(IEvent evt)
         {
             this.RefreshMapInfo();
+        }
+        //当交通工具选择页面关闭时
+        private void OnCityStationClosed(IEvent evt)
+        {
+            if (evt == null || evt.data == null)
+            {
+                Debug.LogError("<><CyclingMediator.OnCityStationClosed>Error: parameter 'evt' or 'evt.data' is null");
+                return;
+            }
+
+            Ticket ticket = evt.data as Ticket;
+            if (ticket == null)
+            {
+                Debug.LogError("<><CyclingMediator.OnCityStationClosed>Error: parameter 'evt.data' is not the type Ticket");
+                return;
+            }
+
+            this.myPlayerData.map_id = ticket.ToMapID;
+            this.myPlayerData.map_position = string.Format("{0}_01", ticket.ToMapID);
+            this.CyclingDataManager.SavePlayerData(this.myPlayerData);
+            this.View.ShowLoading(ticket);
+            this.Initialize();
+            this.DelayInvoke(() => this.View.HideLoading(), Random.Range(1.5f, 3f));
         }
         //当Go按钮被点击时
         private void OnGo()

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Project Name="Gululu" Version="">
   <Cards>
-    <Card CardID="200100001" CardType="1" CardName="中山陵" ScenicID="32010101" Image="NanJing/card_nanjing01" Text="中山陵介绍" />
+    <Card CardID="200100001" CardType="01" CardName="中山陵" ScenicID="32010101" Image="NanJing/card_nanjing01" Text="中山陵介绍" />
     <Card CardID="200100002" CardType="01" CardName="总统府" ScenicID="32010102" Image="NanJing/card_nanjing02" Text="总统府介绍" />
     <Card CardID="200100003" CardType="01" CardName="夫子庙" ScenicID="32010103" Image="NanJing/card_nanjing03" Text="夫子庙介绍" />
     <Card CardID="200100004" CardType="01" CardName="瞻园" ScenicID="32010104" Image="NanJing/card_nanjing04" Text="瞻园介绍" />
@@ -10,5 +10,14 @@
     <Card CardID="200100007" CardType="01" CardName="美龄宫" ScenicID="32010107" Image="NanJing/card_nanjing07" Text="美龄宫介绍" />
     <Card CardID="200100008" CardType="01" CardName="南京大屠杀纪念馆" ScenicID="32010108" Image="NanJing/card_nanjing08" Text="南京大屠杀纪念馆介绍" />
     <Card CardID="200100009" CardType="01" CardName="栖霞山" ScenicID="32010109" Image="NanJing/card_nanjing09" Text="栖霞山介绍" />
+    <Card CardID="200100010" CardType="01" CardName="西津渡古街" ScenicID="32010201" Image="NanJing/card_nanjing01" Text="中山陵介绍" />
+    <Card CardID="200100011" CardType="01" CardName="金山寺" ScenicID="32010202" Image="NanJing/card_nanjing02" Text="总统府介绍" />
+    <Card CardID="200100012" CardType="01" CardName="北固山" ScenicID="32010203" Image="NanJing/card_nanjing03" Text="夫子庙介绍" />
+    <Card CardID="200100013" CardType="01" CardName="焦山" ScenicID="32010204" Image="NanJing/card_nanjing04" Text="瞻园介绍" />
+    <Card CardID="200100014" CardType="01" CardName="得撒石磨豆腐村" ScenicID="32010205" Image="NanJing/card_nanjing05" Text="玄武湖公园介绍" />
+    <Card CardID="200100015" CardType="01" CardName="宝华山国家森林公园" ScenicID="32010206" Image="NanJing/card_nanjing06" Text="明孝陵介绍" />
+    <Card CardID="200100016" CardType="01" CardName="美龄宫" ScenicID="32010207" Image="NanJing/card_nanjing07" Text="美龄宫介绍" />
+    <Card CardID="200100017" CardType="01" CardName="南京大屠杀纪念馆" ScenicID="32010208" Image="NanJing/card_nanjing08" Text="南京大屠杀纪念馆介绍" />
+    <Card CardID="200100018" CardType="01" CardName="栖霞山" ScenicID="32010209" Image="NanJing/card_nanjing09" Text="栖霞山介绍" />
   </Cards>
 </Project>

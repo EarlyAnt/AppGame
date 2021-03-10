@@ -1,8 +1,8 @@
-using strange.extensions.mediation.impl;
+using AppGame.UI;
 
 namespace AppGame.Module.GameStart
 {
-    public class GameStartMediator : EventMediator
+    public class GameStartMediator : BaseMediator
     {
         /************************************************属性与变量命名************************************************/
         [Inject]
