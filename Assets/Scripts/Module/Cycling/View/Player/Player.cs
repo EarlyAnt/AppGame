@@ -102,10 +102,17 @@ namespace AppGame.Module.Cycling
         //向前移动
         public void MoveForward()
         {
-            if (!this.IsMoving && this.nodeIndex + 1 < this.mapNode.Points.Count)
+            if (this.IsMoving)
+                return;
+
+            if (this.nodeIndex + 1 < this.mapNode.Points.Count)
             {
                 this.StopAllCoroutines();
                 this.StartCoroutine(this.MovePlayer(true));
+            }
+            else
+            {
+                this.OnStopped();
             }
         }
         //向后移动

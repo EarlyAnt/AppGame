@@ -150,7 +150,7 @@ namespace AppGame.Module.Cycling
             this.RefreshMpDatas();
             this.CancelInvoke();
             this.InvokeRepeating("GetGameData", 3f, 3f);
-            this.InvokeRepeating("RefreshOriginData", 3f, 5f);
+            this.InvokeRepeating("RefreshOriginData", 3f, 10f);
             this.InvokeRepeating("RefreshFriendData", 3f, 15f);
         }
         //获取游戏数据
@@ -233,19 +233,24 @@ namespace AppGame.Module.Cycling
         //刷新健康数据
         private void RefreshOriginData()
         {
-            this.originData.walk += Random.Range(1000, 5000) * 30;
-            this.originData.ride += Random.Range(1000, 5000) * 30;
+            this.originData.walk += Random.Range(1000, 25000);
+            this.originData.ride += Random.Range(1000, 25000);
             this.CyclingDataManager.SaveOriginData(this.originData);
             this.RefreshMpDatas();
         }
         //刷新亲友数据
         private void RefreshFriendData()
         {
+            int pointCount = this.View.Player.MapNode.Points.Count;
+            MapPointNode endPointNode = this.View.Player.MapNode.Points[pointCount - 1].GetComponent<MapPointNode>();
+            int maxPointIndex = int.Parse(endPointNode.ID.Substring(7, 2));
+
             int index = 1 + Random.Range(0, 10) % 3;
             int offset = Random.Range(1, 5);
             PlayerData playerData = this.playerDataList[index];
             int position = int.Parse(playerData.map_position.Substring(7, 2));
-            playerData.map_position = string.Format("{0}_{1:d2}", playerData.map_id, position + offset);
+            position = Mathf.Clamp(position + offset, 1, maxPointIndex);//不能超过地图上最大的编号
+            playerData.map_position = string.Format("{0}_{1:d2}", playerData.map_id, position);
             this.CyclingDataManager.SavePlayerData(playerData);
             this.View.RefreshTeammates(this.playerDataList);
         }
@@ -486,18 +491,27 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            this.myPlayerData.map_id = ticket.ToMapID;
-            this.myPlayerData.map_position = string.Format("{0}_01", ticket.ToMapID);
-            this.CyclingDataManager.SavePlayerData(this.myPlayerData);
-            this.View.ShowLoading(ticket);
-            this.Initialize();
-            this.DelayInvoke(() => this.View.HideLoading(), Random.Range(1.5f, 3f));
+            if (ticket.Go)
+            {
+                this.myPlayerData.map_id = ticket.ToMapID;
+                this.myPlayerData.map_position = string.Format("{0}_01", ticket.ToMapID);
+                this.myPlayerData.walk_expend += ticket.Step;
+                this.CyclingDataManager.SavePlayerData(this.myPlayerData);
+                this.ItemDataManager.ReduceItem(Items.COIN, ticket.Coin);
+                this.View.ShowLoading(ticket);
+                this.Initialize();
+                this.DelayInvoke(() => this.View.HideLoading(), Random.Range(1.5f, 3f));
+            }
+            else
+            {
+                this.View.Stay();
+            }
         }
         //当Go按钮被点击时
         private void OnGo()
         {
             int hp = this.myPlayerData.hp;
-            if (hp > 0)
+            if (hp > 0 && this.View.Player.CurrentNode.NodeType != NodeTypes.EndNode)
             {
                 this.myPlayerData.hp -= 1;
                 this.CyclingDataManager.SavePlayerData(this.myPlayerData);

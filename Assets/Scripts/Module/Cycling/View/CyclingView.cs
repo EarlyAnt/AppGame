@@ -87,6 +87,7 @@ namespace AppGame.Module.Cycling
             get { return int.Parse(this.coinBox.text); }
             set { this.coinBox.text = value.ToString(); }
         }
+        public Player Player { get { return this.player; } }
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -350,6 +351,11 @@ namespace AppGame.Module.Cycling
         {
             this.Restart();
             this.DelayInvoke(this.trafficLoading.Hide, 0.5f);
+        }
+        public void Stay()
+        {
+            this.playerCanGo = true;
+            this.SetMpBallVisible(true);
         }
         private void OnScenicCardClosed(IEvent evt)
         {
