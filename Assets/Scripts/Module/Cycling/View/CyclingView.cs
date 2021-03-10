@@ -137,8 +137,8 @@ namespace AppGame.Module.Cycling
                 Debug.LogErrorFormat("<><CyclingView.LoadMap>Can not find the map[{0}]", mapID);
                 return;
             }
-            this.mapBox.LoadImage(mapInfo.Prefab, mapInfo.MapImage);
-            this.pathBox.LoadImage(mapInfo.Prefab, mapInfo.PathImage);
+            this.mapBox.LoadImage(mapInfo.AB, mapInfo.MapImage);
+            this.pathBox.LoadImage(mapInfo.AB, mapInfo.PathImage);
 
             this.mapNode = this.PrefabUtil.CreateGameObject("Cycling/Road", mapID).GetComponent<MapNode>();
             this.mapNode.transform.SetParent(this.mapRoot);

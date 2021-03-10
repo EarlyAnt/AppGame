@@ -17,6 +17,8 @@ namespace AppGame.Util
         [Inject]
         public IModuleConfig ModuleConfig { get; set; }//Module配置
         [Inject]
+        public IMapConfig MapConfig { get; set; }
+        [Inject]
         public IResourceUtil ResourceUtils { get; set; }//资源工具
         [Inject]
         public IHotUpdateUtil HotUpdateUtils { get; set; }
@@ -113,6 +115,15 @@ namespace AppGame.Util
                 }
             }
             #endregion
+
+            #region 统计所有地图中的地图AB包
+            List<MapInfo> mapInfos = this.MapConfig.GetAllMaps();
+            foreach (var mapInfo in mapInfos)
+            {
+                assetFiles.Add(new AssetFile() { Path = mapInfo.AB, FullPath = string.Format("Model/{0}.ab", mapInfo.AB), MD5 = "" });
+            }
+            #endregion
+
             #region 统计其余的AssetBundle文件
             //assetFiles.Add(new AssetFile() { Path = "garden/gesture", FullPath = "Model/garden/gesture.ab", MD5 = "" });
             //assetFiles.Add(new AssetFile() { Path = "garden/sow", FullPath = "Model/garden/soil.ab", MD5 = "" });

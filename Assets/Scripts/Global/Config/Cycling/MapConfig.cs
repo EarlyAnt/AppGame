@@ -50,7 +50,7 @@ namespace AppGame.Config
                                         ProvinceName = se.Attribute("ProvinceName"),
                                         CityID = se.Attribute("CityID"),
                                         CityName = se.Attribute("CityName"),
-                                        Prefab = se.Attribute("Prefab"),
+                                        AB = se.Attribute("AB"),
                                         MapImage = se.Attribute("MapImage"),
                                         PathImage = se.Attribute("PathImage"),
                                         NextMap = se.Attribute("NextMap")

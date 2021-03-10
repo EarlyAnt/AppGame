@@ -29,8 +29,7 @@
       <Image Name="bg_circle" FileType="Sprite" Path="Common/Avatar/bg_circle" Enable="1" />
     </Module>
     <Module Name="Cycling" Desc="骑行游戏">
-      <Image Name="nanjing_bg" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
-      <Image Name="path" FileType="Texture2" AB="cycling/nanjing" Enable="1" />
+      <Image Name="traffic" FileType="Texture2" AB="cycling/traffic" Enable="1" />
       <Image Name="card_nanjing01" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing01" Enable="1" />
       <Image Name="card_nanjing02" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing02" Enable="1" />
       <Image Name="card_nanjing03" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing03" Enable="1" />
