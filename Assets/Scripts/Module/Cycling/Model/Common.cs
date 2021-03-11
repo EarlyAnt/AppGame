@@ -15,12 +15,14 @@ namespace AppGame.Module.Cycling
         MOVE_FORWARD,
         INTERACTION,
 
-
         //页面关闭事件
         SCENIC_CARD_CLOSE,
         CITY_STATION_CLOSE,
         PAY_BILL_CLOSE,
-        TRAFFIC_LOADING_CLOSE
+        TRAFFIC_LOADING_CLOSE,
+
+        //其他事件
+        SET_TOUCH
     }
 
     public enum NodeTypes

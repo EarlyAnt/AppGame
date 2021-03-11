@@ -72,6 +72,8 @@ namespace AppGame.Module.Cycling
         private CityStation cityStation;
         [SerializeField]
         private TrafficLoading trafficLoading;
+        [SerializeField]
+        private Image touchPad;
         #endregion
         #region 其他变量
         private bool playerCanGo = true;
@@ -271,6 +273,7 @@ namespace AppGame.Module.Cycling
         {
             this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
             this.dispatcher.UpdateListener(register, GameEvent.PAY_BILL_CLOSE, this.OnPayBillClosed);
+            this.dispatcher.UpdateListener(register, GameEvent.SET_TOUCH, this.OnSetTouch);
         }
         private Vector3 GetRandomPosition()
         {
@@ -378,6 +381,15 @@ namespace AppGame.Module.Cycling
             }
 
             this.dispatcher.Dispatch(GameEvent.COLLECT_MP, mpData);
+        }
+        private void OnSetTouch(IEvent evt)
+        {
+            if (evt == null || evt.data == null)
+            {
+                Debug.LogError("<><CyclingView.OnSetTouch>Error: parameter 'evt' or 'evt.data' is null");
+                return;
+            }
+            this.touchPad.enabled = (bool)evt.data;
         }
     }
 }

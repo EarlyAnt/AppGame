@@ -28,6 +28,7 @@ namespace AppGame.Module.Cycling
         //ÏÔÊ¾¿¨Æ¬
         public void Show(string mapID)
         {
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, false);
             MapInfo mapInfo = this.MapConfig.GetMap(mapID);
             if (mapInfo == null)
             {
@@ -67,6 +68,7 @@ namespace AppGame.Module.Cycling
             this.ticket.Vehicle = vehicle.VehicleName;
             this.dispatcher.Dispatch(GameEvent.CITY_STATION_CLOSE, this.ticket);
             this.root.SetActive(false);
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, true);
         }
         //Òþ²Ø¿¨Æ¬
         public void Stay()
@@ -74,6 +76,7 @@ namespace AppGame.Module.Cycling
             this.ticket.Go = false;
             this.dispatcher.Dispatch(GameEvent.CITY_STATION_CLOSE, this.ticket);
             this.root.SetActive(false);
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, true);
         }
     }
 }

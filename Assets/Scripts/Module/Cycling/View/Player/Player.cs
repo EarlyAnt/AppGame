@@ -29,11 +29,14 @@ namespace AppGame.Module.Cycling
         private bool showGizmos;
         [SerializeField]
         private RoadRenderer roadRenderer;
+        [SerializeField]
+        private float damping = 0f;
         #endregion
         #region 其他变量
         private CameraEdge cameraEdge;
         private bool inRange;
         private Vector3 lastPos;
+        private Vector2 moveAxis;
         private int directon = 0;
         private int lastDirection = 0;
         public MapPointNode CurrentNode
@@ -70,15 +73,30 @@ namespace AppGame.Module.Cycling
         }
         private void Update()
         {
-            //计算相机可视区域的大小
-            this.cameraEdge = this.CameraUtil.GetCameraEdge(this.mapNode.transform, this.camera.position, this.player.position);
-            //计算相机可视区域是否超过地图
-            this.inRange = this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopLeft, this.canvasScale) &&
-                           this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopRight, this.canvasScale) &&
-                           this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
-                           this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomLeft, this.canvasScale);
-            //根据玩家的位置调整相机的位置，使相机可视区域不超出地图
-            this.camera.transform.position = Vector3.Lerp(this.camera.transform.position, this.GetCameraPosition(), this.lerp);
+            if (this.IsMoving)
+            {
+                //计算相机可视区域的大小
+                this.cameraEdge = this.CameraUtil.GetCameraEdge(this.mapNode.transform, this.camera.position, this.player.position);
+                //计算相机可视区域是否超过地图
+                this.inRange = this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopLeft, this.canvasScale) &&
+                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopRight, this.canvasScale) &&
+                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
+                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomLeft, this.canvasScale);
+                //根据玩家的位置调整相机的位置，使相机可视区域不超出地图
+                this.camera.transform.position = Vector3.Lerp(this.camera.transform.position, this.GetCameraPosition(this.player.position), this.lerp);
+            }
+            else
+            {
+                Vector2 newPosition = this.camera.transform.position + new Vector3(this.moveAxis.x, this.moveAxis.y, 0);
+                //计算相机可视区域的大小
+                this.cameraEdge = this.CameraUtil.GetCameraEdge(this.mapNode.transform, this.camera.position, newPosition);
+                //计算相机可视区域是否超过地图
+                this.inRange = this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopLeft, this.canvasScale) &&
+                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopRight, this.canvasScale) &&
+                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
+                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomLeft, this.canvasScale);
+                this.camera.transform.position = Vector3.Lerp(this.camera.transform.position, this.GetCameraPosition(newPosition), this.lerp);
+            }
         }
         private void OnDrawGizmos()
         {
@@ -124,6 +142,21 @@ namespace AppGame.Module.Cycling
                 this.StartCoroutine(this.MovePlayer(false));
             }
         }
+        //开始滑屏
+        public void TouchStart()
+        {
+            this.moveAxis = Vector2.zero;
+        }
+        //结束滑屏
+        public void TouchEnd()
+        {
+            this.moveAxis = Vector2.zero;
+        }
+        //移动相机
+        public void TouchMove(Vector2 axis)
+        {
+            this.moveAxis = axis;
+        }
         //玩家移动
         private IEnumerator MovePlayer(bool forward)
         {
@@ -161,7 +194,7 @@ namespace AppGame.Module.Cycling
             {
                 this.nodeIndex = targetNodeIndex;
                 this.player.position = this.mapNode.Points[this.nodeIndex].position;
-                this.camera.position = this.GetCameraPosition();
+                this.camera.position = this.GetCameraPosition(this.player.position);
                 this.SetPointIcon(true);
             }
             else
@@ -184,16 +217,15 @@ namespace AppGame.Module.Cycling
             }
         }
         //获取相机的合理位置(不超出地图)
-        private Vector3 GetCameraPosition()
+        private Vector3 GetCameraPosition(Vector3 targetPosition)
         {
-            Vector3 playerPosition = this.player.position;
-            playerPosition.z = this.camera.position.z;
+            targetPosition.z = this.camera.position.z;
             if (!this.inRange && this.cameraEdge != null)
             {
-                playerPosition.x = Mathf.Clamp(playerPosition.x, -this.mapRectTransform.sizeDelta.x * this.canvasScale / 2f + this.cameraEdge.Width / 2f, this.mapRectTransform.sizeDelta.x * this.canvasScale / 2f - this.cameraEdge.Width / 2f);
-                playerPosition.y = Mathf.Clamp(playerPosition.y, -this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f + this.cameraEdge.Height / 2f, this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f - this.cameraEdge.Height / 2f);
+                targetPosition.x = Mathf.Clamp(targetPosition.x, -this.mapRectTransform.sizeDelta.x * this.canvasScale / 2f + this.cameraEdge.Width / 2f, this.mapRectTransform.sizeDelta.x * this.canvasScale / 2f - this.cameraEdge.Width / 2f);
+                targetPosition.y = Mathf.Clamp(targetPosition.y, -this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f + this.cameraEdge.Height / 2f, this.mapRectTransform.sizeDelta.y * this.canvasScale / 2f - this.cameraEdge.Height / 2f);
             }
-            return playerPosition;
+            return targetPosition;
         }
         //判断是否已改变方向
         private bool DirectionChanged(Vector3 pos1, Vector3 pos2)
