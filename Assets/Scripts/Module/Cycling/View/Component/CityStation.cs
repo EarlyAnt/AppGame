@@ -44,9 +44,9 @@ namespace AppGame.Module.Cycling
             }
 
             this.fromCityBox.text = mapInfo.CityName;
+            this.fromCityPinYinBox.text = mapInfo.CityPinYin;
             this.toCityBox.text = nextMapInfo.CityName;
-            //this.fromCityPinYinBox.text = "";
-            //this.toCityPinYinBox.text = "";
+            this.toCityPinYinBox.text = nextMapInfo.CityPinYin;
             this.root.SetActive(true);
 
             this.ticket = new Ticket()

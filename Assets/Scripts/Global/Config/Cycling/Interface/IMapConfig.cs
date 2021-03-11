@@ -38,6 +38,7 @@ namespace AppGame.Config
         public string ProvinceName { get; set; }
         public string CityID { get; set; }
         public string CityName { get; set; }
+        public string CityPinYin { get; set; }
         public string AB { get; set; }
         public string MapImage { get; set; }
         public string PathImage { get; set; }

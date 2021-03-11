@@ -55,6 +55,7 @@ namespace AppGame.Module.Cycling
             {
                 this.CyclingDataManager.ClearMpCollection();
                 this.ItemDataManager.Clear(true);
+                this.ItemDataManager.AddItem(Items.COIN, 1000);
                 this.BuildTestData();
             }
             else if (Input.GetKeyDown(KeyCode.R))
@@ -175,7 +176,7 @@ namespace AppGame.Module.Cycling
                 child_avatar = "6",
                 relation = (int)Relations.Self,
                 map_id = "320101",
-                map_position = "320101_25",
+                map_position = "320101_45",
                 walk_expend = 5000,
                 walk_today = 5000,
                 ride_expend = 1000,
