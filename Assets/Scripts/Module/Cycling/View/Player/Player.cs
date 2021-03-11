@@ -73,30 +73,20 @@ namespace AppGame.Module.Cycling
         }
         private void Update()
         {
-            if (this.IsMoving)
+            Vector2 newPosition = this.player.position;
+            if (!this.IsMoving)
             {
-                //计算相机可视区域的大小
-                this.cameraEdge = this.CameraUtil.GetCameraEdge(this.mapNode.transform, this.camera.position, this.player.position);
-                //计算相机可视区域是否超过地图
-                this.inRange = this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopLeft, this.canvasScale) &&
-                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopRight, this.canvasScale) &&
-                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
-                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomLeft, this.canvasScale);
-                //根据玩家的位置调整相机的位置，使相机可视区域不超出地图
-                this.camera.transform.position = Vector3.Lerp(this.camera.transform.position, this.GetCameraPosition(this.player.position), this.lerp);
+                newPosition = this.camera.transform.position + new Vector3(this.moveAxis.x, this.moveAxis.y, 0);
             }
-            else
-            {
-                Vector2 newPosition = this.camera.transform.position + new Vector3(this.moveAxis.x, this.moveAxis.y, 0);
-                //计算相机可视区域的大小
-                this.cameraEdge = this.CameraUtil.GetCameraEdge(this.mapNode.transform, this.camera.position, newPosition);
-                //计算相机可视区域是否超过地图
-                this.inRange = this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopLeft, this.canvasScale) &&
-                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopRight, this.canvasScale) &&
-                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
-                               this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomLeft, this.canvasScale);
-                this.camera.transform.position = Vector3.Lerp(this.camera.transform.position, this.GetCameraPosition(newPosition), this.lerp);
-            }
+
+            //计算相机可视区域的大小
+            this.cameraEdge = this.CameraUtil.GetCameraEdge(this.mapNode.transform, this.camera.position, newPosition);
+            //计算相机可视区域是否超过地图
+            this.inRange = this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopLeft, this.canvasScale) &&
+                           this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopRight, this.canvasScale) &&
+                           this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
+                           this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomLeft, this.canvasScale);
+            this.camera.transform.position = Vector3.Lerp(this.camera.transform.position, this.GetCameraPosition(newPosition), this.lerp);
         }
         private void OnDrawGizmos()
         {
