@@ -145,7 +145,7 @@ namespace AppGame.Module.Cycling
         //移动相机
         public void TouchMove(Vector2 axis)
         {
-            this.moveAxis = axis;
+            this.moveAxis = axis * -1;
         }
         //玩家移动
         private IEnumerator MovePlayer(bool forward)

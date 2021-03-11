@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+using AppGame.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace AppGame.Module.Cycling
 {
-    public class MapPointNode : MonoBehaviour
+    public class MapPointNode : BaseView
     {
         /************************************************属性与变量命名************************************************/
         [SerializeField]
@@ -51,6 +51,14 @@ namespace AppGame.Module.Cycling
 
             if (this.spriteLoader != null)
                 this.spriteLoader.LoadImage(light ? this.lightImageName : this.normalImageName);
+
+            Image icon = this.GetComponent<Image>();
+            if (icon != null) icon.raycastTarget = light;
+        }
+        //点击按钮
+        public void NodeClick()
+        {
+            this.dispatcher.Dispatch(GameEvent.INTERACTION, this);
         }
         //更改节点类型
         public void ChangeNodeType(NodeTypes nodeType)
