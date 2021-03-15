@@ -109,7 +109,7 @@ namespace AppGame.Module.Cycling
             //        this.OpenBox(this.pageCounter.ItemIndex);
             //        break;
             //    case WaterAnimationSteps.OpenedBox:
-            //        this.GetReward();
+            //        this.SaveReward();
             //        break;
             //}
         }
@@ -183,7 +183,7 @@ namespace AppGame.Module.Cycling
                     }
                     else
                     {
-                        this.currentStep = OpenTreasureBoxSteps.DropDown;                        
+                        this.currentStep = OpenTreasureBoxSteps.DropDown;
                         this.treasureBoxList.ForEach(t => t.Arrow.enabled = true);
                         this.ChangeBox();
                         this.DelayInvoke(() =>
@@ -251,8 +251,7 @@ namespace AppGame.Module.Cycling
                 this.treasureBoxList[index].Spine.AnimationState.ClearTracks();
                 this.treasureBoxList[index].Spine.AnimationState.SetAnimation(0, "box02", false).Complete += (trackEntry) =>
                 {//打开当前选中的宝箱
-                    TreasureBoxReward reward = this.CalculateReward();
-                    this.balloonList[index].SetValue(reward.Exp, reward.Coin);
+                    this.balloonList[index].SetValue(this.CalculateReward());
                     this.balloonList[index].Appear(index == this.pageCounter.ItemIndex);
                     if (recursion)
                     {
@@ -271,8 +270,8 @@ namespace AppGame.Module.Cycling
                 };
             }
         }
-        //获得奖励
-        private void GetReward()
+        //保存宝箱奖励
+        private void SaveReward()
         {
             this.currentStep = OpenTreasureBoxSteps.GettingReward;
             if (this.balloonList != null && this.balloonList.Count > 0 &&
@@ -294,23 +293,24 @@ namespace AppGame.Module.Cycling
                 });
             }
         }
-        //获取随机奖励方案
-        private TreasureBoxReward CalculateReward()
+        //计算宝箱奖励
+        private int CalculateReward()
         {
+            //计算奖励方案
             RewardTypes rewardType = RewardTypes.Low;
             if (this.rewardTypes.Count == 3)
             {
-                int solution = UnityEngine.Random.Range(0, 1000) % 101;
-                if (solution <= 5)
-                {//5%的高产出几率：经验9，金币99
+                int solution = 1 + UnityEngine.Random.Range(0, 1000) % 100;
+                if (solution > 90)
+                {//10%的高产出几率
                     rewardType = RewardTypes.High;
                 }
-                else if (solution > 5 && solution <= 30)
-                {//25%的中产出几率：经验5，金币20～50之间随机
+                else if (solution > 60 && solution <= 90)
+                {//30%的中产出几率
                     rewardType = RewardTypes.Medium;
                 }
-                else if (solution > 30)
-                {//70%的低产出几率：经验2，金币10～20之间随机
+                else if (solution <= 60)
+                {//60%的低产出几率
                     rewardType = RewardTypes.Low;
                 }
             }
@@ -324,29 +324,22 @@ namespace AppGame.Module.Cycling
                 rewardType = this.rewardTypes[0];
             }
             this.rewardTypes.Remove(rewardType);
-            return this.GetReward(rewardType);
-        }
-        //获取随机经验和金币奖励
-        private TreasureBoxReward GetReward(RewardTypes rewardType)
-        {
-            int exp = 0;
+
+            //计算不同方案获得的金币
             int coin = 0;
             switch (rewardType)
             {
-                case RewardTypes.High://5%的高产出几率：经验9，金币99
-                    exp = 9;
-                    coin = 99;
+                case RewardTypes.High://10%的高产出几率：金币500
+                    coin = 500;
                     break;
-                case RewardTypes.Medium://25%的中产出几率：经验5，金币20～50之间随机
-                    exp = 5;
-                    coin = 20 + UnityEngine.Random.Range(0, 100) % 31;
+                case RewardTypes.Medium://30%的中产出几率：金币200
+                    coin = 200;
                     break;
-                case RewardTypes.Low://70%的低产出几率：经验2，金币10～20之间随机
-                    exp = 2;
-                    coin = 10 + UnityEngine.Random.Range(0, 100) % 11;
+                case RewardTypes.Low://60%的低产出几率：金币100
+                    coin = 100;
                     break;
             }
-            return new TreasureBoxReward() { Exp = exp, Coin = coin };
+            return coin;
         }
         //当执行回调时
         private void OnCallback()

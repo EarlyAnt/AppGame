@@ -17,21 +17,11 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private float raiseY = 2.5f;
         [SerializeField]
-        private Text expBox;
-        [SerializeField]
         private Text coinBox;
         private RectTransform rectTransform;
         private float originY = 0f;
         public CanvasGroup CanvasGroup { get { return this.canvasGroup; } }
         public BalloonStatus BalloonStatus { get; private set; }
-        public int Exp
-        {
-            get
-            {
-                int exp = 0;
-                return int.TryParse(this.expBox.text, out exp) ? exp : 0;
-            }
-        }
         public int Coin
         {
             get
@@ -43,7 +33,6 @@ namespace AppGame.Module.Cycling
         /************************************************Unity方法与事件***********************************************/
         private void Awake()
         {
-            this.expBox.text = "0";
             this.coinBox.text = "0";
             this.canvasGroup.DOFade(0f, 0f);
             this.rectTransform = this.canvasGroup.GetComponent<RectTransform>();
@@ -52,9 +41,8 @@ namespace AppGame.Module.Cycling
         }
         /************************************************自 定 义 方 法************************************************/
         //设置数值
-        public void SetValue(int exp, int coin)
+        public void SetValue(int coin)
         {
-            this.expBox.text = exp.ToString();
             this.coinBox.text = coin.ToString();
         }
         //出现
