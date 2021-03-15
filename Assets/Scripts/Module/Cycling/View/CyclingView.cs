@@ -120,16 +120,32 @@ namespace AppGame.Module.Cycling
         }
         public void Restart()
         {
+            //复原状态变量
             this.playerCanGo = true;
             this.hideMpBalls = false;
             this.mask.DOFade(1f, 0f);
             this.canvasGroup.DOFade(0f, 0f);
 
+            //场景过渡
             this.DelayInvoke(() =>
             {
                 this.mask.DOFade(0f, 1f);
                 this.canvasGroup.DOFade(1f, 1f);
             }, 0.5f);
+
+            //清除队友
+            if (this.teammates != null)
+                this.teammates.Clear();
+
+            while (this.teammateRoot.childCount > 0)
+                GameObject.DestroyImmediate(this.teammateRoot.GetChild(0).gameObject);
+
+            //清除能量气泡
+            if (this.mpBalls != null)
+                this.mpBalls.Clear();
+
+            while (this.mpBallRoot.childCount > 0)
+                GameObject.DestroyImmediate(this.mpBallRoot.GetChild(0).gameObject);
         }
         public void LoadMap(string mapID)
         {
@@ -142,6 +158,8 @@ namespace AppGame.Module.Cycling
             this.mapBox.LoadImage(mapInfo.AB, mapInfo.MapImage);
             this.pathBox.LoadImage(mapInfo.AB, mapInfo.PathImage);
 
+            while (this.mapRoot.childCount > 0)
+                GameObject.DestroyImmediate(this.mapRoot.GetChild(0).gameObject);
             this.mapNode = this.PrefabUtil.CreateGameObject("Cycling/Road", mapID).GetComponent<MapNode>();
             this.mapNode.transform.SetParent(this.mapRoot);
             this.mapNode.transform.localPosition = Vector3.zero;

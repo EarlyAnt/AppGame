@@ -20,9 +20,6 @@ namespace AppGame.Module.Cycling
         private SpriteLoader spriteLoader;
         public string ID { get { return this.id; } }
         public NodeTypes NodeType { get { return this.nodeType; } }
-        private static Color START_NODE_COLOR = new Color(0.286f, 1f, 0.357f, 1f);
-        private static Color SITE_NODE_COLOR = new Color(1f, 0.286f, 0.443f, 1f);
-        private static Color TRANSPARENT_COLOR = new Color(1f, 1f, 1f, 0f);
         /************************************************Unity方法与事件***********************************************/
 
         /************************************************自 定 义 方 法************************************************/
@@ -64,33 +61,6 @@ namespace AppGame.Module.Cycling
         public void ChangeNodeType(NodeTypes nodeType)
         {
             this.nodeType = nodeType;
-            this.SetNodeColor();
-        }
-        [ContextMenu("更改节点颜色")]
-        public void SetNodeColor()
-        {
-            Image image = this.GetComponent<Image>();
-            if (image != null)
-            {
-                switch (this.nodeType)
-                {
-                    case NodeTypes.StartNode:
-                        image.color = START_NODE_COLOR;
-                        break;
-                    case NodeTypes.EmptyNode:
-                        image.color = TRANSPARENT_COLOR;
-                        break;
-                    case NodeTypes.EventNode:
-                        image.color = Color.white;
-                        break;
-                    case NodeTypes.SiteNode:
-                        image.color = SITE_NODE_COLOR;
-                        break;
-                    case NodeTypes.EndNode:
-                        image.color = START_NODE_COLOR;
-                        break;
-                }
-            }
         }
         [ContextMenu("设置图标名字")]
         public void SetIconName()

@@ -43,10 +43,6 @@ namespace AppGame.Module.Cycling
                     Image image = this.points[i].GetComponent<Image>();
                     mapPointNode.ChangeNodeType(image != null && image.color == Color.white ? NodeTypes.EventNode : NodeTypes.EmptyNode);
                 }
-                else
-                {
-                    mapPointNode.SetNodeColor();
-                }
             }
         }
         [ContextMenu("3-设置节点名称")]

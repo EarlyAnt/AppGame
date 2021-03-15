@@ -35,6 +35,12 @@ namespace AppGame.Module.Cycling
         //移动到指定位置
         public override void MoveToNode(string nodeID, bool lerp = false)
         {
+            if (this.mapNode == null || this.mapNode.Points == null)
+            {
+                Debug.LogWarning("<><Teammate.MoveToNode>Warning: parameter 'mapNode' or 'mapNode.Points' is null");
+                return;
+            }
+
             int index = this.mapNode.Points.FindIndex(t => t.GetComponent<MapPointNode>().ID == nodeID);
             if (index >= 0 && index < this.mapNode.Points.Count)
             {
