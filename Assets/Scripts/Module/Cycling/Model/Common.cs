@@ -1,5 +1,7 @@
+using Spine.Unity;
 using System;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace AppGame.Module.Cycling
 {
@@ -54,6 +56,30 @@ namespace AppGame.Module.Cycling
         Family = 4,
         Friend = 5
     }
+
+    public enum OpenTreasureBoxSteps
+    {
+        Empty = 0,
+        DropDown = 1,
+        OpeningBox = 2,
+        OpenedBox = 3,
+        GotReward = 4,
+        GettingReward = 5
+    }
+
+    public enum BalloonStatus
+    {
+        Disappear = 0,
+        Appear = 1,
+        Raise = 2
+    }
+
+    public enum RewardTypes
+    {
+        Low = 0,
+        Medium = 1,
+        High = 2
+    }
     #endregion
 
     #region 自定义类
@@ -92,6 +118,18 @@ namespace AppGame.Module.Cycling
         public string Vehicle { get; set; }//交通工具
         public int Coin { get; set; }
         public int Step { get; set; }
+    }
+
+    public class TreasureBoxInfo
+    {
+        public SkeletonGraphic Spine { get; set; }
+        public Image Arrow { get; set; }
+    }
+
+    public class TreasureBoxReward
+    {
+        public int Exp { get; set; }
+        public int Coin { get; set; }
     }
     #endregion
 }
