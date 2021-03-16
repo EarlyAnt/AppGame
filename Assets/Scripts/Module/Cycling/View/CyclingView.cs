@@ -23,6 +23,8 @@ namespace AppGame.Module.Cycling
         [Inject]
         public IChildInfoManager ChildInfoManager { get; set; }
         [Inject]
+        public IItemDataManager ItemDataManager { get; set; }
+        [Inject]
         public ICommonImageUtils CommonImageUtils { get; set; }
         [Inject]
         public IPrefabUtil PrefabUtil { get; set; }
@@ -81,7 +83,6 @@ namespace AppGame.Module.Cycling
         private float halfWidth = 380f;
         private float halfHeight = 800f;
         private MapNode mapNode;
-        private PlayerData myPlayerData;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
         public int Coin
@@ -175,12 +176,17 @@ namespace AppGame.Module.Cycling
         {
             this.progressBox.text = string.Format("{0} {1}/{2}", mapName, cardCount, scenicCount);
         }
-        public void RefreshPlayer(List<PlayerData> playerDataList, int coin)
+        public void RefreshPlayer(PlayerData myPlayerData, int coin)
         {
-            this.myPlayerData = playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
+            if (myPlayerData == null)
+            {
+                Debug.LogError("<><CyclingView.RefreshPlayer>Error: parameter 'myPlayerData' is null");
+                return;
+            }
+
             this.player.MapNode = this.mapNode;
-            this.player.MoveToNode(this.myPlayerData.map_position);
-            this.player.name = "Player_" + this.myPlayerData.child_sn;
+            this.player.MoveToNode(myPlayerData.map_position);
+            this.player.name = "Player_" + myPlayerData.child_sn;
             Sprite avatar = this.CommonImageUtils.GetAvatar(myPlayerData.child_avatar);
             this.player.Avatar = avatar;
             this.avatarBox.sprite = avatar;
@@ -190,13 +196,20 @@ namespace AppGame.Module.Cycling
         }
         public void RefreshTeammates(List<PlayerData> playerDataList)
         {
+            PlayerData myPlayerData = playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
+            if (myPlayerData == null)
+            {
+                Debug.LogError("<><CyclingView.RefreshTeammates>Error: parameter 'myPlayerData' is null");
+                return;
+            }
+
             if (this.teammates == null)
             {
                 this.teammates = new List<Teammate>();
                 foreach (var teammateData in playerDataList)
                 {
                     if (teammateData.child_sn == this.ChildInfoManager.GetChildSN() ||
-                        teammateData.map_id != this.myPlayerData.map_id)
+                        teammateData.map_id != myPlayerData.map_id)
                         continue;
 
                     Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.teammateRoot);
@@ -273,7 +286,7 @@ namespace AppGame.Module.Cycling
         {
             this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
             this.dispatcher.UpdateListener(register, GameEvent.PAY_BILL_CLOSE, this.OnPayBillClosed);
-            this.dispatcher.UpdateListener(register, GameEvent.SET_TOUCH, this.OnSetTouch);
+            this.dispatcher.UpdateListener(register, GameEvent.SET_TOUCH_PAD_ENABLE, this.OnSetTouch);
         }
         private Vector3 GetRandomPosition()
         {
@@ -312,18 +325,23 @@ namespace AppGame.Module.Cycling
         {
             this.dispatcher.Dispatch(GameEvent.MP_CLICK, mpBall);
         }
-        public void Interact(MapPointNode mapPointNode)
+        public void Interact(MapPointNode mapPointNode, PlayerData myPlayerData)
         {
             if (mapPointNode == null)
             {
                 Debug.LogError("<><CyclingView.OnPlayerStopped>Error: parameter 'evt.data' is not the type MapPointNode");
                 return;
             }
+            else if (myPlayerData == null)
+            {
+                Debug.LogError("<><CyclingView.Interact>Error: parameter 'myPlayerData' is null");
+                return;
+            }
 
             //检测是否有卡片需要显示
             if (mapPointNode.NodeType == NodeTypes.EndNode)
             {
-                this.cityStation.Show(this.player.MapNode.ID);
+                this.cityStation.Show(this.player.MapNode.ID, this.ItemDataManager.GetItemCount(Items.COIN), myPlayerData.hp);
             }
             else if (mapPointNode.NodeType == NodeTypes.SiteNode)
             {

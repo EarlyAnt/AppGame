@@ -22,7 +22,7 @@ namespace AppGame.Module.Cycling
         TRAFFIC_LOADING_CLOSE,
 
         //其他事件
-        SET_TOUCH
+        SET_TOUCH_PAD_ENABLE
     }
 
     public enum NodeTypes
@@ -91,7 +91,7 @@ namespace AppGame.Module.Cycling
         public string ToCityPinYin { get; set; }
         public string Vehicle { get; set; }//交通工具
         public int Coin { get; set; }
-        public int Step { get; set; }
+        public int Hp { get; set; }
     }
     #endregion
 }

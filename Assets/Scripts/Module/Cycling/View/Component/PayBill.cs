@@ -57,7 +57,7 @@ namespace AppGame.Module.Cycling
         //显示卡片
         public void Show(MpData mpData)
         {
-            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, false);
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, false);
             this.mpData = mpData;
             //设置页面内容
             this.mpBox.text = mpData.Mp.ToString();
@@ -78,7 +78,7 @@ namespace AppGame.Module.Cycling
             this.SetErrorPanel(false);
             this.root.gameObject.SetActive(false);
             if (pay) this.dispatcher.Dispatch(GameEvent.PAY_BILL_CLOSE, this.mpData);
-            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, true);
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, true);
         }
         //设置错误提示面板
         public void SetErrorPanel(bool visible)

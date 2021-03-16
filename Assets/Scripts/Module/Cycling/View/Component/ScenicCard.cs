@@ -49,7 +49,7 @@ namespace AppGame.Module.Cycling
         //显示卡片
         public void Show(string scenicID)
         {
-            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, false);
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, false);
             this.Reset();
             //查询地图和景点数据数据
             ScenicInfo scenicInfo = this.ScenicConfig.GetScenic(scenicID);
@@ -89,7 +89,7 @@ namespace AppGame.Module.Cycling
             this.root.gameObject.SetActive(false);
             this.Reset();
             this.OnViewClosed();
-            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, true);
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, true);
         }
         //旋转卡片
         public void Rotate()

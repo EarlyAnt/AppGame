@@ -55,7 +55,7 @@ namespace AppGame.Module.Cycling
             {
                 this.CyclingDataManager.ClearMpCollection();
                 this.ItemDataManager.Clear(true);
-                this.ItemDataManager.AddItem(Items.COIN, 1000);
+                this.ItemDataManager.AddItem(Items.COIN, 2);
                 this.BuildTestData();
             }
             else if (Input.GetKeyDown(KeyCode.R))
@@ -145,7 +145,7 @@ namespace AppGame.Module.Cycling
             this.GetGameData();
             this.RefreshMapInfo();
             this.View.LoadMap(this.myPlayerData.map_id);
-            this.View.RefreshPlayer(this.playerDataList, this.ItemDataManager.GetItemCount(Items.COIN));
+            this.View.RefreshPlayer(this.myPlayerData, this.ItemDataManager.GetItemCount(Items.COIN));
             this.View.RefreshTeammates(this.playerDataList);
             this.View.RefreshMp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
             this.RefreshMpDatas();
@@ -443,7 +443,7 @@ namespace AppGame.Module.Cycling
             if (mapPointNode.NodeType == NodeTypes.EndNode)
             {
                 //Todo: 处理到站时的数据逻辑
-                this.View.Interact(mapPointNode);
+                this.View.Interact(mapPointNode, this.myPlayerData);
             }
             else if (mapPointNode.NodeType == NodeTypes.SiteNode)
             {
@@ -454,7 +454,7 @@ namespace AppGame.Module.Cycling
                     if (cardInfo != null)
                     {
                         this.ItemDataManager.SetItem(cardInfo.CardID, 1);
-                        this.View.Interact(mapPointNode);
+                        this.View.Interact(mapPointNode, this.myPlayerData);
                     }
                     else
                     {
@@ -468,7 +468,7 @@ namespace AppGame.Module.Cycling
             }
             else
             {
-                this.View.Interact(mapPointNode);
+                this.View.Interact(mapPointNode, this.myPlayerData);
             }
         }
         //当景点卡片关闭时
@@ -496,7 +496,7 @@ namespace AppGame.Module.Cycling
             {
                 this.myPlayerData.map_id = ticket.ToMapID;
                 this.myPlayerData.map_position = string.Format("{0}_01", ticket.ToMapID);
-                this.myPlayerData.walk_expend += ticket.Step;
+                this.myPlayerData.hp -= ticket.Hp;
                 this.CyclingDataManager.SavePlayerData(this.myPlayerData);
                 this.ItemDataManager.ReduceItem(Items.COIN, ticket.Coin);
                 this.View.ShowLoading(ticket);
