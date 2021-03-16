@@ -40,8 +40,8 @@ namespace AppGame.Config
         public string CityName { get; set; }
         public string CityPinYin { get; set; }
         public string AB { get; set; }
-        public string MapImage { get; set; }
-        public string PathImage { get; set; }
+        public string MapImage { get { return "map"; } }
+        public string PathImage { get { return "path"; } }
         public string NextMap { get; set; }
     }
 }

@@ -39,6 +39,12 @@
       <Image Name="card_nanjing07" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing07" Enable="1" />
       <Image Name="card_nanjing08" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing08" Enable="1" />
       <Image Name="card_nanjing09" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing09" Enable="1" />
+      <Image Name="card_zhenjiang01" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang01" Enable="1" />
+      <Image Name="card_zhenjiang02" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang02" Enable="1" />
+      <Image Name="card_zhenjiang03" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang03" Enable="1" />
+      <Image Name="card_zhenjiang04" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang04" Enable="1" />
+      <Image Name="card_zhenjiang05" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang05" Enable="1" />
+      <Image Name="card_zhenjiang06" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang06" Enable="1" />
       <Image Name="arrow_panel" FileType="Sprite" Path="Cycling/View/arrow_panel" Enable="1" />
       <Image Name="back" FileType="Sprite" Path="Cycling/View/back" Enable="1" />
       <Image Name="book" FileType="Sprite" Path="Cycling/View/book" Enable="1" />

@@ -52,8 +52,6 @@ namespace AppGame.Config
                                         CityName = se.Attribute("CityName"),
                                         CityPinYin = se.Attribute("CityPinYin"),
                                         AB = se.Attribute("AB"),
-                                        MapImage = se.Attribute("MapImage"),
-                                        PathImage = se.Attribute("PathImage"),
                                         NextMap = se.Attribute("NextMap")
                                     };
                                     this.configs.Add(mapInfo);
