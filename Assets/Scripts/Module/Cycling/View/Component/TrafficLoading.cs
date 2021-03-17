@@ -80,7 +80,7 @@ namespace AppGame.Module.Cycling
                 trafficObject.transform.SetParent(this.loadingRoot.transform);
                 trafficObject.transform.localPosition = Vector3.zero;
                 trafficObject.transform.localRotation = Quaternion.identity;
-                trafficObject.transform.localScale = Vector3.one;
+                trafficObject.transform.localScale = Vector3.one * 1.25f;
                 this.traffic = trafficObject.GetComponent<SkeletonGraphic>();
             },
             (errorText) =>

@@ -106,8 +106,14 @@ namespace AppGame.Module.Cycling
         public override void OnRegister()
         {
             UpdateListeners(true);
+#if (UNITY_ANDROID) && (!UNITY_EDITOR)
+            this.CyclingDataManager.ClearMpCollection();
+            this.ItemDataManager.Clear(true);
+            this.ItemDataManager.AddItem(Items.COIN, 1000);
+            this.BuildTestData();
+#endif
             this.Initialize();
-
+            #region 访问服务器获取数据
             //this.CyclingDataUtil.GetBasicData((basicData) =>
             //{
             //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetBasicData, success: {0}", basicData);
@@ -123,6 +129,7 @@ namespace AppGame.Module.Cycling
             //{
             //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetGameData, failure: {0}", errorText);
             //});
+            #endregion
         }
         //取消注册
         public override void OnRemove()
