@@ -172,7 +172,7 @@ namespace AppGame.Module.Cycling
         {
             string childSN = this.ChildInfoManager.GetChildSN();
             //创建原始数据
-            OriginData originData = new OriginData() { child_sn = childSN, walk = 10000, ride = 5000, train = 20, learn = 30 };
+            OriginData originData = new OriginData() { child_sn = childSN, walk = 10000, ride = 5000, train = 0, learn = 0 };
             this.CyclingDataManager.SaveOriginData(originData);
             //创建游戏数据
             List<PlayerData> playerDataList = new List<PlayerData>();
@@ -241,8 +241,8 @@ namespace AppGame.Module.Cycling
         //刷新健康数据
         private void RefreshOriginData()
         {
-            this.originData.walk += Random.Range(1000, 25000);
-            this.originData.ride += Random.Range(1000, 25000);
+            this.originData.walk += Random.Range(1000, 25000) * 3;
+            this.originData.ride += Random.Range(1000, 25000) * 3;
             this.CyclingDataManager.SaveOriginData(this.originData);
             this.RefreshMpDatas();
         }
