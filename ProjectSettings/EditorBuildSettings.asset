@@ -5,9 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Test/MapSize/MapSize.unity
-    guid: b7f81c05c3df15b49a9f81c1fc34223f
+  - enabled: 1
+    path: Assets/Test/WebViewer/Example.unity
+    guid: 0064728741c6349739b6079e4e2c6922
   - enabled: 1
     path: Assets/Scenes/GameStart.unity
     guid: 2753c3bf3a9e5d44eb1dbc5da6b6d380
