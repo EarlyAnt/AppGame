@@ -2960,7 +2960,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6632596976234362360}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1192521320
 MonoBehaviour:
@@ -3844,6 +3844,7 @@ MonoBehaviour:
   cityNameBox: {fileID: 6341364341594134594}
   scenicNameBox: {fileID: 7122080463657125671}
   descriptionBox: {fileID: 1738926985}
+  webView: {fileID: 1920089717524940837}
 --- !u!1 &1571576824
 GameObject:
   m_ObjectHideFlags: 0
@@ -8510,6 +8511,51 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1124, y: 2436}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &4718179609858077271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8129495262456895878}
+  - component: {fileID: 1920089717524940837}
+  m_Layer: 0
+  m_Name: WebViewManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8129495262456895878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4718179609858077271}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6632596976234362360}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1920089717524940837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4718179609858077271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a44cd228a2ce4ce1b5e5ac9dfe8984d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  URL: https://baike.baidu.com/item/%E4%B8%AD%E5%B1%B1%E9%99%B5/246397
+  Context: {fileID: 0}
 --- !u!1 &4789398788239371523
 GameObject:
   m_ObjectHideFlags: 0
@@ -11226,6 +11272,7 @@ RectTransform:
   - {fileID: 2304167213753516861}
   - {fileID: 2973472893163342438}
   - {fileID: 2010325265}
+  - {fileID: 8129495262456895878}
   - {fileID: 1192521321}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -12375,7 +12422,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 293314814674283857}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1532280018}
+        m_MethodName: OpenUrl
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8217941629641631813
 GameObject:
   m_ObjectHideFlags: 0

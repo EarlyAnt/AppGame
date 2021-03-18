@@ -7,33 +7,45 @@ using UnityEngine.UI;
 
 namespace Wizcorp.Web
 {
-	public class WebView : MonoBehaviour
-	{
-		public string URL = "https://wizcorp.jp";
-		public Text Context;
+    public class WebView : MonoBehaviour
+    {
+        [SerializeField]
+        private string url = "https://wizcorp.jp";
+        [SerializeField]
+        private Text context;
 
-		#region shared
-		public void CallBack(string message)
-		{
-			Context.text = message;
-		}
-		#endregion
+        public string Url
+        {
+            get { return this.url; }
+            set { this.url = value; }
+        }
+
+        #region shared
+        public void CallBack(string message)
+        {
+            if (this.context != null)
+                context.text = message;
+        }
+        #endregion
 
 #if UNITY_ANDROID
-		public void CallWebView()
-		{
-			Debug.Log("Call WebView");
-			AndroidJavaClass unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-			AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
-			currentActivity.Call("OpenWebView", URL);
-		}
+        public void CallWebView()
+        {
+            if (string.IsNullOrEmpty(this.url))
+                return;
 
-		void Start()
-		{
-			AndroidJavaClass unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-			AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
-			currentActivity.Call("SetupCallBack", this.gameObject.name, "CallBack", "Calling back from Android");
-		}
+            Debug.LogFormat("Call WebView: " + this.url);
+            AndroidJavaClass unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
+            currentActivity.Call("OpenWebView", url);
+        }
+
+        void Start()
+        {
+            AndroidJavaClass unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity");
+            currentActivity.Call("SetupCallBack", this.gameObject.name, "CallBack", "Calling back from Android");
+        }
 #endif
 
 #if UNITY_IOS
@@ -61,5 +73,5 @@ namespace Wizcorp.Web
 	}
 
 #endif
-	}
+    }
 }

@@ -3,6 +3,7 @@ using AppGame.Config;
 using AppGame.UI;
 using UnityEngine;
 using UnityEngine.UI;
+using Wizcorp.Web;
 
 namespace AppGame.Module.Cycling
 {
@@ -38,6 +39,8 @@ namespace AppGame.Module.Cycling
         private Text scenicNameBox;//景点名字文字框
         [SerializeField]
         private Text descriptionBox;//景点介绍文字框
+        [SerializeField]
+        private WebView webView;
         #endregion
         #region 其他变量
         private Vector3 middleAngle = new Vector3(0f, 90f, 0f);//卡片90度角
@@ -71,7 +74,6 @@ namespace AppGame.Module.Cycling
             CardInfo card = this.CardConfig.GetCard(scenicInfo.CardID);
             if (card == null)
             {
-
                 Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find card[{0}]", scenicInfo.CardID);
                 return;
             }
@@ -82,6 +84,7 @@ namespace AppGame.Module.Cycling
             this.scenicNameBox.text = scenicInfo.Name;
             this.descriptionBox.text = this.I18NConfig.GetText(card.Text);
             this.root.gameObject.SetActive(true);
+            this.webView.Url = card.Url;
         }
         //隐藏卡片
         public void Hide()
@@ -101,6 +104,11 @@ namespace AppGame.Module.Cycling
                 this.fore.SetActive(true);
                 this.panelRoot.DOLocalRotate(this.foreAngle, this.rotateDuration / 2);
             };
+        }
+        //打开网页
+        public void OpenUrl()
+        {
+            this.webView.CallWebView();
         }
         //重设卡片状态
         private void Reset()
