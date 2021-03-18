@@ -183,7 +183,7 @@ namespace AppGame.Module.Cycling
                 child_avatar = "6",
                 relation = (int)Relations.Self,
                 map_id = "320101",
-                map_position = "320101_45",
+                map_position = "320101_43",
                 walk_expend = 5000,
                 walk_today = 5000,
                 ride_expend = 1000,

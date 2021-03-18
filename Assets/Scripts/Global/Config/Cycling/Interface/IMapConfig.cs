@@ -28,6 +28,13 @@ namespace AppGame.Config
         /// <param name="mapID">地图ID</param>
         /// <returns></returns>
         MapInfo GetMap(string mapID);
+        /// <summary>
+        /// 计算指定的两个城市间的距离
+        /// </summary>
+        /// <param name="cityID1"></param>
+        /// <param name="cityID2"></param>
+        /// <returns></returns>
+        int GetDistance(string cityID1, string cityID2);
     }
 
     public class MapInfo
@@ -43,5 +50,7 @@ namespace AppGame.Config
         public string MapImage { get { return "map"; } }
         public string PathImage { get { return "path"; } }
         public string NextMap { get; set; }
+        public int AxisX { get; set; }
+        public int AxisY { get; set; }
     }
 }

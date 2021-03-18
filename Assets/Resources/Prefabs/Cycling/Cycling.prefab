@@ -475,8 +475,8 @@ MonoBehaviour:
   disableBgName: disable_button
   coinBox: {fileID: 610996464}
   hpBox: {fileID: 461010224}
-  coin: 3
-  hp: 2
+  coinPrice: 100
+  hpPrice: 1
   vehicleName: hsr
 --- !u!1 &291769147
 GameObject:
@@ -1333,7 +1333,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &637590042
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2122,8 +2122,8 @@ MonoBehaviour:
   disableBgName: disable_button
   coinBox: {fileID: 774285686}
   hpBox: {fileID: 1063515019}
-  coin: 2
-  hp: 3
+  coinPrice: 60
+  hpPrice: 2
   vehicleName: train
 --- !u!1 &915151626
 GameObject:
@@ -2276,8 +2276,8 @@ MonoBehaviour:
   disableBgName: disable_button
   coinBox: {fileID: 1307669450}
   hpBox: {fileID: 637590043}
-  coin: 4
-  hp: 1
+  coinPrice: 400
+  hpPrice: 0
   vehicleName: plane
 --- !u!1 &947366277
 GameObject:
@@ -4123,8 +4123,8 @@ MonoBehaviour:
   disableBgName: disable_button
   coinBox: {fileID: 676431635}
   hpBox: {fileID: 1451434319}
-  coin: 1
-  hp: 4
+  coinPrice: 20
+  hpPrice: 3
   vehicleName: bus
 --- !u!1 &1593435960
 GameObject:

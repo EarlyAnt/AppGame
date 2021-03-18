@@ -52,7 +52,9 @@ namespace AppGame.Config
                                         CityName = se.Attribute("CityName"),
                                         CityPinYin = se.Attribute("CityPinYin"),
                                         AB = se.Attribute("AB"),
-                                        NextMap = se.Attribute("NextMap")
+                                        NextMap = se.Attribute("NextMap"),
+                                        AxisX = int.Parse(se.Attribute("AxisX")),
+                                        AxisY = int.Parse(se.Attribute("AxisY"))
                                     };
                                     this.configs.Add(mapInfo);
                                 }
@@ -118,6 +120,32 @@ namespace AppGame.Config
         public bool IsLoaded()
         {
             return this.isLoaded;
+        }
+        /// <summary>
+        /// 计算指定的两个城市间的距离
+        /// </summary>
+        /// <param name="cityID1"></param>
+        /// <param name="cityID2"></param>
+        /// <returns></returns>
+        public int GetDistance(string cityID1, string cityID2)
+        {
+            if (this.configs == null || this.configs.Count == 0)
+                return 0;
+
+            MapInfo city1 = this.configs.Find(t => t.CityID == cityID1);
+            MapInfo city2 = this.configs.Find(t => t.CityID == cityID2);
+            if (city1 == null)
+            {
+                Debug.LogErrorFormat("<><MapConfig.GetCost>Error: can not find the city[{0}]", cityID1);
+                return 0;
+            }
+            else if (city2 == null)
+            {
+                Debug.LogErrorFormat("<><MapConfig.GetCost>Error: can not find the city[{0}]", cityID2);
+                return 0;
+            }
+
+            return Mathf.Abs(city1.AxisX - city2.AxisX) + Mathf.Abs(city1.AxisY - city2.AxisY);
         }
     }
 }
