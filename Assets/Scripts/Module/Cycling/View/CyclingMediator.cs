@@ -241,8 +241,8 @@ namespace AppGame.Module.Cycling
         //Ë¢ÐÂ½¡¿µÊý¾Ý
         private void RefreshOriginData()
         {
-            this.originData.walk += Random.Range(1000, 25000);
-            this.originData.ride += Random.Range(1000, 25000);
+            this.originData.walk += Random.Range(1000, 25000) * 3;
+            this.originData.ride += Random.Range(1000, 25000) * 3;
             this.CyclingDataManager.SaveOriginData(this.originData);
             this.RefreshMpDatas();
         }

@@ -28,13 +28,12 @@ namespace AppGame.Module.Cycling
         /************************************************Unity方法与事件***********************************************/
 
         /************************************************自 定 义 方 法************************************************/
-        public void DrawPoint(Vector3 point, int axis, bool newLine, bool cornerOffset = true)
+        public void DrawPoint(Vector3 point, int axis, bool newLine)
         {
             if (newLine || this.lineRenderer == null)
             {
-                int flag = point[axis] >= this.lastPoint[axis] ? 1 : -1;
                 this.lastPoint = point;
-                this.DrawCorner(axis, flag, cornerOffset);
+                this.DrawCorner(axis);
                 this.index = 0;
                 this.lineCount += 1;
                 this.lineRenderer = this.GetLineRenderer();
@@ -49,20 +48,18 @@ namespace AppGame.Module.Cycling
         }
         public void Clear()
         {
+            this.index = 0;
+            this.lineCount = 0;
+
             while (this.transform.childCount > 0)
                 GameObject.DestroyImmediate(this.transform.GetChild(0).gameObject);
         }
-        private void DrawCorner(int axis, int flag, bool cornerPlus)
+        private void DrawCorner(int axis)
         {
             if (this.lineRenderer != null)
             {
                 Vector3 corner;
                 int index = 0;
-
-                if (!cornerPlus)
-                {//拐角方块不使用偏移
-                    flag = 0;
-                }
 
                 if (axis == 0)
                 {
@@ -70,10 +67,10 @@ namespace AppGame.Module.Cycling
                     index = 0;
                     this.lineCount += 1;
                     this.lineRenderer = this.GetLineRenderer(true);
-                    corner = new Vector3(this.lastPoint.x - this.startWidth / 2f - this.offset * flag, this.lastPoint.y, 0);
+                    corner = new Vector3(this.lastPoint.x - this.startWidth / 2f, this.lastPoint.y, 0);
                     this.DrawPoint(index, corner);
 
-                    corner = new Vector3(this.lastPoint.x + this.startWidth / 2f - this.offset * flag, this.lastPoint.y, 0);
+                    corner = new Vector3(this.lastPoint.x + this.startWidth / 2f, this.lastPoint.y, 0);
                     this.DrawPoint(++index, corner);
                 }
                 else if (axis == 1)
@@ -82,10 +79,10 @@ namespace AppGame.Module.Cycling
                     index = 0;
                     this.lineCount += 1;
                     this.lineRenderer = this.GetLineRenderer(true);
-                    corner = new Vector3(this.lastPoint.x, this.lastPoint.y - this.startWidth / 2f - this.offset * flag, 0);
+                    corner = new Vector3(this.lastPoint.x, this.lastPoint.y - this.startWidth / 2f, 0);
                     this.DrawPoint(index, corner);
 
-                    corner = new Vector3(this.lastPoint.x, this.lastPoint.y + this.startWidth / 2f - this.offset * flag, 0);
+                    corner = new Vector3(this.lastPoint.x, this.lastPoint.y + this.startWidth / 2f, 0);
                     this.DrawPoint(++index, corner);
                 }
             }
