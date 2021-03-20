@@ -182,8 +182,8 @@ namespace AppGame.Module.Cycling
                 child_name = "樱木花道",
                 child_avatar = "6",
                 relation = (int)Relations.Self,
-                map_id = "320101",
-                map_position = "320101_43",
+                map_id = "3201",
+                map_position = "3201_43",
                 walk_expend = 5000,
                 walk_today = 5000,
                 ride_expend = 1000,
@@ -202,8 +202,8 @@ namespace AppGame.Module.Cycling
                 child_name = "赤木晴子",
                 child_avatar = "9",
                 relation = (int)Relations.Family,
-                map_id = "320101",
-                map_position = "320101_15",
+                map_id = "3202",
+                map_position = "3202_15",
                 mp_yestoday = 50
             });
             playerDataList.Add(new PlayerData()
@@ -212,8 +212,8 @@ namespace AppGame.Module.Cycling
                 child_name = "仙道彰",
                 child_avatar = "12",
                 relation = (int)Relations.Friend,
-                map_id = "320101",
-                map_position = "320101_21",
+                map_id = "3201",
+                map_position = "3201_21",
                 mp_yestoday = 25
             });
             playerDataList.Add(new PlayerData()
@@ -222,8 +222,8 @@ namespace AppGame.Module.Cycling
                 child_name = "流川枫",
                 child_avatar = "15",
                 relation = (int)Relations.Friend,
-                map_id = "320101",
-                map_position = "320101_27",
+                map_id = "3201",
+                map_position = "3201_27",
                 mp_yestoday = 20
             });
             playerDataList.Add(new PlayerData()
@@ -232,8 +232,8 @@ namespace AppGame.Module.Cycling
                 child_name = "牧绅一",
                 child_avatar = "19",
                 relation = (int)Relations.Friend,
-                map_id = "320101",
-                map_position = "320101_33",
+                map_id = "3202",
+                map_position = "3202_33",
                 mp_yestoday = 30
             });
             this.CyclingDataManager.SavePlayerDataList(playerDataList);
@@ -251,12 +251,12 @@ namespace AppGame.Module.Cycling
         {
             int pointCount = this.View.Player.MapNode.Points.Count;
             MapPointNode endPointNode = this.View.Player.MapNode.Points[pointCount - 1].GetComponent<MapPointNode>();
-            int maxPointIndex = int.Parse(endPointNode.ID.Substring(7, 2));
+            int maxPointIndex = int.Parse(endPointNode.ID.Substring(5, 2));
 
             int index = 1 + Random.Range(0, 10) % 3;
             int offset = Random.Range(1, 5);
             PlayerData playerData = this.playerDataList[index];
-            int position = int.Parse(playerData.map_position.Substring(7, 2));
+            int position = int.Parse(playerData.map_position.Substring(5, 2));
             position = Mathf.Clamp(position + offset, 1, maxPointIndex);//不能超过地图上最大的编号
             playerData.map_position = string.Format("{0}_{1:d2}", playerData.map_id, position);
             this.CyclingDataManager.SavePlayerData(playerData);
@@ -324,7 +324,8 @@ namespace AppGame.Module.Cycling
             int cardCount = 0;
             scenicInfos.ForEach(t =>
             {
-                if (this.ItemDataManager.HasItem(t.CardID))
+                CardInfo cardInfo = this.CardConfig.GetCardByScenicID(t.ID);
+                if (cardInfo != null && this.ItemDataManager.HasItem(cardInfo.CardID))
                     cardCount += 1;
             });
             this.View.RefreshMapProgress(mapInfo.CityName, cardCount, scenicCount);

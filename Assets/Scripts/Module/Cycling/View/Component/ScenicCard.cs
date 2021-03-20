@@ -71,10 +71,10 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            CardInfo card = this.CardConfig.GetCard(scenicInfo.CardID);
+            CardInfo card = this.CardConfig.GetCardByScenicID(scenicInfo.ID);
             if (card == null)
             {
-                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find card[{0}]", scenicInfo.CardID);
+                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find card by scenicID[{0}]", scenicInfo.ID);
                 return;
             }
 
@@ -108,7 +108,9 @@ namespace AppGame.Module.Cycling
         //打开网页
         public void OpenUrl()
         {
+#if UNITY_ANDROID && !UNITY_EDITOR
             this.webView.CallWebView();
+#endif
         }
         //重设卡片状态
         private void Reset()

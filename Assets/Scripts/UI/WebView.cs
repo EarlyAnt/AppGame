@@ -13,22 +13,19 @@ namespace Wizcorp.Web
         private string url = "https://wizcorp.jp";
         [SerializeField]
         private Text context;
-
         public string Url
         {
             get { return this.url; }
             set { this.url = value; }
         }
 
-        #region shared
         public void CallBack(string message)
         {
             if (this.context != null)
                 context.text = message;
         }
-        #endregion
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         public void CallWebView()
         {
             if (string.IsNullOrEmpty(this.url))
@@ -48,7 +45,7 @@ namespace Wizcorp.Web
         }
 #endif
 
-#if UNITY_IOS
+#if UNITY_IOS && !UNITY_EDITOR
 	[DllImport("__Internal")]
 	private static extern void _nativeLog();
 	[DllImport("__Internal")]
@@ -67,11 +64,9 @@ namespace Wizcorp.Web
 		if (Application.platform == RuntimePlatform.IPhonePlayer)
 		{
 			_setupCallBack(this.gameObject.name, "CallBack");
-
 			_nativeLog();
 		}
 	}
-
 #endif
     }
 }
