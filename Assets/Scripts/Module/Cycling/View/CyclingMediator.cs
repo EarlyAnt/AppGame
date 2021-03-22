@@ -4,7 +4,6 @@ using AppGame.Data.Model;
 using AppGame.Data.Remote;
 using AppGame.UI;
 using strange.extensions.dispatcher.eventdispatcher.api;
-using strange.extensions.mediation.impl;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -346,20 +345,20 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            if (this.myPlayerData.mp_today >= this.DeviceInfoManager.GetMpLimit())
+            MpData mpData = mpBall.ToMpData();
+            bool overLimit = this.myPlayerData.mp_today >= this.DeviceInfoManager.GetMpLimit();
+            if (overLimit && mpData.RefreshView)
             {//超出每日能量收取上限时，弹出支付手续费页面
                 int coin = this.ItemDataManager.GetItemCount(Items.COIN);
                 int min = Mathf.Min(coin, mpBall.Value);
-                MpData mpData = mpBall.ToMpData();
                 mpData.Mp = min;
                 mpData.Coin = min;
                 mpData.CoinEnough = min > 0;
                 this.View.ShowPayBill(mpData);
             }
-            else
+            else if (!overLimit)
             {//没有超出每日能量收取上限时，也要检查当日已经收取了多少能量，还能收取多少能量
                 int validMp = Mathf.Min(mpBall.Value, this.DeviceInfoManager.GetMpLimit() - this.myPlayerData.mp_today);
-                MpData mpData = mpBall.ToMpData();
                 mpData.Mp = validMp;
                 this.dispatcher.Dispatch(GameEvent.COLLECT_MP, mpData);
                 Debug.LogFormat("<><>mp_today: {0}, mpLimit: {1}, leftMp: {2}, validMp: {3}",
@@ -422,9 +421,10 @@ namespace AppGame.Module.Cycling
                 this.myPlayerData.mp_expend += hpIncrease * 100;//记录耗用的能量
                 this.myPlayerData.hp += hpIncrease;//记录增加的行动点数
             }
-
             this.CyclingDataManager.SavePlayerData(this.myPlayerData);//保存数据
-            this.RefreshMpDatas();//刷新能量气泡
+
+            if (mpData.RefreshView)
+                this.RefreshMpDatas();//玩家点击能量气泡主动收取能量时才立刻刷新能量气泡
             this.View.RefreshMp(this.myPlayerData.mp - this.myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
         }
         //当玩家前进停止时

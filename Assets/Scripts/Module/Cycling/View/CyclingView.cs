@@ -6,6 +6,7 @@ using AppGame.UI;
 using AppGame.Util;
 using DG.Tweening;
 using strange.extensions.dispatcher.eventdispatcher.api;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,6 +67,8 @@ namespace AppGame.Module.Cycling
         private Text mpBox;
         [SerializeField]
         private Text hpBox;
+        [SerializeField]
+        private Transform goButton;
         [SerializeField]
         private PayBill payBill;
         [SerializeField]
@@ -179,9 +182,14 @@ namespace AppGame.Module.Cycling
         {
             if (canMove)
             {
-                this.SetMpBallVisible(false);
-                this.hpBox.text = hp.ToString();
-                this.player.MoveForward();
+                this.mpBalls.ForEach(t => t.AutoCollectMp());
+                this.StopCoroutine("CollectMpAnimation");
+                this.StartCoroutine(this.CollectMpAnimation(() =>
+                {
+                    this.SetMpBallVisible(false);
+                    this.hpBox.text = hp.ToString();
+                    this.player.MoveForward();
+                }));
             }
             else
             {
@@ -300,49 +308,6 @@ namespace AppGame.Module.Cycling
         {
             this.payBill.Show(mpData);
         }
-        private void UpdateDispatcher(bool register)
-        {
-            this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
-            this.dispatcher.UpdateListener(register, GameEvent.PAY_BILL_CLOSE, this.OnPayBillClosed);
-            this.dispatcher.UpdateListener(register, GameEvent.SET_TOUCH_PAD_ENABLE, this.OnSetTouch);
-        }
-        private Vector3 GetRandomPosition()
-        {
-            Vector3 position = new Vector3(Random.Range(-this.halfWidth, this.halfWidth), Random.Range(-this.halfHeight, this.halfHeight), 0);
-            List<Vector3> positions = new List<Vector3>();
-            positions.Add(this.player.transform.localPosition);
-            this.teammates.ForEach(t => positions.Add(t.transform.localPosition));
-            this.mpBalls.ForEach(t => positions.Add(t.transform.localPosition));
-            positions.ForEach(t => t = this.transform.TransformPoint(t));
-            bool valid = true;
-            foreach (var item in positions)
-            {
-                if (Vector3.Distance(position, item) < 300f)
-                {
-                    valid = false;
-                    break;
-                }
-            }
-
-            if (valid)
-                return position;
-            else
-                return this.GetRandomPosition();
-        }
-        private void SetMpBallVisible(bool visible)
-        {
-            this.hideMpBalls = !visible;
-            this.CancelAllDelayInvoke();
-
-            if (visible)
-                this.DelayInvoke(() => this.mpBalls.ForEach(t => t.SetStatus(true)), 0.75f);
-            else
-                this.mpBalls.ForEach(t => t.SetStatus(false));
-        }
-        private void CollectMp(MpBall mpBall)
-        {
-            this.dispatcher.Dispatch(GameEvent.MP_CLICK, mpBall);
-        }
         public void Interact(MapPointNode mapPointNode, PlayerData myPlayerData)
         {
             if (mapPointNode == null)
@@ -396,6 +361,49 @@ namespace AppGame.Module.Cycling
             this.playerCanGo = true;
             this.SetMpBallVisible(true);
         }
+        private void UpdateDispatcher(bool register)
+        {
+            this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
+            this.dispatcher.UpdateListener(register, GameEvent.PAY_BILL_CLOSE, this.OnPayBillClosed);
+            this.dispatcher.UpdateListener(register, GameEvent.SET_TOUCH_PAD_ENABLE, this.OnSetTouch);
+        }
+        private Vector3 GetRandomPosition()
+        {
+            Vector3 position = new Vector3(Random.Range(-this.halfWidth, this.halfWidth), Random.Range(-this.halfHeight, this.halfHeight), 0);
+            List<Vector3> positions = new List<Vector3>();
+            positions.Add(this.player.transform.localPosition);
+            this.teammates.ForEach(t => positions.Add(t.transform.localPosition));
+            this.mpBalls.ForEach(t => positions.Add(t.transform.localPosition));
+            positions.ForEach(t => t = this.transform.TransformPoint(t));
+            bool valid = true;
+            foreach (var item in positions)
+            {
+                if (Vector3.Distance(position, item) < 300f)
+                {
+                    valid = false;
+                    break;
+                }
+            }
+
+            if (valid)
+                return position;
+            else
+                return this.GetRandomPosition();
+        }
+        private void SetMpBallVisible(bool visible)
+        {
+            this.hideMpBalls = !visible;
+            this.CancelAllDelayInvoke();
+
+            if (visible)
+                this.DelayInvoke(() => this.mpBalls.ForEach(t => t.SetStatus(true)), 0.75f);
+            else
+                this.mpBalls.ForEach(t => t.SetStatus(false));
+        }
+        private void CollectMp(MpBall mpBall)
+        {
+            this.dispatcher.Dispatch(GameEvent.MP_CLICK, mpBall);
+        }
         private void OnScenicCardClosed(IEvent evt)
         {
             this.playerCanGo = true;
@@ -426,6 +434,35 @@ namespace AppGame.Module.Cycling
                 return;
             }
             this.touchPad.enabled = (bool)evt.data;
+        }
+        private IEnumerator CollectMpAnimation(System.Action callback)
+        {
+            if (this.mpBalls.Exists(t => t.Visible))
+            {
+                int count = 0;
+                int index = 0;
+                float speed = Random.Range(0.375f, 0.75f);                
+                while (index < this.mpBalls.Count)
+                {
+                    MpBall mpBall = this.mpBalls[index];
+                    mpBall.CanvasGroup.DOFade(0f, speed);
+                    mpBall.transform.DOScale(0f, speed);
+                    mpBall.transform.DOMove(this.goButton.position, speed).onComplete += () => count += 1;
+                    yield return new WaitUntil(() => mpBall.CanvasGroup == null || mpBall.CanvasGroup.alpha <= 0.5f);
+                    index++;
+                    //Debug.LogErrorFormat("<><CyclingView.CollectMpAnimation>Time: {0}, mpBall: {1}, count: {2}, index: {3}", System.DateTime.Now.ToString("HH:mm:ss:fff"), mpBall.GetHashCode(), count, index);
+                };
+
+                while (this.mpBallRoot.childCount > 0)
+                    GameObject.DestroyImmediate(this.mpBallRoot.GetChild(0).gameObject);
+                this.mpBalls.Clear();
+
+                if (callback != null) callback();
+            }
+            else
+            {
+                if (callback != null) callback();
+            }
         }
     }
 }

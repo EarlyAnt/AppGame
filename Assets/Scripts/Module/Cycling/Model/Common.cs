@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace AppGame.Module.Cycling
 {
@@ -70,6 +71,7 @@ namespace AppGame.Module.Cycling
         public int Mp { get; set; }
         public int Coin { get; set; }
         public bool CoinEnough { get; set; }
+        public bool RefreshView { get; set; }
     }
 
     public static class Vehicles

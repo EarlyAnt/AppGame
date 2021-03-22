@@ -10777,6 +10777,41 @@ MonoBehaviour:
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 6989532980907384474}
+--- !u!1 &5950198108318537059
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6787306916145860694}
+  m_Layer: 5
+  m_Name: GoButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &6787306916145860694
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5950198108318537059}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1023910378676608339}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -521}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6153652647132240362
 GameObject:
   m_ObjectHideFlags: 0
@@ -11440,6 +11475,7 @@ MonoBehaviour:
   mpBallPrefab2: {fileID: 3475206375509341008}
   mpBox: {fileID: 8637776220327525781}
   hpBox: {fileID: 7264009693637511558}
+  goButton: {fileID: 6787306916145860694}
   payBill: {fileID: 1130529733}
   scenicCard: {fileID: 1532280018}
   cityStation: {fileID: 9989583}
@@ -12540,6 +12576,7 @@ RectTransform:
   - {fileID: 2069982823085096666}
   - {fileID: 3357784992298949521}
   - {fileID: 6565917087103419358}
+  - {fileID: 6787306916145860694}
   m_Father: {fileID: 916385699150816939}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
