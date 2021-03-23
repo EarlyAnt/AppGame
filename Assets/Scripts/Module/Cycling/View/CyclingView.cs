@@ -183,6 +183,7 @@ namespace AppGame.Module.Cycling
             if (canMove)
             {
                 this.mpBalls.ForEach(t => t.AutoCollectMp());
+                this.StopCoroutine("RefreshMpBallAnimation");
                 this.StopCoroutine("CollectMpAnimation");
                 this.StartCoroutine(this.CollectMpAnimation(() =>
                 {
@@ -281,7 +282,6 @@ namespace AppGame.Module.Cycling
                     newMpBall.transform.localScale = Vector3.one * Random.Range(0.4f, 0.7f);
                     newMpBall.transform.localPosition = this.GetRandomPosition();
                     newMpBall.OnCollectMp = this.CollectMp;
-                    newMpBall.SetStatus(!this.hideMpBalls);
                     this.mpBalls.Add(newMpBall);
                 }
                 else if (mpBall != null)
@@ -292,12 +292,11 @@ namespace AppGame.Module.Cycling
                         this.mpBalls.Remove(mpBall);
                         GameObject.DestroyImmediate(mpBall.gameObject);
                     }
-                    else if (!this.hideMpBalls)
-                    {
-                        mpBall.SetStatus(true);
-                    }
                 }
             }
+
+            this.StopCoroutine(this.RefreshMpBallAnimation());
+            this.StartCoroutine(this.RefreshMpBallAnimation());
         }
         public void RefreshMp(int mp, int hp)
         {
@@ -435,22 +434,31 @@ namespace AppGame.Module.Cycling
             }
             this.touchPad.enabled = (bool)evt.data;
         }
+        private IEnumerator RefreshMpBallAnimation()
+        {
+            int index = 0;
+            float speed = Random.Range(0.375f, 0.75f);
+            while (index < this.mpBalls.Count)
+            {
+                this.mpBalls[index].SetStatus(!this.hideMpBalls);
+                yield return new WaitForSeconds(0.25f);
+                index++;
+            };
+        }
         private IEnumerator CollectMpAnimation(System.Action callback)
         {
             if (this.mpBalls.Exists(t => t.Visible))
             {
-                int count = 0;
                 int index = 0;
-                float speed = Random.Range(0.375f, 0.75f);                
+                float speed = Random.Range(0.375f, 0.75f);
                 while (index < this.mpBalls.Count)
                 {
                     MpBall mpBall = this.mpBalls[index];
                     mpBall.CanvasGroup.DOFade(0f, speed);
                     mpBall.transform.DOScale(0f, speed);
-                    mpBall.transform.DOMove(this.goButton.position, speed).onComplete += () => count += 1;
+                    mpBall.transform.DOMove(this.goButton.position, speed);
                     yield return new WaitUntil(() => mpBall.CanvasGroup == null || mpBall.CanvasGroup.alpha <= 0.5f);
                     index++;
-                    //Debug.LogErrorFormat("<><CyclingView.CollectMpAnimation>Time: {0}, mpBall: {1}, count: {2}, index: {3}", System.DateTime.Now.ToString("HH:mm:ss:fff"), mpBall.GetHashCode(), count, index);
                 };
 
                 while (this.mpBallRoot.childCount > 0)
