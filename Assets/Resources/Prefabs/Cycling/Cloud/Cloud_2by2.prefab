@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 04
+  imageName: cloud_04
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 8830645368816641364}
@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 01
+  imageName: cloud_01
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 4039668581916316537}
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 02
+  imageName: cloud_02
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 5890187177275420100}
@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 02
+  imageName: cloud_02
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 6755427128379828427}
@@ -391,7 +391,7 @@ RectTransform:
   m_GameObject: {fileID: 6970056420294267230}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4560570681775223807}
   - {fileID: 8476433444739417296}
@@ -519,7 +519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 03
+  imageName: cloud_03
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 1040987122352309916}
@@ -610,7 +610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 04
+  imageName: cloud_04
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 3047950837714903969}

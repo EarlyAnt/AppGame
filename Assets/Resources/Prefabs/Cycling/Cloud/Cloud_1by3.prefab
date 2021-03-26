@@ -87,7 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 04
+  imageName: cloud_04
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 7537728786327141876}
@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 02
+  imageName: cloud_02
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 7537728786366300194}
@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 02
+  imageName: cloud_02
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 7537728786367346454}
@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 04
+  imageName: cloud_04
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 7537728786504749707}
@@ -521,7 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 01
+  imageName: cloud_01
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 7537728787260260890}
@@ -612,7 +612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 04
+  imageName: cloud_04
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 7537728787452484306}
@@ -703,7 +703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 04
+  imageName: cloud_04
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 7537728787863456164}
@@ -794,7 +794,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: cloud 03
+  imageName: cloud_03
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 7537728788283665906}
