@@ -54,6 +54,12 @@
       <Image Name="card_bg" FileType="Sprite" Path="Cycling/View/card_bg" Enable="1" />
       <Image Name="card_place" FileType="Sprite" Path="Cycling/View/card_place" Enable="1" />
       <Image Name="card_return" FileType="Sprite" Path="Cycling/View/card_return" Enable="1" />
+      <Image Name="cloud 00" FileType="Sprite" Path="Cycling/View/cloud 00" Enable="1" />
+      <Image Name="cloud 01" FileType="Sprite" Path="Cycling/View/cloud 01" Enable="1" />
+      <Image Name="cloud 02" FileType="Sprite" Path="Cycling/View/cloud 02" Enable="1" />
+      <Image Name="cloud 03" FileType="Sprite" Path="Cycling/View/cloud 03" Enable="1" />
+      <Image Name="cloud 04" FileType="Sprite" Path="Cycling/View/cloud 04" Enable="1" />
+      <Image Name="cloud 05" FileType="Sprite" Path="Cycling/View/cloud 05" Enable="1" />
       <Image Name="coin" FileType="Sprite" Path="Cycling/View/coin" Enable="1" />
       <Image Name="coin_border" FileType="Sprite" Path="Cycling/View/coin_border" Enable="1" />
       <Image Name="coord" FileType="Sprite" Path="Cycling/View/coord" Enable="1" />

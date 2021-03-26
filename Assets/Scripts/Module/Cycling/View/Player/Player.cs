@@ -178,6 +178,7 @@ namespace AppGame.Module.Cycling
             while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode);
 
             this.SetPointIcon(true);
+            this.SetCloudGroup(false);
             this.OnStopped();
             Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
@@ -193,6 +194,7 @@ namespace AppGame.Module.Cycling
                 this.player.position = this.mapNode.Points[this.nodeIndex].position;
                 this.camera.position = this.GetCameraPosition(this.player.position);
                 this.SetPointIcon(true);
+                this.SetCloudGroup(false);
             }
             else
             {
@@ -260,6 +262,30 @@ namespace AppGame.Module.Cycling
                     if (mapPointNode != null && mapPointNode.NodeType != NodeTypes.EmptyNode)
                         mapPointNode.SetIcon(false);
                 });
+            }
+        }
+        //设置已经过的点的云朵
+        private void SetCloudGroup(bool light)
+        {
+            if (light)
+            {
+                this.mapNode.Points.ForEach(t =>
+                {
+                    CloudGroup cloudGroup = t.GetComponentInChildren<CloudGroup>();
+                    if (cloudGroup != null)
+                        cloudGroup.SetStatus(true);
+                });
+            }
+            else
+            {
+                int index = 0;
+                while (index <= this.nodeIndex)
+                {
+                    CloudGroup cloudGroup = this.mapNode.Points[index].GetComponentInChildren<CloudGroup>();
+                    if (cloudGroup != null)
+                        cloudGroup.SetStatus(false);
+                    index += 1;
+                }
             }
         }
         //当玩家移动停止时
