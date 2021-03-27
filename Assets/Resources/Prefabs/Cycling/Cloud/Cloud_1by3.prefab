@@ -453,8 +453,8 @@ MonoBehaviour:
     OriginPoistion: {x: -433, y: -181.99995, z: 0}
     OriginScale: {x: 1, y: 1, z: 1}
     OriginAlpha: 0.8
-  distance: 2
-  duration: 0.5
+  distance: 1.2
+  duration: 1
 --- !u!1 &7537728787260260871
 GameObject:
   m_ObjectHideFlags: 0

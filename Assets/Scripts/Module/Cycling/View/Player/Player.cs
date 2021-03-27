@@ -178,15 +178,14 @@ namespace AppGame.Module.Cycling
             while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode);
 
             this.SetPointIcon(true);
-            this.SetCloudGroup(false);
-            this.OnStopped();
+            this.SetSingleCloudGroup();
             Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
         //移动到指定位置
         public override void MoveToNode(string nodeID, bool lerp = false)
         {
             this.SetPointIcon(false);
-            this.SetCloudGroup(true);
+            this.SetAllCloudGroup(true);
             this.roadRenderer.Clear();
             int targetNodeIndex = this.mapNode.Points.FindIndex(t => t.GetComponent<MapPointNode>().ID == nodeID);
             if (targetNodeIndex >= 0 && targetNodeIndex < this.mapNode.Points.Count)
@@ -195,7 +194,7 @@ namespace AppGame.Module.Cycling
                 this.player.position = this.mapNode.Points[this.nodeIndex].position;
                 this.camera.position = this.GetCameraPosition(this.player.position);
                 this.SetPointIcon(true);
-                this.SetCloudGroup(false);
+                this.SetAllCloudGroup(false);
             }
             else
             {
@@ -266,7 +265,7 @@ namespace AppGame.Module.Cycling
             }
         }
         //设置已经过的点的云朵
-        private void SetCloudGroup(bool light)
+        private void SetAllCloudGroup(bool light)
         {
             if (light)
             {
@@ -288,6 +287,26 @@ namespace AppGame.Module.Cycling
                     index += 1;
                 }
             }
+        }
+        //设置已经过的点的云朵
+        private void SetSingleCloudGroup()
+        {
+            CloudGroup cloudGroup = this.mapNode.Points[this.nodeIndex].GetComponentInChildren<CloudGroup>();
+            if (cloudGroup != null && cloudGroup.Visible)
+            {
+                this.dispatcher.UpdateListener(true, GameEvent.CLOUD_DISPERSE, this.OnCloudDisperse);
+                cloudGroup.SetStatus(false);
+            }
+            else
+            {
+                this.OnStopped();
+            }
+        }
+        //当云朵消散时
+        private void OnCloudDisperse()
+        {
+            this.dispatcher.UpdateListener(false, GameEvent.CLOUD_DISPERSE, this.OnCloudDisperse);
+            this.OnStopped();
         }
         //当玩家移动停止时
         private void OnStopped()

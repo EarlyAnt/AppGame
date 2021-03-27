@@ -1,3 +1,4 @@
+using AppGame.UI;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 namespace AppGame.Module.Cycling
 {
-    public class CloudGroup : MonoBehaviour
+    public class CloudGroup : BaseView
     {
         /************************************************属性与变量命名************************************************/
         #region 页面UI组件
@@ -14,7 +15,7 @@ namespace AppGame.Module.Cycling
         private List<Cloud> clouds;
         [SerializeField, Range(1f, 10f)]
         private float distance = 2f;
-        [SerializeField, Range(0f, 2f)]
+        [SerializeField, Range(0f, 10f)]
         private float duration = 0.5f;
         #endregion
         #region 其他变量
@@ -52,9 +53,9 @@ namespace AppGame.Module.Cycling
             int completeCount = 0;
             for (int i = 0; i < this.clouds.Count; i++)
             {
-                float durationOffset = Random.Range(0.3f, 3f);
+                float durationOffset = Random.Range(1f, 3f);
                 Tweener fadeTweener = this.clouds[i].Image.DOFade(visible ? this.clouds[i].OriginAlpha : 0f, visible ? 0f : this.duration * durationOffset);
-                Tweener scaleTweener = this.clouds[i].Image.transform.DOScale(visible ? this.clouds[i].OriginScale : this.clouds[i].OriginScale * 0.25f, visible ? 0f : this.duration * durationOffset);
+                Tweener scaleTweener = this.clouds[i].Image.transform.DOScale(visible ? this.clouds[i].OriginScale : this.clouds[i].OriginScale * 0.25f, visible ? 0f : this.duration * durationOffset * 2f);
                 Tweener disperseTweener = this.clouds[i].Image.transform.DOLocalMove(visible ? this.clouds[i].OriginPoistion :
                                                                                                this.clouds[i].OriginPoistion * this.distance,
                                                                                      visible ? 0f : this.duration * durationOffset);
@@ -66,6 +67,7 @@ namespace AppGame.Module.Cycling
             Debug.LogFormat("+ + + + +");
             yield return new WaitUntil(() => completeCount >= this.cloudCount);
             Debug.LogFormat("- - - - -");
+            if (!visible) this.dispatcher.Dispatch(GameEvent.CLOUD_DISPERSE);
         }
         [ContextMenu("收集云朵")]
         private void CollectCloud()

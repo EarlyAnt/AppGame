@@ -15,6 +15,7 @@ namespace AppGame.Module.Cycling
         GO_CLICK,
         MOVE_FORWARD,
         INTERACTION,
+        CLOUD_DISPERSE,
 
         //页面关闭事件
         SCENIC_CARD_CLOSE,
