@@ -175,22 +175,22 @@ namespace AppGame.Module.Cycling
             if (this.playerCanGo)
             {
                 this.playerCanGo = false;
-                this.dispatcher.Dispatch(GameEvent.GO_CLICK);
+                this.mpBalls.ForEach(t => t.AutoCollectMp());
+                this.StopCoroutine("RefreshMpBallAnimation");
+                this.StopCoroutine("CollectMpAnimation");
+                this.StartCoroutine(this.CollectMpAnimation(() =>
+                {                    
+                    this.dispatcher.Dispatch(GameEvent.GO_CLICK);
+                }));
             }
         }
         public void Move(bool canMove, int hp)
         {
             if (canMove)
             {
-                this.mpBalls.ForEach(t => t.AutoCollectMp());
-                this.StopCoroutine("RefreshMpBallAnimation");
-                this.StopCoroutine("CollectMpAnimation");
-                this.StartCoroutine(this.CollectMpAnimation(() =>
-                {
-                    this.SetMpBallVisible(false);
-                    this.hpBox.text = hp.ToString();
-                    this.player.MoveForward();
-                }));
+                this.SetMpBallVisible(false);
+                this.hpBox.text = hp.ToString();
+                this.player.MoveForward();
             }
             else
             {
