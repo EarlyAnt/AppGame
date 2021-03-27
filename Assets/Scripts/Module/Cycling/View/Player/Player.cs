@@ -186,6 +186,7 @@ namespace AppGame.Module.Cycling
         public override void MoveToNode(string nodeID, bool lerp = false)
         {
             this.SetPointIcon(false);
+            this.SetCloudGroup(true);
             this.roadRenderer.Clear();
             int targetNodeIndex = this.mapNode.Points.FindIndex(t => t.GetComponent<MapPointNode>().ID == nodeID);
             if (targetNodeIndex >= 0 && targetNodeIndex < this.mapNode.Points.Count)
@@ -282,7 +283,7 @@ namespace AppGame.Module.Cycling
                 while (index <= this.nodeIndex)
                 {
                     CloudGroup cloudGroup = this.mapNode.Points[index].GetComponentInChildren<CloudGroup>();
-                    if (cloudGroup != null)
+                    if (cloudGroup != null && cloudGroup.Visible)
                         cloudGroup.SetStatus(false);
                     index += 1;
                 }

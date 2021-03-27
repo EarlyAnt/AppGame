@@ -192,7 +192,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1581642454430509810}
   - component: {fileID: 2478983787315042304}
-  - component: {fileID: 3736641082329724560}
   m_Layer: 5
   m_Name: Cloud_1by1
   m_TagString: Untagged
@@ -233,16 +232,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbcf2dd64b5b14747a7d0d79f7dfe36a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 3736641082329724560}
---- !u!225 &3736641082329724560
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1581642454430509809}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
-  m_IgnoreParentGroups: 0
+  clouds:
+  - Image: {fileID: 1581642453718887197}
+    OriginPoistion: {x: 2, y: -6, z: 0}
+    OriginScale: {x: 1, y: 1, z: 1}
+    OriginAlpha: 0.9019608
+  - Image: {fileID: 1581642453662219736}
+    OriginPoistion: {x: 134.6, y: 128.5, z: 0}
+    OriginScale: {x: 1.5, y: 1.5, z: 1}
+    OriginAlpha: 0.8
+  distance: 2
+  duration: 0.5

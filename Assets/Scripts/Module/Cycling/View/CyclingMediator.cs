@@ -54,7 +54,7 @@ namespace AppGame.Module.Cycling
             {
                 this.CyclingDataManager.ClearMpCollection();
                 this.ItemDataManager.Clear(true);
-                this.ItemDataManager.AddItem(Items.COIN, 2);
+                this.ItemDataManager.AddItem(Items.COIN, 1000);
                 this.BuildTestData();
             }
             else if (Input.GetKeyDown(KeyCode.R))
