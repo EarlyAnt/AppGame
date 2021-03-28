@@ -32,6 +32,7 @@ namespace AppGame.Module.Cycling
         private float originY;
         private int mp = 0;
         private string fromName = "";
+        private bool clicked = false;
         public int Value
         {
             get
@@ -76,6 +77,8 @@ namespace AppGame.Module.Cycling
             get { return this.fromName; }
             set { this.fromName = value; this.fromBox.text = value; }
         }
+        public bool Visible { get; private set; }
+        public CanvasGroup CanvasGroup { get { return this.canvasGroup; } }
         public Action<MpBall> OnCollectMp { get; set; }
         #endregion
         /************************************************Unity方法与事件***********************************************/
@@ -101,9 +104,10 @@ namespace AppGame.Module.Cycling
         //设置是否可见
         public void SetStatus(bool visible)
         {
-            if (this.fadeTweener != null)
-                this.fadeTweener.Kill();
+            this.Visible = visible;
+            if (visible) this.clicked = false;//重新显示时，重置clicked状态
 
+            if (this.fadeTweener != null) this.fadeTweener.Kill();
             this.fadeTweener = this.canvasGroup.DOFade(visible ? 1f : 0f, visible ? 0.375f : 0f);
         }
         //开始播放
@@ -130,6 +134,12 @@ namespace AppGame.Module.Cycling
         //收取能量
         public void CollectMp()
         {
+            this.clicked = true;
+            this.AutoCollectMp();
+        }
+        //自动收取能量(点Go按钮时自动收取)
+        public void AutoCollectMp()
+        {
             if (this.OnCollectMp != null)
             {
                 this.OnCollectMp(this);
@@ -143,7 +153,8 @@ namespace AppGame.Module.Cycling
                 MpBallType = this.MpBallType,
                 FromID = this.FromID,
                 FromName = this.FromName,
-                Mp = this.Value
+                Mp = this.Value,
+                RefreshView = this.clicked
             };
         }
     }

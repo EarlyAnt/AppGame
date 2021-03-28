@@ -4,7 +4,6 @@ using AppGame.Data.Model;
 using AppGame.Data.Remote;
 using AppGame.UI;
 using strange.extensions.dispatcher.eventdispatcher.api;
-using strange.extensions.mediation.impl;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -106,8 +105,14 @@ namespace AppGame.Module.Cycling
         public override void OnRegister()
         {
             UpdateListeners(true);
+#if (UNITY_ANDROID) && (!UNITY_EDITOR)
+            this.CyclingDataManager.ClearMpCollection();
+            this.ItemDataManager.Clear(true);
+            this.ItemDataManager.AddItem(Items.COIN, 1000);
+            this.BuildTestData();
+#endif
             this.Initialize();
-
+            #region 访问服务器获取数据
             //this.CyclingDataUtil.GetBasicData((basicData) =>
             //{
             //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetBasicData, success: {0}", basicData);
@@ -123,6 +128,7 @@ namespace AppGame.Module.Cycling
             //{
             //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetGameData, failure: {0}", errorText);
             //});
+            #endregion
         }
         //取消注册
         public override void OnRemove()
@@ -145,7 +151,7 @@ namespace AppGame.Module.Cycling
             this.GetGameData();
             this.RefreshMapInfo();
             this.View.LoadMap(this.myPlayerData.map_id);
-            this.View.RefreshPlayer(this.playerDataList, this.ItemDataManager.GetItemCount(Items.COIN));
+            this.View.RefreshPlayer(this.myPlayerData, this.ItemDataManager.GetItemCount(Items.COIN));
             this.View.RefreshTeammates(this.playerDataList);
             this.View.RefreshMp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
             this.RefreshMpDatas();
@@ -175,8 +181,8 @@ namespace AppGame.Module.Cycling
                 child_name = "樱木花道",
                 child_avatar = "6",
                 relation = (int)Relations.Self,
-                map_id = "320101",
-                map_position = "320101_45",
+                map_id = "3201",
+                map_position = "3201_46",
                 walk_expend = 5000,
                 walk_today = 5000,
                 ride_expend = 1000,
@@ -195,8 +201,8 @@ namespace AppGame.Module.Cycling
                 child_name = "赤木晴子",
                 child_avatar = "9",
                 relation = (int)Relations.Family,
-                map_id = "320101",
-                map_position = "320101_15",
+                map_id = "3202",
+                map_position = "3202_15",
                 mp_yestoday = 50
             });
             playerDataList.Add(new PlayerData()
@@ -205,8 +211,8 @@ namespace AppGame.Module.Cycling
                 child_name = "仙道彰",
                 child_avatar = "12",
                 relation = (int)Relations.Friend,
-                map_id = "320101",
-                map_position = "320101_21",
+                map_id = "3201",
+                map_position = "3201_21",
                 mp_yestoday = 25
             });
             playerDataList.Add(new PlayerData()
@@ -215,8 +221,8 @@ namespace AppGame.Module.Cycling
                 child_name = "流川枫",
                 child_avatar = "15",
                 relation = (int)Relations.Friend,
-                map_id = "320101",
-                map_position = "320101_27",
+                map_id = "3201",
+                map_position = "3201_27",
                 mp_yestoday = 20
             });
             playerDataList.Add(new PlayerData()
@@ -225,8 +231,8 @@ namespace AppGame.Module.Cycling
                 child_name = "牧绅一",
                 child_avatar = "19",
                 relation = (int)Relations.Friend,
-                map_id = "320101",
-                map_position = "320101_33",
+                map_id = "3202",
+                map_position = "3202_33",
                 mp_yestoday = 30
             });
             this.CyclingDataManager.SavePlayerDataList(playerDataList);
@@ -234,8 +240,8 @@ namespace AppGame.Module.Cycling
         //刷新健康数据
         private void RefreshOriginData()
         {
-            this.originData.walk += Random.Range(1000, 25000);
-            this.originData.ride += Random.Range(1000, 25000);
+            this.originData.walk += Random.Range(1000, 25000) * 3;
+            this.originData.ride += Random.Range(1000, 25000) * 3;
             this.CyclingDataManager.SaveOriginData(this.originData);
             this.RefreshMpDatas();
         }
@@ -244,12 +250,12 @@ namespace AppGame.Module.Cycling
         {
             int pointCount = this.View.Player.MapNode.Points.Count;
             MapPointNode endPointNode = this.View.Player.MapNode.Points[pointCount - 1].GetComponent<MapPointNode>();
-            int maxPointIndex = int.Parse(endPointNode.ID.Substring(7, 2));
+            int maxPointIndex = int.Parse(endPointNode.ID.Substring(5, 2));
 
             int index = 1 + Random.Range(0, 10) % 3;
             int offset = Random.Range(1, 5);
             PlayerData playerData = this.playerDataList[index];
-            int position = int.Parse(playerData.map_position.Substring(7, 2));
+            int position = int.Parse(playerData.map_position.Substring(5, 2));
             position = Mathf.Clamp(position + offset, 1, maxPointIndex);//不能超过地图上最大的编号
             playerData.map_position = string.Format("{0}_{1:d2}", playerData.map_id, position);
             this.CyclingDataManager.SavePlayerData(playerData);
@@ -317,7 +323,8 @@ namespace AppGame.Module.Cycling
             int cardCount = 0;
             scenicInfos.ForEach(t =>
             {
-                if (this.ItemDataManager.HasItem(t.CardID))
+                CardInfo cardInfo = this.CardConfig.GetCardByScenicID(t.ID);
+                if (cardInfo != null && this.ItemDataManager.HasItem(cardInfo.CardID))
                     cardCount += 1;
             });
             this.View.RefreshMapProgress(mapInfo.CityName, cardCount, scenicCount);
@@ -338,20 +345,20 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            if (this.myPlayerData.mp_today >= this.DeviceInfoManager.GetMpLimit())
+            MpData mpData = mpBall.ToMpData();
+            bool overLimit = this.myPlayerData.mp_today >= this.DeviceInfoManager.GetMpLimit();
+            if (overLimit && mpData.RefreshView)
             {//超出每日能量收取上限时，弹出支付手续费页面
                 int coin = this.ItemDataManager.GetItemCount(Items.COIN);
                 int min = Mathf.Min(coin, mpBall.Value);
-                MpData mpData = mpBall.ToMpData();
                 mpData.Mp = min;
                 mpData.Coin = min;
                 mpData.CoinEnough = min > 0;
                 this.View.ShowPayBill(mpData);
             }
-            else
+            else if (!overLimit)
             {//没有超出每日能量收取上限时，也要检查当日已经收取了多少能量，还能收取多少能量
                 int validMp = Mathf.Min(mpBall.Value, this.DeviceInfoManager.GetMpLimit() - this.myPlayerData.mp_today);
-                MpData mpData = mpBall.ToMpData();
                 mpData.Mp = validMp;
                 this.dispatcher.Dispatch(GameEvent.COLLECT_MP, mpData);
                 Debug.LogFormat("<><>mp_today: {0}, mpLimit: {1}, leftMp: {2}, validMp: {3}",
@@ -414,9 +421,10 @@ namespace AppGame.Module.Cycling
                 this.myPlayerData.mp_expend += hpIncrease * 100;//记录耗用的能量
                 this.myPlayerData.hp += hpIncrease;//记录增加的行动点数
             }
-
             this.CyclingDataManager.SavePlayerData(this.myPlayerData);//保存数据
-            this.RefreshMpDatas();//刷新能量气泡
+
+            if (mpData.RefreshView)
+                this.RefreshMpDatas();//玩家点击能量气泡主动收取能量时才立刻刷新能量气泡
             this.View.RefreshMp(this.myPlayerData.mp - this.myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
         }
         //当玩家前进停止时
@@ -440,35 +448,34 @@ namespace AppGame.Module.Cycling
             this.CyclingDataManager.SavePlayerData(this.myPlayerData);
 
             //检测是否有卡片需要显示
+            InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
             if (mapPointNode.NodeType == NodeTypes.EndNode)
             {
-                //Todo: 处理到站时的数据逻辑
-                this.View.Interact(mapPointNode);
+                this.View.CityStation(this.ItemDataManager.GetItemCount(Items.COIN), this.myPlayerData.hp);
             }
-            else if (mapPointNode.NodeType == NodeTypes.SiteNode)
+            else if (mapPointNode.NodeType == NodeTypes.SiteNode && interactionData != null && 
+                     interactionData.Interacton == Interactions.KNOWLEDGE_LANDMARK)
             {
-                InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
-                if (interactionData != null && interactionData.Interacton == Interactions.KNOWLEDGE_LANDMARK)
-                {//记录卡片进度
-                    CardInfo cardInfo = this.CardConfig.GetCardByScenicID(interactionData.ID);
-                    if (cardInfo != null)
-                    {
-                        this.ItemDataManager.SetItem(cardInfo.CardID, 1);
-                        this.View.Interact(mapPointNode);
-                    }
-                    else
-                    {
-                        Debug.LogErrorFormat("<><CyclingMediator.OnPlayerStopped>Error: can not find the card that its scenicID is {0}", interactionData.ID);
-                    }
+                CardInfo cardInfo = this.CardConfig.GetCardByScenicID(interactionData.ID);
+                if (cardInfo != null)
+                {
+                    this.ItemDataManager.SetItem(cardInfo.CardID, 1);
+                    this.View.ScenicCard(mapPointNode);
                 }
                 else
                 {
-                    Debug.LogErrorFormat("<><CyclingMediator.OnPlayerStopped>Error: can not find the scenic that its scenicID is {0}", interactionData.ID);
+                    this.View.KeepGoing();
+                    Debug.LogErrorFormat("<><CyclingMediator.OnPlayerStopped>Error: can not find the card that its scenicID is {0}", interactionData.ID);
                 }
+            }
+            else if (mapPointNode.NodeType == NodeTypes.EventNode && interactionData != null && 
+                     interactionData.Interacton == Interactions.PROPS_TREASURE_BOX)
+            {
+                this.View.TreasureBox(mapPointNode);
             }
             else
             {
-                this.View.Interact(mapPointNode);
+                this.View.KeepGoing();
             }
         }
         //当景点卡片关闭时
@@ -496,7 +503,7 @@ namespace AppGame.Module.Cycling
             {
                 this.myPlayerData.map_id = ticket.ToMapID;
                 this.myPlayerData.map_position = string.Format("{0}_01", ticket.ToMapID);
-                this.myPlayerData.walk_expend += ticket.Step;
+                this.myPlayerData.hp -= ticket.Hp;
                 this.CyclingDataManager.SavePlayerData(this.myPlayerData);
                 this.ItemDataManager.ReduceItem(Items.COIN, ticket.Coin);
                 this.View.ShowLoading(ticket);

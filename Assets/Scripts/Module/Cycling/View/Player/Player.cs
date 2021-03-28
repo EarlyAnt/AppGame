@@ -157,27 +157,35 @@ namespace AppGame.Module.Cycling
             MapPointNode pointNode = null;
             do
             {//移动玩家至下一个节点
+                Vector3 startPosition = this.destination;
                 this.nodeIndex += forward ? 1 : -1;
+                bool directionChanged = this.DirectionChanged(startPosition, this.destination);
+                if (directionChanged)//方向改变时先画起点
+                    this.roadRenderer.DrawPoint(startPosition, this.directon, true);
                 do
                 {
                     this.lastPos = this.player.position;
                     this.player.position = Vector3.MoveTowards(this.player.position, this.destination, this.step);
-                    this.roadRenderer.DrawPoint(this.player.position, this.directon, this.DirectionChanged(this.player.position, this.lastPos));
+                    this.roadRenderer.DrawPoint(this.player.position, this.directon, false);
                     yield return new WaitForEndOfFrame();
                 }
                 while (Vector3.Distance(this.player.position, this.destination) > 0.01f);
+                if (directionChanged)//方向改变时再话一次终点(弥补玩家移动时位置的差值不够精确)
+                    this.roadRenderer.DrawPoint(this.destination, this.directon, false);
+
                 pointNode = this.mapNode.Points[this.nodeIndex].GetComponent<MapPointNode>();
             }
             while (pointNode == null || pointNode.NodeType == NodeTypes.EmptyNode);
 
             this.SetPointIcon(true);
-            this.OnStopped();
+            this.SetSingleCloudGroup();
             Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
         //移动到指定位置
         public override void MoveToNode(string nodeID, bool lerp = false)
         {
             this.SetPointIcon(false);
+            this.SetAllCloudGroup(true);
             this.roadRenderer.Clear();
             int targetNodeIndex = this.mapNode.Points.FindIndex(t => t.GetComponent<MapPointNode>().ID == nodeID);
             if (targetNodeIndex >= 0 && targetNodeIndex < this.mapNode.Points.Count)
@@ -186,6 +194,7 @@ namespace AppGame.Module.Cycling
                 this.player.position = this.mapNode.Points[this.nodeIndex].position;
                 this.camera.position = this.GetCameraPosition(this.player.position);
                 this.SetPointIcon(true);
+                this.SetAllCloudGroup(false);
             }
             else
             {
@@ -199,7 +208,7 @@ namespace AppGame.Module.Cycling
             {
                 currentNode = this.mapNode.Points[index].position;
                 if (this.DirectionChanged(currentNode, lastNode))
-                    this.roadRenderer.DrawPoint(lastNode, this.directon, true, false);
+                    this.roadRenderer.DrawPoint(lastNode, this.directon, true);
                 this.roadRenderer.DrawPoint(currentNode, this.directon, false);
 
                 lastNode = this.mapNode.Points[index].position;
@@ -220,10 +229,9 @@ namespace AppGame.Module.Cycling
         //判断是否已改变方向
         private bool DirectionChanged(Vector3 pos1, Vector3 pos2)
         {
-            if (pos1.x == pos2.x)
-                this.directon = 0;
-            else if (pos1.y == pos2.y)
-                this.directon = 1;
+            float offsetX = Mathf.Abs(pos1.x - pos2.x);
+            float offsetY = Mathf.Abs(pos1.y - pos2.y);
+            this.directon = offsetX < offsetY ? 0 : 1;
 
             if (this.lastDirection != this.directon)
             {
@@ -255,6 +263,50 @@ namespace AppGame.Module.Cycling
                         mapPointNode.SetIcon(false);
                 });
             }
+        }
+        //设置已经过的点的云朵
+        private void SetAllCloudGroup(bool light)
+        {
+            if (light)
+            {
+                this.mapNode.Points.ForEach(t =>
+                {
+                    CloudGroup cloudGroup = t.GetComponentInChildren<CloudGroup>();
+                    if (cloudGroup != null)
+                        cloudGroup.SetStatus(true);
+                });
+            }
+            else
+            {
+                int index = 0;
+                while (index <= this.nodeIndex)
+                {
+                    CloudGroup cloudGroup = this.mapNode.Points[index].GetComponentInChildren<CloudGroup>();
+                    if (cloudGroup != null && cloudGroup.Visible)
+                        cloudGroup.SetStatus(false);
+                    index += 1;
+                }
+            }
+        }
+        //设置已经过的点的云朵
+        private void SetSingleCloudGroup()
+        {
+            CloudGroup cloudGroup = this.mapNode.Points[this.nodeIndex].GetComponentInChildren<CloudGroup>();
+            if (cloudGroup != null && cloudGroup.Visible)
+            {
+                this.dispatcher.UpdateListener(true, GameEvent.CLOUD_DISPERSE, this.OnCloudDisperse);
+                cloudGroup.SetStatus(false);
+            }
+            else
+            {
+                this.OnStopped();
+            }
+        }
+        //当云朵消散时
+        private void OnCloudDisperse()
+        {
+            this.dispatcher.UpdateListener(false, GameEvent.CLOUD_DISPERSE, this.OnCloudDisperse);
+            this.OnStopped();
         }
         //当玩家移动停止时
         private void OnStopped()

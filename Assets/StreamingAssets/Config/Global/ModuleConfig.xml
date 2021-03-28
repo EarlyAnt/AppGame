@@ -39,6 +39,12 @@
       <Image Name="card_nanjing07" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing07" Enable="1" />
       <Image Name="card_nanjing08" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing08" Enable="1" />
       <Image Name="card_nanjing09" FileType="Sprite" Path="Cycling/Site/NanJing/card_nanjing09" Enable="1" />
+      <Image Name="card_zhenjiang01" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang01" Enable="1" />
+      <Image Name="card_zhenjiang02" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang02" Enable="1" />
+      <Image Name="card_zhenjiang03" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang03" Enable="1" />
+      <Image Name="card_zhenjiang04" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang04" Enable="1" />
+      <Image Name="card_zhenjiang05" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang05" Enable="1" />
+      <Image Name="card_zhenjiang06" FileType="Sprite" Path="Cycling/Site/ZhenJiang/card_zhenjiang06" Enable="1" />
       <Image Name="arrow_panel" FileType="Sprite" Path="Cycling/View/arrow_panel" Enable="1" />
       <Image Name="back" FileType="Sprite" Path="Cycling/View/back" Enable="1" />
       <Image Name="book" FileType="Sprite" Path="Cycling/View/book" Enable="1" />
@@ -48,6 +54,12 @@
       <Image Name="card_bg" FileType="Sprite" Path="Cycling/View/card_bg" Enable="1" />
       <Image Name="card_place" FileType="Sprite" Path="Cycling/View/card_place" Enable="1" />
       <Image Name="card_return" FileType="Sprite" Path="Cycling/View/card_return" Enable="1" />
+      <Image Name="circle_1" FileType="Sprite" Path="Cycling/View/circle_1" Enable="1" />
+      <Image Name="circle_2" FileType="Sprite" Path="Cycling/View/circle_2" Enable="1" />
+      <Image Name="cloud_01" FileType="Sprite" Path="Cycling/View/cloud_01" Enable="1" />
+      <Image Name="cloud_02" FileType="Sprite" Path="Cycling/View/cloud_02" Enable="1" />
+      <Image Name="cloud_03" FileType="Sprite" Path="Cycling/View/cloud_03" Enable="1" />
+      <Image Name="cloud_04" FileType="Sprite" Path="Cycling/View/cloud_04" Enable="1" />
       <Image Name="coin" FileType="Sprite" Path="Cycling/View/coin" Enable="1" />
       <Image Name="coin_border" FileType="Sprite" Path="Cycling/View/coin_border" Enable="1" />
       <Image Name="coord" FileType="Sprite" Path="Cycling/View/coord" Enable="1" />
@@ -63,6 +75,7 @@
       <Image Name="pop_border1" FileType="Sprite" Path="Cycling/View/pop_border1" Enable="1" />
       <Image Name="pop_border2" FileType="Sprite" Path="Cycling/View/pop_border2" Enable="1" />
       <Image Name="progress" FileType="Sprite" Path="Cycling/View/progress" Enable="1" />
+      <Image Name="random_event" FileType="Sprite" Path="Cycling/View/random_event" Enable="1" />
       <Image Name="scenicspot_highlight" FileType="Sprite" Path="Cycling/View/scenicspot_highlight" Enable="1" />
       <Image Name="scenicspot_normal" FileType="Sprite" Path="Cycling/View/scenicspot_normal" Enable="1" />
       <Image Name="site_highlight" FileType="Sprite" Path="Cycling/View/site_highlight" Enable="1" />
@@ -79,6 +92,7 @@
       <Image Name="train1" FileType="Sprite" Path="Cycling/View/train1" Enable="1" />
       <Image Name="train2" FileType="Sprite" Path="Cycling/View/train2" Enable="1" />
       <Image Name="train3" FileType="Sprite" Path="Cycling/View/train3" Enable="1" />
+      <Image Name="treasure_box" FileType="Sprite" Path="Cycling/View/treasure_box" Enable="1" />
     </Module>
   </Modules>
 </Project>

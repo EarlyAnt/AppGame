@@ -15,6 +15,8 @@ public class TextureLoader : ImageLoader
     private string assetbundleName;
     [SerializeField]
     private RawImage imageBox;
+    [SerializeField]
+    private bool setNativeSize;
     /************************************************Unity方法与事件***********************************************/
     protected override void Start()
     {
@@ -56,6 +58,8 @@ public class TextureLoader : ImageLoader
             if (texture != null)
             {
                 this.imageBox.texture = texture;
+                if (this.setNativeSize)
+                    this.imageBox.SetNativeSize();
                 if (this.autoLoad)
                     GameObject.Destroy(this);
             }

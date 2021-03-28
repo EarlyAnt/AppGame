@@ -37,30 +37,33 @@ namespace AppGame.Util
              * 第3步 将本地文件列表B与文件列表A合并，得到最终的文件列表C，并保存下来
              */
 
-#if (UNITY_ANDROID) && (!UNITY_EDITOR)
-        this.HotUpdateUtils.GetUpdateInfo((updateInfos) =>
-        {
-            if (updateInfos != null && !string.IsNullOrEmpty(updateInfos.status) && updateInfos.status.ToUpper() == "OK")
-            {
-                Debug.LogFormat("<><CommonResourceUtils.CheckResources>updateInfo status: {0}, url: {1}", updateInfos.status, updateInfos.url_prefix);
-                this.ResourceUtils.SetServerPath(updateInfos.url_prefix);
-                List<AssetFile> updateFileList = this.GetUpdateFiles(updateInfos);
-                if (updateFileList != null) this.updateFileList = updateFileList;
-                if (callback != null) callback(this.updateFileList != null && this.updateFileList.Count > 0);
-            }
-            else
-            {
-                Debug.LogError("<><CommonResourceUtils.CheckResources>Response data 'updateInfos' is null");
-            }
-        }, (errorText) =>
-        {
+            //#if (UNITY_ANDROID) && (!UNITY_EDITOR)
+            //        this.HotUpdateUtils.GetUpdateInfo((updateInfos) =>
+            //        {
+            //            if (updateInfos != null && !string.IsNullOrEmpty(updateInfos.status) && updateInfos.status.ToUpper() == "OK")
+            //            {
+            //                Debug.LogFormat("<><CommonResourceUtils.CheckResources>updateInfo status: {0}, url: {1}", updateInfos.status, updateInfos.url_prefix);
+            //                this.ResourceUtils.SetServerPath(updateInfos.url_prefix);
+            //                List<AssetFile> updateFileList = this.GetUpdateFiles(updateInfos);
+            //                if (updateFileList != null) this.updateFileList = updateFileList;
+            //                if (callback != null) callback(this.updateFileList != null && this.updateFileList.Count > 0);
+            //            }
+            //            else
+            //            {
+            //                Debug.LogError("<><CommonResourceUtils.CheckResources>Response data 'updateInfos' is null");
+            //            }
+            //        }, (errorText) =>
+            //        {
 
-        });
-#elif (UNITY_EDITOR)
+            //        });
+            //#elif (UNITY_EDITOR)
+            //            List<AssetFile> updateFileList = this.GetUpdateFiles(null);
+            //            if (updateFileList != null) this.updateFileList = updateFileList;
+            //            if (callback != null) callback(this.updateFileList != null && this.updateFileList.Count > 0);
+            //#endif
             List<AssetFile> updateFileList = this.GetUpdateFiles(null);
             if (updateFileList != null) this.updateFileList = updateFileList;
             if (callback != null) callback(this.updateFileList != null && this.updateFileList.Count > 0);
-#endif
         }
         /// <summary>
         /// 获取需要更新的文件列表

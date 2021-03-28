@@ -51,7 +51,8 @@ namespace AppGame.Config
                                         CardName = seCard.Attribute("CardName"),
                                         ScenicID = seCard.Attribute("ScenicID"),
                                         Image = seCard.Attribute("Image"),
-                                        Text = seCard.Attribute("Text")
+                                        Text = seCard.Attribute("Text"),
+                                        Url = seCard.Attribute("Url")
                                     };
                                     this.configs.Add(card);
                                 }

@@ -43,7 +43,7 @@ namespace AppGame.Module.Cycling
         //显示页面
         public void Show(Ticket ticket)
         {
-            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, false);
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, false);
             if (ticket == null)
             {
                 Debug.LogError("<><TrafficLoading.Show>Error: parameter 'ticket' is null");
@@ -61,7 +61,7 @@ namespace AppGame.Module.Cycling
         public void Hide()
         {
             this.root.SetActive(false);
-            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, true);
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, true);
         }
         //加载Traffic动画
         private void LoadTraffic()
@@ -80,7 +80,7 @@ namespace AppGame.Module.Cycling
                 trafficObject.transform.SetParent(this.loadingRoot.transform);
                 trafficObject.transform.localPosition = Vector3.zero;
                 trafficObject.transform.localRotation = Quaternion.identity;
-                trafficObject.transform.localScale = Vector3.one;
+                trafficObject.transform.localScale = Vector3.one * 1.25f;
                 this.traffic = trafficObject.GetComponent<SkeletonGraphic>();
             },
             (errorText) =>

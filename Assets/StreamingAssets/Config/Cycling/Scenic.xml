@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Project Name="Gululu" Version="">
   <Scenics>
-    <Scenic ID="32010101" Name="中山陵" MapID="320101" CardID="200100001" />
-    <Scenic ID="32010102" Name="总统府" MapID="320101" CardID="200100002" />
-    <Scenic ID="32010103" Name="夫子庙" MapID="320101" CardID="200100003" />
-    <Scenic ID="32010104" Name="瞻园" MapID="320101" CardID="200100004" />
-    <Scenic ID="32010105" Name="玄武湖公园" MapID="320101" CardID="200100005" />
-    <Scenic ID="32010106" Name="明孝陵" MapID="320101" CardID="200100006" />
-    <Scenic ID="32010107" Name="美龄宫" MapID="320101" CardID="200100007" />
-    <Scenic ID="32010108" Name="南京大屠杀纪念馆" MapID="320101" CardID="200100008" />
-    <Scenic ID="32010109" Name="栖霞山" MapID="320101" CardID="200100009" />
-    <Scenic ID="32010201" Name="西津渡古街" MapID="320102" CardID="200100010" />
-    <Scenic ID="32010202" Name="金山寺" MapID="320102" CardID="200100011" />
-    <Scenic ID="32010203" Name="北固山" MapID="320102" CardID="200100012" />
-    <Scenic ID="32010204" Name="焦山" MapID="320102" CardID="200100013" />
-    <Scenic ID="32010205" Name="得撒石磨豆腐村" MapID="320102" CardID="200100014" />
-    <Scenic ID="32010206" Name="宝华山国家森林公园" MapID="320102" CardID="200100015" />
-    <Scenic ID="32010207" Name="美龄宫" MapID="320102" CardID="200100016" />
-    <Scenic ID="32010208" Name="南京大屠杀纪念馆" MapID="320102" CardID="200100017" />
-    <Scenic ID="32010209" Name="栖霞山" MapID="320102" CardID="200100018" />
+    <Scenic ID="320101" Name="中山陵" MapID="3201" />
+    <Scenic ID="320102" Name="总统府" MapID="3201" />
+    <Scenic ID="320103" Name="夫子庙" MapID="3201" />
+    <Scenic ID="320104" Name="瞻园" MapID="3201" />
+    <Scenic ID="320105" Name="玄武湖公园" MapID="3201" />
+    <Scenic ID="320106" Name="明孝陵" MapID="3201" />
+    <Scenic ID="320107" Name="美龄宫" MapID="3201" />
+    <Scenic ID="320108" Name="南京大屠杀纪念馆" MapID="3201" />
+    <Scenic ID="320109" Name="栖霞山" MapID="3201" />
+    <Scenic ID="320201" Name="西津渡古街" MapID="3202" />
+    <Scenic ID="320202" Name="金山寺" MapID="3202" />
+    <Scenic ID="320203" Name="北固山" MapID="3202" />
+    <Scenic ID="320204" Name="焦山" MapID="3202" />
+    <Scenic ID="320205" Name="得撒石磨豆腐村" MapID="3202" />
+    <Scenic ID="320206" Name="宝华山国家森林公园" MapID="3202" />
   </Scenics>
 </Project>

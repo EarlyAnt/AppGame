@@ -49,6 +49,5 @@ namespace AppGame.Config
         public string ID { get; set; }
         public string Name { get; set; }
         public string MapID { get; set; }
-        public string CardID { get; set; }
     }
 }

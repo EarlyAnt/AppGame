@@ -6,6 +6,7 @@ using AppGame.UI;
 using AppGame.Util;
 using DG.Tweening;
 using strange.extensions.dispatcher.eventdispatcher.api;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,8 @@ namespace AppGame.Module.Cycling
         public IMapConfig MapConfig { get; set; }
         [Inject]
         public IChildInfoManager ChildInfoManager { get; set; }
+        [Inject]
+        public IItemDataManager ItemDataManager { get; set; }
         [Inject]
         public ICommonImageUtils CommonImageUtils { get; set; }
         [Inject]
@@ -65,6 +68,8 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private Text hpBox;
         [SerializeField]
+        private Transform goButton;
+        [SerializeField]
         private PayBill payBill;
         [SerializeField]
         private ScenicCard scenicCard;
@@ -72,6 +77,8 @@ namespace AppGame.Module.Cycling
         private CityStation cityStation;
         [SerializeField]
         private TrafficLoading trafficLoading;
+        [SerializeField]
+        private TreasureBox treasureBox;
         [SerializeField]
         private Image touchPad;
         #endregion
@@ -81,7 +88,6 @@ namespace AppGame.Module.Cycling
         private float halfWidth = 380f;
         private float halfHeight = 800f;
         private MapNode mapNode;
-        private PlayerData myPlayerData;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
         public int Coin
@@ -171,7 +177,13 @@ namespace AppGame.Module.Cycling
             if (this.playerCanGo)
             {
                 this.playerCanGo = false;
-                this.dispatcher.Dispatch(GameEvent.GO_CLICK);
+                this.mpBalls.ForEach(t => t.AutoCollectMp());
+                this.StopCoroutine("RefreshMpBallAnimation");
+                this.StopCoroutine("CollectMpAnimation");
+                this.StartCoroutine(this.CollectMpAnimation(() =>
+                {
+                    this.dispatcher.Dispatch(GameEvent.GO_CLICK);
+                }));
             }
         }
         public void Move(bool canMove, int hp)
@@ -193,12 +205,17 @@ namespace AppGame.Module.Cycling
         {
             this.progressBox.text = string.Format("{0} {1}/{2}", mapName, cardCount, scenicCount);
         }
-        public void RefreshPlayer(List<PlayerData> playerDataList, int coin)
+        public void RefreshPlayer(PlayerData myPlayerData, int coin)
         {
-            this.myPlayerData = playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
+            if (myPlayerData == null)
+            {
+                Debug.LogError("<><CyclingView.RefreshPlayer>Error: parameter 'myPlayerData' is null");
+                return;
+            }
+
             this.player.MapNode = this.mapNode;
-            this.player.MoveToNode(this.myPlayerData.map_position);
-            this.player.name = "Player_" + this.myPlayerData.child_sn;
+            this.player.MoveToNode(myPlayerData.map_position);
+            this.player.name = "Player_" + myPlayerData.child_sn;
             Sprite avatar = this.CommonImageUtils.GetAvatar(myPlayerData.child_avatar);
             this.player.Avatar = avatar;
             this.avatarBox.sprite = avatar;
@@ -208,13 +225,20 @@ namespace AppGame.Module.Cycling
         }
         public void RefreshTeammates(List<PlayerData> playerDataList)
         {
+            PlayerData myPlayerData = playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
+            if (myPlayerData == null)
+            {
+                Debug.LogError("<><CyclingView.RefreshTeammates>Error: parameter 'myPlayerData' is null");
+                return;
+            }
+
             if (this.teammates == null)
             {
                 this.teammates = new List<Teammate>();
                 foreach (var teammateData in playerDataList)
                 {
                     if (teammateData.child_sn == this.ChildInfoManager.GetChildSN() ||
-                        teammateData.map_id != this.myPlayerData.map_id)
+                        teammateData.map_id != myPlayerData.map_id)
                         continue;
 
                     Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.teammateRoot);
@@ -257,10 +281,9 @@ namespace AppGame.Module.Cycling
                     }
                     newMpBall.Value = mpData.Mp;
                     newMpBall.transform.localRotation = Quaternion.identity;
-                    newMpBall.transform.localScale = Vector3.one * Random.Range(0.7f, 1.0f);
+                    newMpBall.transform.localScale = Vector3.one * Random.Range(0.4f, 0.7f);
                     newMpBall.transform.localPosition = this.GetRandomPosition();
                     newMpBall.OnCollectMp = this.CollectMp;
-                    newMpBall.SetStatus(!this.hideMpBalls);
                     this.mpBalls.Add(newMpBall);
                 }
                 else if (mpBall != null)
@@ -271,12 +294,11 @@ namespace AppGame.Module.Cycling
                         this.mpBalls.Remove(mpBall);
                         GameObject.DestroyImmediate(mpBall.gameObject);
                     }
-                    else if (!this.hideMpBalls)
-                    {
-                        mpBall.SetStatus(true);
-                    }
                 }
             }
+
+            this.StopCoroutine(this.RefreshMpBallAnimation());
+            this.StartCoroutine(this.RefreshMpBallAnimation());
         }
         public void RefreshMp(int mp, int hp)
         {
@@ -287,11 +309,62 @@ namespace AppGame.Module.Cycling
         {
             this.payBill.Show(mpData);
         }
+        public void CityStation(int coin, int hp)
+        {
+            this.cityStation.Show(this.player.MapNode.ID, coin, hp);
+        }
+        public void ScenicCard(MapPointNode mapPointNode)
+        {
+            InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
+            if (interactionData != null && interactionData.Interacton == Interactions.KNOWLEDGE_LANDMARK)
+                this.scenicCard.Show(interactionData.ID);//œ‘ æø®∆¨
+            else
+                this.KeepGoing();
+        }
+        public void TreasureBox(MapPointNode mapPointNode)
+        {
+            InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
+            if (interactionData != null && interactionData.Interacton == Interactions.PROPS_TREASURE_BOX)
+            {
+                //this.treasureBox.Play(null);//ø™±¶œ‰∂Øª≠
+                Debug.Log("OpenTreasureBox + + + + +");
+            }
+            else
+            {
+                this.KeepGoing();
+            }
+        }
+        public void KeepGoing()
+        {
+            this.playerCanGo = true;
+            this.SetMpBallVisible(true);
+        }
+        public void ShowLoading(Ticket ticket)
+        {
+            if (ticket != null && ticket.Go)
+            {
+                this.trafficLoading.Show(ticket);
+            }
+            else
+            {
+                this.playerCanGo = true;
+            }
+        }
+        public void HideLoading()
+        {
+            this.Restart();
+            this.DelayInvoke(this.trafficLoading.Hide, 0.5f);
+        }
+        public void Stay()
+        {
+            this.playerCanGo = true;
+            this.SetMpBallVisible(true);
+        }
         private void UpdateDispatcher(bool register)
         {
             this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
             this.dispatcher.UpdateListener(register, GameEvent.PAY_BILL_CLOSE, this.OnPayBillClosed);
-            this.dispatcher.UpdateListener(register, GameEvent.SET_TOUCH, this.OnSetTouch);
+            this.dispatcher.UpdateListener(register, GameEvent.SET_TOUCH_PAD_ENABLE, this.OnSetTouch);
         }
         private Vector3 GetRandomPosition()
         {
@@ -330,54 +403,6 @@ namespace AppGame.Module.Cycling
         {
             this.dispatcher.Dispatch(GameEvent.MP_CLICK, mpBall);
         }
-        public void Interact(MapPointNode mapPointNode)
-        {
-            if (mapPointNode == null)
-            {
-                Debug.LogError("<><CyclingView.OnPlayerStopped>Error: parameter 'evt.data' is not the type MapPointNode");
-                return;
-            }
-
-            //ºÏ≤‚ «∑Ò”–ø®∆¨–Ë“™œ‘ æ
-            if (mapPointNode.NodeType == NodeTypes.EndNode)
-            {
-                this.cityStation.Show(this.player.MapNode.ID);
-            }
-            else if (mapPointNode.NodeType == NodeTypes.SiteNode)
-            {
-                InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
-                if (interactionData != null && interactionData.Interacton == Interactions.KNOWLEDGE_LANDMARK)
-                {
-                    this.scenicCard.Show(interactionData.ID);//œ‘ æø®∆¨
-                }
-            }
-            else
-            {
-                this.playerCanGo = true;
-                this.SetMpBallVisible(true);
-            }
-        }
-        public void ShowLoading(Ticket ticket)
-        {
-            if (ticket != null && ticket.Go)
-            {
-                this.trafficLoading.Show(ticket);
-            }
-            else
-            {
-                this.playerCanGo = true;
-            }
-        }
-        public void HideLoading()
-        {
-            this.Restart();
-            this.DelayInvoke(this.trafficLoading.Hide, 0.5f);
-        }
-        public void Stay()
-        {
-            this.playerCanGo = true;
-            this.SetMpBallVisible(true);
-        }
         private void OnScenicCardClosed(IEvent evt)
         {
             this.playerCanGo = true;
@@ -408,6 +433,44 @@ namespace AppGame.Module.Cycling
                 return;
             }
             this.touchPad.enabled = (bool)evt.data;
+        }
+        private IEnumerator RefreshMpBallAnimation()
+        {
+            int index = 0;
+            float speed = Random.Range(0.375f, 0.75f);
+            while (index < this.mpBalls.Count)
+            {
+                this.mpBalls[index].SetStatus(!this.hideMpBalls);
+                yield return new WaitForSeconds(0.25f);
+                index++;
+            };
+        }
+        private IEnumerator CollectMpAnimation(System.Action callback)
+        {
+            if (this.mpBalls.Exists(t => t.Visible))
+            {
+                int index = 0;
+                float speed = Random.Range(0.375f, 0.75f);
+                while (index < this.mpBalls.Count)
+                {
+                    MpBall mpBall = this.mpBalls[index];
+                    mpBall.CanvasGroup.DOFade(0f, speed);
+                    mpBall.transform.DOScale(0f, speed);
+                    mpBall.transform.DOMove(this.goButton.position, speed);
+                    yield return new WaitUntil(() => mpBall.CanvasGroup == null || mpBall.CanvasGroup.alpha <= 0.5f);
+                    index++;
+                };
+
+                while (this.mpBallRoot.childCount > 0)
+                    GameObject.DestroyImmediate(this.mpBallRoot.GetChild(0).gameObject);
+                this.mpBalls.Clear();
+
+                if (callback != null) callback();
+            }
+            else
+            {
+                if (callback != null) callback();
+            }
         }
     }
 }

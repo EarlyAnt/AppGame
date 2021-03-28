@@ -2,6 +2,7 @@ using Spine.Unity;
 using System;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.ComponentModel;
 
 namespace AppGame.Module.Cycling
 {
@@ -16,6 +17,7 @@ namespace AppGame.Module.Cycling
         GO_CLICK,
         MOVE_FORWARD,
         INTERACTION,
+        CLOUD_DISPERSE,
 
         //页面关闭事件
         SCENIC_CARD_CLOSE,
@@ -24,7 +26,7 @@ namespace AppGame.Module.Cycling
         TRAFFIC_LOADING_CLOSE,
 
         //其他事件
-        SET_TOUCH
+        SET_TOUCH_PAD_ENABLE
     }
 
     public enum NodeTypes
@@ -96,6 +98,7 @@ namespace AppGame.Module.Cycling
         public int Mp { get; set; }
         public int Coin { get; set; }
         public bool CoinEnough { get; set; }
+        public bool RefreshView { get; set; }
     }
 
     public static class Vehicles
@@ -117,7 +120,7 @@ namespace AppGame.Module.Cycling
         public string ToCityPinYin { get; set; }
         public string Vehicle { get; set; }//交通工具
         public int Coin { get; set; }
-        public int Step { get; set; }
+        public int Hp { get; set; }
     }
 
     public class TreasureBoxInfo

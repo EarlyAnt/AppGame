@@ -47,8 +47,7 @@ namespace AppGame.Config
                                     {
                                         ID = seScenic.Attribute("ID"),
                                         Name = seScenic.Attribute("Name"),
-                                        MapID = seScenic.Attribute("MapID"),
-                                        CardID = seScenic.Attribute("CardID")
+                                        MapID = seScenic.Attribute("MapID")
                                     };
                                     this.configs.Add(mapInfo);
                                 }

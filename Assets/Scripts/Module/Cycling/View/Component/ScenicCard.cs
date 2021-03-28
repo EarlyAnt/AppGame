@@ -3,6 +3,7 @@ using AppGame.Config;
 using AppGame.UI;
 using UnityEngine;
 using UnityEngine.UI;
+using Wizcorp.Web;
 
 namespace AppGame.Module.Cycling
 {
@@ -38,6 +39,8 @@ namespace AppGame.Module.Cycling
         private Text scenicNameBox;//景点名字文字框
         [SerializeField]
         private Text descriptionBox;//景点介绍文字框
+        [SerializeField]
+        private WebView webView;
         #endregion
         #region 其他变量
         private Vector3 middleAngle = new Vector3(0f, 90f, 0f);//卡片90度角
@@ -49,7 +52,7 @@ namespace AppGame.Module.Cycling
         //显示卡片
         public void Show(string scenicID)
         {
-            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, false);
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, false);
             this.Reset();
             //查询地图和景点数据数据
             ScenicInfo scenicInfo = this.ScenicConfig.GetScenic(scenicID);
@@ -68,11 +71,10 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            CardInfo card = this.CardConfig.GetCard(scenicInfo.CardID);
+            CardInfo card = this.CardConfig.GetCardByScenicID(scenicInfo.ID);
             if (card == null)
             {
-
-                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find card[{0}]", scenicInfo.CardID);
+                Debug.LogErrorFormat("<><ScenicCard.Show>Error: can not find card by scenicID[{0}]", scenicInfo.ID);
                 return;
             }
 
@@ -82,6 +84,7 @@ namespace AppGame.Module.Cycling
             this.scenicNameBox.text = scenicInfo.Name;
             this.descriptionBox.text = this.I18NConfig.GetText(card.Text);
             this.root.gameObject.SetActive(true);
+            this.webView.Url = card.Url;
         }
         //隐藏卡片
         public void Hide()
@@ -89,7 +92,7 @@ namespace AppGame.Module.Cycling
             this.root.gameObject.SetActive(false);
             this.Reset();
             this.OnViewClosed();
-            this.dispatcher.Dispatch(GameEvent.SET_TOUCH, true);
+            this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, true);
         }
         //旋转卡片
         public void Rotate()
@@ -101,6 +104,13 @@ namespace AppGame.Module.Cycling
                 this.fore.SetActive(true);
                 this.panelRoot.DOLocalRotate(this.foreAngle, this.rotateDuration / 2);
             };
+        }
+        //打开网页
+        public void OpenUrl()
+        {
+#if UNITY_ANDROID && !UNITY_EDITOR
+            this.webView.CallWebView();
+#endif
         }
         //重设卡片状态
         private void Reset()
