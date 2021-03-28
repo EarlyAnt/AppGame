@@ -93,6 +93,7 @@
       <Image Name="train2" FileType="Sprite" Path="Cycling/View/train2" Enable="1" />
       <Image Name="train3" FileType="Sprite" Path="Cycling/View/train3" Enable="1" />
       <Image Name="treasure_box" FileType="Sprite" Path="Cycling/View/treasure_box" Enable="1" />
+      <Image Name="treasure_box_arrow" FileType="Sprite" Path="Cycling/View/treasure_box_arrow" Enable="1" />
     </Module>
   </Modules>
 </Project>

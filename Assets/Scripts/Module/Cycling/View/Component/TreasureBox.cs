@@ -28,15 +28,11 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         protected AudioSource audioPlayer;
         [SerializeField]
-        private Transform landTransform;
-        [SerializeField]
         private Balloon balloonPrefab;
         [SerializeField]
         private Image arrowPrefab;
         [SerializeField]
         private Image mask;
-        [SerializeField]
-        private GameObject guideSpine;
         [SerializeField]
         private AnimationCurve curve;
         #endregion
@@ -45,12 +41,12 @@ namespace AppGame.Module.Cycling
         private List<Balloon> balloonList = new List<Balloon>();
         private Color transparentColor = new Color(1, 1, 1, 0);
         private Vector3 waterPotOffset = new Vector3(30f, 50f, 0f);
-        private string treasureBoxAB = "garden/treasurebox";
+        private string treasureBoxAB = "cycling/treasurebox";
         private OpenTreasureBoxSteps currentStep;
         private PageCounter pageCounter = null;
         private System.Action callback = null;
         private bool manual = false;
-        private List<float> boxOffset = new List<float>() { 0f, -70f, 70f };
+        private List<float> boxOffset = new List<float>() { -33f, -393, 327f };
         private List<RewardTypes> rewardTypes = null;
         public bool IsPlaying { get; set; }
         #endregion
@@ -73,6 +69,7 @@ namespace AppGame.Module.Cycling
         }
         protected override void Start()
         {
+            this.mask.raycastTarget = false;
             this.LoadTreasureBox();
         }
         private void Update()
@@ -82,6 +79,7 @@ namespace AppGame.Module.Cycling
         //显示动画
         public void Play(System.Action callback)
         {
+            this.mask.raycastTarget = true;
             this.manual = false;
             this.callback = callback;
             this.pageCounter.Reset(3, 3);
@@ -98,26 +96,21 @@ namespace AppGame.Module.Cycling
             if (this.treasureBoxList != null && this.treasureBoxList.Count > 0)
                 this.AssetBundleUtil.UnloadAsset(this.treasureBoxAB);
         }
-        //点击操作
-        public void Click()
+        //打开宝箱
+        public void OpenBox(float axisX)
         {
-            //switch (this.currentStep)
-            //{
-            //    case WaterAnimationSteps.DropDown:
-            //        this.manual = true;
-            //        SoundPlayer.GetInstance().PlaySoundInChannal("garden_open_chest", this.audioPlayer, 0.2f);
-            //        this.OpenBox(this.pageCounter.ItemIndex);
-            //        break;
-            //    case WaterAnimationSteps.OpenedBox:
-            //        this.SaveReward();
-            //        break;
-            //}
+            if (this.currentStep == OpenTreasureBoxSteps.DropDown)
+            {
+                this.manual = true;
+                int index = this.boxOffset.IndexOf(axisX);
+                this.SelectTreasureBox(index);
+                this.DelayInvoke(() => this.OpenBox(index), 1f);
+            }
         }
         //选择宝箱
-        public void SelectTreasureBox(int index)
+        private void SelectTreasureBox(int index)
         {
             this.manual = true;
-            this.guideSpine.SetActive(false);
             this.pageCounter.Locate(index);
             this.ChangeBox();
         }
@@ -144,6 +137,9 @@ namespace AppGame.Module.Cycling
                     treasureBoxObject.transform.localScale = Vector3.one * 0.25f;
                     SkeletonGraphic treasureBox = treasureBoxObject.GetComponent<SkeletonGraphic>();
                     treasureBox.color = this.transparentColor;
+                    Button button = treasureBox.gameObject.AddComponent<Button>();
+                    float axisX = this.boxOffset[i];
+                    button.onClick.AddListener(() => this.OpenBox(axisX));
 
                     Balloon balloon = GameObject.Instantiate<Balloon>(this.balloonPrefab);
                     balloon.transform.SetParent(treasureBoxObject.transform);
@@ -189,16 +185,10 @@ namespace AppGame.Module.Cycling
                         this.DelayInvoke(() =>
                         {
                             if (!this.manual)
-                                this.guideSpine.SetActive(true);
-                            this.DelayInvoke(() =>
                             {
-                                if (!this.manual)
-                                {
-                                    this.guideSpine.SetActive(false);
-                                    this.StopAllCoroutines();
-                                    this.StartCoroutine(this.AutoChangeBox());
-                                }
-                            }, 5f);
+                                this.StopCoroutine("AutoChangeBox");
+                                this.StartCoroutine(this.AutoChangeBox());
+                            }
                         }, 5f);
                     }
                 };
@@ -230,7 +220,7 @@ namespace AppGame.Module.Cycling
 
             for (int i = 0; i < this.treasureBoxList.Count; i++)
             {
-                this.treasureBoxList[i].Spine.transform.DOScale(Vector3.one * 0.15f * (i == this.pageCounter.ItemIndex ? 1.5f : 1f), show ? 0f : 0.5f);
+                this.treasureBoxList[i].Spine.transform.DOScale(Vector3.one * 0.6f * (i == this.pageCounter.ItemIndex ? 1.375f : 1f), show ? 0f : 0.5f);
                 if (show)
                     this.treasureBoxList[i].Spine.DOColor(i == this.pageCounter.ItemIndex ? Color.white : Color.gray, 0.5f);
                 else
@@ -266,6 +256,7 @@ namespace AppGame.Module.Cycling
                     else if (this.currentStep == OpenTreasureBoxSteps.OpeningBox)
                     {
                         this.currentStep = OpenTreasureBoxSteps.OpenedBox;
+                        this.SaveReward();
                     }
                 };
             }
@@ -273,25 +264,31 @@ namespace AppGame.Module.Cycling
         //保存宝箱奖励
         private void SaveReward()
         {
-            this.currentStep = OpenTreasureBoxSteps.GettingReward;
-            if (this.balloonList != null && this.balloonList.Count > 0 &&
-                this.pageCounter.ItemIndex >= 0 && this.pageCounter.ItemIndex < this.balloonList.Count)
+            if (this.currentStep != OpenTreasureBoxSteps.OpenedBox)
+                return;
+
+            this.DelayInvoke(() =>
             {
-                //SoundPlayer.GetInstance().PlaySoundInChannal("garden_reward", this.audioPlayer, 0.2f);
-                this.balloonList[this.pageCounter.ItemIndex].Raise(() =>
+                this.currentStep = OpenTreasureBoxSteps.GettingReward;
+                if (this.balloonList != null && this.balloonList.Count > 0 &&
+                    this.pageCounter.ItemIndex >= 0 && this.pageCounter.ItemIndex < this.balloonList.Count)
                 {
-                    this.ItemDataManager.AddItem(Items.COIN, this.balloonList[this.pageCounter.ItemIndex].Coin);
-                    this.balloonList.ForEach(t => t.Disappear());
-                    this.DelayInvoke(() =>
+                    //SoundPlayer.GetInstance().PlaySoundInChannal("garden_reward", this.audioPlayer, 0.2f);
+                    this.balloonList[this.pageCounter.ItemIndex].Raise(() =>
                     {
-                        this.treasureBoxList.ForEach(t => t.Spine.DOFade(0f, 0f));
-                        this.mask.DOFade(0f, 0f);
-                        this.currentStep = OpenTreasureBoxSteps.GotReward;
-                        this.IsPlaying = false;
-                        this.OnCallback();
-                    }, 0.5f);
-                });
-            }
+                        this.ItemDataManager.AddItem(Items.COIN, this.balloonList[this.pageCounter.ItemIndex].Coin);
+                        this.balloonList.ForEach(t => t.Disappear());
+                        this.DelayInvoke(() =>
+                        {
+                            this.treasureBoxList.ForEach(t => t.Spine.DOFade(0f, 0f));
+                            this.mask.DOFade(0f, 0f);
+                            this.currentStep = OpenTreasureBoxSteps.GotReward;
+                            this.IsPlaying = false;
+                            this.OnCallback();
+                        }, 0.5f);
+                    });
+                }
+            }, 2f);
         }
         //计算宝箱奖励
         private int CalculateReward()
@@ -344,6 +341,7 @@ namespace AppGame.Module.Cycling
         //当执行回调时
         private void OnCallback()
         {
+            this.mask.raycastTarget = false;
             if (this.callback != null)
                 this.callback();
         }

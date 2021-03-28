@@ -326,7 +326,7 @@ namespace AppGame.Module.Cycling
             InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
             if (interactionData != null && interactionData.Interacton == Interactions.PROPS_TREASURE_BOX)
             {
-                //this.treasureBox.Play(null);//开宝箱动画
+                this.treasureBox.Play(this.KeepGoing);//开宝箱动画
                 Debug.Log("OpenTreasureBox + + + + +");
             }
             else
