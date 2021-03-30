@@ -40,12 +40,12 @@ namespace AppGame.Module.Cycling
         private List<TreasureBoxInfo> treasureBoxList = new List<TreasureBoxInfo>();
         private List<Balloon> balloonList = new List<Balloon>();
         private Color transparentColor = new Color(1, 1, 1, 0);
-        private Vector3 waterPotOffset = new Vector3(30f, 50f, 0f);
         private string treasureBoxAB = "cycling/treasurebox";
         private OpenTreasureBoxSteps currentStep;
         private PageCounter pageCounter = null;
         private System.Action callback = null;
         private bool manual = false;
+        private Vector3 treasureBoxScale = Vector3.one * 0.6f;
         private List<float> boxOffset = new List<float>() { -33f, -393, 327f };
         private List<RewardTypes> rewardTypes = null;
         public bool IsPlaying { get; set; }
@@ -87,7 +87,7 @@ namespace AppGame.Module.Cycling
             this.treasureBoxList.ForEach(t => { t.Spine.DOFade(0f, 0f); t.Arrow.enabled = false; });
             this.balloonList.ForEach(t => t.Reset());
             this.rewardTypes = new List<RewardTypes>() { RewardTypes.Low, RewardTypes.Medium, RewardTypes.High };
-            this.ChangeBox(false);
+            this.ChangeBox(false, true);
             this.TreasureBoxDropDown(0);
         }
         //回收水壶资源
@@ -101,10 +101,12 @@ namespace AppGame.Module.Cycling
         {
             if (this.currentStep == OpenTreasureBoxSteps.DropDown)
             {
+                this.currentStep = OpenTreasureBoxSteps.OpeningBox;
                 this.manual = true;
                 int index = this.boxOffset.IndexOf(axisX);
                 this.SelectTreasureBox(index);
                 this.DelayInvoke(() => this.OpenBox(index), 1f);
+                this.treasureBoxList.ForEach(t => t.Spine.raycastTarget = false);
             }
         }
         //选择宝箱
@@ -134,7 +136,8 @@ namespace AppGame.Module.Cycling
                     treasureBoxObject.transform.SetParent(this.transform);
                     treasureBoxObject.transform.localPosition = Vector3.zero + new Vector3(this.boxOffset[i], 0f, 0f);
                     treasureBoxObject.transform.localRotation = Quaternion.identity;
-                    treasureBoxObject.transform.localScale = Vector3.one * 0.25f;
+                    treasureBoxObject.transform.localScale = this.treasureBoxScale;
+                    treasureBoxObject.GetComponent<RectTransform>().sizeDelta = Vector2.one * 400;
                     SkeletonGraphic treasureBox = treasureBoxObject.GetComponent<SkeletonGraphic>();
                     treasureBox.color = this.transparentColor;
                     Button button = treasureBox.gameObject.AddComponent<Button>();
@@ -155,7 +158,7 @@ namespace AppGame.Module.Cycling
                     arrow.enabled = false;
                     this.treasureBoxList.Add(new TreasureBoxInfo() { Spine = treasureBox, Arrow = arrow });
                 }
-                this.ChangeBox(false);
+                this.ChangeBox(false, true);
             },
             (errorText) =>
             {
@@ -181,7 +184,7 @@ namespace AppGame.Module.Cycling
                     {
                         this.currentStep = OpenTreasureBoxSteps.DropDown;
                         this.treasureBoxList.ForEach(t => t.Arrow.enabled = true);
-                        this.ChangeBox();
+                        //this.ChangeBox();
                         this.DelayInvoke(() =>
                         {
                             if (!this.manual)
@@ -197,6 +200,8 @@ namespace AppGame.Module.Cycling
         //自动切换宝箱
         private IEnumerator AutoChangeBox()
         {
+            this.treasureBoxList.ForEach(t => t.Spine.raycastTarget = false);
+
             float time = 0;
             bool forward = Random.Range(0, 10) % 2 == 1;
             while (time <= 3)
@@ -213,20 +218,23 @@ namespace AppGame.Module.Cycling
             this.OpenBox(this.pageCounter.ItemIndex);
         }
         //切换宝箱
-        private void ChangeBox(bool show = true)
+        private void ChangeBox(bool show = true, bool reset = false)
         {
             Color whiteTransparentColor = new Color(1f, 1f, 1f, 0f);
             Color grayTransparentColor = new Color(0.5f, 0.5f, 0.5f, 0f);
 
             for (int i = 0; i < this.treasureBoxList.Count; i++)
             {
-                this.treasureBoxList[i].Spine.transform.DOScale(Vector3.one * 0.6f * (i == this.pageCounter.ItemIndex ? 1.375f : 1f), show ? 0f : 0.5f);
+                Vector3 scale = this.treasureBoxScale * (i == this.pageCounter.ItemIndex ? 1.375f : 1f);
+                if (reset) scale = this.treasureBoxScale;
+                this.treasureBoxList[i].Spine.transform.DOScale(scale, show ? 0f : 0.5f);
                 if (show)
-                    this.treasureBoxList[i].Spine.DOColor(i == this.pageCounter.ItemIndex ? Color.white : Color.gray, 0.5f);
+                    this.treasureBoxList[i].Spine.DOColor(reset ? Color.gray : i == this.pageCounter.ItemIndex ? Color.white : Color.gray, 0.5f);
                 else
-                    this.treasureBoxList[i].Spine.DOColor(i == this.pageCounter.ItemIndex ? whiteTransparentColor : grayTransparentColor, 0f);
+                    this.treasureBoxList[i].Spine.DOColor(reset ? grayTransparentColor : i == this.pageCounter.ItemIndex ? whiteTransparentColor : grayTransparentColor, 0f);
 
                 this.treasureBoxList[i].Arrow.DOFade(i == this.pageCounter.ItemIndex && show ? 1f : 0f, i == this.pageCounter.ItemIndex && show ? 0.2f : 0f);
+                if (reset) this.treasureBoxList[i].Spine.raycastTarget = true;
             }
             this.treasureBoxList[this.pageCounter.ItemIndex].Spine.transform.SetSiblingIndex(1);
         }
