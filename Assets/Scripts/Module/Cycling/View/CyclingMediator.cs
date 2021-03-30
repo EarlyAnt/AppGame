@@ -138,12 +138,24 @@ namespace AppGame.Module.Cycling
         //注册事件监听
         private void UpdateListeners(bool register)
         {
+            this.dispatcher.UpdateListener(register, GameEvent.GAME_START, this.RestartGame);
             this.dispatcher.UpdateListener(register, GameEvent.MP_CLICK, this.OnMpBallClick);
             this.dispatcher.UpdateListener(register, GameEvent.GO_CLICK, this.OnGo);
             this.dispatcher.UpdateListener(register, GameEvent.COLLECT_MP, this.OnCollectMp);
             this.dispatcher.UpdateListener(register, GameEvent.INTERACTION, this.OnPlayerStopped);
             this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
             this.dispatcher.UpdateListener(register, GameEvent.CITY_STATION_CLOSE, this.OnCityStationClosed);
+        }
+        //重启游戏
+        private void RestartGame()
+        {
+            this.CyclingDataManager.ClearMpCollection();
+            this.ItemDataManager.Clear(true);
+            this.ItemDataManager.AddItem(Items.COIN, GameObject.FindObjectOfType<TestData>().Coin);
+            this.BuildTestData();
+
+            this.Initialize();
+            this.View.Restart();
         }
         //初始化
         private void Initialize()
@@ -453,7 +465,7 @@ namespace AppGame.Module.Cycling
             {
                 this.View.CityStation(this.ItemDataManager.GetItemCount(Items.COIN), this.myPlayerData.hp);
             }
-            else if (mapPointNode.NodeType == NodeTypes.SiteNode && interactionData != null && 
+            else if (mapPointNode.NodeType == NodeTypes.SiteNode && interactionData != null &&
                      interactionData.Interacton == Interactions.KNOWLEDGE_LANDMARK)
             {
                 CardInfo cardInfo = this.CardConfig.GetCardByScenicID(interactionData.ID);
@@ -468,7 +480,7 @@ namespace AppGame.Module.Cycling
                     Debug.LogErrorFormat("<><CyclingMediator.OnPlayerStopped>Error: can not find the card that its scenicID is {0}", interactionData.ID);
                 }
             }
-            else if (mapPointNode.NodeType == NodeTypes.EventNode && interactionData != null && 
+            else if (mapPointNode.NodeType == NodeTypes.EventNode && interactionData != null &&
                      interactionData.Interacton == Interactions.PROPS_TREASURE_BOX)
             {
                 this.View.TreasureBox(mapPointNode);

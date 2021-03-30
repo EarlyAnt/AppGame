@@ -124,6 +124,10 @@ namespace AppGame.Module.Cycling
             this.Restart();
             this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
         }
+        public void RestartGame()
+        {
+            this.dispatcher.Dispatch(GameEvent.GAME_START);
+        }
         public void Restart()
         {
             //¸´Ô­×´Ì¬±äÁ¿

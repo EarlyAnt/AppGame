@@ -1133,7 +1133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Phone: 17621798266
   VerifyCode: 
-  Coin: 1000
+  Coin: 25000
 --- !u!1 &1642122746
 GameObject:
   m_ObjectHideFlags: 0
