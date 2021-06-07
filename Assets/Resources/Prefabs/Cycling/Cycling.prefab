@@ -2139,7 +2139,7 @@ GameObject:
   - component: {fileID: 9989585}
   - component: {fileID: 9989568}
   m_Layer: 5
-  m_Name: CRH2
+  m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2406,7 +2406,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -395.7, y: 0}
-  m_SizeDelta: {x: 67, y: 37}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &985815387
 CanvasRenderer:
@@ -2457,7 +2457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: train3
+  imageName: plane
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 985815386}
@@ -3228,7 +3228,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u9AD8\u94C1"
+  m_Text: "\u98DE\u673A"
 --- !u!1 &1307669448
 GameObject:
   m_ObjectHideFlags: 0
@@ -4204,7 +4204,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u52A8\u8F66"
+  m_Text: "\u9AD8\u94C1"
 --- !u!1 &1673776815
 GameObject:
   m_ObjectHideFlags: 0
@@ -4510,7 +4510,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -395.7, y: 0}
-  m_SizeDelta: {x: 46, y: 57}
+  m_SizeDelta: {x: 67, y: 37}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1769649643
 CanvasRenderer:
@@ -4561,7 +4561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: train2
+  imageName: train3
   autoLoad: 1
   moduleView: 3
   imageBox: {fileID: 1769649642}

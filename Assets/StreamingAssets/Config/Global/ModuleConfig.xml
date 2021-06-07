@@ -72,6 +72,7 @@
       <Image Name="pay_border" FileType="Sprite" Path="Cycling/View/pay_border" Enable="1" />
       <Image Name="pay_panel" FileType="Sprite" Path="Cycling/View/pay_panel" Enable="1" />
       <Image Name="pay_line" FileType="Sprite" Path="Cycling/View/pay_line" Enable="1" />
+      <Image Name="plane" FileType="Sprite" Path="Cycling/View/plane" Enable="1" />
       <Image Name="pop_border1" FileType="Sprite" Path="Cycling/View/pop_border1" Enable="1" />
       <Image Name="pop_border2" FileType="Sprite" Path="Cycling/View/pop_border2" Enable="1" />
       <Image Name="progress" FileType="Sprite" Path="Cycling/View/progress" Enable="1" />
