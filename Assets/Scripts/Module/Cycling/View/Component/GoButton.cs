@@ -32,7 +32,6 @@ namespace AppGame.Module.Cycling
         private string goButtonAB = "cycling/gobutton";
         protected AudioSource audioPlayer;
         private SkeletonGraphic goButton;
-        private SkeletonGraphic clickEffect;
         private SkeletonGraphic particleEffect;
         public bool IsPlaying { get; set; }
         #endregion
@@ -83,17 +82,6 @@ namespace AppGame.Module.Cycling
                     this.goButton.gameObject.AddComponent<Button>().onClick.AddListener(cyclingView.Go);
                 }
 
-                GameObject clickEffectObject = GameObject.Instantiate(spineObject) as GameObject;
-                clickEffectObject.name = "ClickEffect";
-                clickEffectObject.transform.SetParent(this.transform);
-                clickEffectObject.transform.localPosition = Vector3.zero;
-                clickEffectObject.transform.localRotation = Quaternion.identity;
-                clickEffectObject.transform.localScale = Vector3.one;
-                clickEffectObject.GetComponent<RectTransform>().sizeDelta = buttonSize;
-                this.clickEffect = clickEffectObject.GetComponent<SkeletonGraphic>();
-                this.clickEffect.raycastTarget = false;
-                this.clickEffect.gameObject.SetActive(false);
-
                 GameObject particleEffectObject = GameObject.Instantiate(spineObject) as GameObject;
                 particleEffectObject.name = "ParticleEffect";
                 particleEffectObject.transform.SetParent(this.transform);
@@ -125,23 +113,12 @@ namespace AppGame.Module.Cycling
 
             string animationName = percent == 0 ? "animation10" : string.Format("animation{0}", percent * 10);
             Debug.LogFormat("<><GoButton.SetWaterLevel>animation: {0}", animationName);
-            //this.goButton.AnimationState.ClearTracks();
-            //this.goButton.AnimationState.SetAnimation(0, "btn_click", false);
             this.goButton.AnimationState.SetAnimation(0, animationName, true).Complete += (trackEntry) =>
             {
                 //Todo: 播放水位上升或下降的声音
             };
 
             this.particleEffect.gameObject.SetActive(percent > 0);
-        }
-        //播放点击特效
-        public void PlayClickEffect()
-        {
-            //this.clickEffect.gameObject.SetActive(true);
-            //this.clickEffect.AnimationState.SetAnimation(0, "btn_click", false).Complete += (trackEntry) =>
-            //{
-            //    this.clickEffect.gameObject.SetActive(false);
-            //};
         }
     }
 }
