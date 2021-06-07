@@ -59,14 +59,12 @@ namespace AppGame.Module.Cycling
                 Tweener disperseTweener = this.clouds[i].Image.transform.DOLocalMove(visible ? this.clouds[i].OriginPoistion :
                                                                                                this.clouds[i].OriginPoistion * this.distance,
                                                                                      visible ? 0f : this.duration * durationOffset);
-                disperseTweener.onComplete = () => { completeCount++; Debug.LogFormat("* * * {0}", completeCount); };
+                disperseTweener.onComplete = () => { completeCount++; };
                 this.tweeners.Add(fadeTweener);
                 this.tweeners.Add(scaleTweener);
                 this.tweeners.Add(disperseTweener);
             }
-            Debug.LogFormat("+ + + + +");
             yield return new WaitUntil(() => completeCount >= this.cloudCount);
-            Debug.LogFormat("- - - - -");
             if (!visible) this.dispatcher.Dispatch(GameEvent.CLOUD_DISPERSE);
         }
         [ContextMenu(" ’ºØ‘∆∂‰")]
