@@ -10,11 +10,11 @@ namespace AppGame.Data.Model
         public int walk { get; set; }
         public int ride { get; set; }
         public int train { get; set; }
-        public int learn { get; set; }
+        public int monitor { get; set; }
 
         public override string ToString()
         {
-            return string.Format("child_sn: {0}, walk: {1}, ride: {2}, train: {3}, learn: {4}", this.child_sn, this.walk, this.ride, this.train, this.learn);
+            return string.Format("child_sn: {0}, walk: {1}, ride: {2}, train: {3}, monitor: {4}", this.child_sn, this.walk, this.ride, this.train, this.monitor);
         }
     }
 

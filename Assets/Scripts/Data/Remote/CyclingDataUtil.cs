@@ -38,10 +38,8 @@ namespace AppGame.Data.Remote
         public ICyclingDataManager CyclingDataManager { get; set; }
         [Inject]
         public INativeOkHttpMethodWrapper NativeOkHttpMethodWrapper { get; set; }
-        private List<ActionData> sendExpressionActionDatas = new List<ActionData>();
-        private List<ActionData> addWorldFriendActionDatas = new List<ActionData>();
-        private List<ActionData> makeWorldFriendActionDatas = new List<ActionData>();
-        private ActionData lastSendExpressionActionData = null;
+        private List<ActionData> postGameDatas = new List<ActionData>();
+        private ActionData lastPostGameData = null;
 
         //获取朋友列表
         public void GetBasicData(Action<BasicData> callback = null, Action<string> errCallback = null)
@@ -100,51 +98,48 @@ namespace AppGame.Data.Remote
             });
         }
         //发送表情
-        public void PutGameData(string childSN, PlayerData playerData, Action<Result> callback = null, Action<Result> errCallback = null)
+        public void PostGameData(PlayerData playerData, Action<Result> callback = null, Action<Result> errCallback = null)
         {
-            //Header header = new Header();
-            //header.headers = new List<HeaderData>();
-            //header.headers.Add(new HeaderData() { key = "Gululu-Agent", value = GululuNetworkHelper.GetAgent() });
-            //header.headers.Add(new HeaderData() { key = "udid", value = GululuNetworkHelper.GetUdid() });
-            //header.headers.Add(new HeaderData() { key = "Accept-Language", value = GululuNetworkHelper.GetAcceptLang() });
-            //header.headers.Add(new HeaderData() { key = "Content-Type", value = "application/json" });
-            //string strHeader = this.JsonUtils.Json2String(header);
+            Header header = new Header();
+            header.headers = new List<HeaderData>();
+            header.headers.Add(new HeaderData() { key = "Gululu-Agent", value = GululuNetworkHelper.GetAgent() });
+            header.headers.Add(new HeaderData() { key = "udid", value = GululuNetworkHelper.GetUdid() });
+            header.headers.Add(new HeaderData() { key = "Accept-Language", value = GululuNetworkHelper.GetAcceptLang() });
+            header.headers.Add(new HeaderData() { key = "Content-Type", value = "application/json" });
+            string strHeader = this.JsonUtil.Json2String(header);
 
-            //ExpressionMessages expressionMessages = new ExpressionMessages();
-            //expressionMessages.msgs.Add(new ExpressionMessage() { to = childSN, msg_id = expressionId, ts = 0 });
+            string strBody = this.JsonUtil.Json2String(playerData);
+            Debug.Log("<><CyclingDataUtil.PutGameData>Prepare data");
 
-            //string strBody = this.JsonUtils.Json2String(expressionMessages);
-            //Debug.Log("<><CyclingDataUtil.PutGameData>Prepare data");
+            ActionData newActionData = new ActionData()
+            {
+                Header = strHeader,
+                Body = strBody,
+                SendTimes = 3,
+                OnSuccess = callback,
+                OnFailed = errCallback
+            };
 
-            //ActionData newActionData = new ActionData()
-            //{
-            //    Header = strHeader,
-            //    Body = strBody,
-            //    SendTimes = 3,
-            //    OnSuccess = callback,
-            //    OnFailed = errCallback
-            //};
-
-            ////检查队列里是否已经有数据
-            //if (this.lastSendExpressionActionData != null && this.lastSendExpressionActionData.Body == strBody)
-            //{//队列里有数据，只需要处理数据是否压栈
-            //    Debug.LogFormat("<><CyclingDataUtil.PutGameData>Ignore same data, Header: {0}, Body: {1}", strHeader, strBody);
-            //    return;//如果新数据与最后一条数据的Body相同，直接忽略
-            //}
-            //else
-            //{//队列里没有数据，才需要数据压栈，且主动调用数据同步方法
-            //    Debug.LogFormat("<><CyclingDataUtil.PutGameData>Append new data and execute, Header: {0}, Body: {1}", strHeader, strBody);
-            //    this.lastSendExpressionActionData = newActionData;
-            //    this.sendExpressionActionDatas.Add(newActionData);
-            //    this.SendGameData();
-            //}
+            //检查队列里是否已经有数据
+            if (this.lastPostGameData != null && this.lastPostGameData.Body == strBody)
+            {//队列里有数据，只需要处理数据是否压栈
+                Debug.LogFormat("<><CyclingDataUtil.PutGameData>Ignore same data, Header: {0}, Body: {1}", strHeader, strBody);
+                return;//如果新数据与最后一条数据的Body相同，直接忽略
+            }
+            else
+            {//队列里没有数据，才需要数据压栈，且主动调用数据同步方法
+                Debug.LogFormat("<><CyclingDataUtil.PutGameData>Append new data and execute, Header: {0}, Body: {1}", strHeader, strBody);
+                this.lastPostGameData = newActionData;
+                this.postGameDatas.Add(newActionData);
+                this.SendGameData();
+            }
         }
         //发送表情消息
         private void SendGameData()
         {
-            if (this.sendExpressionActionDatas.Count > 0)
+            if (this.postGameDatas.Count > 0)
             {
-                ActionData actionData = this.sendExpressionActionDatas[0];
+                ActionData actionData = this.postGameDatas[0];
                 Debug.LogFormat("<><CyclingDataUtil.SendGameData>Header: {0}, Body: {1}, SendTimes: {2}", actionData.Header, actionData.Body, actionData.SendTimes);
                 Debug.LogFormat("<><CyclingDataUtil.SendGameData>Url: {0}", this.UrlProvider.PutGameDataUrl(this.ChildInfoManager.GetChildSN()));
                 this.NativeOkHttpMethodWrapper.post(this.UrlProvider.PutGameDataUrl(this.ChildInfoManager.GetChildSN()), actionData.Header, actionData.Body, (result) =>
@@ -154,11 +149,11 @@ namespace AppGame.Data.Remote
                     if (actionData.OnSuccess != null) Loom.QueueOnMainThread(() => actionData.OnSuccess(Result.Success(result)));
                     Debug.LogFormat("<><CyclingDataUtil.SendGameData>Success:\n{0}", result);
                     //检查数据
-                    if (this.sendExpressionActionDatas.Count > 0)
+                    if (this.postGameDatas.Count > 0)
                     {
-                        this.lastSendExpressionActionData = null;
-                        this.sendExpressionActionDatas.RemoveAt(0);//移除已经执行成功的数据
-                        if (this.sendExpressionActionDatas.Count > 0)//执行下一条数据
+                        this.lastPostGameData = null;
+                        this.postGameDatas.RemoveAt(0);//移除已经执行成功的数据
+                        if (this.postGameDatas.Count > 0)//执行下一条数据
                             this.SendGameData();
                     }
 
@@ -167,18 +162,18 @@ namespace AppGame.Data.Remote
                     Debug.LogFormat("<><CyclingDataUtil.SendGameData>Error: {0}", errorResult.ErrorInfo);
                     if (actionData.OnFailed != null) Loom.QueueOnMainThread(() => actionData.OnFailed(Result.Error(errorResult.ErrorInfo)));
                     //检查数据
-                    if (this.sendExpressionActionDatas.Count > 0)
+                    if (this.postGameDatas.Count > 0)
                     {
-                        this.lastSendExpressionActionData = null;
-                        if (this.sendExpressionActionDatas[0].SendTimes > 0)
+                        this.lastPostGameData = null;
+                        if (this.postGameDatas[0].SendTimes > 0)
                         {//重复上传(最多3次)
-                            this.sendExpressionActionDatas[0].SendTimes -= 1;
+                            this.postGameDatas[0].SendTimes -= 1;
                             Debug.LogFormat("<><CyclingDataUtil.SendGameData>Repeat, SendTimes: {0}, Body: {1}", actionData.SendTimes, actionData.Body);
                             this.SendGameData();
                         }
                         else
                         {//3次重传失败放弃
-                            this.sendExpressionActionDatas.RemoveAt(0);
+                            this.postGameDatas.RemoveAt(0);
                             Debug.LogFormat("<><CyclingDataUtil.SendGameData>Abandon, SendTimes: {0}, Body: {1}", actionData.SendTimes, actionData.Body);
                         }
                     }

@@ -11,7 +11,7 @@ namespace AppGame.Data.Remote
 
         void GetGameData(Action<List<PlayerData>> callback = null, Action<string> errCallback = null);
 
-        void PutGameData(string childSN, PlayerData playerData, Action<Result> callback = null, Action<Result> errCallback = null);
+        void PostGameData(PlayerData playerData, Action<Result> callback = null, Action<Result> errCallback = null);
     }
 
     public class GetBasicDataResponse : DataBase

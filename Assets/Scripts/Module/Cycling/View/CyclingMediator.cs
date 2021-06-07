@@ -68,37 +68,41 @@ namespace AppGame.Module.Cycling
                 this.ItemDataManager.SetItem(Items.COIN, coin);
                 this.View.Coin = coin;
             }
-            //else if (Input.GetKeyDown(KeyCode.Alpha1))
-            //{
-            //    TestData testData = GameObject.FindObjectOfType<TestData>();
-            //    this.AuthenticationUtils.GetVerifyCode(testData.Phone, (success) =>
-            //    {
-            //        Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, success: {0}", success.info);
-            //    }, (failure) =>
-            //    {
-            //        Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, failure: {0}", failure.ErrorInfo);
-            //    });
-            //}
-            //else if (Input.GetKeyDown(KeyCode.Alpha2))
-            //{
-            //    TestData loginTestData = GameObject.FindObjectOfType<TestData>();
-            //    LoginData loginData = new LoginData()
-            //    {
-            //        Name = "早起的蚂蚁",
-            //        Password = "bobo123456",
-            //        Email = "54763755@qq.com",
-            //        Phone = loginTestData.Phone,
-            //        VerifyCode = loginTestData.VerifyCode
-            //    };
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                this.CyclingDataUtil.PostGameData(this.myPlayerData);
+            }
+            else if (Input.GetKeyDown(KeyCode.V))
+            {
+                TestData testData = GameObject.FindObjectOfType<TestData>();
+                this.AuthenticationUtils.GetVerifyCode(testData.Phone, (success) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, success: {0}", success.info);
+                }, (failure) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, failure: {0}", failure.ErrorInfo);
+                });
+            }
+            else if (Input.GetKeyDown(KeyCode.L))
+            {
+                TestData loginTestData = GameObject.FindObjectOfType<TestData>();
+                LoginData loginData = new LoginData()
+                {
+                    Name = "早起的蚂蚁",
+                    Password = "bobo123456",
+                    Email = "54763755@qq.com",
+                    Phone = loginTestData.Phone,
+                    VerifyCode = loginTestData.VerifyCode
+                };
 
-            //    this.AuthenticationUtils.Login(loginData, (success) =>
-            //    {
-            //        Debug.LogFormat("<><CyclingMediator.Update>Login, success: {0}", success.info);
-            //    }, (failure) =>
-            //    {
-            //        Debug.LogFormat("<><CyclingMediator.Update>Login, failure: {0}", failure.ErrorInfo);
-            //    });
-            //}
+                this.AuthenticationUtils.Login(loginData, (success) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>Login, success: {0}", success.info);
+                }, (failure) =>
+                {
+                    Debug.LogFormat("<><CyclingMediator.Update>Login, failure: {0}", failure.ErrorInfo);
+                });
+            }
         }
         /************************************************自 定 义 方 法************************************************/
         //注册
@@ -106,12 +110,11 @@ namespace AppGame.Module.Cycling
         {
             UpdateListeners(true);
 #if (UNITY_ANDROID) && (!UNITY_EDITOR)
-            this.CyclingDataManager.ClearMpCollection();
-            this.ItemDataManager.Clear(true);
-            this.ItemDataManager.AddItem(Items.COIN, 1000);
-            this.BuildTestData();
+                        this.CyclingDataManager.ClearMpCollection();
+                        this.ItemDataManager.Clear(true);
+                        this.ItemDataManager.AddItem(Items.COIN, 1000);
+                        this.BuildTestData();
 #endif
-            this.Initialize();
             #region 访问服务器获取数据
             //this.CyclingDataUtil.GetBasicData((basicData) =>
             //{
@@ -129,6 +132,7 @@ namespace AppGame.Module.Cycling
             //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetGameData, failure: {0}", errorText);
             //});
             #endregion
+            this.Initialize();
         }
         //取消注册
         public override void OnRemove()
@@ -184,7 +188,7 @@ namespace AppGame.Module.Cycling
         {
             string childSN = this.ChildInfoManager.GetChildSN();
             //创建原始数据
-            OriginData originData = new OriginData() { child_sn = childSN, walk = 10000, ride = 5000, train = 20, learn = 30 };
+            OriginData originData = new OriginData() { child_sn = childSN, walk = 10000, ride = 5000, train = 20, monitor = 30 };
             this.CyclingDataManager.SaveOriginData(originData);
             //创建游戏数据
             List<PlayerData> playerDataList = new List<PlayerData>();
@@ -288,7 +292,7 @@ namespace AppGame.Module.Cycling
             int mpTrain = (this.originData.train - this.myPlayerData.train_expend);
             mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Train, Mp = mpTrain });
 
-            int mpLearn = (int)((this.originData.learn - this.myPlayerData.learn_expend) / 5);
+            int mpLearn = (int)((this.originData.monitor - this.myPlayerData.learn_expend) / 5);
             mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Learn, Mp = mpLearn });
 
             foreach (var playerData in this.playerDataList)
