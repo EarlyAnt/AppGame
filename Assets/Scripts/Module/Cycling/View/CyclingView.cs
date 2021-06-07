@@ -190,7 +190,6 @@ namespace AppGame.Module.Cycling
                     this.dispatcher.Dispatch(GameEvent.GO_CLICK);
                 }));
             }
-            this.goButton.PlayClickEffect();
         }
         public void Move(bool canMove, int hp)
         {
