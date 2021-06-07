@@ -68,37 +68,37 @@ namespace AppGame.Module.Cycling
                 this.ItemDataManager.SetItem(Items.COIN, coin);
                 this.View.Coin = coin;
             }
-            else if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                TestData testData = GameObject.FindObjectOfType<TestData>();
-                this.AuthenticationUtils.GetVerifyCode(testData.Phone, (success) =>
-                {
-                    Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, success: {0}", success.info);
-                }, (failure) =>
-                {
-                    Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, failure: {0}", failure.ErrorInfo);
-                });
-            }
-            else if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                TestData loginTestData = GameObject.FindObjectOfType<TestData>();
-                LoginData loginData = new LoginData()
-                {
-                    Name = "早起的蚂蚁",
-                    Password = "bobo123456",
-                    Email = "54763755@qq.com",
-                    Phone = loginTestData.Phone,
-                    VerifyCode = loginTestData.VerifyCode
-                };
+            //else if (Input.GetKeyDown(KeyCode.Alpha1))
+            //{
+            //    TestData testData = GameObject.FindObjectOfType<TestData>();
+            //    this.AuthenticationUtils.GetVerifyCode(testData.Phone, (success) =>
+            //    {
+            //        Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, success: {0}", success.info);
+            //    }, (failure) =>
+            //    {
+            //        Debug.LogFormat("<><CyclingMediator.Update>GetVerifyCode, failure: {0}", failure.ErrorInfo);
+            //    });
+            //}
+            //else if (Input.GetKeyDown(KeyCode.Alpha2))
+            //{
+            //    TestData loginTestData = GameObject.FindObjectOfType<TestData>();
+            //    LoginData loginData = new LoginData()
+            //    {
+            //        Name = "早起的蚂蚁",
+            //        Password = "bobo123456",
+            //        Email = "54763755@qq.com",
+            //        Phone = loginTestData.Phone,
+            //        VerifyCode = loginTestData.VerifyCode
+            //    };
 
-                this.AuthenticationUtils.Login(loginData, (success) =>
-                {
-                    Debug.LogFormat("<><CyclingMediator.Update>Login, success: {0}", success.info);
-                }, (failure) =>
-                {
-                    Debug.LogFormat("<><CyclingMediator.Update>Login, failure: {0}", failure.ErrorInfo);
-                });
-            }
+            //    this.AuthenticationUtils.Login(loginData, (success) =>
+            //    {
+            //        Debug.LogFormat("<><CyclingMediator.Update>Login, success: {0}", success.info);
+            //    }, (failure) =>
+            //    {
+            //        Debug.LogFormat("<><CyclingMediator.Update>Login, failure: {0}", failure.ErrorInfo);
+            //    });
+            //}
         }
         /************************************************自 定 义 方 法************************************************/
         //注册
@@ -141,6 +141,7 @@ namespace AppGame.Module.Cycling
             this.dispatcher.UpdateListener(register, GameEvent.GAME_START, this.RestartGame);
             this.dispatcher.UpdateListener(register, GameEvent.MP_CLICK, this.OnMpBallClick);
             this.dispatcher.UpdateListener(register, GameEvent.GO_CLICK, this.OnGo);
+            this.dispatcher.UpdateListener(register, GameEvent.GO_BUTTON_LOADED, this.RefreshMpAndHp);
             this.dispatcher.UpdateListener(register, GameEvent.COLLECT_MP, this.OnCollectMp);
             this.dispatcher.UpdateListener(register, GameEvent.INTERACTION, this.OnPlayerStopped);
             this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
@@ -165,7 +166,7 @@ namespace AppGame.Module.Cycling
             this.View.LoadMap(this.myPlayerData.map_id);
             this.View.RefreshPlayer(this.myPlayerData, this.ItemDataManager.GetItemCount(Items.COIN));
             this.View.RefreshTeammates(this.playerDataList);
-            this.View.RefreshMp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
+            this.View.RefreshMpAndHp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
             this.RefreshMpDatas();
             this.CancelInvoke();
             this.InvokeRepeating("GetGameData", 3f, 3f);
@@ -437,7 +438,12 @@ namespace AppGame.Module.Cycling
 
             if (mpData.RefreshView)
                 this.RefreshMpDatas();//玩家点击能量气泡主动收取能量时才立刻刷新能量气泡
-            this.View.RefreshMp(this.myPlayerData.mp - this.myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
+            this.RefreshMpAndHp();//刷新Go按钮
+        }
+        //刷新页面数据
+        public void RefreshMpAndHp()
+        {
+            this.View.RefreshMpAndHp(this.myPlayerData.mp - this.myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
         }
         //当玩家前进停止时
         private void OnPlayerStopped(IEvent evt)

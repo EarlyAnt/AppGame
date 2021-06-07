@@ -64,11 +64,11 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private MpBall mpBallPrefab2;
         [SerializeField]
+        private GoButton goButton;
+        [SerializeField]
         private Text mpBox;
         [SerializeField]
         private Text hpBox;
-        [SerializeField]
-        private Transform goButton;
         [SerializeField]
         private PayBill payBill;
         [SerializeField]
@@ -115,6 +115,7 @@ namespace AppGame.Module.Cycling
         }
         protected override void OnDestroy()
         {
+            this.goButton.DestroyAssetBundle();
             this.UpdateDispatcher(false);
             base.OnDestroy();
         }
@@ -189,6 +190,7 @@ namespace AppGame.Module.Cycling
                     this.dispatcher.Dispatch(GameEvent.GO_CLICK);
                 }));
             }
+            this.goButton.PlayClickEffect();
         }
         public void Move(bool canMove, int hp)
         {
@@ -304,10 +306,11 @@ namespace AppGame.Module.Cycling
             this.StopCoroutine(this.RefreshMpBallAnimation());
             this.StartCoroutine(this.RefreshMpBallAnimation());
         }
-        public void RefreshMp(int mp, int hp)
+        public void RefreshMpAndHp(int mp, int hp)
         {
             this.mpBox.text = mp.ToString();
             this.hpBox.text = hp.ToString();
+            this.goButton.SetWaterLevel(mp);
         }
         public void ShowPayBill(MpData mpData)
         {
@@ -460,7 +463,7 @@ namespace AppGame.Module.Cycling
                     MpBall mpBall = this.mpBalls[index];
                     mpBall.CanvasGroup.DOFade(0f, speed);
                     mpBall.transform.DOScale(0f, speed);
-                    mpBall.transform.DOMove(this.goButton.position, speed);
+                    mpBall.transform.DOMove(this.goButton.transform.position, speed);
                     yield return new WaitUntil(() => mpBall.CanvasGroup == null || mpBall.CanvasGroup.alpha <= 0.5f);
                     index++;
                 };

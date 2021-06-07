@@ -26,7 +26,8 @@ namespace AppGame.Module.Cycling
         TRAFFIC_LOADING_CLOSE,
 
         //其他事件
-        SET_TOUCH_PAD_ENABLE
+        SET_TOUCH_PAD_ENABLE,
+        GO_BUTTON_LOADED,
     }
 
     public enum NodeTypes
