@@ -50,7 +50,7 @@ namespace AppGame.Module.Cycling
         {
             get
             {
-                return this.step / 80 * this.frameRate;
+                return this.step / this.frameRate * 80;
             }
         }
         public MapPointNode CurrentNode
