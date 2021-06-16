@@ -39,6 +39,20 @@ namespace AppGame.Module.Cycling
         private Vector2 moveAxis;
         private int directon = 0;
         private int lastDirection = 0;
+        private float frameRate
+        {
+            get
+            {
+                return (float)(1.0 / Time.smoothDeltaTime);
+            }
+        }
+        private float realStep
+        {
+            get
+            {
+                return this.step / 80 * this.frameRate;
+            }
+        }
         public MapPointNode CurrentNode
         {
             get
@@ -165,7 +179,7 @@ namespace AppGame.Module.Cycling
                 do
                 {
                     this.lastPos = this.player.position;
-                    this.player.position = Vector3.MoveTowards(this.player.position, this.destination, this.step);
+                    this.player.position = Vector3.MoveTowards(this.player.position, this.destination, this.realStep);
                     this.roadRenderer.DrawPoint(this.player.position, this.directon, false);
                     yield return new WaitForEndOfFrame();
                 }
