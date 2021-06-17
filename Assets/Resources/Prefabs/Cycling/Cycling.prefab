@@ -11504,8 +11504,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 5429350304871026917}
-  appearY: 100
-  raiseY: 300
+  appearY: 300
+  raiseY: 600
   coinBox: {fileID: 3389789960906382267}
 --- !u!1 &6153652647132240362
 GameObject:

@@ -46,12 +46,12 @@ namespace AppGame.Module.Cycling
             this.coinBox.text = coin.ToString();
         }
         //出现
-        public void Appear(bool selected)
+        public void Appear()
         {
             this.canvasGroup.DOFade(0f, 0f);
             this.rectTransform.DOLocalMoveY(this.originY, 0f);
 
-            this.canvasGroup.DOFade(selected ? 1f : 0.5f, 0.5f);
+            this.canvasGroup.DOFade(1f, 0.5f);
             this.rectTransform.DOLocalMoveY(this.appearY, 0.5f).onComplete = () => { this.BalloonStatus = BalloonStatus.Appear; };
         }
         //上升

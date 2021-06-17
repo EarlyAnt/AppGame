@@ -146,7 +146,7 @@ namespace AppGame.Module.Cycling
 
                     Balloon balloon = GameObject.Instantiate<Balloon>(this.balloonPrefab);
                     balloon.transform.SetParent(treasureBoxObject.transform);
-                    balloon.transform.localPosition = new Vector3(13f, 0f, 0f);
+                    balloon.transform.localPosition = new Vector3(-3f, 0f, 0f);
                     balloon.transform.localRotation = Quaternion.identity;
                     balloon.transform.localScale = Vector3.one * 4f;
                     this.balloonList.Add(balloon);
@@ -183,7 +183,7 @@ namespace AppGame.Module.Cycling
                     else
                     {
                         this.currentStep = OpenTreasureBoxSteps.DropDown;
-                        this.treasureBoxList.ForEach(t => t.Arrow.enabled = true);
+                        //this.treasureBoxList.ForEach(t => t.Arrow.enabled = true);
                         //this.ChangeBox();
                         this.DelayInvoke(() =>
                         {
@@ -221,7 +221,6 @@ namespace AppGame.Module.Cycling
         private void ChangeBox(bool show = true, bool reset = false)
         {
             Color whiteTransparentColor = new Color(1f, 1f, 1f, 0f);
-            Color grayTransparentColor = new Color(0.5f, 0.5f, 0.5f, 0f);
 
             for (int i = 0; i < this.treasureBoxList.Count; i++)
             {
@@ -229,11 +228,11 @@ namespace AppGame.Module.Cycling
                 if (reset) scale = this.treasureBoxScale;
                 this.treasureBoxList[i].Spine.transform.DOScale(scale, show ? 0f : 0.5f);
                 if (show)
-                    this.treasureBoxList[i].Spine.DOColor(reset ? Color.gray : i == this.pageCounter.ItemIndex ? Color.white : Color.gray, 0.5f);
+                    this.treasureBoxList[i].Spine.DOColor(Color.white, 0.5f);
                 else
-                    this.treasureBoxList[i].Spine.DOColor(reset ? grayTransparentColor : i == this.pageCounter.ItemIndex ? whiteTransparentColor : grayTransparentColor, 0f);
+                    this.treasureBoxList[i].Spine.DOColor(whiteTransparentColor, 0f);
 
-                this.treasureBoxList[i].Arrow.DOFade(i == this.pageCounter.ItemIndex && show ? 1f : 0f, i == this.pageCounter.ItemIndex && show ? 0.2f : 0f);
+                //this.treasureBoxList[i].Arrow.DOFade(i == this.pageCounter.ItemIndex && show ? 1f : 0f, i == this.pageCounter.ItemIndex && show ? 0.2f : 0f);
                 if (reset) this.treasureBoxList[i].Spine.raycastTarget = true;
             }
             this.treasureBoxList[this.pageCounter.ItemIndex].Spine.transform.SetSiblingIndex(1);
@@ -242,7 +241,7 @@ namespace AppGame.Module.Cycling
         private void OpenBox(int index, bool recursion = true)
         {
             this.currentStep = OpenTreasureBoxSteps.OpeningBox;
-            this.treasureBoxList.ForEach(t => t.Arrow.enabled = false);
+            //this.treasureBoxList.ForEach(t => t.Arrow.enabled = false);
             if (this.treasureBoxList != null && this.treasureBoxList.Count > 0 &&
                 index >= 0 && index < this.treasureBoxList.Count)
             {
@@ -250,7 +249,7 @@ namespace AppGame.Module.Cycling
                 this.treasureBoxList[index].Spine.AnimationState.SetAnimation(0, "box02", false).Complete += (trackEntry) =>
                 {//打开当前选中的宝箱
                     this.balloonList[index].SetValue(this.CalculateReward());
-                    this.balloonList[index].Appear(index == this.pageCounter.ItemIndex);
+                    this.balloonList[index].Appear();
                     if (recursion)
                     {
                         this.DelayInvoke(() =>
