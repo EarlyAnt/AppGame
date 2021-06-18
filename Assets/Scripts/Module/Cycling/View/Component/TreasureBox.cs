@@ -285,6 +285,7 @@ namespace AppGame.Module.Cycling
                     {
                         this.ItemDataManager.AddItem(Items.COIN, this.balloonList[this.pageCounter.ItemIndex].Coin);
                         this.balloonList.ForEach(t => t.Disappear());
+                        this.treasureBoxList.ForEach(t => t.Spine.AnimationState.SetAnimation(0, "box03", false));
                         this.DelayInvoke(() =>
                         {
                             this.treasureBoxList.ForEach(t => t.Spine.DOFade(0f, 0f));
