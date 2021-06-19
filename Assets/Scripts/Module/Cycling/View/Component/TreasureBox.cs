@@ -285,10 +285,10 @@ namespace AppGame.Module.Cycling
                     {
                         this.ItemDataManager.AddItem(Items.COIN, this.balloonList[this.pageCounter.ItemIndex].Coin);
                         this.balloonList.ForEach(t => t.Disappear());
-                        this.treasureBoxList.ForEach(t => t.Spine.AnimationState.SetAnimation(0, "box03", false));
+                        this.treasureBoxList.ForEach(t => t.Spine.DOFade(0f, 0.5f));
                         this.DelayInvoke(() =>
                         {
-                            this.treasureBoxList.ForEach(t => t.Spine.DOFade(0f, 0f));
+                            this.treasureBoxList.ForEach(t => t.Spine.AnimationState.SetAnimation(0, "box03", false));
                             this.mask.DOFade(0f, 0f);
                             this.currentStep = OpenTreasureBoxSteps.GotReward;
                             this.IsPlaying = false;
@@ -296,7 +296,7 @@ namespace AppGame.Module.Cycling
                         }, 0.5f);
                     });
                 }
-            }, 2f);
+            }, 1f);
         }
         //计算宝箱奖励
         private int CalculateReward()
