@@ -748,3 +748,4 @@ MonoBehaviour:
   durationMin: 3
   durationMax: 5
   speedRate: 0.2
+  nextScene: BotDialog

@@ -54,6 +54,11 @@ namespace AppGame.Data.Remote
             return AddServerPrefix(putGameDataUrl);
         }
 
+        public string PostDialogDataUrl()
+        {
+            return "https://deportal.chinaeast2.cloudapp.chinacloudapi.cn/dialog-bot/api/c18902dc-7fb8-4c31-9aa4-47f1b616af9e/Dialog";
+        }
+
         public string GetVerifyCodeUrl()
         {
             return AddServerPrefix(ApiUrls.GET_VERIFY_CODE);

@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameStart.unity
     guid: 2753c3bf3a9e5d44eb1dbc5da6b6d380
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TripMap.unity
     guid: c8caf85d2ea60064092731a00775772b
+  - enabled: 1
+    path: Assets/Scenes/BotDialog.unity
+    guid: 5c9c8998da8ce3047a7b88a23abc8f36
   - enabled: 0
     path: Assets/Test/WebViewer/Example.unity
     guid: 0064728741c6349739b6079e4e2c6922

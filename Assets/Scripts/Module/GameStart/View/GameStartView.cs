@@ -55,6 +55,8 @@ namespace AppGame.Module.GameStart
         private float durationMax = 5f;
         [SerializeField, Range(0f, 1f)]
         private float speedRate = 1f;
+        [SerializeField]
+        private string nextScene;
         #endregion
         #region 其他变量
         private bool downloadComplete = false;
@@ -243,7 +245,7 @@ namespace AppGame.Module.GameStart
         //加载场景
         private IEnumerator LoadScene(float startValue, float endValue)
         {
-            AsyncOperation async = SceneManager.LoadSceneAsync("TripMap", LoadSceneMode.Single);
+            AsyncOperation async = SceneManager.LoadSceneAsync(this.nextScene, LoadSceneMode.Single);
             async.allowSceneActivation = false;
             while (async.progress < 0.9f)
             {
