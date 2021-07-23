@@ -108,7 +108,8 @@ namespace AppGame.Data.Remote
             header.headers.Add(new HeaderData() { key = "Content-Type", value = "application/json" });
             string strHeader = this.JsonUtil.Json2String(header);
 
-            string strBody = this.JsonUtil.Json2String(playerData);
+            PostGameDataRequest postGameDataRequest = playerData.ToGameData();
+            string strBody = this.JsonUtil.Json2String(postGameDataRequest);
             Debug.Log("<><CyclingDataUtil.PutGameData>Prepare data");
 
             ActionData newActionData = new ActionData()
