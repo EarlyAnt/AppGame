@@ -112,7 +112,7 @@ namespace AppGame.Module.Cycling
 #if (UNITY_ANDROID) && (!UNITY_EDITOR)
                         this.CyclingDataManager.ClearMpCollection();
                         this.ItemDataManager.Clear(true);
-                        this.ItemDataManager.AddItem(Items.COIN, 1000);
+                        this.ItemDataManager.AddItem(Items.COIN, 50000);
                         this.BuildTestData();
 #endif
             #region 访问服务器获取数据

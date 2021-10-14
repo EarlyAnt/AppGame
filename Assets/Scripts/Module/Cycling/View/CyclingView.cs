@@ -329,16 +329,17 @@ namespace AppGame.Module.Cycling
         }
         public void TreasureBox(MapPointNode mapPointNode)
         {
-            InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
-            if (interactionData != null && interactionData.Interacton == Interactions.PROPS_TREASURE_BOX)
-            {
-                this.treasureBox.Play(this.KeepGoing);//开宝箱动画
-                Debug.Log("OpenTreasureBox + + + + +");
-            }
-            else
-            {
-                this.KeepGoing();
-            }
+            //InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
+            //if (interactionData != null && interactionData.Interacton == Interactions.PROPS_TREASURE_BOX)
+            //{
+            //    this.treasureBox.Play(this.KeepGoing);//开宝箱动画
+            //    Debug.Log("OpenTreasureBox + + + + +");
+            //}
+            //else
+            //{
+            //    this.KeepGoing();
+            //}
+            this.KeepGoing();
         }
         public void KeepGoing()
         {

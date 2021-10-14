@@ -43,6 +43,7 @@ namespace AppGame.Module.Cycling
         private WebView webView;
         #endregion
         #region 其他变量
+        private string url = "";
         private Vector3 middleAngle = new Vector3(0f, 90f, 0f);//卡片90度角
         private Vector3 foreAngle = new Vector3(0f, 180f, 0f);//卡片翻转角度
         #endregion
@@ -84,7 +85,8 @@ namespace AppGame.Module.Cycling
             this.scenicNameBox.text = scenicInfo.Name;
             this.descriptionBox.text = this.I18NConfig.GetText(card.Text);
             this.root.gameObject.SetActive(true);
-            this.webView.Url = card.Url;
+            //this.webView.Url = card.Url;
+            this.url = card.Url;
         }
         //隐藏卡片
         public void Hide()
@@ -109,8 +111,10 @@ namespace AppGame.Module.Cycling
         public void OpenUrl()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            this.webView.CallWebView();
+            //this.webView.CallWebView();
+            NativeAPI.SendMessageToFlutter(this.url);            
 #endif
+			Debug.LogFormat("<><ScenicCard.OpenUrl>url: {0}", this.url);
         }
         //重设卡片状态
         private void Reset()
