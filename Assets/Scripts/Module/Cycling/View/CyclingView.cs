@@ -158,6 +158,11 @@ namespace AppGame.Module.Cycling
             while (this.mpBallRoot.childCount > 0)
                 GameObject.DestroyImmediate(this.mpBallRoot.GetChild(0).gameObject);
         }
+        public void GoBack()
+        {
+            AndroidNativeAPI.Instance.GoBack();
+            Debug.Log("<><CyclingView.GoBack>go back to flutter");
+        }
         public void LoadMap(string mapID)
         {
             MapInfo mapInfo = this.MapConfig.GetMap(mapID);

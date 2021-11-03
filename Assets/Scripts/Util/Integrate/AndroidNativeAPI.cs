@@ -7,16 +7,7 @@ public class AndroidNativeAPI : SingletonMonoBehaviour<AndroidNativeAPI>
 
     private void Start()
     {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        //androidJavaClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        //androidJavaObject = androidJavaClass.GetStatic<AndroidJavaObject>("currentActivity");
-
-        androidJavaClass = new AndroidJavaClass("com.unity3d.player.TestUnityActivity");
-        androidJavaObject = androidJavaClass.GetStatic<AndroidJavaObject>("currentActivity");
-
-        Debug.Log("<><AndroidNativeAPI.Start>version001");
-#endif
-        Debug.Log("<><AndroidNativeAPI.Start>version001");
+        Debug.Log("<><AndroidNativeAPI.Start>version 2020-11-03 09:30:00");
     }
 
     public void SendMessageToAndroid(string message)
@@ -24,7 +15,7 @@ public class AndroidNativeAPI : SingletonMonoBehaviour<AndroidNativeAPI>
 #if UNITY_ANDROID && !UNITY_EDITOR
         if (androidJavaClass == null || androidJavaObject == null)
         {
-            androidJavaClass = new AndroidJavaClass("com.unity3d.player.TestUnityActivity");
+            androidJavaClass = new AndroidJavaClass("com.unity3d.player.UnityExtActivity");
             androidJavaObject = androidJavaClass.GetStatic<AndroidJavaObject>("currentActivity");
         }
 
@@ -42,5 +33,10 @@ public class AndroidNativeAPI : SingletonMonoBehaviour<AndroidNativeAPI>
     public void UnityMethod(string str)
     {
         Debug.Log("Android: " + str);
+    }
+
+    public void GoBack()
+    {
+        this.SendMessageToAndroid("goback");
     }
 }
