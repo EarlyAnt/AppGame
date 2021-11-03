@@ -84,30 +84,30 @@ public class UnityMessageManager : SingletonMonoBehaviour<UnityMessageManager>
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        NativeAPI.OnSceneLoaded(scene, mode);
+        FlutterNativeAPI.OnSceneLoaded(scene, mode);
 
     }
 
     public void ShowHostMainWindow()
     {
-        NativeAPI.ShowHostMainWindow();
+        FlutterNativeAPI.ShowHostMainWindow();
     }
 
     public void UnloadMainWindow()
     {
-        NativeAPI.UnloadMainWindow();
+        FlutterNativeAPI.UnloadMainWindow();
     }
 
 
     public void QuitUnityWindow()
     {
-        NativeAPI.QuitUnityWindow();
+        FlutterNativeAPI.QuitUnityWindow();
     }
 
 
     public void SendMessageToFlutter(string message)
     {
-        NativeAPI.SendMessageToFlutter(message);
+        FlutterNativeAPI.SendMessageToFlutter(message);
     }
 
     public void SendMessageToFlutter(UnityMessage message)

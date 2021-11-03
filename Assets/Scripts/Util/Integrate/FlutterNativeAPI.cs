@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using AOT;
 
-public class NativeAPI
+public class FlutterNativeAPI
 {
 #if UNITY_IOS && !UNITY_EDITOR
     [DllImport("__Internal")]
@@ -33,7 +33,7 @@ public class NativeAPI
 
     public static void SendMessageToFlutter(string message)
     {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
         try
         {
             AndroidJavaClass jc = new AndroidJavaClass("com.xraph.plugin.flutter_unity_widget.UnityPlayerUtils");

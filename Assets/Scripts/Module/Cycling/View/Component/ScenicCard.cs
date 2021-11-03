@@ -110,11 +110,10 @@ namespace AppGame.Module.Cycling
         //打开网页
         public void OpenUrl()
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
             //this.webView.CallWebView();
-            NativeAPI.SendMessageToFlutter(this.url);            
-#endif
-			Debug.LogFormat("<><ScenicCard.OpenUrl>url: {0}", this.url);
+            //FlutterNativeAPI.SendMessageToFlutter(this.url);
+            AndroidNativeAPI.Instance.SendMessageToAndroid(this.url);
+            Debug.LogFormat("<><ScenicCard.OpenUrl>url: {0}", this.url);
         }
         //重设卡片状态
         private void Reset()
