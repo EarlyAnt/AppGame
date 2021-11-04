@@ -17,7 +17,7 @@ namespace AppGame.Data.Common
 
         public void post(string url, string headerStr, string body, Action<string> result, Action<ResponseErroInfo> faile)
         {
-            //#if UNITY_ANDROID && (!UNITY_EDITOR)
+            //#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
             //            Debug.Log(string.Format("<><GululuNetwork.post>url: {0}, headerStr: {1}, body: {2}", url, headerStr, body));
             //            GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), body, (response) =>
             //            {
@@ -52,7 +52,7 @@ namespace AppGame.Data.Common
 
         public void put(string url, string headerStr, string body, Action<string> result, Action<ResponseErroInfo> faile)
         {
-            //#if UNITY_ANDROID && (!UNITY_EDITOR)
+            //#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
             //            Debug.Log(string.Format("<><GululuNetwork.put>url: {0}, headerStr: {1}, body: {2}", url, headerStr, body));
             //            GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), body, (response) =>
             //            {
@@ -72,7 +72,7 @@ namespace AppGame.Data.Common
 
         public void get(string url, string headerStr, Action<string> result, Action<ResponseErroInfo> faile)
         {
-            //#if UNITY_ANDROID && (!UNITY_EDITOR)
+            //#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
             //            Debug.Log("GululuNetwork get");
             //            GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), (response) =>
             //            {
@@ -92,7 +92,7 @@ namespace AppGame.Data.Common
 
         public void delete(string url, string headerStr, Action<string> result, Action<ResponseErroInfo> faile)
         {
-            //#if UNITY_ANDROID && (!UNITY_EDITOR)
+            //#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
             //            Debug.Log("GululuNetwork delete");
             //            GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), (response) =>
             //            {
@@ -112,7 +112,7 @@ namespace AppGame.Data.Common
 
         public void delete(string url, string headerStr, string body, Action<string> result, Action<ResponseErroInfo> faile)
         {
-            //#if UNITY_ANDROID && (!UNITY_EDITOR)
+            //#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
             //            Debug.Log("GululuNetwork delete");
             //            GululuNetwork.SendRequest(url, NetUtils.transforDictionarHead(headerStr), body, (response) =>
             //            {

@@ -25,7 +25,7 @@ namespace AppGame.Global
             {
                 return VersionTypes.Release;
 
-                //#if (UNITY_ANDROID) && (!UNITY_EDITOR)
+                //#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
                 //                return VersionTypes.Release;
                 //#else
                 //                return VersionTypes.Development;

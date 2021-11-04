@@ -109,7 +109,7 @@ namespace AppGame.Module.Cycling
         public override void OnRegister()
         {
             UpdateListeners(true);
-#if (UNITY_ANDROID) && (!UNITY_EDITOR)
+#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
                         this.CyclingDataManager.ClearMpCollection();
                         this.ItemDataManager.Clear(true);
                         this.ItemDataManager.AddItem(Items.COIN, 50000);

@@ -37,7 +37,7 @@ namespace AppGame.Util
              * 第3步 将本地文件列表B与文件列表A合并，得到最终的文件列表C，并保存下来
              */
 
-            //#if (UNITY_ANDROID) && (!UNITY_EDITOR)
+            //#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
             //        this.HotUpdateUtils.GetUpdateInfo((updateInfos) =>
             //        {
             //            if (updateInfos != null && !string.IsNullOrEmpty(updateInfos.status) && updateInfos.status.ToUpper() == "OK")
@@ -151,7 +151,7 @@ namespace AppGame.Util
                 #endregion
                 #region 服务器数据筛选
                 List<UpdateFileInfo> severFileList = new List<UpdateFileInfo>();//结果数据集
-#if (UNITY_ANDROID) && (!UNITY_EDITOR)
+#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
                 if (updateInfos != null && updateInfos.res_list != null)
                 {
                     List<UpdateInfo> updateInfoList = updateInfos.res_list.OrderByDescending(t => t.res_ver_code).ToList();//按照资源版本号倒叙排列历次更新数据

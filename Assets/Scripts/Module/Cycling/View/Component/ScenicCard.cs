@@ -3,7 +3,6 @@ using AppGame.Config;
 using AppGame.UI;
 using UnityEngine;
 using UnityEngine.UI;
-using Wizcorp.Web;
 
 namespace AppGame.Module.Cycling
 {
@@ -39,8 +38,6 @@ namespace AppGame.Module.Cycling
         private Text scenicNameBox;//景点名字文字框
         [SerializeField]
         private Text descriptionBox;//景点介绍文字框
-        [SerializeField]
-        private WebView webView;
         #endregion
         #region 其他变量
         private string url = "";
@@ -85,7 +82,6 @@ namespace AppGame.Module.Cycling
             this.scenicNameBox.text = scenicInfo.Name;
             this.descriptionBox.text = this.I18NConfig.GetText(card.Text);
             this.root.gameObject.SetActive(true);
-            //this.webView.Url = card.Url;
             this.url = card.Url;
         }
         //隐藏卡片
@@ -110,7 +106,6 @@ namespace AppGame.Module.Cycling
         //打开网页
         public void OpenUrl()
         {
-            //this.webView.CallWebView();
             //FlutterNativeAPI.SendMessageToFlutter(this.url);
             AndroidNativeAPI.Instance.SendMessageToAndroid(this.url);
             Debug.LogFormat("<><ScenicCard.OpenUrl>url: {0}", this.url);

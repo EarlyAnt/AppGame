@@ -243,7 +243,7 @@ namespace AppGame.Module.GameStart
         //º”‘ÿ≥°æ∞
         private IEnumerator LoadScene(float startValue, float endValue)
         {
-            AsyncOperation async = SceneManager.LoadSceneAsync("TripMap", LoadSceneMode.Single);
+            AsyncOperation async = SceneManager.LoadSceneAsync("ComingSoon", LoadSceneMode.Single);
             async.allowSceneActivation = false;
             while (async.progress < 0.9f)
             {
