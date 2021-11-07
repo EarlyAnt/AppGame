@@ -4166,7 +4166,7 @@ MonoBehaviour:
   id: 3202_38
   idLock: 1
   nodeType: 4
-  normalImageName: 'ticket_normal '
+  normalImageName: ticket_normal
   lightImageName: ticket _highlight
 --- !u!114 &2757916161164984818
 MonoBehaviour:
@@ -4180,7 +4180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: 'ticket_normal '
+  imageName: ticket_normal
   autoLoad: 0
   moduleView: 3
   imageBox: {fileID: 3125467863373621203}
@@ -4638,8 +4638,8 @@ MonoBehaviour:
   id: 3202_01
   idLock: 1
   nodeType: 0
-  normalImageName: 'start_normal '
-  lightImageName: 'stars_highlight '
+  normalImageName: start_normal
+  lightImageName: stars_highlight
 --- !u!114 &9092039811220996715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4652,7 +4652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imageName: 'start_normal '
+  imageName: start_normal
   autoLoad: 0
   moduleView: 3
   imageBox: {fileID: 4470183013114386643}
