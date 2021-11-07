@@ -15,8 +15,8 @@ namespace AppGame.Module.GameStart
 {
     public class GameStartView : BaseView
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region ×¢Èë½Ó¿Ú
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region æ³¨å…¥æ¥å£
         [Inject]
         public IFontConfig FontConfig { get; set; }
         [Inject]
@@ -46,7 +46,7 @@ namespace AppGame.Module.GameStart
         [Inject]
         public IAssetBundleUtil AssetBundleUtil { get; set; }
         #endregion
-        #region Ò³ÃæUI×é¼ş
+        #region é¡µé¢UIç»„ä»¶
         [SerializeField]
         private ProgressBar totalProgress;
         [SerializeField]
@@ -58,13 +58,13 @@ namespace AppGame.Module.GameStart
         [SerializeField, Range(0f, 1f)]
         private float speedRate = 1f;
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
         private bool downloadComplete = false;
         private Tweener tweener;
         private Queue<System.Action> asyncActions = new Queue<System.Action>();
-        private DownloadInfo downloadInfo = new DownloadInfo();//ÏÂÔØĞÅÏ¢
+        private DownloadInfo downloadInfo = new DownloadInfo();//ä¸‹è½½ä¿¡æ¯
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
         protected override void Start()
         {
             base.Start();
@@ -89,15 +89,15 @@ namespace AppGame.Module.GameStart
                 Debug.LogErrorFormat("<><GameStartView.Update>do async action error: {0}", ex.Message);
             }
         }
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //³õÊ¼»¯
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //åˆå§‹åŒ–
         private IEnumerator Initialize()
         {
             float progress = UnityEngine.Random.Range(0.2f, 0.5f);
             yield return this.StartCoroutine(this.ReadConfig(progress));
             yield return this.StartCoroutine(this.LoadScene(progress, 1f));
         }
-        //¶ÁÈ¡ÅäÖÃ
+        //è¯»å–é…ç½®
         private IEnumerator ReadConfig(float endValue)
         {
             float startValue = 0f;
@@ -164,7 +164,7 @@ namespace AppGame.Module.GameStart
             this.CommonImageUtils.LoadCommonImages();
             yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f) * this.speedRate);
 
-            #region ²âÊÔ´úÂë
+            #region æµ‹è¯•ä»£ç 
             //bool complete = false;
             //this.tweener = this.progressBar.DOFillAmount(endValue, UnityEngine.Random.Range(this.durationMin, this.durationMax));
             //this.tweener.onUpdate = () => { this.progressValue.text = string.Format("{0:f1}%", this.progressBar.fillAmount * 100); };
@@ -174,7 +174,7 @@ namespace AppGame.Module.GameStart
             #endregion
             Debug.Log("<><GameStartView.ReadConfig>Read config complete...");
         }
-        //ÏÂÔØ×ÊÔ´ÎÄ¼ş
+        //ä¸‹è½½èµ„æºæ–‡ä»¶
         private IEnumerator Download()
         {
             List<AssetFile> assetFiles = this.CommonResourceUtil.GetUpdateFileList();
@@ -198,7 +198,7 @@ namespace AppGame.Module.GameStart
             bool error = false;
             this.InvokeRepeating("CheckOverTime", 1f, 1f);
             for (int i = 0; i < assetFiles.Count; i++)
-            {//Öğ¸öÏÂÔØÈ±Ê§µÄ×ÊÔ´ÎÄ¼ş
+            {//é€ä¸ªä¸‹è½½ç¼ºå¤±çš„èµ„æºæ–‡ä»¶
                 Debug.LogFormat("<><GameStartView.Download>File: {0}", assetFiles[i]);
                 yield return this.StartCoroutine(this.ResourceUtil.LoadAsset(assetFiles[i].FullPath, (obj) =>
                 {
@@ -221,27 +221,27 @@ namespace AppGame.Module.GameStart
                 },
                 (failureInfo) =>
                 {
-                    if (failureInfo != null)//ÖĞ¶Ï²Ù×÷Àà´íÎó²Å×ö´¦Àí
+                    if (failureInfo != null)//ä¸­æ–­æ“ä½œç±»é”™è¯¯æ‰åšå¤„ç†
                     {
                         Debug.LogErrorFormat("<><GameStartView.Download>Error: {0}\n({1})", failureInfo.Message, assetFiles[i]);
                         if (failureInfo.Interrupt) error = true;
                     }
                 }, true));
-                if (error) break;//Èç¹ûÏÂÔØ¹ı³ÌÖĞÓöµ½´íÎó£¬ÍË³öÏÂÔØÒ³
+                if (error) break;//å¦‚æœä¸‹è½½è¿‡ç¨‹ä¸­é‡åˆ°é”™è¯¯ï¼Œé€€å‡ºä¸‹è½½é¡µ
 
-                //¸üĞÂ½ø¶ÈÌõ¼°½ø¶ÈÎÄ×Ö
+                //æ›´æ–°è¿›åº¦æ¡åŠè¿›åº¦æ–‡å­—
                 float percent = (float)++this.downloadInfo.CompleteCount / this.downloadInfo.TotalCount;
                 percent = Mathf.Clamp01(percent);
                 this.downloadProgress.Value = percent;
             }
             System.GC.Collect();
-            this.CancelInvoke("CheckOverTime");//½áÊøÏÂÔØÊ±(ÎŞÂÛÊÇÕı³£½áÊø»¹ÊÇÓöµ½´íÎóÊ±Òì³£½áÊø)Í£Ö¹¼ì²âÏÂÔØ³¬Ê±
+            this.CancelInvoke("CheckOverTime");//ç»“æŸä¸‹è½½æ—¶(æ— è®ºæ˜¯æ­£å¸¸ç»“æŸè¿˜æ˜¯é‡åˆ°é”™è¯¯æ—¶å¼‚å¸¸ç»“æŸ)åœæ­¢æ£€æµ‹ä¸‹è½½è¶…æ—¶
             AssetBundle.UnloadAllAssetBundles(true);
             this.downloadComplete = true;
             this.ResourceUtil.UnloadAllAssetBundles();
             yield return this.AssetBundleUtil.LoadManifest();
         }
-        //¼ÓÔØ³¡¾°
+        //åŠ è½½åœºæ™¯
         private IEnumerator LoadScene(float startValue, float endValue)
         {
             AsyncOperation async = SceneManager.LoadSceneAsync("TripMap", LoadSceneMode.Single);
@@ -257,7 +257,7 @@ namespace AppGame.Module.GameStart
             yield return new WaitForSeconds(UnityEngine.Random.Range(1f, 2f) * this.speedRate);
             async.allowSceneActivation = true;
         }
-        //¶¨Ê±¼ì²âÊÇ·ñ³¬Ê±
+        //å®šæ—¶æ£€æµ‹æ˜¯å¦è¶…æ—¶
         private void CheckOverTime()
         {
             if (this.downloadInfo.OverTime)
@@ -270,7 +270,7 @@ namespace AppGame.Module.GameStart
         }
     }
 
-    #region ×Ô¶¨ÒåÀà
+    #region è‡ªå®šä¹‰ç±»
     [Serializable]
     public class ProgressBar
     {
@@ -319,10 +319,10 @@ namespace AppGame.Module.GameStart
             get
             {
                 if (this.updateOnce)
-                {//Èç¹ûÒÑ¾­¸üĞÂ¹ıÒ»´ÎÏÂÔØÍê³ÉÊı£¬²Å¼ì²âÊÇ·ñ³¬Ê±
-                    return this.Duration > 60;//ÏÂÔØÍê³ÉÊıµÄÊıÖµ³¬¹ı60ÃëÃ»ÓĞ¸Ä±ä£¬ÔòÊÓÎª³¬Ê±(±ÈÈçÍøÂç·Ç³£²îµÄÊ±ºò)
+                {//å¦‚æœå·²ç»æ›´æ–°è¿‡ä¸€æ¬¡ä¸‹è½½å®Œæˆæ•°ï¼Œæ‰æ£€æµ‹æ˜¯å¦è¶…æ—¶
+                    return this.Duration > 60;//ä¸‹è½½å®Œæˆæ•°çš„æ•°å€¼è¶…è¿‡60ç§’æ²¡æœ‰æ”¹å˜ï¼Œåˆ™è§†ä¸ºè¶…æ—¶(æ¯”å¦‚ç½‘ç»œéå¸¸å·®çš„æ—¶å€™)
                 }
-                else return false;//·ñÔò£¬²»ÊÓÎª³¬Ê±
+                else return false;//å¦åˆ™ï¼Œä¸è§†ä¸ºè¶…æ—¶
             }
         }
     }

@@ -7,7 +7,7 @@ namespace AppGame.Module.Cycling
 {
     public class Vehicle : BaseView
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
         [Inject]
         public IModuleConfig ModuleConfig { get; set; }
         [SerializeField]
@@ -23,14 +23,14 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private Text hpBox;
         [SerializeField]
-        private int coinPrice;//½»Í¨·Ñµ¥¼Û£º½ğ±Ò
+        private int coinPrice;//äº¤é€šè´¹å•ä»·ï¼šé‡‘å¸
         [SerializeField]
-        private int hpPrice;//½»Í¨·Ñµ¥¼Û£ºÄÜÁ¿µãÊı
+        private int hpPrice;//äº¤é€šè´¹å•ä»·ï¼šèƒ½é‡ç‚¹æ•°
         [SerializeField]
-        private string vehicleName;//½»Í¨¹¤¾ßÃû³Æ
+        private string vehicleName;//äº¤é€šå·¥å…·åç§°
 
-        private int coin;//½»Í¨·Ñ£º½ğ±Ò
-        private int hp;//½»Í¨·Ñ£ºÄÜÁ¿µãÊı
+        private int coin;//äº¤é€šè´¹ï¼šé‡‘å¸
+        private int hp;//äº¤é€šè´¹ï¼šèƒ½é‡ç‚¹æ•°
         public int Coin
         {
             get { return this.coin; }
@@ -39,7 +39,7 @@ namespace AppGame.Module.Cycling
         public int Hp
         {
             get { return this.hp; }
-            set { this.hp = value; this.hpBox.text = string.Format("+{0}²½", value); }
+            set { this.hp = value; this.hpBox.text = string.Format("+{0}æ­¥", value); }
         }
         public int CoinPrice
         {
@@ -53,9 +53,9 @@ namespace AppGame.Module.Cycling
         {
             get { return this.vehicleName; }
         }
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
 
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
         public void SetStatus(bool enable)
         {
             string imageName = enable ? this.enableBgName : this.disableBgName;

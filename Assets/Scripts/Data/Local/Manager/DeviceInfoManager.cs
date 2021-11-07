@@ -16,8 +16,8 @@ namespace AppGame.Data.Local
         {
             List<DeviceInfo> deviceInfos = this.GetAllDeviceInfos();
             if (deviceInfos == null) deviceInfos = new List<DeviceInfo>();
-            deviceInfos.Add(new DeviceInfo() { ID = "01", Type = DeviceTypes.Walk, Name = "±³±³¼Ñ", Count = 1 });
-            deviceInfos.Add(new DeviceInfo() { ID = "02", Type = DeviceTypes.Ride, Name = "Æ½ºâ³µ", Count = 1 });
+            deviceInfos.Add(new DeviceInfo() { ID = "01", Type = DeviceTypes.Walk, Name = "èƒŒèƒŒä½³", Count = 1 });
+            deviceInfos.Add(new DeviceInfo() { ID = "02", Type = DeviceTypes.Ride, Name = "å¹³è¡¡è½¦", Count = 1 });
             deviceInfos.ForEach(t => this.SaveDeviceInfo(t));
         }
 

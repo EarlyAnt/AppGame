@@ -7,12 +7,12 @@ namespace AppGame.Module.Cycling
 {
     public class Player : BasePlayer
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region ×¢Èë½Ó¿Ú
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region æ³¨å…¥æ¥å£
         [Inject]
         public ICameraUtil CameraUtil { get; set; }
         #endregion
-        #region Ò³ÃæUI×é¼ş
+        #region é¡µé¢UIç»„ä»¶
         [SerializeField]
         private RectTransform mapCanvas;
         [SerializeField]
@@ -32,7 +32,7 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private float damping = 0f;
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
         private CameraEdge cameraEdge;
         private bool inRange;
         private Vector3 lastPos;
@@ -69,7 +69,7 @@ namespace AppGame.Module.Cycling
             }
         }
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
         protected override void Awake()
         {
             base.Awake();
@@ -93,9 +93,9 @@ namespace AppGame.Module.Cycling
                 newPosition = this.camera.transform.position + new Vector3(this.moveAxis.x, this.moveAxis.y, 0);
             }
 
-            //¼ÆËãÏà»ú¿ÉÊÓÇøÓòµÄ´óĞ¡
+            //è®¡ç®—ç›¸æœºå¯è§†åŒºåŸŸçš„å¤§å°
             this.cameraEdge = this.CameraUtil.GetCameraEdge(this.mapNode.transform, this.camera.position, newPosition);
-            //¼ÆËãÏà»ú¿ÉÊÓÇøÓòÊÇ·ñ³¬¹ıµØÍ¼
+            //è®¡ç®—ç›¸æœºå¯è§†åŒºåŸŸæ˜¯å¦è¶…è¿‡åœ°å›¾
             this.inRange = this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopLeft, this.canvasScale) &&
                            this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.TopRight, this.canvasScale) &&
                            this.CameraUtil.PointInEdge(this.mapRectTransform, this.cameraEdge.BottomRight, this.canvasScale) &&
@@ -112,8 +112,8 @@ namespace AppGame.Module.Cycling
             Gizmos.DrawLine(this.cameraEdge.BottomRight, this.cameraEdge.BottomLeft);
             Gizmos.DrawLine(this.cameraEdge.BottomLeft, this.cameraEdge.TopLeft);
         }
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //³õÊ¼»¯
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //åˆå§‹åŒ–
         protected override void Initialize()
         {
             base.Initialize();
@@ -121,7 +121,7 @@ namespace AppGame.Module.Cycling
             playerPos.z = this.camera.position.z;
             this.camera.position = playerPos;
         }
-        //ÏòÇ°ÒÆ¶¯
+        //å‘å‰ç§»åŠ¨
         public void MoveForward()
         {
             if (this.IsMoving)
@@ -137,7 +137,7 @@ namespace AppGame.Module.Cycling
                 this.OnStopped();
             }
         }
-        //ÏòºóÒÆ¶¯
+        //å‘åç§»åŠ¨
         public void MoveBack()
         {
             if (!this.IsMoving && this.nodeIndex > 0)
@@ -146,22 +146,22 @@ namespace AppGame.Module.Cycling
                 this.StartCoroutine(this.MovePlayer(false));
             }
         }
-        //¿ªÊ¼»¬ÆÁ
+        //å¼€å§‹æ»‘å±
         public void TouchStart()
         {
             this.moveAxis = Vector2.zero;
         }
-        //½áÊø»¬ÆÁ
+        //ç»“æŸæ»‘å±
         public void TouchEnd()
         {
             this.moveAxis = Vector2.zero;
         }
-        //ÒÆ¶¯Ïà»ú
+        //ç§»åŠ¨ç›¸æœº
         public void TouchMove(Vector2 axis)
         {
             this.moveAxis = axis * -1;
         }
-        //Íæ¼ÒÒÆ¶¯
+        //ç©å®¶ç§»åŠ¨
         private IEnumerator MovePlayer(bool forward)
         {
             if (this.nodeIndex < 0 || this.nodeIndex >= this.mapNode.Points.Count)
@@ -170,11 +170,11 @@ namespace AppGame.Module.Cycling
             this.IsMoving = true;
             MapPointNode pointNode = null;
             do
-            {//ÒÆ¶¯Íæ¼ÒÖÁÏÂÒ»¸ö½Úµã
+            {//ç§»åŠ¨ç©å®¶è‡³ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
                 Vector3 startPosition = this.destination;
                 this.nodeIndex += forward ? 1 : -1;
                 bool directionChanged = this.DirectionChanged(startPosition, this.destination);
-                if (directionChanged)//·½Ïò¸Ä±äÊ±ÏÈ»­Æğµã
+                if (directionChanged)//æ–¹å‘æ”¹å˜æ—¶å…ˆç”»èµ·ç‚¹
                     this.roadRenderer.DrawPoint(startPosition, this.directon, true);
                 do
                 {
@@ -184,7 +184,7 @@ namespace AppGame.Module.Cycling
                     yield return new WaitForEndOfFrame();
                 }
                 while (Vector3.Distance(this.player.position, this.destination) > 0.01f);
-                if (directionChanged)//·½Ïò¸Ä±äÊ±ÔÙ»°Ò»´ÎÖÕµã(ÃÖ²¹Íæ¼ÒÒÆ¶¯Ê±Î»ÖÃµÄ²îÖµ²»¹»¾«È·)
+                if (directionChanged)//æ–¹å‘æ”¹å˜æ—¶å†è¯ä¸€æ¬¡ç»ˆç‚¹(å¼¥è¡¥ç©å®¶ç§»åŠ¨æ—¶ä½ç½®çš„å·®å€¼ä¸å¤Ÿç²¾ç¡®)
                     this.roadRenderer.DrawPoint(this.destination, this.directon, false);
 
                 pointNode = this.mapNode.Points[this.nodeIndex].GetComponent<MapPointNode>();
@@ -195,7 +195,7 @@ namespace AppGame.Module.Cycling
             this.SetSingleCloudGroup();
             Debug.Log("<><Player.MovePlayer>Stop + + + + +");
         }
-        //ÒÆ¶¯µ½Ö¸¶¨Î»ÖÃ
+        //ç§»åŠ¨åˆ°æŒ‡å®šä½ç½®
         public override void MoveToNode(string nodeID, bool lerp = false)
         {
             this.SetPointIcon(false);
@@ -229,7 +229,7 @@ namespace AppGame.Module.Cycling
                 index += 1;
             }
         }
-        //»ñÈ¡Ïà»úµÄºÏÀíÎ»ÖÃ(²»³¬³öµØÍ¼)
+        //è·å–ç›¸æœºçš„åˆç†ä½ç½®(ä¸è¶…å‡ºåœ°å›¾)
         private Vector3 GetCameraPosition(Vector3 targetPosition)
         {
             targetPosition.z = this.camera.position.z;
@@ -240,7 +240,7 @@ namespace AppGame.Module.Cycling
             }
             return targetPosition;
         }
-        //ÅĞ¶ÏÊÇ·ñÒÑ¸Ä±ä·½Ïò
+        //åˆ¤æ–­æ˜¯å¦å·²æ”¹å˜æ–¹å‘
         private bool DirectionChanged(Vector3 pos1, Vector3 pos2)
         {
             float offsetX = Mathf.Abs(pos1.x - pos2.x);
@@ -254,7 +254,7 @@ namespace AppGame.Module.Cycling
             }
             else return false;
         }
-        //µãÁÁÒÑ¾­¹ıµÄµãµÄÍ¼±ê
+        //ç‚¹äº®å·²ç»è¿‡çš„ç‚¹çš„å›¾æ ‡
         private void SetPointIcon(bool light)
         {
             if (light)
@@ -278,7 +278,7 @@ namespace AppGame.Module.Cycling
                 });
             }
         }
-        //ÉèÖÃÒÑ¾­¹ıµÄµãµÄÔÆ¶ä
+        //è®¾ç½®å·²ç»è¿‡çš„ç‚¹çš„äº‘æœµ
         private void SetAllCloudGroup(bool light)
         {
             if (light)
@@ -302,7 +302,7 @@ namespace AppGame.Module.Cycling
                 }
             }
         }
-        //ÉèÖÃÒÑ¾­¹ıµÄµãµÄÔÆ¶ä
+        //è®¾ç½®å·²ç»è¿‡çš„ç‚¹çš„äº‘æœµ
         private void SetSingleCloudGroup()
         {
             CloudGroup cloudGroup = this.mapNode.Points[this.nodeIndex].GetComponentInChildren<CloudGroup>();
@@ -316,13 +316,13 @@ namespace AppGame.Module.Cycling
                 this.OnStopped();
             }
         }
-        //µ±ÔÆ¶äÏûÉ¢Ê±
+        //å½“äº‘æœµæ¶ˆæ•£æ—¶
         private void OnCloudDisperse()
         {
             this.dispatcher.UpdateListener(false, GameEvent.CLOUD_DISPERSE, this.OnCloudDisperse);
             this.OnStopped();
         }
-        //µ±Íæ¼ÒÒÆ¶¯Í£Ö¹Ê±
+        //å½“ç©å®¶ç§»åŠ¨åœæ­¢æ—¶
         private void OnStopped()
         {
             this.IsMoving = false;

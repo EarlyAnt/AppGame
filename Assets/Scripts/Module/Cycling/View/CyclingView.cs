@@ -15,8 +15,8 @@ namespace AppGame.Module.Cycling
 {
     public class CyclingView : BaseView
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region ×¢Èë½Ó¿Ú
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region æ³¨å…¥æ¥å£
         [Inject]
         public IModuleConfig ModuleConfig { get; set; }
         [Inject]
@@ -30,7 +30,7 @@ namespace AppGame.Module.Cycling
         [Inject]
         public IPrefabUtil PrefabUtil { get; set; }
         #endregion
-        #region Ò³ÃæUI×é¼ş
+        #region é¡µé¢UIç»„ä»¶
         [SerializeField]
         private Image mask;
         [SerializeField]
@@ -82,7 +82,7 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private Image touchPad;
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
         private bool playerCanGo = true;
         private bool hideMpBalls = false;
         private float halfWidth = 380f;
@@ -97,7 +97,7 @@ namespace AppGame.Module.Cycling
         }
         public Player Player { get { return this.player; } }
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
         protected override void Awake()
         {
             base.Awake();
@@ -119,7 +119,7 @@ namespace AppGame.Module.Cycling
             this.UpdateDispatcher(false);
             base.OnDestroy();
         }
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
         private void Initialize()
         {
             this.Restart();
@@ -131,27 +131,27 @@ namespace AppGame.Module.Cycling
         }
         public void Restart()
         {
-            //¸´Ô­×´Ì¬±äÁ¿
+            //å¤åŸçŠ¶æ€å˜é‡
             this.playerCanGo = true;
             this.hideMpBalls = false;
             this.mask.DOFade(1f, 0f);
             this.canvasGroup.DOFade(0f, 0f);
 
-            //³¡¾°¹ı¶É
+            //åœºæ™¯è¿‡æ¸¡
             this.DelayInvoke(() =>
             {
                 this.mask.DOFade(0f, 1f);
                 this.canvasGroup.DOFade(1f, 1f);
             }, 0.5f);
 
-            //Çå³ı¶ÓÓÑ
+            //æ¸…é™¤é˜Ÿå‹
             if (this.teammates != null)
                 this.teammates.Clear();
 
             while (this.teammateRoot.childCount > 0)
                 GameObject.DestroyImmediate(this.teammateRoot.GetChild(0).gameObject);
 
-            //Çå³ıÄÜÁ¿ÆøÅİ
+            //æ¸…é™¤èƒ½é‡æ°”æ³¡
             if (this.mpBalls != null)
                 this.mpBalls.Clear();
 
@@ -208,7 +208,7 @@ namespace AppGame.Module.Cycling
             {
                 this.playerCanGo = true;
                 this.SetMpBallVisible(true);
-                //Todo: ÏÔÊ¾ĞĞ¶¯µãÊı²»×ãµÄÌáÊ¾
+                //Todo: æ˜¾ç¤ºè¡ŒåŠ¨ç‚¹æ•°ä¸è¶³çš„æç¤º
             }
         }
         public void RefreshMapProgress(string mapName, int cardCount, int scenicCount)
@@ -328,7 +328,7 @@ namespace AppGame.Module.Cycling
         {
             InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
             if (interactionData != null && interactionData.Interacton == Interactions.KNOWLEDGE_LANDMARK)
-                this.scenicCard.Show(interactionData.ID);//ÏÔÊ¾¿¨Æ¬
+                this.scenicCard.Show(interactionData.ID);//æ˜¾ç¤ºå¡ç‰‡
             else
                 this.KeepGoing();
         }
@@ -337,7 +337,7 @@ namespace AppGame.Module.Cycling
             //InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
             //if (interactionData != null && interactionData.Interacton == Interactions.PROPS_TREASURE_BOX)
             //{
-            //    this.treasureBox.Play(this.KeepGoing);//¿ª±¦Ïä¶¯»­
+            //    this.treasureBox.Play(this.KeepGoing);//å¼€å®ç®±åŠ¨ç”»
             //    Debug.Log("OpenTreasureBox + + + + +");
             //}
             //else

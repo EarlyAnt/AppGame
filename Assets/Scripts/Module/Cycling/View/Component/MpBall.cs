@@ -7,8 +7,8 @@ namespace AppGame.Module.Cycling
 {
     public class MpBall : MonoBehaviour
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region Ò³ÃæUI×é¼ş
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region é¡µé¢UIç»„ä»¶
         [SerializeField]
         private MpBallTypes mpBallType;
         [SerializeField]
@@ -26,7 +26,7 @@ namespace AppGame.Module.Cycling
         [SerializeField, Range(0.1f, 5f)]
         private float durationMax = 2f;
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
         private Tweener fadeTweener;
         private Tweener pingPongTweener;
         private float originY;
@@ -57,16 +57,16 @@ namespace AppGame.Module.Cycling
                 switch (value)
                 {
                     case MpBallTypes.Walk:
-                        this.fromBox.text = "²½ĞĞ";
+                        this.fromBox.text = "æ­¥è¡Œ";
                         break;
                     case MpBallTypes.Ride:
-                        this.fromBox.text = "ÆïĞĞ";
+                        this.fromBox.text = "éª‘è¡Œ";
                         break;
                     case MpBallTypes.Train:
-                        this.fromBox.text = "×ø×ËÑµÁ·";
+                        this.fromBox.text = "åå§¿è®­ç»ƒ";
                         break;
                     case MpBallTypes.Learn:
-                        this.fromBox.text = "×ø×Ë¼à²â";
+                        this.fromBox.text = "åå§¿ç›‘æµ‹";
                         break;
                 }
             }
@@ -81,7 +81,7 @@ namespace AppGame.Module.Cycling
         public CanvasGroup CanvasGroup { get { return this.canvasGroup; } }
         public Action<MpBall> OnCollectMp { get; set; }
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
         private void Awake()
         {
             this.mpBox.text = "0";
@@ -100,17 +100,17 @@ namespace AppGame.Module.Cycling
             if (this.pingPongTweener != null)
                 this.pingPongTweener.Kill();
         }
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //ÉèÖÃÊÇ·ñ¿É¼û
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //è®¾ç½®æ˜¯å¦å¯è§
         public void SetStatus(bool visible)
         {
             this.Visible = visible;
-            if (visible) this.clicked = false;//ÖØĞÂÏÔÊ¾Ê±£¬ÖØÖÃclicked×´Ì¬
+            if (visible) this.clicked = false;//é‡æ–°æ˜¾ç¤ºæ—¶ï¼Œé‡ç½®clickedçŠ¶æ€
 
             if (this.fadeTweener != null) this.fadeTweener.Kill();
             this.fadeTweener = this.canvasGroup.DOFade(visible ? 1f : 0f, visible ? 0.375f : 0f);
         }
-        //¿ªÊ¼²¥·Å
+        //å¼€å§‹æ’­æ”¾
         public void PlayPingPong()
         {
             this.StopPingPong();
@@ -119,25 +119,25 @@ namespace AppGame.Module.Cycling
             else
                 this.PingPong(this.originY, this.destinationY);
         }
-        //Í£Ö¹²¥·Å
+        //åœæ­¢æ’­æ”¾
         public void StopPingPong()
         {
             if (this.pingPongTweener != null)
                 this.pingPongTweener.Kill();
         }
-        //Íù·µÔË¶¯
+        //å¾€è¿”è¿åŠ¨
         private void PingPong(float from, float to)
         {
             this.pingPongTweener = this.bubbleTransform.DOLocalMoveY(to, UnityEngine.Random.Range(this.durationMin, this.durationMax));
             this.pingPongTweener.onComplete += () => this.PingPong(to, from);
         }
-        //ÊÕÈ¡ÄÜÁ¿
+        //æ”¶å–èƒ½é‡
         public void CollectMp()
         {
             this.clicked = true;
             this.AutoCollectMp();
         }
-        //×Ô¶¯ÊÕÈ¡ÄÜÁ¿(µãGo°´Å¥Ê±×Ô¶¯ÊÕÈ¡)
+        //è‡ªåŠ¨æ”¶å–èƒ½é‡(ç‚¹GoæŒ‰é’®æ—¶è‡ªåŠ¨æ”¶å–)
         public void AutoCollectMp()
         {
             if (this.OnCollectMp != null)
@@ -145,7 +145,7 @@ namespace AppGame.Module.Cycling
                 this.OnCollectMp(this);
             }
         }
-        //×ª»»³ÉMpData
+        //è½¬æ¢æˆMpData
         public MpData ToMpData()
         {
             return new MpData()

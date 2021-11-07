@@ -1,4 +1,4 @@
-﻿using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement;
 using System.Runtime.InteropServices;
 using System;
 using UnityEngine;

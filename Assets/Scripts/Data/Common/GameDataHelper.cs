@@ -1,4 +1,4 @@
-﻿using AppGame.Data.Local;
+using AppGame.Data.Local;
 using AppGame.Util;
 using UnityEngine;
 

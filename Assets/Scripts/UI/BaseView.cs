@@ -1,4 +1,4 @@
-﻿using DG.Tweening;
+using DG.Tweening;
 using strange.extensions.mediation.impl;
 using System;
 using System.Collections;

@@ -7,17 +7,17 @@ namespace AppGame.Module.Cycling
 {
     public class Teammate : BasePlayer
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region ×¢Èë½Ó¿Ú
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region æ³¨å…¥æ¥å£
 
         #endregion
-        #region Ò³ÃæUI×é¼ş
+        #region é¡µé¢UIç»„ä»¶
 
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
 
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
         protected override void Awake()
         {
             base.Awake();
@@ -31,8 +31,8 @@ namespace AppGame.Module.Cycling
         {
             base.OnDestroy();
         }
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //ÒÆ¶¯µ½Ö¸¶¨Î»ÖÃ
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //ç§»åŠ¨åˆ°æŒ‡å®šä½ç½®
         public override void MoveToNode(string nodeID, bool lerp = false)
         {
             if (this.mapNode == null || this.mapNode.Points == null)
@@ -60,7 +60,7 @@ namespace AppGame.Module.Cycling
                 Debug.LogErrorFormat("<><Teammate.MoveToNode>Error: can not find the node named '{0}'", nodeID);
             }
         }
-        //Íæ¼ÒÒÆ¶¯
+        //ç©å®¶ç§»åŠ¨
         private IEnumerator MovePlayer(Transform targetNode)
         {
             do

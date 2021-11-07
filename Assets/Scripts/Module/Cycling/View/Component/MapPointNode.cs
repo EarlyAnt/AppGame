@@ -6,7 +6,7 @@ namespace AppGame.Module.Cycling
 {
     public class MapPointNode : BaseView
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
         [SerializeField]
         private string id;
         [SerializeField]
@@ -20,10 +20,10 @@ namespace AppGame.Module.Cycling
         private SpriteLoader spriteLoader;
         public string ID { get { return this.id; } }
         public NodeTypes NodeType { get { return this.nodeType; } }
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
 
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //ÉèÖÃ½ÚµãID
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //è®¾ç½®èŠ‚ç‚¹ID
         public void SetID(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -40,7 +40,7 @@ namespace AppGame.Module.Cycling
                 this.idLock = true;
             }
         }
-        //µãÁÁÍ¼±ê
+        //ç‚¹äº®å›¾æ ‡
         public void SetIcon(bool light)
         {
             if (this.spriteLoader == null)
@@ -52,17 +52,17 @@ namespace AppGame.Module.Cycling
             Image icon = this.GetComponent<Image>();
             if (icon != null) icon.raycastTarget = light;
         }
-        //µã»÷°´Å¥
+        //ç‚¹å‡»æŒ‰é’®
         public void NodeClick()
         {
             this.dispatcher.Dispatch(GameEvent.INTERACTION, this);
         }
-        //¸ü¸Ä½ÚµãÀàĞÍ
+        //æ›´æ”¹èŠ‚ç‚¹ç±»å‹
         public void ChangeNodeType(NodeTypes nodeType)
         {
             this.nodeType = nodeType;
         }
-        [ContextMenu("ÉèÖÃÍ¼±êÃû×Ö")]
+        [ContextMenu("è®¾ç½®å›¾æ ‡åå­—")]
         public void SetIconName()
         {
             switch (this.nodeType)

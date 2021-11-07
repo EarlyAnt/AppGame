@@ -9,38 +9,38 @@ namespace AppGame.Module.Cycling
 {
     public class TrafficLoading : BaseView
     {
-        /************************************************ÊôÐÔÓë±äÁ¿ÃüÃû************************************************/
-        #region ×¢Èë½Ó¿Ú
+        /************************************************å±žæ€§ä¸Žå˜é‡å‘½å************************************************/
+        #region æ³¨å…¥æŽ¥å£
         [Inject]
         public IMapConfig MapConfig { get; set; }
         [Inject]
         public IAssetBundleUtil AssetBundleUtil { get; set; }
         #endregion
-        #region Ò³ÃæUI×é¼þ
+        #region é¡µé¢UIç»„ä»¶
         [SerializeField]
         private GameObject root;
         [SerializeField]
         private GameObject loadingRoot;
         [SerializeField]
-        private Text fromCityBox;//³ÇÊÐÃû×ÖÎÄ×Ö¿ò
+        private Text fromCityBox;//åŸŽå¸‚åå­—æ–‡å­—æ¡†
         [SerializeField]
-        private Text fromCityPinYinBox;//³ÇÊÐÃû×ÖÎÄ×Ö¿ò
+        private Text fromCityPinYinBox;//åŸŽå¸‚åå­—æ–‡å­—æ¡†
         [SerializeField]
-        private Text toCityBox;//¾°µãÃû×ÖÎÄ×Ö¿ò
+        private Text toCityBox;//æ™¯ç‚¹åå­—æ–‡å­—æ¡†
         [SerializeField]
-        private Text toCityPinYinBox;//¾°µãÃû×ÖÎÄ×Ö¿ò
+        private Text toCityPinYinBox;//æ™¯ç‚¹åå­—æ–‡å­—æ¡†
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
         private string trafficAB = "cycling/traffic";
         private SkeletonGraphic traffic;
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼þ***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸Žäº‹ä»¶***********************************************/
         protected override void Start()
         {
             this.LoadTraffic();
         }
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //ÏÔÊ¾Ò³Ãæ
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //æ˜¾ç¤ºé¡µé¢
         public void Show(Ticket ticket)
         {
             this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, false);
@@ -57,13 +57,13 @@ namespace AppGame.Module.Cycling
             this.root.SetActive(true);
             this.traffic.AnimationState.SetAnimation(0, ticket.Vehicle, true);
         }
-        //Òþ²ØÒ³Ãæ
+        //éšè—é¡µé¢
         public void Hide()
         {
             this.root.SetActive(false);
             this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, true);
         }
-        //¼ÓÔØTraffic¶¯»­
+        //åŠ è½½TrafficåŠ¨ç”»
         private void LoadTraffic()
         {
             this.AssetBundleUtil.LoadAssetBundleAsync(this.trafficAB, (assetBundle) =>

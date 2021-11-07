@@ -8,42 +8,42 @@ namespace AppGame.Module.Cycling
 {
     public class CityStation : BaseView
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region ×¢Èë½Ó¿Ú
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region æ³¨å…¥æ¥å£
         [Inject]
         public IMapConfig MapConfig { get; set; }
         #endregion
-        #region Ò³ÃæUI×é¼ş
+        #region é¡µé¢UIç»„ä»¶
         [SerializeField]
         private GameObject root;
         [SerializeField]
-        private Text fromCityBox;//³ÇÊĞÃû×ÖÎÄ×Ö¿ò
+        private Text fromCityBox;//åŸå¸‚åå­—æ–‡å­—æ¡†
         [SerializeField]
-        private Text fromCityPinYinBox;//³ÇÊĞÃû×ÖÎÄ×Ö¿ò
+        private Text fromCityPinYinBox;//åŸå¸‚åå­—æ–‡å­—æ¡†
         [SerializeField]
-        private Text toCityBox;//¾°µãÃû×ÖÎÄ×Ö¿ò
+        private Text toCityBox;//æ™¯ç‚¹åå­—æ–‡å­—æ¡†
         [SerializeField]
-        private Text toCityPinYinBox;//¾°µãÃû×ÖÎÄ×Ö¿ò
+        private Text toCityPinYinBox;//æ™¯ç‚¹åå­—æ–‡å­—æ¡†
         [SerializeField]
-        private List<Vehicle> vehicles;//½»Í¨¹¤¾ß¼¯ºÏ
+        private List<Vehicle> vehicles;//äº¤é€šå·¥å…·é›†åˆ
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
         private int coin;
         private int hp;
         private Ticket ticket;
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
 
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //ÏÔÊ¾¿¨Æ¬
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //æ˜¾ç¤ºå¡ç‰‡
         public void Show(string mapID, int coin, int hp)
         {
-            //½ÓÊÕ²ÎÊı
+            //æ¥æ”¶å‚æ•°
             this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, false);
             this.coin = coin;
             this.hp = hp;
 
-            //ÏÔÊ¾³ö·¢µØºÍÄ¿µÄµØÃû³Æ¼°Æ´Òô
+            //æ˜¾ç¤ºå‡ºå‘åœ°å’Œç›®çš„åœ°åç§°åŠæ‹¼éŸ³
             MapInfo mapInfo = this.MapConfig.GetMap(mapID);
             if (mapInfo == null)
             {
@@ -58,7 +58,7 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            //¼ÆËãÂ··Ñ
+            //è®¡ç®—è·¯è´¹
             int distance = this.MapConfig.GetDistance(mapInfo.CityID, nextMapInfo.CityID);
             this.vehicles.ForEach(t =>
             {
@@ -66,16 +66,16 @@ namespace AppGame.Module.Cycling
                 t.Hp = t.HpPrice * distance;
             });
 
-            //¼ì²é½»Í¨¹¤¾ßÊÇ·ñ¿ÉÓÃ
+            //æ£€æŸ¥äº¤é€šå·¥å…·æ˜¯å¦å¯ç”¨
             this.CheckVehicles();
 
-            //ÉèÖÃÒ³ÃæÏÔÊ¾
+            //è®¾ç½®é¡µé¢æ˜¾ç¤º
             this.fromCityBox.text = mapInfo.CityName;
             this.fromCityPinYinBox.text = mapInfo.CityPinYin;
             this.toCityBox.text = nextMapInfo.CityName;
             this.toCityPinYinBox.text = nextMapInfo.CityPinYin;
             this.root.SetActive(true);
-            //Éú³É³µÆ±Êı¾İ
+            //ç”Ÿæˆè½¦ç¥¨æ•°æ®
             this.ticket = new Ticket()
             {
                 FromMapID = mapInfo.ID,
@@ -86,7 +86,7 @@ namespace AppGame.Module.Cycling
                 ToCityPinYin = this.toCityPinYinBox.text,
             };
         }
-        //ÂÃĞĞ
+        //æ—…è¡Œ
         public void Travel(Vehicle vehicle)
         {
             this.ticket.Go = true;
@@ -97,7 +97,7 @@ namespace AppGame.Module.Cycling
             this.root.SetActive(false);
             this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, true);
         }
-        //Òş²Ø¿¨Æ¬
+        //éšè—å¡ç‰‡
         public void Stay()
         {
             this.ticket.Go = false;
@@ -105,7 +105,7 @@ namespace AppGame.Module.Cycling
             this.root.SetActive(false);
             this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, true);
         }
-        //¼ì²é½»Í¨¹¤¾ßÊÇ·ñ¿ÉÓÃ
+        //æ£€æŸ¥äº¤é€šå·¥å…·æ˜¯å¦å¯ç”¨
         private void CheckVehicles()
         {
             foreach (var vehicle in this.vehicles)

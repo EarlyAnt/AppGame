@@ -1,4 +1,4 @@
-﻿using AppGame.Util;
+using AppGame.Util;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -1,4 +1,4 @@
-﻿using AppGame.Util;
+using AppGame.Util;
 using strange.extensions.signal.impl;
 using System;
 using System.Collections.Generic;

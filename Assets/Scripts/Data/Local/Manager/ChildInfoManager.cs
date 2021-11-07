@@ -26,7 +26,7 @@ namespace AppGame.Data.Local
 //            this.childSn = this.LocalDataHelper.GetObject<string>(DATA_KEY, "");
 //            //Debug.LogFormat("<><ChildInfoManager.GetChildSN>childSn: {0}", this.childSn);
 //            return childSn;
-            return "BWR8ODUPYX3C";//¹þÃÜ¹Ï
+            return "BWR8ODUPYX3C";//å“ˆå¯†ç“œ
         }
 
         public void Clear()

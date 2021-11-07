@@ -1,4 +1,4 @@
-﻿using AppGame.Config;
+using AppGame.Config;
 using AppGame.UI;
 using AppGame.Util;
 using System.Collections;

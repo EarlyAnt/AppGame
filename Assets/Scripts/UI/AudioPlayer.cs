@@ -10,13 +10,13 @@ namespace AppGame.Module.GameStart
 {
     public class AudioPlayer : BaseView
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
         [Inject]
         public IAudioConfig AudioConfig { get; set; }
         [SerializeField]
         private List<AudioChannel> channels;
         public static AudioPlayer Instance { get; private set; }
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
         protected override void Awake()
         {
             base.Awake();
@@ -31,13 +31,13 @@ namespace AppGame.Module.GameStart
         {
             base.OnDestroy();
         }
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //³õÊ¼»¯
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //åˆå§‹åŒ–
         private void Initialize()
         {
 
         }
-        [ContextMenu("ÊÕ¼¯ÒôÆµ²¥·ÅÍ¨µÀ")]
+        [ContextMenu("æ”¶é›†éŸ³é¢‘æ’­æ”¾é€šé“")]
         private void CollectAudioChannel()
         {
             AudioChannel[] channels = GameObject.FindObjectsOfType<AudioChannel>();
@@ -51,7 +51,7 @@ namespace AppGame.Module.GameStart
                 Debug.LogError("<><>Error: can not find objects of type 'AudioChannel'");
             }
         }
-        //²¥·ÅÉùÒôÆ¬¶Î
+        //æ’­æ”¾å£°éŸ³ç‰‡æ®µ
         public void PlayAudioClip(string audioName, Action completeCallback, float delayStart = 1f, float delayEnd = 1f)
         {
             Audio audio = this.AudioConfig.GetAudio(audioName);
@@ -62,12 +62,12 @@ namespace AppGame.Module.GameStart
             }
 
         }
-        //²¥·Å±³¾°ÒôÀÖ
+        //æ’­æ”¾èƒŒæ™¯éŸ³ä¹
         public void PlayBgm(string bgmName, bool loop = true, float delayStart = 1f, float delayEnd = 1f)
         {
 
         }
-        //Í£Ö¹ÒôÆµ²¥·Å
+        //åœæ­¢éŸ³é¢‘æ’­æ”¾
         public void StopAllAudios(AudioChannelTypes type)
         {
             if (type == AudioChannelTypes.Bgm)

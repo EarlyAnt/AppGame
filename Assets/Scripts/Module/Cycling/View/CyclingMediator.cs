@@ -11,8 +11,8 @@ namespace AppGame.Module.Cycling
 {
     public class CyclingMediator : BaseMediator
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region ×¢Èë½Ó¿Ú
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region æ³¨å…¥æ¥å£
         [Inject]
         public CyclingView View { get; set; }
         [Inject]
@@ -36,7 +36,7 @@ namespace AppGame.Module.Cycling
         [Inject]
         public ICyclingDataManager CyclingDataManager { get; set; }
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
         private OriginData originData = null;
         private List<PlayerData> playerDataList = null;
         private PlayerData myPlayerData
@@ -47,7 +47,7 @@ namespace AppGame.Module.Cycling
             }
         }
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.C))
@@ -88,7 +88,7 @@ namespace AppGame.Module.Cycling
                 TestData loginTestData = GameObject.FindObjectOfType<TestData>();
                 LoginData loginData = new LoginData()
                 {
-                    Name = "ÔçÆğµÄÂìÒÏ",
+                    Name = "æ—©èµ·çš„èš‚èš",
                     Password = "bobo123456",
                     Email = "54763755@qq.com",
                     Phone = loginTestData.Phone,
@@ -104,8 +104,8 @@ namespace AppGame.Module.Cycling
                 });
             }
         }
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //×¢²á
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //æ³¨å†Œ
         public override void OnRegister()
         {
             UpdateListeners(true);
@@ -115,7 +115,7 @@ namespace AppGame.Module.Cycling
                         this.ItemDataManager.AddItem(Items.COIN, 50000);
                         this.BuildTestData();
 #endif
-            #region ·ÃÎÊ·şÎñÆ÷»ñÈ¡Êı¾İ
+            #region è®¿é—®æœåŠ¡å™¨è·å–æ•°æ®
             //this.CyclingDataUtil.GetBasicData((basicData) =>
             //{
             //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetBasicData, success: {0}", basicData);
@@ -134,12 +134,12 @@ namespace AppGame.Module.Cycling
             #endregion
             this.Initialize();
         }
-        //È¡Ïû×¢²á
+        //å–æ¶ˆæ³¨å†Œ
         public override void OnRemove()
         {
             UpdateListeners(false);
         }
-        //×¢²áÊÂ¼ş¼àÌı
+        //æ³¨å†Œäº‹ä»¶ç›‘å¬
         private void UpdateListeners(bool register)
         {
             this.dispatcher.UpdateListener(register, GameEvent.GAME_START, this.RestartGame);
@@ -151,7 +151,7 @@ namespace AppGame.Module.Cycling
             this.dispatcher.UpdateListener(register, GameEvent.SCENIC_CARD_CLOSE, this.OnScenicCardClosed);
             this.dispatcher.UpdateListener(register, GameEvent.CITY_STATION_CLOSE, this.OnCityStationClosed);
         }
-        //ÖØÆôÓÎÏ·
+        //é‡å¯æ¸¸æˆ
         private void RestartGame()
         {
             this.CyclingDataManager.ClearMpCollection();
@@ -162,7 +162,7 @@ namespace AppGame.Module.Cycling
             this.Initialize();
             this.View.Restart();
         }
-        //³õÊ¼»¯
+        //åˆå§‹åŒ–
         private void Initialize()
         {
             this.GetGameData();
@@ -170,32 +170,32 @@ namespace AppGame.Module.Cycling
             this.View.LoadMap(this.myPlayerData.map_id);
             this.View.RefreshPlayer(this.myPlayerData, this.ItemDataManager.GetItemCount(Items.COIN));
             this.View.RefreshTeammates(this.playerDataList);
-            this.View.RefreshMpAndHp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//Ë¢ĞÂGo°´Å¥
+            this.View.RefreshMpAndHp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//åˆ·æ–°GoæŒ‰é’®
             this.RefreshMpDatas();
             this.CancelInvoke();
             this.InvokeRepeating("GetGameData", 3f, 3f);
             this.InvokeRepeating("RefreshOriginData", 3f, 3f);
             this.InvokeRepeating("RefreshFriendData", 3f, 15f);
         }
-        //»ñÈ¡ÓÎÏ·Êı¾İ
+        //è·å–æ¸¸æˆæ•°æ®
         private void GetGameData()
         {
             this.originData = this.CyclingDataManager.GetOriginData(this.ChildInfoManager.GetChildSN());
             this.playerDataList = this.CyclingDataManager.GetAllPlayerData();
         }
-        //´´½¨Ä£ÄâÊı¾İ
+        //åˆ›å»ºæ¨¡æ‹Ÿæ•°æ®
         private void BuildTestData()
         {
             string childSN = this.ChildInfoManager.GetChildSN();
-            //´´½¨Ô­Ê¼Êı¾İ
+            //åˆ›å»ºåŸå§‹æ•°æ®
             OriginData originData = new OriginData() { child_sn = childSN, walk = 10000, ride = 5000, train = 20, monitor = 30 };
             this.CyclingDataManager.SaveOriginData(originData);
-            //´´½¨ÓÎÏ·Êı¾İ
+            //åˆ›å»ºæ¸¸æˆæ•°æ®
             List<PlayerData> playerDataList = new List<PlayerData>();
             playerDataList.Add(new PlayerData()
             {
                 child_sn = childSN,
-                child_name = "Ó£Ä¾»¨µÀ",
+                child_name = "æ¨±æœ¨èŠ±é“",
                 child_avatar = "6",
                 relation = (int)Relations.Self,
                 map_id = "3201",
@@ -215,7 +215,7 @@ namespace AppGame.Module.Cycling
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "02",
-                child_name = "³àÄ¾Çç×Ó",
+                child_name = "èµ¤æœ¨æ™´å­",
                 child_avatar = "9",
                 relation = (int)Relations.Family,
                 map_id = "3202",
@@ -225,7 +225,7 @@ namespace AppGame.Module.Cycling
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "03",
-                child_name = "ÏÉµÀÕÃ",
+                child_name = "ä»™é“å½°",
                 child_avatar = "12",
                 relation = (int)Relations.Friend,
                 map_id = "3201",
@@ -235,7 +235,7 @@ namespace AppGame.Module.Cycling
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "04",
-                child_name = "Á÷´¨·ã",
+                child_name = "æµå·æ«",
                 child_avatar = "15",
                 relation = (int)Relations.Friend,
                 map_id = "3201",
@@ -245,7 +245,7 @@ namespace AppGame.Module.Cycling
             playerDataList.Add(new PlayerData()
             {
                 child_sn = "05",
-                child_name = "ÄÁÉğÒ»",
+                child_name = "ç‰§ç»…ä¸€",
                 child_avatar = "19",
                 relation = (int)Relations.Friend,
                 map_id = "3202",
@@ -254,7 +254,7 @@ namespace AppGame.Module.Cycling
             });
             this.CyclingDataManager.SavePlayerDataList(playerDataList);
         }
-        //Ë¢ĞÂ½¡¿µÊı¾İ
+        //åˆ·æ–°å¥åº·æ•°æ®
         private void RefreshOriginData()
         {
             this.originData.walk += Random.Range(1000, 25000) * 3;
@@ -262,7 +262,7 @@ namespace AppGame.Module.Cycling
             this.CyclingDataManager.SaveOriginData(this.originData);
             this.RefreshMpDatas();
         }
-        //Ë¢ĞÂÇ×ÓÑÊı¾İ
+        //åˆ·æ–°äº²å‹æ•°æ®
         private void RefreshFriendData()
         {
             int pointCount = this.View.Player.MapNode.Points.Count;
@@ -273,12 +273,12 @@ namespace AppGame.Module.Cycling
             int offset = Random.Range(1, 5);
             PlayerData playerData = this.playerDataList[index];
             int position = int.Parse(playerData.map_position.Substring(5, 2));
-            position = Mathf.Clamp(position + offset, 1, maxPointIndex);//²»ÄÜ³¬¹ıµØÍ¼ÉÏ×î´óµÄ±àºÅ
+            position = Mathf.Clamp(position + offset, 1, maxPointIndex);//ä¸èƒ½è¶…è¿‡åœ°å›¾ä¸Šæœ€å¤§çš„ç¼–å·
             playerData.map_position = string.Format("{0}_{1:d2}", playerData.map_id, position);
             this.CyclingDataManager.SavePlayerData(playerData);
             this.View.RefreshTeammates(this.playerDataList);
         }
-        //Ë¢ĞÂÄÜÁ¿Êı¾İ
+        //åˆ·æ–°èƒ½é‡æ•°æ®
         private void RefreshMpDatas()
         {
             List<MpData> mpDatas = new List<MpData>();
@@ -302,7 +302,7 @@ namespace AppGame.Module.Cycling
 
                 int mpShare = 0;
                 if (!this.CyclingDataManager.MpCollected(playerData.child_sn))
-                {//½ñÈÕÃ»ÓĞÊÕÈ¡´Ë¼ÒÈË»òÅóÓÑµÄÄÜÁ¿·Ö³É£¬²Å¼ÆËãÆäµÄÄÜÁ¿·Ö³É
+                {//ä»Šæ—¥æ²¡æœ‰æ”¶å–æ­¤å®¶äººæˆ–æœ‹å‹çš„èƒ½é‡åˆ†æˆï¼Œæ‰è®¡ç®—å…¶çš„èƒ½é‡åˆ†æˆ
                     if (playerData.relation == (int)Relations.Family)
                         mpShare = (int)System.Math.Ceiling(playerData.mp_yestoday * 0.05);
                     else if (playerData.relation == (int)Relations.Friend)
@@ -319,7 +319,7 @@ namespace AppGame.Module.Cycling
             }
             this.View.RefreshMpBalls(mpDatas);
         }
-        //Ë¢ĞÂµØÍ¼ĞÅÏ¢
+        //åˆ·æ–°åœ°å›¾ä¿¡æ¯
         private void RefreshMapInfo()
         {
             MapInfo mapInfo = this.MapConfig.GetMap(this.myPlayerData.map_id);
@@ -346,7 +346,7 @@ namespace AppGame.Module.Cycling
             });
             this.View.RefreshMapProgress(mapInfo.CityName, cardCount, scenicCount);
         }
-        //µ±ÄÜÁ¿Çò±»µã»÷Ê±
+        //å½“èƒ½é‡çƒè¢«ç‚¹å‡»æ—¶
         private void OnMpBallClick(IEvent evt)
         {
             if (evt == null || evt.data == null)
@@ -365,7 +365,7 @@ namespace AppGame.Module.Cycling
             MpData mpData = mpBall.ToMpData();
             bool overLimit = this.myPlayerData.mp_today >= this.DeviceInfoManager.GetMpLimit();
             if (overLimit && mpData.RefreshView)
-            {//³¬³öÃ¿ÈÕÄÜÁ¿ÊÕÈ¡ÉÏÏŞÊ±£¬µ¯³öÖ§¸¶ÊÖĞø·ÑÒ³Ãæ
+            {//è¶…å‡ºæ¯æ—¥èƒ½é‡æ”¶å–ä¸Šé™æ—¶ï¼Œå¼¹å‡ºæ”¯ä»˜æ‰‹ç»­è´¹é¡µé¢
                 int coin = this.ItemDataManager.GetItemCount(Items.COIN);
                 int min = Mathf.Min(coin, mpBall.Value);
                 mpData.Mp = min;
@@ -374,7 +374,7 @@ namespace AppGame.Module.Cycling
                 this.View.ShowPayBill(mpData);
             }
             else if (!overLimit)
-            {//Ã»ÓĞ³¬³öÃ¿ÈÕÄÜÁ¿ÊÕÈ¡ÉÏÏŞÊ±£¬Ò²Òª¼ì²éµ±ÈÕÒÑ¾­ÊÕÈ¡ÁË¶àÉÙÄÜÁ¿£¬»¹ÄÜÊÕÈ¡¶àÉÙÄÜÁ¿
+            {//æ²¡æœ‰è¶…å‡ºæ¯æ—¥èƒ½é‡æ”¶å–ä¸Šé™æ—¶ï¼Œä¹Ÿè¦æ£€æŸ¥å½“æ—¥å·²ç»æ”¶å–äº†å¤šå°‘èƒ½é‡ï¼Œè¿˜èƒ½æ”¶å–å¤šå°‘èƒ½é‡
                 int validMp = Mathf.Min(mpBall.Value, this.DeviceInfoManager.GetMpLimit() - this.myPlayerData.mp_today);
                 mpData.Mp = validMp;
                 this.dispatcher.Dispatch(GameEvent.COLLECT_MP, mpData);
@@ -383,7 +383,7 @@ namespace AppGame.Module.Cycling
                                 this.DeviceInfoManager.GetMpLimit() - this.myPlayerData.mp_today, validMp);
             }
         }
-        //ÊÕÈ¡ÄÜÁ¿
+        //æ”¶å–èƒ½é‡
         private void OnCollectMp(IEvent evt)
         {
             if (evt == null || evt.data == null)
@@ -399,14 +399,14 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            //¿Û¼õÏàÓ¦µÄ½ğ±Ò
+            //æ‰£å‡ç›¸åº”çš„é‡‘å¸
             if (mpData.Coin > 0)
             {
                 this.ItemDataManager.ReduceItem(Items.COIN, mpData.Coin);
                 this.View.Coin = this.ItemDataManager.GetItemCount(Items.COIN);
             }
 
-            //¼ÇÂ¼ºÄÓÃµÄÔ­Ê¼Êı¾İ(²½ĞĞ£¬ÆïĞĞ£¬×ø×Ë¼°ÄÜÁ¿·Ö³É)
+            //è®°å½•è€—ç”¨çš„åŸå§‹æ•°æ®(æ­¥è¡Œï¼Œéª‘è¡Œï¼Œåå§¿åŠèƒ½é‡åˆ†æˆ)
             switch (mpData.MpBallType)
             {
                 case MpBallTypes.Walk:
@@ -423,33 +423,33 @@ namespace AppGame.Module.Cycling
                     break;
                 case MpBallTypes.Family:
                 case MpBallTypes.Friend:
-                    //¼ÇÂ¼ÒÑÊÕÈ¡´Ë¼ÒÈË»òÅóÓÑµÄÄÜÁ¿·Ö³É
+                    //è®°å½•å·²æ”¶å–æ­¤å®¶äººæˆ–æœ‹å‹çš„èƒ½é‡åˆ†æˆ
                     if (!this.CyclingDataManager.MpCollected(mpData.FromID))
                         this.CyclingDataManager.SaveMpCollection(mpData.FromID);
                     break;
             }
 
-            this.myPlayerData.mp += mpData.Mp;//¼ÇÂ¼Ôö¼ÓµÄÄÜÁ¿Öµ
+            this.myPlayerData.mp += mpData.Mp;//è®°å½•å¢åŠ çš„èƒ½é‡å€¼
             if (this.myPlayerData.mp_date == System.DateTime.Today)
-                this.myPlayerData.mp_today += mpData.Mp;//¼ÇÂ¼Ôö¼ÓµÄÄÜÁ¿Öµ
-            int hpIncrease = (int)((this.myPlayerData.mp - myPlayerData.mp_expend) / 100);//¼ÆËãÄÜÁ¿ÖµÊÇ·ñ¿É×ª»»³ÉĞĞ¶¯µãÊı
-            if (hpIncrease > 0)//Ã¿Âú100¿É×ª»»³É1µãĞĞ¶¯µãÊı
+                this.myPlayerData.mp_today += mpData.Mp;//è®°å½•å¢åŠ çš„èƒ½é‡å€¼
+            int hpIncrease = (int)((this.myPlayerData.mp - myPlayerData.mp_expend) / 100);//è®¡ç®—èƒ½é‡å€¼æ˜¯å¦å¯è½¬æ¢æˆè¡ŒåŠ¨ç‚¹æ•°
+            if (hpIncrease > 0)//æ¯æ»¡100å¯è½¬æ¢æˆ1ç‚¹è¡ŒåŠ¨ç‚¹æ•°
             {
-                this.myPlayerData.mp_expend += hpIncrease * 100;//¼ÇÂ¼ºÄÓÃµÄÄÜÁ¿
-                this.myPlayerData.hp += hpIncrease;//¼ÇÂ¼Ôö¼ÓµÄĞĞ¶¯µãÊı
+                this.myPlayerData.mp_expend += hpIncrease * 100;//è®°å½•è€—ç”¨çš„èƒ½é‡
+                this.myPlayerData.hp += hpIncrease;//è®°å½•å¢åŠ çš„è¡ŒåŠ¨ç‚¹æ•°
             }
-            this.CyclingDataManager.SavePlayerData(this.myPlayerData);//±£´æÊı¾İ
+            this.CyclingDataManager.SavePlayerData(this.myPlayerData);//ä¿å­˜æ•°æ®
 
             if (mpData.RefreshView)
-                this.RefreshMpDatas();//Íæ¼Òµã»÷ÄÜÁ¿ÆøÅİÖ÷¶¯ÊÕÈ¡ÄÜÁ¿Ê±²ÅÁ¢¿ÌË¢ĞÂÄÜÁ¿ÆøÅİ
-            this.RefreshMpAndHp();//Ë¢ĞÂGo°´Å¥
+                this.RefreshMpDatas();//ç©å®¶ç‚¹å‡»èƒ½é‡æ°”æ³¡ä¸»åŠ¨æ”¶å–èƒ½é‡æ—¶æ‰ç«‹åˆ»åˆ·æ–°èƒ½é‡æ°”æ³¡
+            this.RefreshMpAndHp();//åˆ·æ–°GoæŒ‰é’®
         }
-        //Ë¢ĞÂÒ³ÃæÊı¾İ
+        //åˆ·æ–°é¡µé¢æ•°æ®
         public void RefreshMpAndHp()
         {
-            this.View.RefreshMpAndHp(this.myPlayerData.mp - this.myPlayerData.mp_expend, myPlayerData.hp);//Ë¢ĞÂGo°´Å¥
+            this.View.RefreshMpAndHp(this.myPlayerData.mp - this.myPlayerData.mp_expend, myPlayerData.hp);//åˆ·æ–°GoæŒ‰é’®
         }
-        //µ±Íæ¼ÒÇ°½øÍ£Ö¹Ê±
+        //å½“ç©å®¶å‰è¿›åœæ­¢æ—¶
         private void OnPlayerStopped(IEvent evt)
         {
             if (evt == null || evt.data == null)
@@ -465,11 +465,11 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            //¼ÇÂ¼Íæ¼Òµ±Ç°Î»ÖÃ
+            //è®°å½•ç©å®¶å½“å‰ä½ç½®
             this.myPlayerData.map_position = mapPointNode.ID;
             this.CyclingDataManager.SavePlayerData(this.myPlayerData);
 
-            //¼ì²âÊÇ·ñÓĞ¿¨Æ¬ĞèÒªÏÔÊ¾
+            //æ£€æµ‹æ˜¯å¦æœ‰å¡ç‰‡éœ€è¦æ˜¾ç¤º
             InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
             if (mapPointNode.NodeType == NodeTypes.EndNode)
             {
@@ -500,12 +500,12 @@ namespace AppGame.Module.Cycling
                 this.View.KeepGoing();
             }
         }
-        //µ±¾°µã¿¨Æ¬¹Ø±ÕÊ±
+        //å½“æ™¯ç‚¹å¡ç‰‡å…³é—­æ—¶
         private void OnScenicCardClosed(IEvent evt)
         {
             this.RefreshMapInfo();
         }
-        //µ±½»Í¨¹¤¾ßÑ¡ÔñÒ³Ãæ¹Ø±ÕÊ±
+        //å½“äº¤é€šå·¥å…·é€‰æ‹©é¡µé¢å…³é—­æ—¶
         private void OnCityStationClosed(IEvent evt)
         {
             if (evt == null || evt.data == null)
@@ -537,7 +537,7 @@ namespace AppGame.Module.Cycling
                 this.View.Stay();
             }
         }
-        //µ±Go°´Å¥±»µã»÷Ê±
+        //å½“GoæŒ‰é’®è¢«ç‚¹å‡»æ—¶
         private void OnGo()
         {
             int hp = this.myPlayerData.hp;

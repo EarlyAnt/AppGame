@@ -6,11 +6,11 @@ namespace AppGame.Module.Cycling
 {
     public abstract class BasePlayer : BaseView
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region ×¢Èë½Ó¿Ú
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region æ³¨å…¥æ¥å£
 
         #endregion
-        #region Ò³ÃæUI×é¼ş
+        #region é¡µé¢UIç»„ä»¶
         [SerializeField]
         protected Image avatarBox;
         [SerializeField]
@@ -20,7 +20,7 @@ namespace AppGame.Module.Cycling
         [SerializeField, Range(0f, 5f)]
         protected float step;
         #endregion
-        #region ÆäËû±äÁ¿        
+        #region å…¶ä»–å˜é‡        
         protected int nodeIndex;
         protected Vector3 destination
         {
@@ -42,7 +42,7 @@ namespace AppGame.Module.Cycling
         }
         public bool IsMoving { get; protected set; }
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
         protected override void Awake()
         {
             base.Awake();
@@ -56,13 +56,13 @@ namespace AppGame.Module.Cycling
         {
             base.OnDestroy();
         }
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //³õÊ¼»¯
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //åˆå§‹åŒ–
         protected virtual void Initialize()
         {
             this.player.position = this.mapNode.Points[this.nodeIndex].position;
         }
-        //ÒÆ¶¯µ½Ö¸¶¨Î»ÖÃ
+        //ç§»åŠ¨åˆ°æŒ‡å®šä½ç½®
         public abstract void MoveToNode(string nodeID, bool lerp = false);
     }
 }

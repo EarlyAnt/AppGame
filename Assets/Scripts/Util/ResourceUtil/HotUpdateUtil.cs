@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace AppGame.Util
 {
-    //ÈÈ¸üÊı¾İ»ñÈ¡¹¤¾ß
+    //çƒ­æ›´æ•°æ®è·å–å·¥å…·
     public class HotUpdateUtil : IHotUpdateUtil
     {
         [Inject]
@@ -21,7 +21,7 @@ namespace AppGame.Util
         private UpdateInfo newestVersion = null;
         private string fileName = string.Format("{0}/UpdateRecord.json", Application.persistentDataPath);
 
-        //»ñÈ¡·şÎñÆ÷×ÊÔ´¸üĞÂÊı¾İ
+        //è·å–æœåŠ¡å™¨èµ„æºæ›´æ–°æ•°æ®
         public void GetUpdateInfo(Action<UpdateInfos> callBack = null, Action<string> errCallBack = null)
         {
             Header header = new Header();
@@ -32,12 +32,12 @@ namespace AppGame.Util
             header.headers.Add(new HeaderData() { key = "Content-Type", value = "application/json" });
             string strHeader = this.JsonUtil.Json2String(header);
 
-            UpdateRecord updateRecord = this.ReadUpdateRecord();//¶ÁÈ¡±¾µØ¸üĞÂ¼ÇÂ¼
+            UpdateRecord updateRecord = this.ReadUpdateRecord();//è¯»å–æœ¬åœ°æ›´æ–°è®°å½•
             UpdateRequest body = new UpdateRequest()
             {
                 partner = AppData.Channel,
                 apk_ver_code = AppData.VersionCode,
-                res_ver_code = updateRecord != null ? updateRecord.ResVersionCode : 0//Èç¹û±¾µØ¸üĞÂ¼ÇÂ¼Îª¿Õ£¬×ÊÔ´°æ±¾ºÅÄ¬ÈÏÎª0
+                res_ver_code = updateRecord != null ? updateRecord.ResVersionCode : 0//å¦‚æœæœ¬åœ°æ›´æ–°è®°å½•ä¸ºç©ºï¼Œèµ„æºç‰ˆæœ¬å·é»˜è®¤ä¸º0
             };
             string strBody = this.JsonUtil.Json2String(body);
 
@@ -67,7 +67,7 @@ namespace AppGame.Util
                 }
             });
         }
-        //¶ÁÈ¡±¾µØ×ÊÔ´¸üĞÂ¼ÇÂ¼
+        //è¯»å–æœ¬åœ°èµ„æºæ›´æ–°è®°å½•
         public UpdateRecord ReadUpdateRecord()
         {
             UpdateRecord updateRecord = null;
@@ -107,7 +107,7 @@ namespace AppGame.Util
             }
             return updateRecord;
         }
-        //±£´æ±¾µØ×ÊÔ´¸üĞÂ¼ÇÂ¼
+        //ä¿å­˜æœ¬åœ°èµ„æºæ›´æ–°è®°å½•
         public void SaveUpdateRecord(UpdateRecord updateRecord)
         {
             if (updateRecord == null)
@@ -123,10 +123,10 @@ namespace AppGame.Util
 
             try
             {
-                //¼ÇÂ¼´Ó·şÎñÆ÷ÉÏ»ñÈ¡µ½µÄ×îĞÂµÄ£¬²¢³É¹¦¸üĞÂÍê±ÏµÄ°æ±¾µÄ°æ±¾ºÅºÍÊ±¼ä´Á
+                //è®°å½•ä»æœåŠ¡å™¨ä¸Šè·å–åˆ°çš„æœ€æ–°çš„ï¼Œå¹¶æˆåŠŸæ›´æ–°å®Œæ¯•çš„ç‰ˆæœ¬çš„ç‰ˆæœ¬å·å’Œæ—¶é—´æˆ³
                 updateRecord.ResVersionCode = this.newestVersion.res_ver_code;
                 updateRecord.TimeStamp = this.newestVersion.create_time;
-                //±£´æ¸üĞÂ¼ÇÂ¼
+                //ä¿å­˜æ›´æ–°è®°å½•
                 string content = this.JsonUtil.Json2String(updateRecord);
                 using (FileStream fs = new FileStream(this.fileName, FileMode.OpenOrCreate, FileAccess.Write))
                 {
@@ -144,12 +144,12 @@ namespace AppGame.Util
                 Debug.LogErrorFormat("<><HotUpdateUtils.SaveUpdateRecord>Error: {0}", ex.Message);
             }
         }
-        //¼ÇÂ¼×îĞÂ°æ±¾
+        //è®°å½•æœ€æ–°ç‰ˆæœ¬
         private void SetNewsestVersion(UpdateInfos updateInfos)
         {
             if (updateInfos != null && updateInfos.res_list != null)
             {
-                List<UpdateInfo> updateInfoList = updateInfos.res_list.OrderByDescending(t => t.res_ver_code).ToList();//°´ÕÕ×ÊÔ´°æ±¾ºÅµ¹ĞğÅÅÁĞÀú´Î¸üĞÂÊı¾İ
+                List<UpdateInfo> updateInfoList = updateInfos.res_list.OrderByDescending(t => t.res_ver_code).ToList();//æŒ‰ç…§èµ„æºç‰ˆæœ¬å·å€’å™æ’åˆ—å†æ¬¡æ›´æ–°æ•°æ®
                 foreach (var updateInfo in updateInfoList)
                 {
                     if (updateInfo.apk_ver_code <= AppData.VersionCode)

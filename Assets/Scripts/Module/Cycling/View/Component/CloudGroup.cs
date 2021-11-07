@@ -9,8 +9,8 @@ namespace AppGame.Module.Cycling
 {
     public class CloudGroup : BaseView
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region Ò³ÃæUI×é¼ş
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region é¡µé¢UIç»„ä»¶
         [SerializeField]
         private List<Cloud> clouds;
         [SerializeField, Range(1f, 10f)]
@@ -18,7 +18,7 @@ namespace AppGame.Module.Cycling
         [SerializeField, Range(0f, 10f)]
         private float duration = 0.5f;
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
         private List<Tweener> tweeners;
         private int cloudCount
         {
@@ -26,10 +26,10 @@ namespace AppGame.Module.Cycling
         }
         public bool Visible { get; private set; }
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
 
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //ÉèÖÃÊÇ·ñ¿É¼û
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //è®¾ç½®æ˜¯å¦å¯è§
         public void SetStatus(bool visible)
         {
             this.Visible = visible;
@@ -47,7 +47,7 @@ namespace AppGame.Module.Cycling
             this.StopCoroutine("CloudAnimation");
             this.StartCoroutine(CloudAnimation(visible));
         }
-        //ÔÆ¶äÉ¢¿ª¶¯»­
+        //äº‘æœµæ•£å¼€åŠ¨ç”»
         private IEnumerator CloudAnimation(bool visible)
         {
             int completeCount = 0;
@@ -67,7 +67,7 @@ namespace AppGame.Module.Cycling
             yield return new WaitUntil(() => completeCount >= this.cloudCount);
             if (!visible) this.dispatcher.Dispatch(GameEvent.CLOUD_DISPERSE);
         }
-        [ContextMenu("ÊÕ¼¯ÔÆ¶ä")]
+        [ContextMenu("æ”¶é›†äº‘æœµ")]
         private void CollectCloud()
         {
             if (this.clouds == null)

@@ -6,10 +6,10 @@ using System.ComponentModel;
 
 namespace AppGame.Module.Cycling
 {
-    #region ×Ô¶¨ÒåÃ¶¾Ù
+    #region è‡ªå®šä¹‰æšä¸¾
     public enum GameEvent
     {
-        //ÆÕÍ¨ÊÂ¼ş
+        //æ™®é€šäº‹ä»¶
         GAME_START,
         GAME_OVER,
         MP_CLICK,
@@ -19,13 +19,13 @@ namespace AppGame.Module.Cycling
         INTERACTION,
         CLOUD_DISPERSE,
 
-        //Ò³Ãæ¹Ø±ÕÊÂ¼ş
+        //é¡µé¢å…³é—­äº‹ä»¶
         SCENIC_CARD_CLOSE,
         CITY_STATION_CLOSE,
         PAY_BILL_CLOSE,
         TRAFFIC_LOADING_CLOSE,
 
-        //ÆäËûÊÂ¼ş
+        //å…¶ä»–äº‹ä»¶
         SET_TOUCH_PAD_ENABLE,
         GO_BUTTON_LOADED,
     }
@@ -85,7 +85,7 @@ namespace AppGame.Module.Cycling
     }
     #endregion
 
-    #region ×Ô¶¨ÒåÀà
+    #region è‡ªå®šä¹‰ç±»
     public static class SpineParameters
     {
         public const string MATERIAL_NAME = "SkeletonGraphicDefault";
@@ -112,14 +112,14 @@ namespace AppGame.Module.Cycling
 
     public class Ticket
     {
-        public bool Go { get; set; }//true-Ìø×ªµ½ÏÂÒ»µØÍ¼£¬false-ÁôÔÚÔ­µØ
+        public bool Go { get; set; }//true-è·³è½¬åˆ°ä¸‹ä¸€åœ°å›¾ï¼Œfalse-ç•™åœ¨åŸåœ°
         public string FromMapID { get; set; }
         public string FromCityName { get; set; }
         public string FromCityPinYin { get; set; }
         public string ToMapID { get; set; }
         public string ToCityName { get; set; }
         public string ToCityPinYin { get; set; }
-        public string Vehicle { get; set; }//½»Í¨¹¤¾ß
+        public string Vehicle { get; set; }//äº¤é€šå·¥å…·
         public int Coin { get; set; }
         public int Hp { get; set; }
     }

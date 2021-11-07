@@ -6,17 +6,17 @@ namespace AppGame.Module.Cycling
 {
     public class MapNode : MonoBehaviour
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
         [SerializeField]
         private string id;
         [SerializeField]
         private List<Transform> points;
         public string ID { get { return this.id; } }
         public List<Transform> Points { get { return this.points; } }
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
 
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        [ContextMenu("1-ÊÕ¼¯µØÍ¼µã")]
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        [ContextMenu("1-æ”¶é›†åœ°å›¾ç‚¹")]
         private void CollectPoints()
         {
             this.points = new List<Transform>();
@@ -25,7 +25,7 @@ namespace AppGame.Module.Cycling
                 this.points.Add(this.transform.GetChild(i));
             }
         }
-        [ContextMenu("2-²¹ÆëMapNodePoint×é¼ş")]
+        [ContextMenu("2-è¡¥é½MapNodePointç»„ä»¶")]
         private void AddNodeScript()
         {
             if (this.points == null || this.points.Count == 0)
@@ -45,7 +45,7 @@ namespace AppGame.Module.Cycling
                 }
             }
         }
-        [ContextMenu("3-ÉèÖÃ½ÚµãÃû³Æ")]
+        [ContextMenu("3-è®¾ç½®èŠ‚ç‚¹åç§°")]
         private void SetNodeName()
         {
             if (this.points == null || this.points.Count == 0)
@@ -69,7 +69,7 @@ namespace AppGame.Module.Cycling
                 }
             }
         }
-        [ContextMenu("4-ÉèÖÃ½ÚµãID")]
+        [ContextMenu("4-è®¾ç½®èŠ‚ç‚¹ID")]
         private void SetNodeID()
         {
             if (this.points == null || this.points.Count == 0)

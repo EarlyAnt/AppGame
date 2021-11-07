@@ -8,8 +8,8 @@ namespace AppGame.Module.Cycling
 {
     public class PayBill : BaseView
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region ×¢Èë½Ó¿Ú
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region æ³¨å…¥æ¥å£
         [Inject]
         public IMapConfig MapConfig { get; set; }
         [Inject]
@@ -21,50 +21,50 @@ namespace AppGame.Module.Cycling
         [Inject]
         public IModuleConfig ModuleConfig { get; set; }
         #endregion
-        #region Ò³ÃæUI×é¼ş
+        #region é¡µé¢UIç»„ä»¶
         [SerializeField]
-        private Transform root;//¿¨Æ¬Ãæ°å¸ùÎïÌå
+        private Transform root;//å¡ç‰‡é¢æ¿æ ¹ç‰©ä½“
         [SerializeField]
-        private CanvasGroup tipPanel;//´íÎóÌáÊ¾Ãæ°å
+        private CanvasGroup tipPanel;//é”™è¯¯æç¤ºé¢æ¿
         [SerializeField]
-        private Text titleBox;//±êÌâÎÄ×Ö¿ò
+        private Text titleBox;//æ ‡é¢˜æ–‡å­—æ¡†
         [SerializeField]
-        private Text tipBox;//ËµÃ÷ÎÄ×Ö¿ò
+        private Text tipBox;//è¯´æ˜æ–‡å­—æ¡†
         [SerializeField]
-        private Text mpBox;//ÄÜÁ¿ÎÄ×Ö¿ò
+        private Text mpBox;//èƒ½é‡æ–‡å­—æ¡†
         [SerializeField]
-        private Text feepBox;//·ÑÓÃÎÄ×Ö¿ò
+        private Text feepBox;//è´¹ç”¨æ–‡å­—æ¡†
         [SerializeField]
-        private Image buttonBox;//·ÑÓÃ±ß¿ò
+        private Image buttonBox;//è´¹ç”¨è¾¹æ¡†
         [SerializeField]
-        private Color noMoneyColor;//½ğ±Ò²»×ãÊ±°´Å¥ÉÏÊı×ÖµÄÑÕÉ«
+        private Color noMoneyColor;//é‡‘å¸ä¸è¶³æ—¶æŒ‰é’®ä¸Šæ•°å­—çš„é¢œè‰²
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
         private MpData mpData = null;
         private Tweener fadeTweener = null;
         private Tweener moveTweener = null;
         private float tipPanelShowY = 0f;
         private float tipPanelHideY = 0f;
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
         protected override void Awake()
         {
             this.tipPanelShowY = this.tipPanel.transform.localPosition.y;
             this.tipPanelHideY = 2436f / 2f + this.tipPanel.GetComponent<RectTransform>().sizeDelta.y;
             this.tipPanel.transform.DOLocalMoveY(this.tipPanelHideY, 0f);
         }
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //ÏÔÊ¾¿¨Æ¬
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //æ˜¾ç¤ºå¡ç‰‡
         public void Show(MpData mpData)
         {
             this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, false);
             this.mpData = mpData;
-            //ÉèÖÃÒ³ÃæÄÚÈİ
+            //è®¾ç½®é¡µé¢å†…å®¹
             this.mpBox.text = mpData.Mp.ToString();
             this.feepBox.text = mpData.Coin.ToString();
             this.feepBox.color = mpData.CoinEnough ? Color.white : this.noMoneyColor;
-            //this.titleBox.text = "";//Todo: ºóĞø²¹ÉÏ¹ú¼Ê»¯µÄ¹¦ÄÜ
-            //this.tipBox.text = "";//Todo: ºóĞø²¹ÉÏ¹ú¼Ê»¯µÄ¹¦ÄÜ
+            //this.titleBox.text = "";//Todo: åç»­è¡¥ä¸Šå›½é™…åŒ–çš„åŠŸèƒ½
+            //this.tipBox.text = "";//Todo: åç»­è¡¥ä¸Šå›½é™…åŒ–çš„åŠŸèƒ½
             Sprite sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, this.ModuleConfig.GetImagePath(ModuleViews.Cycling, mpData.CoinEnough ? "enable_button" : "disable_button"));
             this.buttonBox.sprite = sprite;
             this.buttonBox.raycastTarget = mpData.CoinEnough;
@@ -72,7 +72,7 @@ namespace AppGame.Module.Cycling
             this.SetErrorPanel(!mpData.CoinEnough);
             if (!mpData.CoinEnough) this.DelayInvoke(() => this.SetErrorPanel(false), 2f);
         }
-        //Òş²Ø¿¨Æ¬
+        //éšè—å¡ç‰‡
         public void Hide(bool pay)
         {
             this.SetErrorPanel(false);
@@ -80,7 +80,7 @@ namespace AppGame.Module.Cycling
             if (pay) this.dispatcher.Dispatch(GameEvent.PAY_BILL_CLOSE, this.mpData);
             this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, true);
         }
-        //ÉèÖÃ´íÎóÌáÊ¾Ãæ°å
+        //è®¾ç½®é”™è¯¯æç¤ºé¢æ¿
         public void SetErrorPanel(bool visible)
         {
             if (this.fadeTweener != null) this.fadeTweener.Kill();

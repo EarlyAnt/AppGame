@@ -8,8 +8,8 @@ namespace AppGame.Module.Cycling
 {
     public class ScenicCard : BaseView
     {
-        /************************************************ÊôĞÔÓë±äÁ¿ÃüÃû************************************************/
-        #region ×¢Èë½Ó¿Ú
+        /************************************************å±æ€§ä¸å˜é‡å‘½å************************************************/
+        #region æ³¨å…¥æ¥å£
         [Inject]
         public IMapConfig MapConfig { get; set; }
         [Inject]
@@ -19,40 +19,40 @@ namespace AppGame.Module.Cycling
         [Inject]
         public II18NConfig I18NConfig { get; set; }
         #endregion
-        #region Ò³ÃæUI×é¼ş
+        #region é¡µé¢UIç»„ä»¶
         [SerializeField]
         private GameObject root;
         [SerializeField]
-        private Transform panelRoot;//¿¨Æ¬Ãæ°å¸ùÎïÌå
+        private Transform panelRoot;//å¡ç‰‡é¢æ¿æ ¹ç‰©ä½“
         [SerializeField]
-        private GameObject fore;//¿¨Æ¬ÕıÃæ
+        private GameObject fore;//å¡ç‰‡æ­£é¢
         [SerializeField]
-        private GameObject back;//¿¨Æ¬±³Ãæ
+        private GameObject back;//å¡ç‰‡èƒŒé¢
         [SerializeField, Range(0f, 1f)]
-        private float rotateDuration = 1f;//¿¨Æ¬Ğı×ªÊ±³¤
+        private float rotateDuration = 1f;//å¡ç‰‡æ—‹è½¬æ—¶é•¿
         [SerializeField]
-        private Image imageBox;//¾°µãÍ¼Æ¬¿ò
+        private Image imageBox;//æ™¯ç‚¹å›¾ç‰‡æ¡†
         [SerializeField]
-        private Text cityNameBox;//³ÇÊĞÃû×ÖÎÄ×Ö¿ò
+        private Text cityNameBox;//åŸå¸‚åå­—æ–‡å­—æ¡†
         [SerializeField]
-        private Text scenicNameBox;//¾°µãÃû×ÖÎÄ×Ö¿ò
+        private Text scenicNameBox;//æ™¯ç‚¹åå­—æ–‡å­—æ¡†
         [SerializeField]
-        private Text descriptionBox;//¾°µã½éÉÜÎÄ×Ö¿ò
+        private Text descriptionBox;//æ™¯ç‚¹ä»‹ç»æ–‡å­—æ¡†
         #endregion
-        #region ÆäËû±äÁ¿
+        #region å…¶ä»–å˜é‡
         private string url = "";
-        private Vector3 middleAngle = new Vector3(0f, 90f, 0f);//¿¨Æ¬90¶È½Ç
-        private Vector3 foreAngle = new Vector3(0f, 180f, 0f);//¿¨Æ¬·­×ª½Ç¶È
+        private Vector3 middleAngle = new Vector3(0f, 90f, 0f);//å¡ç‰‡90åº¦è§’
+        private Vector3 foreAngle = new Vector3(0f, 180f, 0f);//å¡ç‰‡ç¿»è½¬è§’åº¦
         #endregion
-        /************************************************Unity·½·¨ÓëÊÂ¼ş***********************************************/
+        /************************************************Unityæ–¹æ³•ä¸äº‹ä»¶***********************************************/
 
-        /************************************************×Ô ¶¨ Òå ·½ ·¨************************************************/
-        //ÏÔÊ¾¿¨Æ¬
+        /************************************************è‡ª å®š ä¹‰ æ–¹ æ³•************************************************/
+        //æ˜¾ç¤ºå¡ç‰‡
         public void Show(string scenicID)
         {
             this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, false);
             this.Reset();
-            //²éÑ¯µØÍ¼ºÍ¾°µãÊı¾İÊı¾İ
+            //æŸ¥è¯¢åœ°å›¾å’Œæ™¯ç‚¹æ•°æ®æ•°æ®
             ScenicInfo scenicInfo = this.ScenicConfig.GetScenic(scenicID);
             if (scenicInfo == null)
             {
@@ -76,7 +76,7 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            //ÉèÖÃÒ³ÃæÄÚÈİ
+            //è®¾ç½®é¡µé¢å†…å®¹
             this.imageBox.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/Site/{0}", card.Image));
             this.cityNameBox.text = mapInfo.CityName;
             this.scenicNameBox.text = scenicInfo.Name;
@@ -84,7 +84,7 @@ namespace AppGame.Module.Cycling
             this.root.gameObject.SetActive(true);
             this.url = card.Url;
         }
-        //Òş²Ø¿¨Æ¬
+        //éšè—å¡ç‰‡
         public void Hide()
         {
             this.root.gameObject.SetActive(false);
@@ -92,7 +92,7 @@ namespace AppGame.Module.Cycling
             this.OnViewClosed();
             this.dispatcher.Dispatch(GameEvent.SET_TOUCH_PAD_ENABLE, true);
         }
-        //Ğı×ª¿¨Æ¬
+        //æ—‹è½¬å¡ç‰‡
         public void Rotate()
         {
             this.panelRoot.DOScale(1, this.rotateDuration);
@@ -103,14 +103,14 @@ namespace AppGame.Module.Cycling
                 this.panelRoot.DOLocalRotate(this.foreAngle, this.rotateDuration / 2);
             };
         }
-        //´ò¿ªÍøÒ³
+        //æ‰“å¼€ç½‘é¡µ
         public void OpenUrl()
         {
             //FlutterNativeAPI.SendMessageToFlutter(this.url);
             AndroidNativeAPI.Instance.SendMessageToAndroid(this.url);
             Debug.LogFormat("<><ScenicCard.OpenUrl>url: {0}", this.url);
         }
-        //ÖØÉè¿¨Æ¬×´Ì¬
+        //é‡è®¾å¡ç‰‡çŠ¶æ€
         private void Reset()
         {
             this.panelRoot.localEulerAngles = Vector3.zero;
@@ -118,7 +118,7 @@ namespace AppGame.Module.Cycling
             this.fore.SetActive(false);
             this.back.SetActive(true);
         }
-        //µ±¿¨Æ¬¹Ø±ÕÊ±
+        //å½“å¡ç‰‡å…³é—­æ—¶
         private void OnViewClosed()
         {
             this.dispatcher.Dispatch(GameEvent.SCENIC_CARD_CLOSE);

@@ -8,20 +8,20 @@ using UnityEngine;
 
 namespace AppGame.Data.Remote
 {
-    //ºÃÓÑÁĞ±í¼°±íÇéÊı¾İÍ¬²½¹¤¾ß
+    //å¥½å‹åˆ—è¡¨åŠè¡¨æƒ…æ•°æ®åŒæ­¥å·¥å…·
     public class CyclingDataUtil : ICyclingDataUtil
     {
         /// <summary>
-        /// Í¬²½Êı¾İÀà
+        /// åŒæ­¥æ•°æ®ç±»
         /// </summary>
         class ActionData
         {
-            public DateTime RegisterTime { get; set; }//Êı¾İ×¢²áÊ±¼ä
+            public DateTime RegisterTime { get; set; }//æ•°æ®æ³¨å†Œæ—¶é—´
             public string Header { get; set; }
             public string Body { get; set; }
-            public int SendTimes { get; set; }//·¢ËÍ´ÎÊı(Ä¬ÈÏ3´Î£¬3´ÎÊ§°Üºó£¬²»ÔÙÖØ·¢)
-            public Action<Result> OnSuccess { get; set; }//httpÇëÇó³É¹¦Ê±»Øµ÷
-            public Action<Result> OnFailed { get; set; }//httpÇëÇóÊ§°ÜÊ±»Øµ÷
+            public int SendTimes { get; set; }//å‘é€æ¬¡æ•°(é»˜è®¤3æ¬¡ï¼Œ3æ¬¡å¤±è´¥åï¼Œä¸å†é‡å‘)
+            public Action<Result> OnSuccess { get; set; }//httpè¯·æ±‚æˆåŠŸæ—¶å›è°ƒ
+            public Action<Result> OnFailed { get; set; }//httpè¯·æ±‚å¤±è´¥æ—¶å›è°ƒ
         }
 
         [Inject]
@@ -41,7 +41,7 @@ namespace AppGame.Data.Remote
         private List<ActionData> postGameDatas = new List<ActionData>();
         private ActionData lastPostGameData = null;
 
-        //»ñÈ¡ÅóÓÑÁĞ±í
+        //è·å–æœ‹å‹åˆ—è¡¨
         public void GetBasicData(Action<BasicData> callback = null, Action<string> errCallback = null)
         {
             string url = this.UrlProvider.GetBasicDataUrl(this.ChildInfoManager.GetChildSN());
@@ -69,7 +69,7 @@ namespace AppGame.Data.Remote
                 if (errCallback != null) errCallback(errorInfo.ErrorInfo);
             });
         }
-        //»ñÈ¡ÊÀ½çºÃÓÑ
+        //è·å–ä¸–ç•Œå¥½å‹
         public void GetGameData(Action<List<PlayerData>> callback = null, Action<string> errCallback = null)
         {
             string url = this.UrlProvider.GetGameDataUrl(this.ChildInfoManager.GetChildSN());
@@ -97,7 +97,7 @@ namespace AppGame.Data.Remote
                 if (errCallback != null) errCallback(errorInfo.ErrorInfo);
             });
         }
-        //·¢ËÍ±íÇé
+        //å‘é€è¡¨æƒ…
         public void PostGameData(PlayerData playerData, Action<Result> callback = null, Action<Result> errCallback = null)
         {
             Header header = new Header();
@@ -121,21 +121,21 @@ namespace AppGame.Data.Remote
                 OnFailed = errCallback
             };
 
-            //¼ì²é¶ÓÁĞÀïÊÇ·ñÒÑ¾­ÓĞÊı¾İ
+            //æ£€æŸ¥é˜Ÿåˆ—é‡Œæ˜¯å¦å·²ç»æœ‰æ•°æ®
             if (this.lastPostGameData != null && this.lastPostGameData.Body == strBody)
-            {//¶ÓÁĞÀïÓĞÊı¾İ£¬Ö»ĞèÒª´¦ÀíÊı¾İÊÇ·ñÑ¹Õ»
+            {//é˜Ÿåˆ—é‡Œæœ‰æ•°æ®ï¼Œåªéœ€è¦å¤„ç†æ•°æ®æ˜¯å¦å‹æ ˆ
                 Debug.LogFormat("<><CyclingDataUtil.PutGameData>Ignore same data, Header: {0}, Body: {1}", strHeader, strBody);
-                return;//Èç¹ûĞÂÊı¾İÓë×îºóÒ»ÌõÊı¾İµÄBodyÏàÍ¬£¬Ö±½ÓºöÂÔ
+                return;//å¦‚æœæ–°æ•°æ®ä¸æœ€åä¸€æ¡æ•°æ®çš„Bodyç›¸åŒï¼Œç›´æ¥å¿½ç•¥
             }
             else
-            {//¶ÓÁĞÀïÃ»ÓĞÊı¾İ£¬²ÅĞèÒªÊı¾İÑ¹Õ»£¬ÇÒÖ÷¶¯µ÷ÓÃÊı¾İÍ¬²½·½·¨
+            {//é˜Ÿåˆ—é‡Œæ²¡æœ‰æ•°æ®ï¼Œæ‰éœ€è¦æ•°æ®å‹æ ˆï¼Œä¸”ä¸»åŠ¨è°ƒç”¨æ•°æ®åŒæ­¥æ–¹æ³•
                 Debug.LogFormat("<><CyclingDataUtil.PutGameData>Append new data and execute, Header: {0}, Body: {1}", strHeader, strBody);
                 this.lastPostGameData = newActionData;
                 this.postGameDatas.Add(newActionData);
                 this.SendGameData();
             }
         }
-        //·¢ËÍ±íÇéÏûÏ¢
+        //å‘é€è¡¨æƒ…æ¶ˆæ¯
         private void SendGameData()
         {
             if (this.postGameDatas.Count > 0)
@@ -149,12 +149,12 @@ namespace AppGame.Data.Remote
                     DataBase dataBase = this.JsonUtil.String2Json<DataBase>(result);
                     if (actionData.OnSuccess != null) Loom.QueueOnMainThread(() => actionData.OnSuccess(Result.Success(result)));
                     Debug.LogFormat("<><CyclingDataUtil.SendGameData>Success:\n{0}", result);
-                    //¼ì²éÊı¾İ
+                    //æ£€æŸ¥æ•°æ®
                     if (this.postGameDatas.Count > 0)
                     {
                         this.lastPostGameData = null;
-                        this.postGameDatas.RemoveAt(0);//ÒÆ³ıÒÑ¾­Ö´ĞĞ³É¹¦µÄÊı¾İ
-                        if (this.postGameDatas.Count > 0)//Ö´ĞĞÏÂÒ»ÌõÊı¾İ
+                        this.postGameDatas.RemoveAt(0);//ç§»é™¤å·²ç»æ‰§è¡ŒæˆåŠŸçš„æ•°æ®
+                        if (this.postGameDatas.Count > 0)//æ‰§è¡Œä¸‹ä¸€æ¡æ•°æ®
                             this.SendGameData();
                     }
 
@@ -162,18 +162,18 @@ namespace AppGame.Data.Remote
                 {
                     Debug.LogFormat("<><CyclingDataUtil.SendGameData>Error: {0}", errorResult.ErrorInfo);
                     if (actionData.OnFailed != null) Loom.QueueOnMainThread(() => actionData.OnFailed(Result.Error(errorResult.ErrorInfo)));
-                    //¼ì²éÊı¾İ
+                    //æ£€æŸ¥æ•°æ®
                     if (this.postGameDatas.Count > 0)
                     {
                         this.lastPostGameData = null;
                         if (this.postGameDatas[0].SendTimes > 0)
-                        {//ÖØ¸´ÉÏ´«(×î¶à3´Î)
+                        {//é‡å¤ä¸Šä¼ (æœ€å¤š3æ¬¡)
                             this.postGameDatas[0].SendTimes -= 1;
                             Debug.LogFormat("<><CyclingDataUtil.SendGameData>Repeat, SendTimes: {0}, Body: {1}", actionData.SendTimes, actionData.Body);
                             this.SendGameData();
                         }
                         else
-                        {//3´ÎÖØ´«Ê§°Ü·ÅÆú
+                        {//3æ¬¡é‡ä¼ å¤±è´¥æ”¾å¼ƒ
                             this.postGameDatas.RemoveAt(0);
                             Debug.LogFormat("<><CyclingDataUtil.SendGameData>Abandon, SendTimes: {0}, Body: {1}", actionData.SendTimes, actionData.Body);
                         }

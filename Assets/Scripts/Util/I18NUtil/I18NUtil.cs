@@ -1,4 +1,4 @@
-﻿using AppGame.Config;
+using AppGame.Config;
 using AppGame.Global;
 //using Spine.Unity;
 using System;

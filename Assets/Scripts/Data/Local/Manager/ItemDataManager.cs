@@ -1,4 +1,4 @@
-﻿using AppGame.Config;
+using AppGame.Config;
 using AppGame.Data.Common;
 using AppGame.Data.Local;
 using AppGame.Data.Model;

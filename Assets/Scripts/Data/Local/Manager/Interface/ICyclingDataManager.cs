@@ -1,4 +1,4 @@
-﻿using AppGame.Data.Model;
+using AppGame.Data.Model;
 using System.Collections.Generic;
 
 namespace AppGame.Data.Local
