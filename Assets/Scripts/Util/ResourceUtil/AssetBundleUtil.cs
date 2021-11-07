@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,11 +11,49 @@ namespace AppGame.Util
     class AssetBundleUtil : IAssetBundleUtil
     {
         [Inject]
-        public IResourceUtil ResourceUtils { get; set; } 
+        public IResourceUtil ResourceUtils { get; set; }
         private Dictionary<string, Coroutine> asyncOperations = new Dictionary<string, Coroutine>();
         private Dictionary<string, AssetBundle> assetBundles = new Dictionary<string, AssetBundle>();
         private AssetBundleManifest manifest;
+        private string platform
+        {
+            get
+            {
+#if UNITY_ANDROID && !UNITY_EDITOR
+                return "Android";
+#elif UNITY_IOS && !UNITY_EDITOR
+                return "iOS"
+#else
+                return "Android";
+#endif
+            }
+        }
 
+        /// <summary>
+        /// 加载manifest文件
+        /// </summary>
+        public IEnumerator LoadManifest()
+        {
+            string fileName = string.Format("{0}/Model/{1}/manifest", Application.persistentDataPath, platform);
+            if (File.Exists(fileName))
+            {//如果本地存在manifest文件，则直接加载
+                AssetBundle manifestAssetBundle = AssetBundle.LoadFromFile(fileName);
+                if (manifestAssetBundle != null)
+                {
+                    this.manifest = manifestAssetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+                }
+            }
+            else
+            {//否则，从服务器上获取manifest文件
+                yield return this.ResourceUtils.LoadAssetBundle(string.Format("Model/{0}/manifest", platform), (manifestAssetBundle) =>
+                {
+                    if (manifestAssetBundle != null)
+                    {
+                        this.manifest = manifestAssetBundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
+                    }
+                }, null);
+            }
+        }
         /// <summary>
         /// 从AssetBundle包中加载所需要的物体
         /// </summary>
@@ -30,7 +69,7 @@ namespace AppGame.Util
 
                 if (!this.CheckAssetBundleBuffer(assetBundleName))
                 {//如果缓存中不存在指定的AssetBundle包，则加载
-                    string fileName = string.Format("{0}/Model/{1}.ab", Application.persistentDataPath, assetBundleName);
+                    string fileName = string.Format("{0}/Model/{1}/{2}.ab", Application.persistentDataPath, platform, assetBundleName);
                     if (File.Exists(fileName))
                     {//本地存在AssetBundle包文件，则直接加载
                         AssetBundle assetBundle = AssetBundle.LoadFromFile(fileName);
@@ -39,7 +78,7 @@ namespace AppGame.Util
                     }
                     else
                     {//否则，从服务器上获取AssetBundle包文件
-                        this.CollectAsyncOperation(assetBundleName, AsyncActionHelper.Instance.StartCoroutine(this.ResourceUtils.LoadAssetBundle(string.Format("Model/{0}.ab", assetBundleName), (assetBundle) =>
+                        this.CollectAsyncOperation(assetBundleName, AsyncActionHelper.Instance.StartCoroutine(this.ResourceUtils.LoadAssetBundle(string.Format("Model/{0}/{1}.ab", platform, assetBundleName), (assetBundle) =>
                             {
                                 if (assetBundle != null)
                                 {
@@ -74,7 +113,7 @@ namespace AppGame.Util
 
                 if (!this.CheckAssetBundleBuffer(assetBundleName))
                 {//如果缓存中不存在指定的AssetBundle包，则加载
-                    string fileName = string.Format("{0}/Model/{1}.ab", Application.persistentDataPath, assetBundleName);
+                    string fileName = string.Format("{0}/Model/{1}/{2}.ab", Application.persistentDataPath, platform, assetBundleName);
                     if (File.Exists(fileName))
                     {//本地存在AssetBundle包文件，则直接加载
                         AssetBundle assetBundle = AssetBundle.LoadFromFile(fileName);
@@ -83,7 +122,7 @@ namespace AppGame.Util
                     }
                     else
                     {//否则，从服务器上获取AssetBundle包文件
-                        this.CollectAsyncOperation(assetBundleName, AsyncActionHelper.Instance.StartCoroutine(this.ResourceUtils.LoadAssetBundle(string.Format("Model/{0}.ab", assetBundleName), (assetBundle) =>
+                        this.CollectAsyncOperation(assetBundleName, AsyncActionHelper.Instance.StartCoroutine(this.ResourceUtils.LoadAssetBundle(string.Format("Model/{0}/{1}.ab", platform, assetBundleName), (assetBundle) =>
                             {
                                 if (assetBundle != null)
                                 {
@@ -125,7 +164,7 @@ namespace AppGame.Util
         {
             if (this.manifest == null)
             {//加载manifest文件
-                string fileName = string.Format("{0}/Model/Android", Application.persistentDataPath);
+                string fileName = string.Format("{0}/Model/{1}/manifest", Application.persistentDataPath, platform);
                 if (File.Exists(fileName))
                 {//如果本地存在manifest文件，则直接加载
                     AssetBundle manifestAssetBundle = AssetBundle.LoadFromFile(fileName);
@@ -137,7 +176,7 @@ namespace AppGame.Util
                 }
                 else
                 {//否则，从服务器上获取manifest文件
-                    this.CollectAsyncOperation(assetBundleName, AsyncActionHelper.Instance.StartCoroutine(this.ResourceUtils.LoadAssetBundle("Model/Android", (manifestAssetBundle) =>
+                    this.CollectAsyncOperation(assetBundleName, AsyncActionHelper.Instance.StartCoroutine(this.ResourceUtils.LoadAssetBundle(string.Format("Model/{0}/manifest", platform), (manifestAssetBundle) =>
                     {
                         if (manifestAssetBundle != null)
                         {
@@ -169,9 +208,9 @@ namespace AppGame.Util
                     {//第一次遍历，仅加载本地存在的依赖项资源，并计数
                         if (!this.CheckAssetBundleBuffer(dependency))
                         {
-                            if (File.Exists(string.Format("{0}/Model/{1}", Application.persistentDataPath, dependency)))
+                            if (File.Exists(string.Format("{0}/Model/{1}/{2}", Application.persistentDataPath, platform, dependency)))
                             {//如果本地存在manifest文件，则直接加载
-                                AssetBundle dependentAssetBundle = AssetBundle.LoadFromFile(string.Format("{0}/Model/{1}", Application.persistentDataPath, dependency));
+                                AssetBundle dependentAssetBundle = AssetBundle.LoadFromFile(string.Format("{0}/Model/{1}/{2}", Application.persistentDataPath, platform, dependency));
                                 if (dependentAssetBundle != null)
                                 {
                                     this.assetBundles.Add(dependency, dependentAssetBundle);
@@ -190,7 +229,7 @@ namespace AppGame.Util
                             string dependency = dependencyArray[i];
                             if (!this.CheckAssetBundleBuffer(dependency))
                             {//否则，从服务器上获取manifest文件
-                                this.CollectAsyncOperation(assetBundleName, AsyncActionHelper.Instance.StartCoroutine(this.ResourceUtils.LoadAssetBundle(string.Format("Model/{0}", dependency), (dependentAssetBundle) =>
+                                this.CollectAsyncOperation(assetBundleName, AsyncActionHelper.Instance.StartCoroutine(this.ResourceUtils.LoadAssetBundle(string.Format("Model/{0}/{1}", platform, dependency), (dependentAssetBundle) =>
                                 {
                                     if (dependentAssetBundle != null)
                                     {

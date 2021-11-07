@@ -107,9 +107,13 @@ namespace AppGame.Util
         /// <param name="failure">删除失败的回调</param>
         void DeleteModule(string moduleName, Action<string> success = null, Action<string> failure = null);
         /// <summary>
-        /// 从缓存中移除指定的AssetBundle
+        /// 从缓存中卸载指定的AssetBundle
         /// </summary>
         /// <param name="assetBundlePath">指定的AssetBundle的名字或路径</param>
         void UnloadAssetBundle(string assetBundlePath);
+        /// <summary>
+        /// 从缓存中卸载所有的AssetBundle
+        /// </summary>
+        void UnloadAllAssetBundles();
     }
 }

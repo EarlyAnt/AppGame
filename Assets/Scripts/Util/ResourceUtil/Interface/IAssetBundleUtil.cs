@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace AppGame.Util
 {
     public interface IAssetBundleUtil
     {
+        /// <summary>
+        /// 加载manifest文件
+        /// </summary>
+        IEnumerator LoadManifest();
         /// <summary>
         /// 从AssetBundle包中加载所需要的物体
         /// </summary>

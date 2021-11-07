@@ -501,7 +501,7 @@ namespace AppGame.Util
             }
         }
         /// <summary>
-        /// 从缓存中移除指定的AssetBundle
+        /// 从缓存中卸载指定的AssetBundle
         /// </summary>
         /// <param name="assetBundlePath">指定的AssetBundle的名字或路径</param>
         public void UnloadAssetBundle(string assetBundlePath)
@@ -511,6 +511,21 @@ namespace AppGame.Util
                 if (this.assetBundleBuffer[assetBundlePath] != null)
                     this.assetBundleBuffer[assetBundlePath].Unload(true);
                 this.assetBundleBuffer.Remove(assetBundlePath);
+            }
+        }
+        /// <summary>
+        /// 从缓存中卸载所有的AssetBundle
+        /// </summary>
+        public void UnloadAllAssetBundles()
+        {
+            if (this.assetBundleBuffer != null)
+            {
+                foreach (var assetBundle in this.assetBundleBuffer)
+                {
+                    if (assetBundle.Value != null)
+                        assetBundle.Value.Unload(true);
+                }
+                this.assetBundleBuffer.Clear();
             }
         }
         /// <summary>

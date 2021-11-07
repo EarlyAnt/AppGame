@@ -43,6 +43,8 @@ namespace AppGame.Module.GameStart
         public IResourceUtil ResourceUtil { get; set; }
         [Inject]
         public ICommonResourceUtil CommonResourceUtil { get; set; }
+        [Inject]
+        public IAssetBundleUtil AssetBundleUtil { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
@@ -178,7 +180,7 @@ namespace AppGame.Module.GameStart
             List<AssetFile> assetFiles = this.CommonResourceUtil.GetUpdateFileList();
             if (assetFiles == null || assetFiles.Count == 0)
             {
-                Debug.Log("<><DownloadPage2View.Download>No one file need to download");
+                Debug.Log("<><GameStartView.Download>No one file need to download");
                 this.downloadComplete = true;
                 yield break;
             }
@@ -186,7 +188,7 @@ namespace AppGame.Module.GameStart
             UpdateRecord updateRecord = this.HotUpdateUtil.ReadUpdateRecord();
             if (assetFiles == null || assetFiles.Count == 0)
             {
-                Debug.Log("<><DownloadPage2View.Download>Native update record is null");
+                Debug.Log("<><GameStartView.Download>Native update record is null");
                 this.downloadComplete = true;
                 yield break;
             }
@@ -197,7 +199,7 @@ namespace AppGame.Module.GameStart
             this.InvokeRepeating("CheckOverTime", 1f, 1f);
             for (int i = 0; i < assetFiles.Count; i++)
             {//逐个下载缺失的资源文件
-                Debug.LogFormat("<><DownloadPage2View.Download>File: {0}", assetFiles[i]);
+                Debug.LogFormat("<><GameStartView.Download>File: {0}", assetFiles[i]);
                 yield return this.StartCoroutine(this.ResourceUtil.LoadAsset(assetFiles[i].FullPath, (obj) =>
                 {
                     LocalFileInfo localFileInfo = updateRecord.FileList.Find(t => t.File + t.MD5 == assetFiles[i].FullPath);
@@ -221,7 +223,7 @@ namespace AppGame.Module.GameStart
                 {
                     if (failureInfo != null)//中断操作类错误才做处理
                     {
-                        Debug.LogErrorFormat("<><DownloadPage2View.Download>Error: {0}\n({1})", failureInfo.Message, assetFiles[i]);
+                        Debug.LogErrorFormat("<><GameStartView.Download>Error: {0}\n({1})", failureInfo.Message, assetFiles[i]);
                         if (failureInfo.Interrupt) error = true;
                     }
                 }, true));
@@ -234,11 +236,10 @@ namespace AppGame.Module.GameStart
             }
             System.GC.Collect();
             this.CancelInvoke("CheckOverTime");//结束下载时(无论是正常结束还是遇到错误时异常结束)停止检测下载超时
-            if (!error)
-            {
-                AssetBundle.UnloadAllAssetBundles(true);
-                this.downloadComplete = true;
-            }
+            AssetBundle.UnloadAllAssetBundles(true);
+            this.downloadComplete = true;
+            this.ResourceUtil.UnloadAllAssetBundles();
+            yield return this.AssetBundleUtil.LoadManifest();
         }
         //加载场景
         private IEnumerator LoadScene(float startValue, float endValue)

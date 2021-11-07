@@ -84,9 +84,13 @@ namespace AppGame.Util
         /// <returns></returns>
         public List<AssetFile> GetAllFileList()
         {
+            string platform = "Android";
+#if UNITY_IOS && !UNITY_EDITOR
+            platform = "iOS";
+#endif
             List<AssetFile> assetFiles = new List<AssetFile>();
             #region 添加AssetBundleManifest文件
-            assetFiles.Add(new AssetFile() { Path = "Android", FullPath = "Model/Android", MD5 = "" });
+            assetFiles.Add(new AssetFile() { Path = "manifest", FullPath = string.Format("Model/{0}/manifest", platform), MD5 = "" });
             #endregion
             #region 统计AudioClip文件
             //List<Audio> allAudios = this.AudioConfig.GetAllAudios();
@@ -118,15 +122,13 @@ namespace AppGame.Util
                 }
             }
             #endregion
-
             #region 统计所有地图中的地图AB包
             List<MapInfo> mapInfos = this.MapConfig.GetAllMaps();
             foreach (var mapInfo in mapInfos)
             {
-                assetFiles.Add(new AssetFile() { Path = mapInfo.AB, FullPath = string.Format("Model/{0}.ab", mapInfo.AB), MD5 = "" });
+                assetFiles.Add(new AssetFile() { Path = mapInfo.AB, FullPath = string.Format("Model/{0}/{1}.ab", platform, mapInfo.AB), MD5 = "" });
             }
             #endregion
-
             #region 统计其余的AssetBundle文件
             //assetFiles.Add(new AssetFile() { Path = "garden/gesture", FullPath = "Model/garden/gesture.ab", MD5 = "" });
             //assetFiles.Add(new AssetFile() { Path = "garden/sow", FullPath = "Model/garden/soil.ab", MD5 = "" });
@@ -151,7 +153,7 @@ namespace AppGame.Util
                 #endregion
                 #region 服务器数据筛选
                 List<UpdateFileInfo> severFileList = new List<UpdateFileInfo>();//结果数据集
-#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
+#if (UNITY_ANDROID || UNITY_IOS) && (!UNITY_EDITOR)
                 if (updateInfos != null && updateInfos.res_list != null)
                 {
                     List<UpdateInfo> updateInfoList = updateInfos.res_list.OrderByDescending(t => t.res_ver_code).ToList();//按照资源版本号倒叙排列历次更新数据
