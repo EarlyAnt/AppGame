@@ -86,7 +86,7 @@
       <Image Name="start_normal" FileType="Sprite" Path="Cycling/View/start_normal" Enable="1" />
       <Image Name="station_panel" FileType="Sprite" Path="Cycling/View/station_panel" Enable="1" />
       <Image Name="ticket_highlight" FileType="Sprite" Path="Cycling/View/ticket_highlight" Enable="1" />
-      <Image Name="ticket_normal " FileType="Sprite" Path="Cycling/View/ticket_normal " Enable="1" />
+      <Image Name="ticket_normal" FileType="Sprite" Path="Cycling/View/ticket_normal" Enable="1" />
       <Image Name="timer" FileType="Sprite" Path="Cycling/View/timer" Enable="1" />
       <Image Name="tip_error" FileType="Sprite" Path="Cycling/View/tip_error" Enable="1" />
       <Image Name="title_border" FileType="Sprite" Path="Cycling/View/title_border" Enable="1" />
