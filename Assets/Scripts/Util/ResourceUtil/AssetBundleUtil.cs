@@ -22,7 +22,7 @@ namespace AppGame.Util
 #if UNITY_ANDROID && !UNITY_EDITOR
                 return "Android";
 #elif UNITY_IOS && !UNITY_EDITOR
-                return "iOS"
+                return "iOS";
 #else
                 return "Android";
 #endif
