@@ -315,6 +315,23 @@ namespace AppGame.Util
             }
         }
         /// <summary>
+        /// 卸载所有AssetBundle包
+        /// </summary>
+        public void UnloadAllAssets()
+        {
+            if (this.assetBundles == null || this.assetBundles.Count == 0)
+                return;
+
+            foreach (var kvp in this.assetBundles)
+            {
+                if (kvp.Value != null)
+                    kvp.Value.Unload(true);
+            }
+            this.assetBundles.Clear();
+            this.ResourceUtils.UnloadAllAssetBundles();
+            AssetBundle.UnloadAllAssetBundles(true);
+        }
+        /// <summary>
         /// 校验AssetBundle缓存池(如果已加载的AssetBundle为空，则视为已被回收，需要重新加载)
         /// </summary>
         /// <param name="assetBundleName"></param>

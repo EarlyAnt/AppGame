@@ -35,5 +35,9 @@ namespace AppGame.Util
         /// </summary>
         /// <param name="assetBundleName">AssetBundle包的名称</param>
         void UnloadAsset(string assetBundleName);
+        /// <summary>
+        /// 卸载所有AssetBundle包
+        /// </summary>
+        void UnloadAllAssets();
     }
 }
