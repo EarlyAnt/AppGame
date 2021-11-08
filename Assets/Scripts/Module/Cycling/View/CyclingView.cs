@@ -29,6 +29,8 @@ namespace AppGame.Module.Cycling
         public ICommonImageUtils CommonImageUtils { get; set; }
         [Inject]
         public IPrefabUtil PrefabUtil { get; set; }
+        [Inject]
+        public IAssetBundleUtil AssetBundleUtil { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
@@ -96,6 +98,7 @@ namespace AppGame.Module.Cycling
             set { this.coinBox.text = value.ToString(); }
         }
         public Player Player { get { return this.player; } }
+        public static string PlayerName = "ABC";
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -160,7 +163,12 @@ namespace AppGame.Module.Cycling
         }
         public void GoBack()
         {
-            AndroidNativeAPI.Instance.GoBack();
+            this.AssetBundleUtil.UnloadAllAssets();
+#if UNITY_ANDROID
+                AndroidNativeAPI.Instance.GoBack();
+#elif UNITY_IOS
+                iOSNativeAPI.Instance.GoBack();
+#endif
             Debug.Log("<><CyclingView.GoBack>go back to flutter");
         }
         public void LoadMap(string mapID)
@@ -229,7 +237,9 @@ namespace AppGame.Module.Cycling
             Sprite avatar = this.CommonImageUtils.GetAvatar(myPlayerData.child_avatar);
             this.player.Avatar = avatar;
             this.avatarBox.sprite = avatar;
-            this.nameBox.text = myPlayerData.child_name;
+            // this.nameBox.text = myPlayerData.child_name;
+            this.nameBox.text = CyclingView.PlayerName;
+            Debug.LogFormat("<><CyclingView.RefreshPlayer>player name: {0}", this.nameBox.text);
             this.coinBox.text = coin.ToString();
 
         }

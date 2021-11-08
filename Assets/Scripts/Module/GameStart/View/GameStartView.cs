@@ -93,6 +93,9 @@ namespace AppGame.Module.GameStart
         //初始化
         private IEnumerator Initialize()
         {
+#if UNITY_IOS
+                iOSNativeAPI.Instance.Initialize();
+#endif
             float progress = UnityEngine.Random.Range(0.2f, 0.5f);
             yield return this.StartCoroutine(this.ReadConfig(progress));
             yield return this.StartCoroutine(this.LoadScene(progress, 1f));
