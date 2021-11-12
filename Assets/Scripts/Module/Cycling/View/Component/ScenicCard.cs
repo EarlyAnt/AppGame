@@ -106,9 +106,12 @@ namespace AppGame.Module.Cycling
         //打开网页
         public void OpenUrl()
         {
-            //FlutterNativeAPI.SendMessageToFlutter(this.url);
-            AndroidNativeAPI.Instance.SendMessageToAndroid(this.url);
             Debug.LogFormat("<><ScenicCard.OpenUrl>url: {0}", this.url);
+#if UNITY_ANDROID
+                AndroidNativeAPI.Instance.SendMessageToAndroid(this.url);
+#elif UNITY_IOS
+                iOSNativeAPI.Instance.OpenWebPage(this.url);
+#endif
         }
         //重设卡片状态
         private void Reset()

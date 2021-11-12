@@ -17,7 +17,7 @@ public class iOSNativeAPI : SingletonMonoBehaviour<iOSNativeAPI>
     public void SendMessageToiOS(string message)
     {
 #if UNITY_IOS && !UNITY_EDITOR
-        NativeAPI.sendMessageToMobileApp("goback");
+        NativeAPI.sendMessageToMobileApp(message);
 #endif
         Application.Unload();
         Debug.LogFormat("<><iOSNativeAPI.SendMessageToiOS>message: {0}", message);
@@ -31,6 +31,14 @@ public class iOSNativeAPI : SingletonMonoBehaviour<iOSNativeAPI>
 
     public void GoBack()
     {
-        this.SendMessageToiOS("goback");
+        this.SendMessageToiOS("exit_game");
+    }
+
+    public void OpenWebPage(string url)
+    {
+#if UNITY_IOS && !UNITY_EDITOR
+        NativeAPI.sendMessageToMobileApp(url);
+#endif
+        Debug.LogFormat("<><iOSNativeAPI.OpenWebPage>open web page: {0}", url);
     }
 }
