@@ -10,6 +10,8 @@ namespace AppGame.Data.Local
 
         void SavePlayerDataList(List<PlayerData> playerDataList);
         List<PlayerData> GetAllPlayerData();
+        bool HasPlayerData();
+        List<PlayerData> BuildGameData();
 
         void SavePlayerData(PlayerData playerData);
         PlayerData GetPlayerData(string childSN);
@@ -17,5 +19,7 @@ namespace AppGame.Data.Local
         void SaveMpCollection(string childSN);
         bool MpCollected(string childSN);
         void ClearMpCollection();
+
+        void ClearAllData();
     }
 }

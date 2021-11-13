@@ -106,9 +106,7 @@ namespace AppGame.Module.Cycling
             base.Awake();
 
             this.mpBalls = new List<MpBall>();
-
-            while (this.mpBallRoot.childCount > 0)
-                GameObject.DestroyImmediate(this.mpBallRoot.GetChild(0).gameObject);
+            this.Restart();
         }
         protected override void Start()
         {
@@ -125,7 +123,6 @@ namespace AppGame.Module.Cycling
         /************************************************自 定 义 方 法************************************************/
         private void Initialize()
         {
-            this.Restart();
             this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
         }
         public void RestartGame()
@@ -143,8 +140,8 @@ namespace AppGame.Module.Cycling
             //场景过渡
             this.DelayInvoke(() =>
             {
-                this.mask.DOFade(0f, 1f);
-                this.canvasGroup.DOFade(1f, 1f);
+                this.mask.DOFade(0f, 0.5f);
+                this.canvasGroup.DOFade(1f, 0.5f);
             }, 0.5f);
 
             //清除队友
@@ -165,9 +162,9 @@ namespace AppGame.Module.Cycling
         {
             this.AssetBundleUtil.UnloadAllAssets();
 #if UNITY_ANDROID
-                AndroidNativeAPI.Instance.GoBack();
+            AndroidNativeAPI.Instance.GoBack();
 #elif UNITY_IOS
-                iOSNativeAPI.Instance.GoBack();
+            iOSNativeAPI.Instance.GoBack();
 #endif
             Debug.Log("<><CyclingView.GoBack>go back to flutter");
         }
@@ -252,7 +249,7 @@ namespace AppGame.Module.Cycling
                 return;
             }
 
-            if (this.teammates == null)
+            if (this.teammates == null || this.teammates.Count == 0)
             {
                 this.teammates = new List<Teammate>();
                 foreach (var teammateData in playerDataList)
@@ -374,7 +371,6 @@ namespace AppGame.Module.Cycling
         }
         public void HideLoading()
         {
-            this.Restart();
             this.DelayInvoke(this.trafficLoading.Hide, 0.5f);
         }
         public void Stay()

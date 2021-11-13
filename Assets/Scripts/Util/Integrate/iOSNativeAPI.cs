@@ -5,8 +5,10 @@ public class iOSNativeAPI : SingletonMonoBehaviour<iOSNativeAPI>
 {
     private class NativeAPI
     {
+#if UNITY_IOS && !UNITY_EDITOR
         [DllImport("__Internal")]
         public static extern void sendMessageToMobileApp(string message);
+#endif
     }
 
     private void Start()

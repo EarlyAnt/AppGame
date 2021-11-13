@@ -48,19 +48,13 @@ namespace AppGame.Module.Cycling
         }
         #endregion
         /************************************************Unity方法与事件***********************************************/
+#if UNITY_EDITOR
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.C))
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                this.CyclingDataManager.ClearMpCollection();
-                this.ItemDataManager.Clear(true);
-                this.ItemDataManager.AddItem(Items.COIN, 1000);
-                this.BuildTestData();
-            }
-            else if (Input.GetKeyDown(KeyCode.R))
-            {
-                this.View.Restart();
-                this.Initialize();
+                this.CyclingDataManager.ClearAllData();
+                Debug.Log("<><CyclingMediator.Update>clear all player data");
             }
             else if (Input.GetKeyDown(KeyCode.D))
             {
@@ -103,18 +97,26 @@ namespace AppGame.Module.Cycling
                     Debug.LogFormat("<><CyclingMediator.Update>Login, failure: {0}", failure.ErrorInfo);
                 });
             }
+
         }
+#endif
         /************************************************自 定 义 方 法************************************************/
         //注册
         public override void OnRegister()
         {
             UpdateListeners(true);
-#if (UNITY_ANDROID || UNITY_IOS ) && (!UNITY_EDITOR)
-                        this.CyclingDataManager.ClearMpCollection();
-                        this.ItemDataManager.Clear(true);
-                        this.ItemDataManager.AddItem(Items.COIN, 50000);
-                        this.BuildTestData();
-#endif
+
+            if (!this.CyclingDataManager.HasPlayerData())
+            {
+                //Todo: 进入游戏场景之前，调用CyclingDataUtil.GetBasicData方法获取基础数据，然后在此处获取玩家姓名，头像
+
+                this.playerDataList = this.CyclingDataManager.BuildGameData();
+                this.ItemDataManager.Clear(true);
+                this.ItemDataManager.AddItem(Items.COIN, 50000);
+            }
+
+            this.Initialize();
+
             #region 访问服务器获取数据
             //this.CyclingDataUtil.GetBasicData((basicData) =>
             //{
@@ -132,7 +134,6 @@ namespace AppGame.Module.Cycling
             //    Debug.LogFormat("<><CyclingMediator.OnRegister>GetGameData, failure: {0}", errorText);
             //});
             #endregion
-            this.Initialize();
         }
         //取消注册
         public override void OnRemove()
@@ -154,10 +155,10 @@ namespace AppGame.Module.Cycling
         //重启游戏
         private void RestartGame()
         {
-            this.CyclingDataManager.ClearMpCollection();
+            this.CyclingDataManager.ClearAllData();
             this.ItemDataManager.Clear(true);
-            this.ItemDataManager.AddItem(Items.COIN, GameObject.FindObjectOfType<TestData>().Coin);
-            this.BuildTestData();
+            this.ItemDataManager.AddItem(Items.COIN, GameObject.FindObjectOfType<TestData>().Coin);            
+            this.playerDataList = this.CyclingDataManager.BuildGameData();
 
             this.Initialize();
             this.View.Restart();
@@ -165,13 +166,13 @@ namespace AppGame.Module.Cycling
         //初始化
         private void Initialize()
         {
+            //获取游数据并刷新页面显示
             this.GetGameData();
             this.RefreshMapInfo();
-            this.View.LoadMap(this.myPlayerData.map_id);
-            this.View.RefreshPlayer(this.myPlayerData, this.ItemDataManager.GetItemCount(Items.COIN));
-            this.View.RefreshTeammates(this.playerDataList);
-            this.View.RefreshMpAndHp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
+            this.RefreshViewData();
             this.RefreshMpDatas();
+
+            //定时刷新页面
             this.CancelInvoke();
             this.InvokeRepeating("GetGameData", 3f, 3f);
             this.InvokeRepeating("RefreshOriginData", 3f, 3f);
@@ -182,77 +183,6 @@ namespace AppGame.Module.Cycling
         {
             this.originData = this.CyclingDataManager.GetOriginData(this.ChildInfoManager.GetChildSN());
             this.playerDataList = this.CyclingDataManager.GetAllPlayerData();
-        }
-        //创建模拟数据
-        private void BuildTestData()
-        {
-            string childSN = this.ChildInfoManager.GetChildSN();
-            //创建原始数据
-            OriginData originData = new OriginData() { child_sn = childSN, walk = 10000, ride = 5000, train = 20, monitor = 30 };
-            this.CyclingDataManager.SaveOriginData(originData);
-            //创建游戏数据
-            List<PlayerData> playerDataList = new List<PlayerData>();
-            playerDataList.Add(new PlayerData()
-            {
-                child_sn = childSN,
-                child_name = "樱木花道",
-                child_avatar = "6",
-                relation = (int)Relations.Self,
-                map_id = "3201",
-                map_position = "3201_01",
-                walk_expend = 5000,
-                walk_today = 5000,
-                ride_expend = 1000,
-                train_expend = 0,
-                learn_expend = 0,
-                mp = 0,
-                mp_expend = 0,
-                mp_today = 0,
-                mp_date = System.DateTime.Today,
-                mp_yestoday = 0,
-                hp = 5
-            });
-            playerDataList.Add(new PlayerData()
-            {
-                child_sn = "02",
-                child_name = "赤木晴子",
-                child_avatar = "9",
-                relation = (int)Relations.Family,
-                map_id = "3202",
-                map_position = "3202_15",
-                mp_yestoday = 50
-            });
-            playerDataList.Add(new PlayerData()
-            {
-                child_sn = "03",
-                child_name = "仙道彰",
-                child_avatar = "12",
-                relation = (int)Relations.Friend,
-                map_id = "3201",
-                map_position = "3201_21",
-                mp_yestoday = 25
-            });
-            playerDataList.Add(new PlayerData()
-            {
-                child_sn = "04",
-                child_name = "流川枫",
-                child_avatar = "15",
-                relation = (int)Relations.Friend,
-                map_id = "3201",
-                map_position = "3201_27",
-                mp_yestoday = 20
-            });
-            playerDataList.Add(new PlayerData()
-            {
-                child_sn = "05",
-                child_name = "牧绅一",
-                child_avatar = "19",
-                relation = (int)Relations.Friend,
-                map_id = "3202",
-                map_position = "3202_33",
-                mp_yestoday = 30
-            });
-            this.CyclingDataManager.SavePlayerDataList(playerDataList);
         }
         //刷新健康数据
         private void RefreshOriginData()
@@ -277,6 +207,14 @@ namespace AppGame.Module.Cycling
             playerData.map_position = string.Format("{0}_{1:d2}", playerData.map_id, position);
             this.CyclingDataManager.SavePlayerData(playerData);
             this.View.RefreshTeammates(this.playerDataList);
+        }
+        //刷新页面数据
+        private void RefreshViewData()
+        {
+            this.View.LoadMap(this.myPlayerData.map_id);
+            this.View.RefreshPlayer(this.myPlayerData, this.ItemDataManager.GetItemCount(Items.COIN));
+            this.View.RefreshTeammates(this.playerDataList);
+            this.View.RefreshMpAndHp(myPlayerData.mp - myPlayerData.mp_expend, myPlayerData.hp);//刷新Go按钮
         }
         //刷新能量数据
         private void RefreshMpDatas()
@@ -529,6 +467,7 @@ namespace AppGame.Module.Cycling
                 this.CyclingDataManager.SavePlayerData(this.myPlayerData);
                 this.ItemDataManager.ReduceItem(Items.COIN, ticket.Coin);
                 this.View.ShowLoading(ticket);
+                this.View.Restart();
                 this.Initialize();
                 this.DelayInvoke(() => this.View.HideLoading(), Random.Range(1.5f, 3f));
             }
