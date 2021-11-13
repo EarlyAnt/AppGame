@@ -261,6 +261,7 @@ namespace AppGame.Module.GameStart
             this.CommonImageUtils.LoadCommonImages();
             yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
             this.totalProgress.Value = endValue;
+            Debug.Log("<><GameStartView.LoadImage>Load image complete...");
         }
         //加载游戏数据
         private IEnumerator LoadGameData(float endValue)
@@ -287,6 +288,7 @@ namespace AppGame.Module.GameStart
 
             yield return new WaitUntil(() => this.basicDataLoaded && this.playerDataLoaded || (Time.time - startTime) > 3);
             if (this.basicDataLoaded && this.playerDataLoaded) this.totalProgress.Value = endValue;
+            Debug.LogFormat("<><GameStartView.LoadGameData>Load game data complete...{0}, {1}", this.basicDataLoaded, this.playerDataLoaded);
         }
         //加载场景
         private IEnumerator LoadScene(float startValue, float endValue)
