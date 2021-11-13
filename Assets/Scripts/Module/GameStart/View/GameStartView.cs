@@ -1,9 +1,9 @@
 using AppGame.Config;
+using AppGame.Data.Remote;
 using AppGame.Global;
 using AppGame.UI;
 using AppGame.Util;
 using DG.Tweening;
-using strange.extensions.mediation.impl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -45,20 +45,26 @@ namespace AppGame.Module.GameStart
         public ICommonResourceUtil CommonResourceUtil { get; set; }
         [Inject]
         public IAssetBundleUtil AssetBundleUtil { get; set; }
+        [Inject]
+        public ICyclingDataUtil CyclingDataUtil { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
         private ProgressBar totalProgress;
         [SerializeField]
         private ProgressBar downloadProgress;
-        [SerializeField, Range(3f, 30f)]
+        [SerializeField, Range(0f, 5f)]
         private float durationMin = 3f;
-        [SerializeField, Range(3f, 30f)]
+        [SerializeField, Range(0f, 5f)]
         private float durationMax = 5f;
         [SerializeField, Range(0f, 1f)]
         private float speedRate = 1f;
+        [SerializeField]
+        private Text tipText;
         #endregion
         #region 其他变量
+        private bool basicDataLoaded = false;
+        private bool playerDataLoaded = false;
         private bool downloadComplete = false;
         private Tweener tweener;
         private Queue<System.Action> asyncActions = new Queue<System.Action>();
@@ -68,6 +74,8 @@ namespace AppGame.Module.GameStart
         protected override void Start()
         {
             base.Start();
+            this.tipText.text = "";
+            this.tipText.DOFade(0f, 0f);
             this.StartCoroutine(this.Initialize());
         }
         protected override void OnDestroy()
@@ -96,8 +104,15 @@ namespace AppGame.Module.GameStart
 #if UNITY_IOS
                 iOSNativeAPI.Instance.Initialize();
 #endif
-            float progress = UnityEngine.Random.Range(0.2f, 0.5f);
+            float progress = UnityEngine.Random.Range(0.15f, 0.2f);
             yield return this.StartCoroutine(this.ReadConfig(progress));
+            progress = UnityEngine.Random.Range(0.2f, 0.5f);
+            yield return this.StartCoroutine(this.Download(progress));
+            progress = UnityEngine.Random.Range(0.5f, 0.6f);
+            yield return this.StartCoroutine(this.LoadImage(progress));
+            progress = UnityEngine.Random.Range(0.6f, 0.7f);
+            yield return this.StartCoroutine(this.LoadGameData(progress));
+            progress = UnityEngine.Random.Range(0.7f, 0.8f);
             yield return this.StartCoroutine(this.LoadScene(progress, 1f));
         }
         //读取配置
@@ -110,62 +125,55 @@ namespace AppGame.Module.GameStart
             this.FontConfig.Load();
             yield return new WaitUntil(() => this.FontConfig.IsLoaded());
             this.totalProgress.Value = startValue += stepValue;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f) * this.speedRate);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
 
             //read language config
             this.LanConfig.Load();
             yield return new WaitUntil(() => this.LanConfig.IsLoaded());
             this.totalProgress.Value = startValue += stepValue;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
 
             //read i18n config
             this.I18NConfig.Load();
             yield return new WaitUntil(() => this.I18NConfig.IsLoaded());
             this.totalProgress.Value = startValue += stepValue;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f) * this.speedRate);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
 
             //read audio config
             this.AudioConfig.Load();
             yield return new WaitUntil(() => this.AudioConfig.IsLoaded());
             this.totalProgress.Value = startValue += stepValue;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f) * this.speedRate);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
 
             //read module config
             this.ModuleConfig.Load();
             yield return new WaitUntil(() => this.ModuleConfig.IsLoaded());
             this.totalProgress.Value = startValue += stepValue;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f) * this.speedRate);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
 
             //read item config
             this.ItemConfig.Load();
             yield return new WaitUntil(() => this.ItemConfig.IsLoaded());
             this.totalProgress.Value = startValue += stepValue;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f) * this.speedRate);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
 
             //read map config
             this.MapConfig.Load();
             yield return new WaitUntil(() => this.MapConfig.IsLoaded());
             this.totalProgress.Value = startValue += stepValue;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f) * this.speedRate);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
 
             //read scenic config
             this.ScenicConfig.Load();
             yield return new WaitUntil(() => this.ScenicConfig.IsLoaded());
             this.totalProgress.Value = startValue += stepValue;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f) * this.speedRate);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
 
             //read card config
             this.CardConfig.Load();
             yield return new WaitUntil(() => this.CardConfig.IsLoaded());
             this.totalProgress.Value = startValue += stepValue;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f) * this.speedRate);
-
-            //load common images
-            yield return this.StartCoroutine(this.Download());
-            this.CommonImageUtils.Initialize();
-            yield return new WaitForSeconds(1f);
-            this.CommonImageUtils.LoadCommonImages();
-            yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f) * this.speedRate);
+            yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
 
             #region 测试代码
             //bool complete = false;
@@ -173,12 +181,12 @@ namespace AppGame.Module.GameStart
             //this.tweener.onUpdate = () => { this.progressValue.text = string.Format("{0:f1}%", this.progressBar.fillAmount * 100); };
             //this.tweener.onComplete = () => { complete = true; };
             //yield return new WaitUntil(() => complete == true);
-            //yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f));
+            //yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax));
             #endregion
             Debug.Log("<><GameStartView.ReadConfig>Read config complete...");
         }
         //下载资源文件
-        private IEnumerator Download()
+        private IEnumerator Download(float endValue)
         {
             List<AssetFile> assetFiles = this.CommonResourceUtil.GetUpdateFileList();
             if (assetFiles == null || assetFiles.Count == 0)
@@ -243,10 +251,62 @@ namespace AppGame.Module.GameStart
             this.downloadComplete = true;
             this.ResourceUtil.UnloadAllAssetBundles();
             yield return this.AssetBundleUtil.LoadManifest();
+            this.totalProgress.Value = endValue;
+        }
+        //加载图片
+        private IEnumerator LoadImage(float endValue)
+        {
+            this.CommonImageUtils.Initialize();
+            yield return new WaitForSeconds(1f);
+            this.CommonImageUtils.LoadCommonImages();
+            yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
+            this.totalProgress.Value = endValue;
+        }
+        //加载游戏数据
+        private IEnumerator LoadGameData(float endValue)
+        {
+            float startTime = Time.time;
+
+            this.CyclingDataUtil.GetBasicData((basicData) =>
+            {
+                this.basicDataLoaded = true;
+                Debug.LogFormat("<><GameStartView.LoadGameData>GetBasicData, success: {0}", basicData);
+            }, (errorText) =>
+            {
+                Debug.LogFormat("<><GameStartView.LoadGameData>GetBasicData, failure: {0}", errorText);
+            });
+
+            this.CyclingDataUtil.GetGameData((playerDataList) =>
+            {
+                this.playerDataLoaded = true;
+                Debug.LogFormat("<><GameStartView.LoadGameData>GetGameData, success: {0}", playerDataList != null ? playerDataList.Count : 0);
+            }, (errorText) =>
+            {
+                Debug.LogFormat("<><GameStartView.LoadGameData>GetGameData, failure: {0}", errorText);
+            });
+
+            yield return new WaitUntil(() => this.basicDataLoaded && this.playerDataLoaded || (Time.time - startTime) > 3);
+            if (this.basicDataLoaded && this.playerDataLoaded) this.totalProgress.Value = endValue;
         }
         //加载场景
         private IEnumerator LoadScene(float startValue, float endValue)
         {
+#if !UNITY_EDITOR
+            if (!this.basicDataLoaded || !this.playerDataLoaded)
+            {//如果数据未完整下载，则退出游戏
+                this.tipText.text = "数据下载失败，请稍后再试！";
+                this.tipText.DOFade(1, 0.5f);
+                yield return new WaitForSeconds(2f);
+                Debug.LogError("<><GameStartView.LoadScene>Download game data, exit game");
+#if UNITY_ANDROID
+                AndroidNativeAPI.Instance.GoBack();
+#elif UNITY_IOS
+                    iOSNativeAPI.Instance.GoBack();
+#endif
+                yield break;
+            }
+#endif
+
             AsyncOperation async = SceneManager.LoadSceneAsync("TripMap", LoadSceneMode.Single);
             async.allowSceneActivation = false;
             while (async.progress < 0.9f)
