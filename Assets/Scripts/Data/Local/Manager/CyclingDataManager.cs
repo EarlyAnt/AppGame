@@ -97,7 +97,7 @@ namespace AppGame.Data.Local
                 child_avatar = "6",
                 relation = (int)Relations.Self,
                 map_id = "3201",
-                map_position = "3201_50",
+                map_position = "3201_01",
                 walk_expend = 5000,
                 walk_today = 5000,
                 ride_expend = 1000,

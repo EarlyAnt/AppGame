@@ -3357,7 +3357,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 4
   normalImageName: ticket_normal
-  lightImageName: ticket _highlight
+  lightImageName: ticket_highlight
 --- !u!114 &2757916161164984818
 MonoBehaviour:
   m_ObjectHideFlags: 0

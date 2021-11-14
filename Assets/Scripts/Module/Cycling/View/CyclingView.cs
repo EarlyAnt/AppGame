@@ -92,6 +92,8 @@ namespace AppGame.Module.Cycling
         private MapNode mapNode;
         private List<Teammate> teammates;
         private List<MpBall> mpBalls;
+        private Coroutine refreshBallCoroutine;
+        private Coroutine collectMpCoroutine;
         public int Coin
         {
             get { return int.Parse(this.coinBox.text); }
@@ -193,9 +195,9 @@ namespace AppGame.Module.Cycling
             {
                 this.playerCanGo = false;
                 this.mpBalls.ForEach(t => t.AutoCollectMp());
-                this.StopCoroutine("RefreshMpBallAnimation");
-                this.StopCoroutine("CollectMpAnimation");
-                this.StartCoroutine(this.CollectMpAnimation(() =>
+                this.StopOneCoroutine(this.refreshBallCoroutine);
+                this.StopOneCoroutine(this.collectMpCoroutine);
+                this.collectMpCoroutine = this.StartCoroutine(this.CollectMpAnimation(() =>
                 {
                     this.dispatcher.Dispatch(GameEvent.GO_CLICK);
                 }));
@@ -314,8 +316,8 @@ namespace AppGame.Module.Cycling
                 }
             }
 
-            this.StopCoroutine(this.RefreshMpBallAnimation());
-            this.StartCoroutine(this.RefreshMpBallAnimation());
+            this.StopOneCoroutine(this.refreshBallCoroutine);
+            this.refreshBallCoroutine = this.StartCoroutine(this.RefreshMpBallAnimation());
         }
         public void RefreshMpAndHp(int mp, int hp)
         {
@@ -339,19 +341,13 @@ namespace AppGame.Module.Cycling
             else
                 this.KeepGoing();
         }
-        public void TreasureBox(MapPointNode mapPointNode)
+        public void TreasureBox()
         {
-            //InteractionData interactionData = mapPointNode.GetComponent<InteractionData>();
-            //if (interactionData != null && interactionData.Interacton == Interactions.PROPS_TREASURE_BOX)
-            //{
-            //    this.treasureBox.Play(this.KeepGoing);//开宝箱动画
-            //    Debug.Log("OpenTreasureBox + + + + +");
-            //}
-            //else
-            //{
-            //    this.KeepGoing();
-            //}
-            this.KeepGoing();
+            this.treasureBox.Play(() =>
+            {
+                this.KeepGoing();
+                this.Coin = this.ItemDataManager.GetItemCount(Items.COIN);
+            });//开宝箱动画
         }
         public void KeepGoing()
         {
@@ -452,6 +448,11 @@ namespace AppGame.Module.Cycling
             }
             this.touchPad.enabled = (bool)evt.data;
         }
+        private void StopOneCoroutine(Coroutine coroutine)
+        {
+            if (coroutine != null)
+                this.StopCoroutine(coroutine);
+        }
         private IEnumerator RefreshMpBallAnimation()
         {
             int index = 0;
@@ -465,7 +466,7 @@ namespace AppGame.Module.Cycling
         }
         private IEnumerator CollectMpAnimation(System.Action callback)
         {
-            if (this.mpBalls.Exists(t => t.Visible))
+            if (this.mpBalls != null && this.mpBalls.Count > 0 && this.mpBalls.Exists(t => t.Visible))
             {
                 int index = 0;
                 float speed = Random.Range(0.375f, 0.75f);

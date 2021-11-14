@@ -157,7 +157,7 @@ namespace AppGame.Module.Cycling
         {
             this.CyclingDataManager.ClearAllData();
             this.ItemDataManager.Clear(true);
-            this.ItemDataManager.AddItem(Items.COIN, GameObject.FindObjectOfType<TestData>().Coin);            
+            this.ItemDataManager.AddItem(Items.COIN, GameObject.FindObjectOfType<TestData>().Coin);
             this.playerDataList = this.CyclingDataManager.BuildGameData();
 
             this.Initialize();
@@ -431,7 +431,8 @@ namespace AppGame.Module.Cycling
             else if (mapPointNode.NodeType == NodeTypes.EventNode && interactionData != null &&
                      interactionData.Interacton == Interactions.PROPS_TREASURE_BOX)
             {
-                this.View.TreasureBox(mapPointNode);
+                this.View.TreasureBox();
+                Debug.Log("OpenTreasureBox + + + + +");
             }
             else
             {

@@ -72,23 +72,29 @@ namespace AppGame.Module.Cycling
             this.mask.raycastTarget = false;
             this.LoadTreasureBox();
         }
-        private void Update()
-        {
-        }
         /************************************************自 定 义 方 法************************************************/
         //显示动画
         public void Play(System.Action callback)
         {
-            this.mask.raycastTarget = true;
-            this.manual = false;
-            this.callback = callback;
-            this.pageCounter.Reset(3, 3);
-            this.currentStep = OpenTreasureBoxSteps.Empty;
-            this.treasureBoxList.ForEach(t => { t.Spine.DOFade(0f, 0f); t.Arrow.enabled = false; });
-            this.balloonList.ForEach(t => t.Reset());
-            this.rewardTypes = new List<RewardTypes>() { RewardTypes.Low, RewardTypes.Medium, RewardTypes.High };
-            this.ChangeBox(false, true);
-            this.TreasureBoxDropDown(0);
+            try
+            {
+                this.mask.raycastTarget = true;
+                this.manual = false;
+                this.callback = callback;
+                this.pageCounter.Reset(3, 3);
+                this.currentStep = OpenTreasureBoxSteps.Empty;
+                this.treasureBoxList.ForEach(t => { t.Spine.DOFade(0f, 0f); t.Arrow.enabled = false; });
+                this.balloonList.ForEach(t => t.Reset());
+                this.rewardTypes = new List<RewardTypes>() { RewardTypes.Low, RewardTypes.Medium, RewardTypes.High };
+                this.ChangeBox(false, true);
+                this.TreasureBoxDropDown(0);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogErrorFormat("<><TreasureBox.Play>Error: {0}", ex.Message);
+                this.Reset();
+                this.OnCallback();
+            }
         }
         //回收水壶资源
         public void DestroyAssetBundle()
@@ -99,14 +105,23 @@ namespace AppGame.Module.Cycling
         //打开宝箱
         public void OpenBox(float axisX)
         {
-            if (this.currentStep == OpenTreasureBoxSteps.DropDown)
+            try
             {
-                this.currentStep = OpenTreasureBoxSteps.OpeningBox;
-                this.manual = true;
-                int index = this.boxOffset.IndexOf(axisX);
-                this.SelectTreasureBox(index);
-                this.DelayInvoke(() => this.OpenBox(index), 1f);
-                this.treasureBoxList.ForEach(t => t.Spine.raycastTarget = false);
+                if (this.currentStep == OpenTreasureBoxSteps.DropDown)
+                {
+                    this.currentStep = OpenTreasureBoxSteps.OpeningBox;
+                    this.manual = true;
+                    int index = this.boxOffset.IndexOf(axisX);
+                    this.SelectTreasureBox(index);
+                    this.DelayInvoke(() => this.OpenBox(index), 1f);
+                    this.treasureBoxList.ForEach(t => t.Spine.raycastTarget = false);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogErrorFormat("<><TreasureBox.OpenBox>Error: {0}", ex.Message);
+                this.Reset();
+                this.OnCallback();
             }
         }
         //选择宝箱
@@ -288,10 +303,9 @@ namespace AppGame.Module.Cycling
                         this.treasureBoxList.ForEach(t => t.Spine.DOFade(0f, 0.5f));
                         this.DelayInvoke(() =>
                         {
-                            this.treasureBoxList.ForEach(t => t.Spine.AnimationState.SetAnimation(0, "box03", false));
-                            this.mask.DOFade(0f, 0f);
+                            //this.treasureBoxList.ForEach(t => t.Spine.AnimationState.SetAnimation(0, "box03", false));//DoFade把透明度改为零后，再执行这句话就报错，暂时先注释掉(注释掉也没发现有视觉问题)
                             this.currentStep = OpenTreasureBoxSteps.GotReward;
-                            this.IsPlaying = false;
+                            this.Reset();
                             this.OnCallback();
                         }, 0.5f);
                     });
@@ -346,10 +360,18 @@ namespace AppGame.Module.Cycling
             }
             return coin;
         }
+        //重置显示状态
+        private void Reset()
+        {
+            this.treasureBoxList.ForEach(t => { t.Spine.DOFade(0f, 0f); });
+            this.balloonList.ForEach(t => t.Reset());
+            this.mask.DOFade(0f, 0f);
+            this.mask.raycastTarget = false;
+            this.IsPlaying = false;
+        }
         //当执行回调时
         private void OnCallback()
         {
-            this.mask.raycastTarget = false;
             if (this.callback != null)
                 this.callback();
         }
