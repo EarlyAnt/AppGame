@@ -101,9 +101,6 @@ namespace AppGame.Module.GameStart
         //初始化
         private IEnumerator Initialize()
         {
-#if UNITY_IOS
-                iOSNativeAPI.Instance.Initialize();
-#endif
             float progress = UnityEngine.Random.Range(0.15f, 0.2f);
             yield return this.StartCoroutine(this.ReadConfig(progress));
             progress = UnityEngine.Random.Range(0.2f, 0.5f);
@@ -293,21 +290,23 @@ namespace AppGame.Module.GameStart
         //加载场景
         private IEnumerator LoadScene(float startValue, float endValue)
         {
-#if !UNITY_EDITOR
-            if (!this.basicDataLoaded || !this.playerDataLoaded)
-            {//如果数据未完整下载，则退出游戏
-                this.tipText.text = "数据下载失败，请稍后再试！";
-                this.tipText.DOFade(1, 0.5f);
-                yield return new WaitForSeconds(2f);
-                Debug.LogError("<><GameStartView.LoadScene>Download game data, exit game");
-#if UNITY_ANDROID
-                AndroidNativeAPI.Instance.GoBack();
-#elif UNITY_IOS
-                    iOSNativeAPI.Instance.GoBack();
-#endif
-                yield break;
-            }
-#endif
+            /*
+            #if !UNITY_EDITOR
+                        if (!this.basicDataLoaded || !this.playerDataLoaded)
+                        {//如果数据未完整下载，则退出游戏
+                            this.tipText.text = "数据下载失败，请稍后再试！";
+                            this.tipText.DOFade(1, 0.5f);
+                            yield return new WaitForSeconds(2f);
+                            Debug.LogError("<><GameStartView.LoadScene>Download game data, exit game");
+            #if UNITY_ANDROID
+                            AndroidNativeAPI.Instance.GoBack();
+            #elif UNITY_IOS
+                                iOSNativeAPI.Instance.GoBack();
+            #endif
+                            yield break;
+                        }
+            #endif
+            */
 
             AsyncOperation async = SceneManager.LoadSceneAsync("TripMap", LoadSceneMode.Single);
             async.allowSceneActivation = false;

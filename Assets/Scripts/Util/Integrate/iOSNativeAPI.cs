@@ -1,8 +1,12 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
 
-public class iOSNativeAPI : SingletonMonoBehaviour<iOSNativeAPI>
+public class iOSNativeAPI : MonoBehaviour
 {
+    public static iOSNativeAPI Instance { get; private set; }
+    [SerializeField]
+    private bool sendGameLoaded;
+
     private class NativeAPI
     {
 #if UNITY_IOS && !UNITY_EDITOR
@@ -11,9 +15,19 @@ public class iOSNativeAPI : SingletonMonoBehaviour<iOSNativeAPI>
 #endif
     }
 
+    private void Awake()
+    {
+        Instance = this;
+        DontDestroyOnLoad(this.gameObject);
+    }
+
     private void Start()
     {
-        Debug.Log("<><iOSNativeAPI.Start>version 2020-11-08 14:00:00");
+        //Debug.Log("<><iOSNativeAPI.Start>version 2020-11-19 13:10:00");
+        if (this.sendGameLoaded)
+        {
+            this.SendMessageToiOS("game_loaded");
+        }
     }
 
     public void SendMessageToiOS(string message)
@@ -21,19 +35,19 @@ public class iOSNativeAPI : SingletonMonoBehaviour<iOSNativeAPI>
 #if UNITY_IOS && !UNITY_EDITOR
         NativeAPI.sendMessageToMobileApp(message);
 #endif
-        Application.Unload();
         Debug.LogFormat("<><iOSNativeAPI.SendMessageToiOS>message: {0}", message);
     }
 
-    public void UnityMethod(string message)
+    public void ReceiveMessageFromiOS(string message)
     {
         AppGame.Module.Cycling.CyclingView.PlayerName = message;
-        Debug.Log("<><iOSNativeAPI.UnityMethod>message: " + message);
+        Debug.Log("<><iOSNativeAPI.ReceiveMessageFromiOS>message: " + message);
     }
 
     public void GoBack()
     {
         this.SendMessageToiOS("exit_game");
+        Application.Unload();
     }
 
     public void OpenWebPage(string url)
