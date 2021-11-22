@@ -9,6 +9,7 @@ using strange.extensions.dispatcher.eventdispatcher.api;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace AppGame.Module.Cycling
@@ -162,13 +163,17 @@ namespace AppGame.Module.Cycling
         }
         public void GoBack()
         {
-            this.AssetBundleUtil.UnloadAllAssets();
+            SceneManager.LoadScene("GameOver");
+            this.DelayInvoke(() =>
+            {
+                this.AssetBundleUtil.UnloadAllAssets();
 #if UNITY_ANDROID
             AndroidNativeAPI.Instance.GoBack();
 #elif UNITY_IOS
             iOSNativeAPI.Instance.GoBack();
 #endif
-            Debug.Log("<><CyclingView.GoBack>go back to flutter");
+                Debug.Log("<><CyclingView.GoBack>go back to flutter");
+            }, 1f);
         }
         public void LoadMap(string mapID)
         {

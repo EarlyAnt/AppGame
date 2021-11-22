@@ -1,11 +1,14 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
+using AppGame.UI;
+using AppGame.Util;
 
 public class iOSNativeAPI : MonoBehaviour
 {
     public static iOSNativeAPI Instance { get; private set; }
     [SerializeField]
     private bool sendGameLoaded;
+    private JsonUtil jsonUtil { get; set; }
 
     private class NativeAPI
     {
@@ -19,6 +22,7 @@ public class iOSNativeAPI : MonoBehaviour
     {
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
+        this.jsonUtil = new JsonUtil();
     }
 
     private void Start()
@@ -33,7 +37,8 @@ public class iOSNativeAPI : MonoBehaviour
     public void SendMessageToiOS(string message)
     {
 #if UNITY_IOS && !UNITY_EDITOR
-        NativeAPI.sendMessageToMobileApp(message);
+        string jsonString = this.MessageToJson(message);
+        NativeAPI.sendMessageToMobileApp(jsonString);
 #endif
         Debug.LogFormat("<><iOSNativeAPI.SendMessageToiOS>message: {0}", message);
     }
@@ -53,8 +58,23 @@ public class iOSNativeAPI : MonoBehaviour
     public void OpenWebPage(string url)
     {
 #if UNITY_IOS && !UNITY_EDITOR
-        NativeAPI.sendMessageToMobileApp(url);
+        string jsonString = this.MessageToJson("open_web_page", url);
+        NativeAPI.sendMessageToMobileApp(jsonString);
 #endif
         Debug.LogFormat("<><iOSNativeAPI.OpenWebPage>open web page: {0}", url);
     }
+
+    public string MessageToJson(string type, string content = "")
+    {
+        UnityMessage unityMessage = new UnityMessage() { type = type, content = content };
+        string jsonString = this.jsonUtil.Json2String(unityMessage);
+        Debug.LogFormat("<><iOSNativeAPI.MessageToJson>jsonString: {0}", jsonString);
+        return jsonString;
+    }
+}
+
+public class UnityMessage
+{
+    public string type { get; set; }
+    public string content { get; set; }
 }
