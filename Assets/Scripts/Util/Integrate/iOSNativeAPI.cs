@@ -45,7 +45,16 @@ public class iOSNativeAPI : MonoBehaviour
 
     public void ReceiveMessageFromiOS(string message)
     {
-        AppGame.Module.Cycling.CyclingView.PlayerName = message;
+        iOSNativeMessage nativeMessage = this.jsonUtil.String2Json<iOSNativeMessage>(message);
+        if (nativeMessage != null)
+        {
+            AppGame.Module.Cycling.CyclingView.PlayerName = nativeMessage.childSN;
+        }
+        else
+        {
+            Debug.LogError("<><iOSNativeAPI.ReceiveMessageFromiOS>Error: invalid message[type error]");
+        }
+
         Debug.Log("<><iOSNativeAPI.ReceiveMessageFromiOS>message: " + message);
     }
 
@@ -77,4 +86,10 @@ public class UnityMessage
 {
     public string type { get; set; }
     public string content { get; set; }
+}
+
+public class iOSNativeMessage
+{
+    public string childSN { get; set; }
+    public string token { get; set; }
 }
