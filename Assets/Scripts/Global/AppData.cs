@@ -34,4 +34,10 @@ namespace AppGame.Global
         }
         public static bool DebugMode { get; set; }
     }
+
+    public static class GameData
+    {
+        public static string ChildSn { get; set; }
+        public static string Token { get; set; }
+    }
 }

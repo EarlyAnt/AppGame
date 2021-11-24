@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
+using AppGame.Global;
 using AppGame.UI;
 using AppGame.Util;
 
-public class iOSNativeAPI : MonoBehaviour
+public class iOSNativeAPI : BaseView
 {
     public static iOSNativeAPI Instance { get; private set; }
+    public System.Action<string, string> OnReceiveGameData { get; set; }
     [SerializeField]
     private bool sendGameLoaded;
     private JsonUtil jsonUtil { get; set; }
@@ -27,10 +29,9 @@ public class iOSNativeAPI : MonoBehaviour
 
     private void Start()
     {
-        //Debug.Log("<><iOSNativeAPI.Start>version 2020-11-19 13:10:00");
         if (this.sendGameLoaded)
         {
-            this.SendMessageToiOS("game_loaded");
+            this.DelayInvoke(() => { this.SendMessageToiOS("game_loaded"); }, 1f);
         }
     }
 
@@ -49,6 +50,9 @@ public class iOSNativeAPI : MonoBehaviour
         if (nativeMessage != null)
         {
             AppGame.Module.Cycling.CyclingView.PlayerName = nativeMessage.childSN;
+            GameData.ChildSn = nativeMessage.childSN;
+            GameData.Token = nativeMessage.token;
+            this.OnReceivedGameData(GameData.ChildSn, GameData.Token);
         }
         else
         {
@@ -73,12 +77,21 @@ public class iOSNativeAPI : MonoBehaviour
         Debug.LogFormat("<><iOSNativeAPI.OpenWebPage>open web page: {0}", url);
     }
 
-    public string MessageToJson(string type, string content = "")
+    private string MessageToJson(string type, string content = "")
     {
         UnityMessage unityMessage = new UnityMessage() { type = type, content = content };
         string jsonString = this.jsonUtil.Json2String(unityMessage);
         Debug.LogFormat("<><iOSNativeAPI.MessageToJson>jsonString: {0}", jsonString);
         return jsonString;
+    }
+
+    private void OnReceivedGameData(string childSn, string token)
+    {
+        if (this.OnReceiveGameData != null)
+        {
+            this.OnReceiveGameData(childSn, token);
+            Debug.LogFormat("<><iOSNativeAPI.OnReceivedGameData>childSn: {0}, token: {1}", childSn, token);
+        }
     }
 }
 

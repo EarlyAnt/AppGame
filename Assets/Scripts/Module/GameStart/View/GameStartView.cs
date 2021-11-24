@@ -1,4 +1,5 @@
 using AppGame.Config;
+using AppGame.Data.Local;
 using AppGame.Data.Remote;
 using AppGame.Global;
 using AppGame.UI;
@@ -47,6 +48,10 @@ namespace AppGame.Module.GameStart
         public IAssetBundleUtil AssetBundleUtil { get; set; }
         [Inject]
         public ICyclingDataUtil CyclingDataUtil { get; set; }
+        [Inject]
+        public IChildInfoManager ChildInfoManager { get; set; }
+        [Inject]
+        public ITokenManager TokenManager { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
@@ -101,6 +106,7 @@ namespace AppGame.Module.GameStart
         //初始化
         private IEnumerator Initialize()
         {
+            iOSNativeAPI.Instance.OnReceiveGameData = this.OnReceivedGameData;
             float progress = UnityEngine.Random.Range(0.15f, 0.2f);
             yield return this.StartCoroutine(this.ReadConfig(progress));
             progress = UnityEngine.Random.Range(0.2f, 0.5f);
@@ -331,6 +337,13 @@ namespace AppGame.Module.GameStart
                 Debug.LogFormat("<><GameStartView.CheckOverTime>TotalCount: {0}, CompleteCount: {1}, Duration: {2}, LastTime: {3}",
                                 this.downloadInfo.CompleteCount, this.downloadInfo.TotalCount, this.downloadInfo.Duration, this.downloadInfo.LastTime);
             }
+        }
+        //当收到native传来的GameData时
+        private void OnReceivedGameData(string childSn, string token)
+        {
+            this.ChildInfoManager.SaveChildSN(childSn);
+            this.TokenManager.SaveToken(token);
+            Debug.LogFormat("<><GameStartView.OnReceivedGameData>childSn: {0}, token: {1}", childSn, token);
         }
     }
 
