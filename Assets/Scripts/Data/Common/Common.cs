@@ -25,5 +25,9 @@ namespace AppGame.Data.Common
     public class DataBase
     {
         public string status { get; set; }
+
+        public int code { get; set; }
+        public string msg { get; set; }
+        public bool success { get; set; }
     }
 }

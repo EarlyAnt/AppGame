@@ -41,24 +41,24 @@ namespace AppGame.Data.Remote
         private List<ActionData> postGameDatas = new List<ActionData>();
         private ActionData lastPostGameData = null;
 
-        //获取朋友列表
+        //获取孩子基本数据
         public void GetBasicData(Action<BasicData> callback = null, Action<string> errCallback = null)
         {
             string url = this.UrlProvider.GetBasicDataUrl(this.ChildInfoManager.GetChildSN());
             Debug.LogFormat("<><CyclingDataUtil.GetBasicData>ChildSN: {0}, Url: {1}", this.ChildInfoManager.GetChildSN(), url);
 
             Header header = new Header();
-            header.headers.Add(new HeaderData() { key = "token", value = this.TokenManager.GetToken() });
+            header.headers.Add(new HeaderData() { key = "Authorization", value = this.TokenManager.GetToken() });
             string headerString = this.JsonUtil.Json2String(header);
 
             this.NativeOkHttpMethodWrapper.get(url, headerString, (result) =>
             {
                 Debug.LogFormat("<><CyclingDataUtil.GetBasicData>Result: {0}", result);
                 GetBasicDataResponse response = this.JsonUtil.String2Json<GetBasicDataResponse>(result);
-                if (response != null && !string.IsNullOrEmpty(response.status) && response.status.ToUpper() == "OK")
+                if (response != null && response.success)
                 {
                     Debug.LogFormat("<><CyclingDataUtil.GetBasicData>Response data is valid: {0}", result);
-                    BasicData basicData = response.child.ToBasicData();
+                    BasicData basicData = response.data.ToBasicData();
                     this.BasicDataManager.SaveData(basicData);
                     if (callback != null) callback(basicData);
                 }
@@ -69,6 +69,44 @@ namespace AppGame.Data.Remote
                 if (errCallback != null) errCallback(errorInfo.ErrorInfo);
             });
         }
+        //获取健康数据(原始数据)
+        public void GetOriginData(Action<OriginData> callback = null, Action<string> errCallback = null)
+        {
+            string url = this.UrlProvider.GetOriginDataUrl(this.ChildInfoManager.GetChildSN(), "cycling");
+            Debug.LogFormat("<><CyclingDataUtil.GetOriginData>ChildSN: {0}, Url: {1}", this.ChildInfoManager.GetChildSN(), url);
+
+            Header header = new Header();
+            header.headers.Add(new HeaderData() { key = "Authorization", value = this.TokenManager.GetToken() });
+            string headerString = this.JsonUtil.Json2String(header);
+
+            this.NativeOkHttpMethodWrapper.get(url, headerString, (result) =>
+            {
+                Debug.LogFormat("<><CyclingDataUtil.GetOriginData>Result: {0}", result);
+                GetOriginDataResponse response = this.JsonUtil.String2Json<GetOriginDataResponse>(result);
+                if (response != null && response.success)
+                {
+                    Debug.LogFormat("<><CyclingDataUtil.GetOriginData>Response data is valid: {0}", result);
+                    OriginData newOriginData = response.data.ToOriginData();
+                    OriginData curOriginData = this.CyclingDataManager.GetOriginData(this.ChildInfoManager.GetChildSN());
+                    if (curOriginData == null)
+                    {
+                        curOriginData = newOriginData;
+                    }
+                    else
+                    {
+                        curOriginData.ride = newOriginData.ride;
+                    }
+
+                    this.CyclingDataManager.SaveOriginData(curOriginData);
+                    if (callback != null) callback(curOriginData);
+                }
+            },
+            (errorInfo) =>
+            {
+                Debug.LogErrorFormat("<><CyclingDataUtil.GetOriginData>Error: {0}", errorInfo.ErrorInfo);
+                if (errCallback != null) errCallback(errorInfo.ErrorInfo);
+            });
+        }
         //获取世界好友
         public void GetGameData(Action<List<PlayerData>> callback = null, Action<string> errCallback = null)
         {
@@ -76,14 +114,14 @@ namespace AppGame.Data.Remote
             //Debug.LogFormat("<><CyclingDataUtil.GetGameData>ChildSN: {0}, Url: {1}", this.LocalChildInfoAgent.getChildSN(), url);
 
             Header header = new Header();
-            header.headers.Add(new HeaderData() { key = "token", value = this.TokenManager.GetToken() });
+            header.headers.Add(new HeaderData() { key = "Authorization", value = this.TokenManager.GetToken() });
             string headerString = this.JsonUtil.Json2String(header);
 
             this.NativeOkHttpMethodWrapper.get(url, headerString, (result) =>
             {
                 Debug.LogFormat("<><CyclingDataUtil.GetGameData>Result: {0}", result);
                 GetGameDataResponse response = this.JsonUtil.String2Json<GetGameDataResponse>(result);
-                if (response != null && !string.IsNullOrEmpty(response.status) && response.status.ToUpper() == "OK")
+                if (response != null && response.success)
                 {
                     Debug.LogFormat("<><CyclingDataUtil.GetGameData>Response data is valid: {0}", result);
                     List<PlayerData> playerDataList = response.ToPlayerDataList();

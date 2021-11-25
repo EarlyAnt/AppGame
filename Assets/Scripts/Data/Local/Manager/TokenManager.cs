@@ -17,11 +17,12 @@ namespace AppGame.Data.Local
         }
         public string GetToken()
         {
-            if (string.IsNullOrEmpty(this.token))
-            {
-                this.token = this.GameDataHelper.GetObject<string>(DATA_KEY, "");
-            }
-            return this.token;
+            //if (string.IsNullOrEmpty(this.token))
+            //{
+            //    this.token = this.GameDataHelper.GetObject<string>(DATA_KEY, "");
+            //}
+            //return this.token;
+            return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c24iOiJ1c184QUg4eWZZZUI1NWciLCJleHAiOjE2Mzc4OTY3Mjd9.xku9iqlFYnPaxFjCeMRn22hyeAKG7xDYg3Gc6MrN6w0";
         }
     }
 }

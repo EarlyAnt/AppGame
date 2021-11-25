@@ -20,14 +20,14 @@ public class iOSNativeAPI : BaseView
 #endif
     }
 
-    private void Awake()
+    protected override void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
         this.jsonUtil = new JsonUtil();
     }
 
-    private void Start()
+    protected override void Start()
     {
         if (this.sendGameLoaded)
         {

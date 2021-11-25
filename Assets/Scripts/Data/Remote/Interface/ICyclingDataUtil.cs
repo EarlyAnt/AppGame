@@ -9,6 +9,8 @@ namespace AppGame.Data.Remote
     {
         void GetBasicData(Action<BasicData> callback = null, Action<string> errCallback = null);
 
+        void GetOriginData(Action<OriginData> callback = null, Action<string> errCallback = null);
+
         void GetGameData(Action<List<PlayerData>> callback = null, Action<string> errCallback = null);
 
         void PostGameData(PlayerData playerData, Action<Result> callback = null, Action<Result> errCallback = null);
@@ -16,27 +18,46 @@ namespace AppGame.Data.Remote
 
     public class GetBasicDataResponse : DataBase
     {
-        public NetBasicData child { get; set; }
+        public NetBasicData data { get; set; }
     }
 
     public class NetBasicData
     {
-        public string child_sn { get; set; }
+        public string sn { get; set; }
         public string nickname { get; set; }
         public string gender { get; set; }
-        public string birthday { get; set; }
+        public string birth_year { get; set; }
+        public string birth_month { get; set; }
         public int avatar_index { get; set; }
 
         public BasicData ToBasicData()
         {
             return new BasicData()
             {
-                child_sn = this.child_sn,
+                child_sn = this.sn,
                 child_name = this.nickname,
                 child_avatar = this.avatar_index.ToString(),
                 gender = this.gender,
-                birthday = this.birthday
+                birthday = string.Format("{0}-{1}-01", !string.IsNullOrEmpty(this.birth_year) ? this.birth_year : "2010", !string.IsNullOrEmpty(this.birth_month) ? this.birth_month : "01")
             };
+        }
+    }
+
+    public class GetOriginDataResponse : DataBase
+    {
+        public NetOriginData data { get; set; }
+    }
+
+    public class NetOriginData
+    {
+        public string child_sn { get; set; }
+        public int distance { get; set; }
+        public int duration { get; set; }
+        public int calories { get; set; }
+
+        public OriginData ToOriginData()
+        {
+            return new OriginData() { child_sn = child_sn, ride = distance };
         }
     }
 

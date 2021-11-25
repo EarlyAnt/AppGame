@@ -17,16 +17,17 @@ namespace AppGame.Data.Local
 
         public string GetChildSN()
         {
-//#if UNITY_EDITOR
-//            if (AppData.DebugMode)
-//                return "";
+            //#if UNITY_EDITOR
+            //            if (AppData.DebugMode)
+            //                return "";
 
-//            this.SaveChildSN(DEFAULT_CHILD_SN);
-//#endif
-//            this.childSn = this.LocalDataHelper.GetObject<string>(DATA_KEY, "");
-//            //Debug.LogFormat("<><ChildInfoManager.GetChildSN>childSn: {0}", this.childSn);
-//            return childSn;
-            return "BWR8ODUPYX3C";//哈密瓜
+            //            this.SaveChildSN(DEFAULT_CHILD_SN);
+            //#endif
+            //            this.childSn = this.LocalDataHelper.GetObject<string>(DATA_KEY, "");
+            //            //Debug.LogFormat("<><ChildInfoManager.GetChildSN>childSn: {0}", this.childSn);
+            //            return childSn;
+            //return "BWR8ODUPYX3C";//哈密瓜
+            return "ch_7urZTiFJHhDE";//Ann
         }
 
         public void Clear()

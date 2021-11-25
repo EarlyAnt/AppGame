@@ -187,10 +187,19 @@ namespace AppGame.Module.Cycling
         //刷新健康数据
         private void RefreshOriginData()
         {
-            this.originData.walk += Random.Range(1000, 25000) * 3;
-            this.originData.ride += Random.Range(1000, 25000) * 3;
-            this.CyclingDataManager.SaveOriginData(this.originData);
-            this.RefreshMpDatas();
+            //this.originData.walk += Random.Range(1000, 25000) * 3;
+            //this.originData.ride += Random.Range(1000, 25000) * 3;
+            //this.CyclingDataManager.SaveOriginData(this.originData);
+            //this.RefreshMpDatas();
+
+            this.CyclingDataUtil.GetOriginData((originData) =>
+            {
+                this.RefreshMpDatas();
+
+            }, (errorText) =>
+            {
+                Debug.LogErrorFormat("<><CyclingMediator.RefreshOriginData>Error: {0}", errorText);
+            });
         }
         //刷新亲友数据
         private void RefreshFriendData()
