@@ -208,7 +208,7 @@ namespace AppGame.Module.Cycling
             MapPointNode endPointNode = this.View.Player.MapNode.Points[pointCount - 1].GetComponent<MapPointNode>();
             int maxPointIndex = int.Parse(endPointNode.ID.Substring(5, 2));
 
-            int index = 1 + Random.Range(0, 10) % 3;
+            int index = Random.Range(0, 100) % this.playerDataList.Count;
             int offset = Random.Range(1, 5);
             PlayerData playerData = this.playerDataList[index];
             int position = int.Parse(playerData.map_position.Substring(5, 2));

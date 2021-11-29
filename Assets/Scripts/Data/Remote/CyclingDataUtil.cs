@@ -140,10 +140,8 @@ namespace AppGame.Data.Remote
         {
             Header header = new Header();
             header.headers = new List<HeaderData>();
-            header.headers.Add(new HeaderData() { key = "Gululu-Agent", value = GululuNetworkHelper.GetAgent() });
-            header.headers.Add(new HeaderData() { key = "udid", value = GululuNetworkHelper.GetUdid() });
-            header.headers.Add(new HeaderData() { key = "Accept-Language", value = GululuNetworkHelper.GetAcceptLang() });
             header.headers.Add(new HeaderData() { key = "Content-Type", value = "application/json" });
+            header.headers.Add(new HeaderData() { key = "Authorization", value = this.TokenManager.GetToken() });
             string strHeader = this.JsonUtil.Json2String(header);
 
             PostGameDataRequest postGameDataRequest = playerData.ToGameData();
@@ -181,7 +179,7 @@ namespace AppGame.Data.Remote
                 ActionData actionData = this.postGameDatas[0];
                 Debug.LogFormat("<><CyclingDataUtil.SendGameData>Header: {0}, Body: {1}, SendTimes: {2}", actionData.Header, actionData.Body, actionData.SendTimes);
                 Debug.LogFormat("<><CyclingDataUtil.SendGameData>Url: {0}", this.UrlProvider.PutGameDataUrl(this.ChildInfoManager.GetChildSN()));
-                this.NativeOkHttpMethodWrapper.post(this.UrlProvider.PutGameDataUrl(this.ChildInfoManager.GetChildSN()), actionData.Header, actionData.Body, (result) =>
+                this.NativeOkHttpMethodWrapper.put(this.UrlProvider.PutGameDataUrl(this.ChildInfoManager.GetChildSN()), actionData.Header, actionData.Body, (result) =>
                 {
                     Debug.LogFormat("<><CyclingDataUtil.SendGameData>GotResponse: {0}", result);
                     DataBase dataBase = this.JsonUtil.String2Json<DataBase>(result);

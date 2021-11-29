@@ -93,8 +93,8 @@ namespace AppGame.Data.Remote
         public const string REGISTER_USER = "auth/session";
         public const string GET_BASIC_DATA = "child/<child_sn>";
         public const string GET_ORIGIN_DATA = "child/<child_sn>/device_type/<device_type>/summary_data";
-        public const string GET_GAME_DATA = "child/<child_sn>/friends_data";
-        public const string PUT_GAME_DATA = "child/<child_sn>/gamedata";
+        public const string GET_GAME_DATA = "child/<child_sn>/friends_gamedata";
+        public const string PUT_GAME_DATA = "child/<child_sn>/child_data/game";
         public const string CUP_GET_UPDATE_INFO = "cup/<cup_hw_sn>/upgrade_res_metas";
     }
 }

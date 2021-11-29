@@ -82,10 +82,11 @@ namespace AppGame.Data.Remote
 
     public class NetPlayerData
     {
-        public string child_sn { get; set; }
+        public string sn { get; set; }
         public string nickname { get; set; }
         public string gender { get; set; }
-        public string birthday { get; set; }
+        public string birth_year { get; set; }
+        public string birth_month { get; set; }
         public int avatar_index { get; set; }
         public int relation { get; set; }
         public NetGameData gamedata { get; set; }
@@ -94,12 +95,14 @@ namespace AppGame.Data.Remote
         {
             return new PlayerData()
             {
-                child_sn = this.child_sn,
+                child_sn = this.sn,
                 child_name = this.nickname,
                 child_avatar = this.avatar_index.ToString(),
-                birthday = this.birthday,
+                birthday = string.Format("{0}-{1}-01", !string.IsNullOrEmpty(this.birth_year) ? this.birth_year : "2010", !string.IsNullOrEmpty(this.birth_month) ? this.birth_month : "01"),
                 gender = this.gender,
                 relation = this.relation,
+                map_id = !string.IsNullOrEmpty(this.gamedata.map_id) ? this.gamedata.map_id : "3201",
+                map_position = !string.IsNullOrEmpty(this.gamedata.map_position) ? this.gamedata.map_position : "3201_01",
                 walk_expend = this.gamedata.walk_expend,
                 walk_today = this.gamedata.walk_today,
                 ride_expend = this.gamedata.ride_expend,
@@ -147,8 +150,7 @@ namespace AppGame.Data.Remote
         }
     }
 
-    public class PostGameDataRequest
+    public class PostGameDataRequest : NetGameData
     {
-        public NetGameData gamedata { get; set; }
     }
 }

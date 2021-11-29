@@ -42,7 +42,7 @@ namespace AppGame.Data.Model
 
         public Remote.PostGameDataRequest ToGameData()
         {
-            Remote.NetGameData gameData = new Remote.NetGameData()
+            Remote.PostGameDataRequest gameData = new Remote.PostGameDataRequest()
             {
                 child_sn = this.child_sn,
                 child_name = this.child_name,
@@ -65,7 +65,7 @@ namespace AppGame.Data.Model
                 hp = this.hp
             };
 
-            return new Remote.PostGameDataRequest() { gamedata = gameData };
+            return gameData;
         }
 
         public override string ToString()
