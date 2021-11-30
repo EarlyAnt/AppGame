@@ -37,6 +37,10 @@ namespace AppGame.Module.GameStart
         [Inject]
         public ICardConfig CardConfig { get; set; }
         [Inject]
+        public IChildInfoManager ChildInfoManager { get; set; }
+        [Inject]
+        public ITokenManager TokenManager { get; set; }
+        [Inject]
         public ICommonImageUtils CommonImageUtils { get; set; }
         [Inject]
         public IHotUpdateUtil HotUpdateUtil { get; set; }
@@ -47,11 +51,9 @@ namespace AppGame.Module.GameStart
         [Inject]
         public IAssetBundleUtil AssetBundleUtil { get; set; }
         [Inject]
+        public IItemDataUtil ItemDataUtil { get; set; }
+        [Inject]
         public ICyclingDataUtil CyclingDataUtil { get; set; }
-        [Inject]
-        public IChildInfoManager ChildInfoManager { get; set; }
-        [Inject]
-        public ITokenManager TokenManager { get; set; }
         #endregion
         #region 页面UI组件
         [SerializeField]
@@ -68,6 +70,7 @@ namespace AppGame.Module.GameStart
         private Text tipText;
         #endregion
         #region 其他变量
+        private bool itemDataLoaded = false;
         private bool basicDataLoaded = false;
         private bool playerDataLoaded = false;
         private bool downloadComplete = false;
@@ -271,6 +274,15 @@ namespace AppGame.Module.GameStart
         {
             float startTime = Time.time;
 
+            this.ItemDataUtil.GetItemData((itemDataList) =>
+            {
+                itemDataLoaded = true;
+                Debug.LogFormat("<><GameStartView.LoadGameData>GetItemData, success: {0}", itemDataLoaded);
+            }, (errorText) =>
+            {
+                Debug.LogFormat("<><GameStartView.LoadGameData>GetItemData, failure: {0}", errorText);
+            });
+
             this.CyclingDataUtil.GetBasicData((basicData) =>
             {
                 this.basicDataLoaded = true;
@@ -289,9 +301,9 @@ namespace AppGame.Module.GameStart
                 Debug.LogFormat("<><GameStartView.LoadGameData>GetGameData, failure: {0}", errorText);
             });
 
-            yield return new WaitUntil(() => this.basicDataLoaded && this.playerDataLoaded || (Time.time - startTime) > 3);
-            if (this.basicDataLoaded && this.playerDataLoaded) this.totalProgress.Value = endValue;
-            Debug.LogFormat("<><GameStartView.LoadGameData>Load game data complete...{0}, {1}", this.basicDataLoaded, this.playerDataLoaded);
+            yield return new WaitUntil(() => this.itemDataLoaded && this.basicDataLoaded && this.playerDataLoaded || (Time.time - startTime) > 3);
+            if (this.itemDataLoaded && this.basicDataLoaded && this.playerDataLoaded) this.totalProgress.Value = endValue;
+            Debug.LogFormat("<><GameStartView.LoadGameData>Load game data complete...{0}, {1}, {2}", this.itemDataLoaded, this.basicDataLoaded, this.playerDataLoaded);
         }
         //加载场景
         private IEnumerator LoadScene(float startValue, float endValue)

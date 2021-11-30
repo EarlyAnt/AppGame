@@ -64,7 +64,7 @@ namespace AppGame.Module.Cycling
             }
             else if (Input.GetKeyDown(KeyCode.S))
             {
-                this.CyclingDataUtil.PostGameData(this.myPlayerData);
+                this.CyclingDataUtil.PutGameData(this.myPlayerData);
             }
             else if (Input.GetKeyDown(KeyCode.V))
             {

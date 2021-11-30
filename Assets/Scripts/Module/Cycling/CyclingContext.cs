@@ -1,7 +1,6 @@
-using AppGame.Config;
+using AppGame.Data.Common;
 using AppGame.Data.Local;
 using AppGame.Data.Remote;
-using AppGame.Util;
 using strange.extensions.command.api;
 using strange.extensions.command.impl;
 using strange.extensions.context.api;
@@ -37,13 +36,17 @@ namespace AppGame.Module.Cycling
 
             //bind command
             commandBinder.Bind<StartSignal>().To<StartCommand>();
+            commandBinder.Bind<UploadItemDataSignal>().To<UploadItemDataCommand>();
 
             //bind injection
-            injectionBinder.Bind<ICameraUtil>().To<CameraUtil>().ToSingleton();
-            injectionBinder.Bind<IBasicDataManager>().To<BasicDataManager>().ToSingleton();
-            injectionBinder.Bind<ICyclingDataManager>().To<CyclingDataManager>().ToSingleton();
+            injectionBinder.Bind<IItemDataManager>().To<ItemDataManager>().ToSingleton();
+            injectionBinder.Bind<IItemDataUtil>().To<ItemDataUtil>().ToSingleton();
 
             injectionBinder.Bind<ICyclingDataUtil>().To<CyclingDataUtil>().ToSingleton();
+            injectionBinder.Bind<IBasicDataManager>().To<BasicDataManager>().ToSingleton();
+            injectionBinder.Bind<ICyclingDataManager>().To<CyclingDataManager>().ToSingleton();            
+
+            injectionBinder.Bind<ICameraUtil>().To<CameraUtil>().ToSingleton();
         }
     }
 }

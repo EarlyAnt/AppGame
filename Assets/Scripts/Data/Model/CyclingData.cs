@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AppGame.Data.Model
 {
@@ -40,9 +38,9 @@ namespace AppGame.Data.Model
         public int mp_yestoday { get; set; }
         public int hp { get; set; }
 
-        public Remote.PostGameDataRequest ToGameData()
+        public Remote.PutGameDataRequest ToGameData()
         {
-            Remote.PostGameDataRequest gameData = new Remote.PostGameDataRequest()
+            Remote.PutGameDataRequest gameData = new Remote.PutGameDataRequest()
             {
                 child_sn = this.child_sn,
                 child_name = this.child_name,

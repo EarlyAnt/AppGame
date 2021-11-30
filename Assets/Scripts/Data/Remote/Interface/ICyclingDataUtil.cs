@@ -13,7 +13,7 @@ namespace AppGame.Data.Remote
 
         void GetGameData(Action<List<PlayerData>> callback = null, Action<string> errCallback = null);
 
-        void PostGameData(PlayerData playerData, Action<Result> callback = null, Action<Result> errCallback = null);
+        void PutGameData(PlayerData playerData, Action<Result> callback = null, Action<Result> errCallback = null);
     }
 
     public class GetBasicDataResponse : DataBase
@@ -150,7 +150,7 @@ namespace AppGame.Data.Remote
         }
     }
 
-    public class PostGameDataRequest : NetGameData
+    public class PutGameDataRequest : NetGameData
     {
     }
 }

@@ -37,6 +37,12 @@ namespace AppGame.Data.Remote
             return AddServerPrefix(registerUrl);
         }
 
+        public string ItemDataUrl(string child_sn)
+        {
+            string itemDataUrl = ApiUrls.ITEM_DATA.Replace("<child_sn>", child_sn);
+            return AddServerPrefix(itemDataUrl);
+        }
+
         public string GetBasicDataUrl(string child_sn)
         {
             string getBasicDataUrl = ApiUrls.GET_BASIC_DATA.Replace("<child_sn>", child_sn);
@@ -91,6 +97,9 @@ namespace AppGame.Data.Remote
 
         public const string GET_TOKEN = "auth/<x_user_sn>/token";
         public const string REGISTER_USER = "auth/session";
+
+        public const string ITEM_DATA = "child/<child_sn>/child_data/item";
+
         public const string GET_BASIC_DATA = "child/<child_sn>";
         public const string GET_ORIGIN_DATA = "child/<child_sn>/device_type/<device_type>/summary_data";
         public const string GET_GAME_DATA = "child/<child_sn>/friends_gamedata";

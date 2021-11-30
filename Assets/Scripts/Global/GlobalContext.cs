@@ -46,7 +46,7 @@ namespace AppGame.Global
             injectionBinder.Bind<IChildInfoManager>().To<ChildInfoManager>().ToSingleton().CrossContext();
             injectionBinder.Bind<IGameDataHelper>().To<GameDataHelper>().ToSingleton().CrossContext();
             injectionBinder.Bind<ITokenManager>().To<TokenManager>().ToSingleton().CrossContext();
-            
+
             injectionBinder.Bind<IPrefabUtil>().To<PrefabUtil>().ToSingleton().CrossContext();
             injectionBinder.Bind<II18NUtil>().To<I18NUtil>().ToSingleton().CrossContext();
             injectionBinder.Bind<IHotUpdateUtil>().To<HotUpdateUtil>().ToSingleton().CrossContext();
@@ -62,7 +62,6 @@ namespace AppGame.Global
             injectionBinder.Bind<IAuthenticationUtils>().To<AuthenticationUtils>().ToSingleton().CrossContext();
 
             injectionBinder.Bind<IDeviceInfoManager>().To<DeviceInfoManager>().ToSingleton().CrossContext();
-            injectionBinder.Bind<IItemDataManager>().To<ItemDataManager>().ToSingleton().CrossContext();
         }
     }
 }

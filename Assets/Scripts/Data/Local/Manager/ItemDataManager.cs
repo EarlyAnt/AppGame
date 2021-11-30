@@ -2,6 +2,7 @@ using AppGame.Config;
 using AppGame.Data.Common;
 using AppGame.Data.Local;
 using AppGame.Data.Model;
+using AppGame.Module.Cycling;
 using AppGame.Util;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,254 +18,158 @@ namespace AppGame.Data.Local
         public IGameDataHelper GameDataHelper { get; set; }
         [Inject]
         public IChildInfoManager ChildInfoManager { get; set; }
-        //[Inject]
-        //public StartPostGameDataCommandSignal startPostGameDataCommand { get; set; }
         [Inject]
-        public IItemConfig ItemConifg { get; set; }
+        public IItemConfig ItemConfig { get; set; }
+        [Inject]
+        public UploadItemDataSignal UploadItemDataSignal { get; set; }
         public const string ITEM_DATA_KEY = "ItemData";
-        Dictionary<string, int> itemInfos = new Dictionary<string, int>();
+        private List<ItemData> buffer = new List<ItemData>();
 
-        struct ItemInfo
-        {
-            public string itemID;
-            public int itemCount;
-        }
-
-        [PostConstruct]
-        public void PostConstruct()
-        {
-            LoadItemDatas();
-        }
-
-        public void SetItem(string itemID, int itemCount)
-        {
-            Debug.LogFormat("<><ItemDataManager.SetItem>ItemID: {0}, ItemCount: {1}", itemID, itemCount);
-            itemCount = this.GetValidCount(itemID, itemCount);
-            if (this.itemInfos.ContainsKey(itemID))
-            {
-                this.itemInfos[itemID] = itemCount;
-            }
-            else
-            {
-                this.itemInfos.Add(itemID, itemCount);
-            }
-
-            try
-            {
-                this.SaveItemDatas();
-                this.SyncItemsData2Server(itemID, itemCount);
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogErrorFormat("<><ItemDataManager.SetItem>Error: {0}, itemId: {1}, itemCount: {2}", ex.Message, itemID, itemCount);
-            }
-        }
-
+        //增加物品数量
         public void AddItem(string itemID, int itemCount = 1)
         {
-            int newItemCount = 0;
-            if (this.itemInfos.ContainsKey(itemID))
+            if (!this.ItemValid(itemID)) return;
+
+            ItemData itemData = this.buffer.Find(t => t.ItemID == itemID);
+            if (itemData != null)
             {
-                newItemCount = this.GetValidCount(itemID, this.itemInfos[itemID] + itemCount);
-                this.itemInfos[itemID] = newItemCount;
+                itemData.ItemCount += itemCount;
+                Debug.LogFormat("<><ItemDataManager.AddItem>existed, id: {0}, add count: {1}, current count: {2}", itemID, itemCount, itemData.ItemCount);
             }
             else
             {
-                newItemCount = this.GetValidCount(itemID, itemCount);
-                this.itemInfos.Add(itemID, newItemCount);
+                this.buffer.Add(new ItemData() { ItemID = itemID, ItemCount = itemCount });
+                Debug.LogFormat("<><ItemDataManager.AddItem>not existed, id: {0}, add count: {1}, current count: {2}", itemID, itemCount, itemCount);
             }
 
-            try
-            {
-                this.SaveItemDatas();
-                this.SyncItemsData2Server(itemID, newItemCount);
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogErrorFormat("<><ItemDataManager.AddItem>Error: {0}, itemId: {1}, count: {2}, currentCount: {3}", ex.Message, itemID, itemCount, newItemCount);
-            }
+            this.UploadItemData();
         }
+        //减少物品数量
+        public void ReduceItem(string itemID, int itemCount = 1)
+        {
+            if (!this.ItemValid(itemID)) return;
 
+            ItemData itemData = this.buffer.Find(t => t.ItemID == itemID);
+            if (itemData != null)
+            {
+                itemData.ItemCount -= itemCount;
+                Debug.LogFormat("<><ItemDataManager.ReduceItem>existed, id: {0}, reduce count: {1}, current count: {2}", itemID, itemCount, itemData.ItemCount);
+            }
+            else
+            {
+                Debug.LogErrorFormat("<><ItemDataManager.ReduceItem>Error: item[{0}] is not existed", itemID);
+            }
+
+            this.UploadItemData();
+        }
+        //设置物品数量
+        public void SetItem(string itemID, int itemCount)
+        {
+            if (!this.ItemValid(itemID)) return;
+
+            ItemData itemData = this.buffer.Find(t => t.ItemID == itemID);
+            if (itemData != null)
+            {
+                itemData.ItemCount = itemCount;
+                Debug.LogFormat("<><ItemDataManager.SetItem>existed, id: {0}, add count: {1}", itemID, itemCount);
+            }
+            else
+            {
+                this.buffer.Add(new ItemData() { ItemID = itemID, ItemCount = itemCount });
+                Debug.LogFormat("<><ItemDataManager.SetItem>not existed, id: {0}, add count: {1}", itemID, itemCount);
+            }
+
+            this.UploadItemData();
+        }
+        //判断是否有物品
         public bool HasItem(string itemID, int itemCount = 1)
         {
-            int count = 0;
-            if (this.itemInfos.TryGetValue(itemID, out count))
+            if (!this.ItemValid(itemID)) return false;
+
+            ItemData itemData = this.buffer.Find(t => t.ItemID == itemID);
+            if (itemData != null)
             {
-                return count >= itemCount;
-            }
-            return false;
-        }
-
-        public bool ReduceItem(string itemID, int count = 1)
-        {
-            Item item = this.ItemConifg.GetItem(itemID);
-            if (item.ItemType != ItemTypes.Coin)
-            {//目前只有表情类资源可被扣减
-                Debug.LogErrorFormat("<><ItemDataManager.ReduceItem>only coin can be reduced, itemID: {0}, itemType: {1}, count: {2}", itemID, item.ItemType, count);
-                return false;
-            }
-
-            int currentCount = this.itemInfos.ContainsKey(itemID) ? this.itemInfos[itemID] : 0;//获取当前数量
-            if (currentCount >= count)
-            {//扣减当前数量
-                currentCount -= count;
+                Debug.LogFormat("<><ItemDataManager.HasItem>id: {0}, count: {1}, existed: {2}", itemID, itemCount, itemData.ItemCount >= itemCount);
+                return itemData.ItemCount >= itemCount;
             }
             else
-            {//余额不足，不予操作
-                Debug.LogErrorFormat("<><ItemDataManager.ReduceItem>no enough item, itemId: {0}, count: {1}, currentCount: {2}", itemID, count, currentCount);
-                return false;
-            }
-
-            if (this.itemInfos.ContainsKey(itemID))
-                this.itemInfos[itemID] = currentCount;
-            else
-                this.itemInfos.Add(itemID, currentCount);
-
-            try
             {
-                this.SaveItemDatas();
-                this.SyncItemsData2Server(itemID, currentCount);
-                return true;
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogErrorFormat("<><ItemDataManager.ReduceItem>Error: {0}, itemId: {1}, count: {2}, currentCount: {3}", ex.Message, itemID, count, currentCount);
+                Debug.LogFormat("<><ItemDataManager.HasItem>id: {0}, count: {1}, existed: false", itemID, itemCount);
                 return false;
             }
         }
-
+        //获取物品数量
         public int GetItemCount(string itemID)
         {
-            int itemCount;
-            if (this.itemInfos.TryGetValue(itemID, out itemCount))
-            {
-                return itemCount;
-            }
-            return 0;
-        }
+            if (!this.ItemValid(itemID)) return 0;
 
-        public void SaveItemDatas()
-        {
-            List<ItemInfo> listInfos = Convert2List();
-            this.GameDataHelper.SaveObject<List<ItemInfo>>(ITEM_DATA_KEY, listInfos);
+            ItemData itemData = this.buffer.Find(t => t.ItemID == itemID);
+            int itemCount = itemData != null ? itemData.ItemCount : 0;
+            Debug.LogFormat("<><ItemDataManager.GetItemCount>id: {0}, count: {1}", itemID, itemCount);
+            return itemCount;
         }
-
-        public void LoadItemDatas()
+        //保存物品列表
+        public void SaveItemList(List<ItemData> itemDataList)
         {
-            this.itemInfos.Clear();
-            List<ItemInfo> listInfos = this.GameDataHelper.GetObject<List<ItemInfo>>(ITEM_DATA_KEY);
-            if (listInfos != null)
+            if (itemDataList != null)
             {
-                foreach (var info in listInfos)
+                if (this.buffer == null)
+                    this.buffer = new List<ItemData>();
+
+                foreach (ItemData remoteItem in itemDataList)
                 {
-                    this.itemInfos.Add(info.itemID, info.itemCount);
+                    ItemData localItem = this.buffer.Find(t => t.ItemID == remoteItem.ItemID);
+                    if (localItem != null)
+                    {
+                        localItem.ItemCount = Mathf.Max(localItem.ItemCount, remoteItem.ItemCount);
+                        this.buffer.Add(localItem);
+                    }
+                    else
+                    {
+                        this.buffer.Add(new ItemData() { ItemID = remoteItem.ItemID, ItemCount = remoteItem.ItemCount });
+                    }
+
                 }
+                this.GameDataHelper.SaveObject<List<ItemData>>(ITEM_DATA_KEY, itemDataList);
             }
         }
-
-        public void SendAllItemData(bool force)
-        {
-            //List<ItemsDataBean> items = new List<ItemsDataBean>();
-            ////StringBuilder strbContent = new StringBuilder();
-            //foreach (var pair in itemsInfo)
-            //{
-            //    Item item = this.ItemConifg.GetItemById(pair.Key);
-            //    if (item != null)
-            //    {
-            //        items.Add(new ItemsDataBean
-            //        {
-            //            item_id = pair.Key,
-            //            type = item.Type,
-            //            count = this.GetValidCount(item.ItemId, pair.Value),
-            //            name = item.Name
-            //        });
-            //        //strbContent.AppendFormat("ID: {0}, Type: {1}, Count: {2}, Name: {3}\n", pair.Key, item.Type, pair.Value, item.Name);
-            //    }
-            //}
-            //SendItemsData(items);
-            ////Debug.LogFormat("<><ItemDataManager.SendAllItemsData>Datas: {0}", strbContent.ToString());
-        }
-
-        public void SetValuesLong(GameData datas)
-        {
-            //List<ItemsDataBean> listInfos = datas.getItemsData();
-            //if (listInfos != null)
-            //{
-            //    for (int i = 0; i < listInfos.Count; ++i)
-            //    {
-            //        AddItem(listInfos[i].getItem_id(), listInfos[i].getCount());
-            //    }
-            //}
-        }
-
-        //private void SendItemsData(List<ItemsDataBean> dataItems)
-        //{
-        //    GameData datas = GameData.getGameDataBuilder()
-        //        .setItemsData(dataItems)
-        //        .setTimestamp((int)DateUtil.GetTimeStamp())
-        //        .build();
-        //    string jsonData = JsonUtil.Json2String(datas);
-        //    startPostGameDataCommand.Dispatch(jsonData);
-        //    Debug.LogFormat("----{0}====ItemDataManager.SendItemsData: {1}", System.DateTime.Now, jsonData);
-        //}
-
-        private List<ItemInfo> Convert2List()
-        {
-            List<ItemInfo> listInfos = new List<ItemInfo>();
-            foreach (var pair in this.itemInfos)
-            {
-                listInfos.Add(new ItemInfo
-                {
-                    itemID = pair.Key,
-                    itemCount = pair.Value
-                });
-            }
-            return listInfos;
-        }
-
-        private void SyncItemsData2Server(string itemID, int itemCount)
-        {
-            //Item item = this.ItemConifg.GetItem(itemID);
-            //if (item != null)
-            //{
-            //    List<ItemsDataBean> items = new List<ItemsDataBean>();
-            //    items.Add(new ItemsDataBean
-            //    {
-            //        item_id = itemId,
-            //        type = item.Type,
-            //        count = this.GetValidCount(item.ItemId, itemCount),
-            //        name = item.Name
-            //    });
-            //    SendItemsData(items);
-            //}
-        }
-
-        private int GetValidCount(string itemID, int itemCount)
-        {
-            int maxCount = 1;
-            Item item = this.ItemConifg.GetItem(itemID);
-            if (item != null)
-            {
-                switch (item.ItemType)
-                {
-                    case ItemTypes.Coin:
-                        maxCount = 99999;
-                        break;
-                    case ItemTypes.Card:
-                        maxCount = 1;
-                        break;
-                }
-            }
-            return Mathf.Clamp(itemCount, 0, maxCount);
-        }
-
+        //清除本地缓存
         public void Clear(bool confirm = false)
         {
-            if (this.itemInfos != null)
-                this.itemInfos.Clear();
+            if (this.buffer != null)
+                this.buffer.Clear();
 
             if (confirm)
                 this.GameDataHelper.Clear(ITEM_DATA_KEY);
+        }
+        //判断配置表里是否有此物体
+        private bool ItemValid(string itemID)
+        {
+            bool valid = this.ItemConfig != null && !string.IsNullOrEmpty(itemID) && this.ItemConfig.HasItem(itemID);
+            if (!valid)
+                Debug.LogErrorFormat("<><ItemDataManager.ItemValid>error: can not find the item[{0}] in config file", itemID);
+
+            return valid;
+        }
+        //上传物品数据
+        private void UploadItemData()
+        {
+            try
+            {
+                if (this.buffer != null)
+                {
+                    this.UploadItemDataSignal.Dispatch(this.buffer);
+                    Debug.LogError("<><ItemDataManager.UploadItemData>+++++++++++++++++++++++++++++++++++++++");
+                }
+                else
+                {
+                    Debug.LogError("<><ItemDataManager.UploadItemData>error: parameter 'buffer' is null");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogErrorFormat("<><ItemDataManager.UploadItemData>error: {0}", ex.Message);
+            }
         }
     }
 }

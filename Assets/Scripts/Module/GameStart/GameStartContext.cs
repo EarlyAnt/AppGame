@@ -1,3 +1,4 @@
+using AppGame.Data.Common;
 using AppGame.Data.Local;
 using AppGame.Data.Remote;
 using strange.extensions.command.api;
@@ -37,8 +38,12 @@ namespace AppGame.Module.GameStart
 
             //bind command
             commandBinder.Bind<StartSignal>().To<StartCommand>();
+            commandBinder.Bind<UploadItemDataSignal>().To<UploadItemDataCommand>();
 
             //bind injection
+            injectionBinder.Bind<IItemDataManager>().To<ItemDataManager>().ToSingleton();
+            injectionBinder.Bind<IItemDataUtil>().To<ItemDataUtil>().ToSingleton();
+
             injectionBinder.Bind<ICyclingDataUtil>().To<CyclingDataUtil>().ToSingleton();
             injectionBinder.Bind<IBasicDataManager>().To<BasicDataManager>().ToSingleton();
             injectionBinder.Bind<ICyclingDataManager>().To<CyclingDataManager>().ToSingleton();

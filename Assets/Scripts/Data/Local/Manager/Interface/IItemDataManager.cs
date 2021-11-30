@@ -5,19 +5,12 @@ namespace AppGame.Data.Local
 {
     public interface IItemDataManager
     {
+        void AddItem(string itemID, int itemCount = 1);        
+        void ReduceItem(string itemID, int itemCount = 1);
         void SetItem(string itemID, int itemCount);
-        void AddItem(string itemID, int count = 1);
-        bool HasItem(string itemID, int count = 1);
-        bool ReduceItem(string itemID, int count = 1);
-
+        bool HasItem(string itemID, int itemCount = 1);
         int GetItemCount(string itemID);
-
-        void SaveItemDatas();
-        void LoadItemDatas();
-
-        void SendAllItemData(bool force);
-        void SetValuesLong(GameData datas);
-
+        void SaveItemList(List<ItemData> itemDataList);
         void Clear(bool confirm = false);
     }
 

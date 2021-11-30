@@ -13,9 +13,15 @@ namespace AppGame.Data.Model
     }
     #endregion
     #region 自定义类
+    public class ItemData
+    {
+        public string ItemID { get; set; }
+        public int ItemCount { get; set; }
+    }
+
     public class GameData
     {
-        
+
     }
 
     public class BasicData
