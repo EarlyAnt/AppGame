@@ -107,10 +107,8 @@ namespace AppGame.Module.Cycling
         {
             UpdateListeners(true);
 
-            if (!this.CyclingDataManager.HasPlayerData())
+            if (this.CyclingDataManager.IsNovice())
             {
-                //Todo: 进入游戏场景之前，调用CyclingDataUtil.GetBasicData方法获取基础数据，然后在此处获取玩家姓名，头像
-
                 this.playerDataList = this.CyclingDataManager.BuildGameData();
                 this.ItemDataManager.Clear(true);
                 this.ItemDataManager.AddItem(Items.COIN, 50000);

@@ -51,13 +51,17 @@ namespace AppGame.Data.Remote
     public class NetOriginData
     {
         public string child_sn { get; set; }
-        public int distance { get; set; }
-        public int duration { get; set; }
-        public int calories { get; set; }
+        public int? distance { get; set; }
+        public int? duration { get; set; }
+        public int? calories { get; set; }
 
         public OriginData ToOriginData()
         {
-            return new OriginData() { child_sn = child_sn, ride = distance };
+            return new OriginData()
+            {
+                child_sn = child_sn,
+                ride = distance != null ? distance.Value : 0
+            };
         }
     }
 
@@ -72,7 +76,9 @@ namespace AppGame.Data.Remote
                 List<PlayerData> playerDataList = new List<PlayerData>();
                 foreach (var item in this.data)
                 {
-                    playerDataList.Add(item.ToPlayerData());
+                    PlayerData playerData = item.ToPlayerData();
+                    if (playerData != null)
+                        playerDataList.Add(playerData);
                 }
                 return playerDataList;
             }
@@ -93,16 +99,20 @@ namespace AppGame.Data.Remote
 
         public PlayerData ToPlayerData()
         {
+            if (this.gamedata.IsInvalid && this.relation != 0)
+                return null;//亲友的数据中，如果map_id或map_postion为空，则视为无效数据
+
             return new PlayerData()
             {
+                is_novice = this.gamedata.IsEmpty,
                 child_sn = this.sn,
                 child_name = this.nickname,
                 child_avatar = this.avatar_index.ToString(),
                 birthday = string.Format("{0}-{1}-01", !string.IsNullOrEmpty(this.birth_year) ? this.birth_year : "2010", !string.IsNullOrEmpty(this.birth_month) ? this.birth_month : "01"),
                 gender = this.gender,
                 relation = this.relation,
-                map_id = !string.IsNullOrEmpty(this.gamedata.map_id) ? this.gamedata.map_id : "3201",
-                map_position = !string.IsNullOrEmpty(this.gamedata.map_position) ? this.gamedata.map_position : "3201_01",
+                map_id = string.IsNullOrEmpty(this.gamedata.map_id) ? "3201" : this.gamedata.map_id,
+                map_position = string.IsNullOrEmpty(this.gamedata.map_position) ? "3201_01" : this.gamedata.map_position,
                 walk_expend = this.gamedata.walk_expend,
                 walk_today = this.gamedata.walk_today,
                 ride_expend = this.gamedata.ride_expend,
@@ -143,6 +153,16 @@ namespace AppGame.Data.Remote
         public DateTime mp_date { get; set; }
         public int mp_yestoday { get; set; }
         public int hp { get; set; }
+
+        public bool IsEmpty
+        {
+            get { return string.IsNullOrEmpty(this.child_sn) || string.IsNullOrEmpty(this.map_id) || string.IsNullOrEmpty(this.map_position); }
+        }
+
+        public bool IsInvalid
+        {
+            get { return string.IsNullOrEmpty(this.map_id) || string.IsNullOrEmpty(this.map_position); }
+        }
 
         public override string ToString()
         {

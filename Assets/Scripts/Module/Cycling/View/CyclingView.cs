@@ -101,7 +101,6 @@ namespace AppGame.Module.Cycling
             set { this.coinBox.text = value.ToString(); }
         }
         public Player Player { get { return this.player; } }
-        public static string PlayerName = "ABC";
         #endregion
         /************************************************Unity方法与事件***********************************************/
         protected override void Awake()
@@ -241,8 +240,7 @@ namespace AppGame.Module.Cycling
             Sprite avatar = this.CommonImageUtils.GetAvatar(myPlayerData.child_avatar);
             this.player.Avatar = avatar;
             this.avatarBox.sprite = avatar;
-            // this.nameBox.text = myPlayerData.child_name;
-            this.nameBox.text = CyclingView.PlayerName;
+            this.nameBox.text = myPlayerData.child_name;
             Debug.LogFormat("<><CyclingView.RefreshPlayer>player name: {0}", this.nameBox.text);
             this.coinBox.text = coin.ToString();
 

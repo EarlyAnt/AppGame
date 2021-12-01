@@ -3,6 +3,7 @@ using AppGame.Data.Model;
 using AppGame.Util;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AppGame.Data.Local
 {
@@ -39,7 +40,10 @@ namespace AppGame.Data.Local
         /// <returns></returns>
         public OriginData GetOriginData(string childSN)
         {
-            return this.GameDataHelper.GetObject<OriginData>(ORIGIN_DATA_DATA_KEY);
+            OriginData originData = this.GameDataHelper.GetObject<OriginData>(ORIGIN_DATA_DATA_KEY);
+            if (originData == null)
+                originData = new OriginData() { child_sn = childSN };
+            return originData;
         }
 
         /// <summary>
@@ -66,41 +70,44 @@ namespace AppGame.Data.Local
         /// 判断是否有游戏数据(即是否第一次玩游戏)
         /// </summary>
         /// <returns></returns>
-        public bool HasPlayerData()
+        public bool IsNovice()
         {
             List<PlayerData> playerDataList = this.GetAllPlayerData();
-            if (playerDataList != null && playerDataList.Count > 0)
+            if (playerDataList == null)
+                return false;
+
+            PlayerData playerData = playerDataList.Find(t => t.child_sn == this.ChildInfoManager.GetChildSN());
+            if (playerData != null && playerData.is_novice)
                 return true;
             else
                 return false;
         }
         /// <summary>
-        /// 创建默认数据
+        /// 创建初始数据
         /// </summary>
         /// <returns></returns>
         public List<PlayerData> BuildGameData()
         {
             string childSN = this.ChildInfoManager.GetChildSN();
-            //BasicData basicData = this.BasicDataManager.GetData(childSN);
-            //string childName = basicData.child_name;
-            //string childAvatar = basicData.child_avatar;
+            BasicData basicData = this.BasicDataManager.GetData(childSN);
+            string childName = basicData != null ? basicData.child_name : "默认玩家";
+            string childAvatar = basicData != null ? basicData.child_avatar : "1";
 
-            //创建原始数据
-            OriginData originData = new OriginData() { child_sn = childSN, walk = 10000, ride = 5000, train = 20, monitor = 30 };
-            this.SaveOriginData(originData);
             //创建游戏数据
             List<PlayerData> playerDataList = new List<PlayerData>();
+            //创建自己初始数据
             playerDataList.Add(new PlayerData()
             {
+                is_novice = true,
                 child_sn = childSN,
-                child_name = "樱木花道",
-                child_avatar = "6",
+                child_name = childName,
+                child_avatar = childAvatar,
                 relation = (int)Relations.Self,
                 map_id = "3201",
                 map_position = "3201_01",
-                walk_expend = 5000,
-                walk_today = 5000,
-                ride_expend = 1000,
+                walk_expend = 0,
+                walk_today = 0,
+                ride_expend = 0,
                 train_expend = 0,
                 learn_expend = 0,
                 mp = 0,
@@ -108,49 +115,62 @@ namespace AppGame.Data.Local
                 mp_today = 0,
                 mp_date = System.DateTime.Today,
                 mp_yestoday = 0,
-                hp = 5
+                hp = 3
             });
-            playerDataList.Add(new PlayerData()
+            #region 创建亲友游戏数据(测试用)
+            //playerDataList.Add(new PlayerData()
+            //{
+            //    child_sn = "02",
+            //    child_name = "赤木晴子",
+            //    child_avatar = "9",
+            //    relation = (int)Relations.Family,
+            //    map_id = "3202",
+            //    map_position = "3202_15",
+            //    mp_yestoday = 50
+            //});
+            //playerDataList.Add(new PlayerData()
+            //{
+            //    child_sn = "03",
+            //    child_name = "仙道彰",
+            //    child_avatar = "12",
+            //    relation = (int)Relations.Friend,
+            //    map_id = "3201",
+            //    map_position = "3201_21",
+            //    mp_yestoday = 25
+            //});
+            //playerDataList.Add(new PlayerData()
+            //{
+            //    child_sn = "04",
+            //    child_name = "流川枫",
+            //    child_avatar = "15",
+            //    relation = (int)Relations.Friend,
+            //    map_id = "3201",
+            //    map_position = "3201_27",
+            //    mp_yestoday = 20
+            //});
+            //playerDataList.Add(new PlayerData()
+            //{
+            //    child_sn = "05",
+            //    child_name = "牧绅一",
+            //    child_avatar = "19",
+            //    relation = (int)Relations.Friend,
+            //    map_id = "3202",
+            //    map_position = "3202_33",
+            //    mp_yestoday = 30
+            //});
+            #endregion
+            #region 创建初始数据(测试用)
+            //OriginData originData = new OriginData() { child_sn = childSN, walk = 10000, ride = 5000, train = 20, monitor = 30 };
+            //this.SaveOriginData(originData);
+            #endregion
+
+            List<PlayerData> curPlayerDataList = this.GetAllPlayerData();
+            foreach (PlayerData playerData in curPlayerDataList)
             {
-                child_sn = "02",
-                child_name = "赤木晴子",
-                child_avatar = "9",
-                relation = (int)Relations.Family,
-                map_id = "3202",
-                map_position = "3202_15",
-                mp_yestoday = 50
-            });
-            playerDataList.Add(new PlayerData()
-            {
-                child_sn = "03",
-                child_name = "仙道彰",
-                child_avatar = "12",
-                relation = (int)Relations.Friend,
-                map_id = "3201",
-                map_position = "3201_21",
-                mp_yestoday = 25
-            });
-            playerDataList.Add(new PlayerData()
-            {
-                child_sn = "04",
-                child_name = "流川枫",
-                child_avatar = "15",
-                relation = (int)Relations.Friend,
-                map_id = "3201",
-                map_position = "3201_27",
-                mp_yestoday = 20
-            });
-            playerDataList.Add(new PlayerData()
-            {
-                child_sn = "05",
-                child_name = "牧绅一",
-                child_avatar = "19",
-                relation = (int)Relations.Friend,
-                map_id = "3202",
-                map_position = "3202_33",
-                mp_yestoday = 30
-            });
-            this.SavePlayerDataList(playerDataList);
+                if (!playerDataList.Exists(t => t.child_sn == playerData.child_sn))
+                    playerDataList.Add(playerData);
+            }
+            this.GameDataHelper.SaveObject(PLAYER_DATA_DATA_KEY, playerDataList);
             return playerDataList;
         }
 
@@ -160,6 +180,13 @@ namespace AppGame.Data.Local
         /// <param name="playerData"></param>
         public void SavePlayerData(PlayerData playerData)
         {
+            if (playerData == null)
+            {
+                Debug.LogError("<><CyclingDataManager.SavePlayerData>Error: parameter 'playerData' is null");
+                return;
+            }
+            playerData.is_novice = false;//保存玩家数据时，将“是否新手”置为false
+
             //记录PlayerData
             List<PlayerData> playerDataList = this.GetAllPlayerData();
             if (playerDataList == null)

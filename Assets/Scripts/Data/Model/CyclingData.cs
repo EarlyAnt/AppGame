@@ -18,6 +18,7 @@ namespace AppGame.Data.Model
 
     public class PlayerData
     {
+        public bool is_novice { get; set; }
         public string child_sn { get; set; }
         public string child_name { get; set; }
         public string child_avatar { get; set; }

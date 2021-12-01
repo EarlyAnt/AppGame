@@ -72,7 +72,15 @@ namespace AppGame.Module.GameStart
         #region 其他变量
         private bool itemDataLoaded = false;
         private bool basicDataLoaded = false;
+        private bool originDataLoaded = false;
         private bool playerDataLoaded = false;
+        private bool allDataLoaded
+        {
+            get
+            {
+                return this.itemDataLoaded && this.basicDataLoaded && this.originDataLoaded && this.playerDataLoaded;
+            }
+        }
         private bool downloadComplete = false;
         private Tweener tweener;
         private Queue<System.Action> asyncActions = new Queue<System.Action>();
@@ -276,8 +284,8 @@ namespace AppGame.Module.GameStart
 
             this.ItemDataUtil.GetItemData((itemDataList) =>
             {
-                itemDataLoaded = true;
-                Debug.LogFormat("<><GameStartView.LoadGameData>GetItemData, success: {0}", itemDataLoaded);
+                this.itemDataLoaded = true;
+                Debug.LogFormat("<><GameStartView.LoadGameData>GetItemData, success: {0}", itemDataList != null ? itemDataList.Count : 0);
             }, (errorText) =>
             {
                 Debug.LogFormat("<><GameStartView.LoadGameData>GetItemData, failure: {0}", errorText);
@@ -286,10 +294,20 @@ namespace AppGame.Module.GameStart
             this.CyclingDataUtil.GetBasicData((basicData) =>
             {
                 this.basicDataLoaded = true;
-                Debug.LogFormat("<><GameStartView.LoadGameData>GetBasicData, success: {0}", basicData);
+                Debug.LogFormat("<><GameStartView.LoadGameData>GetBasicData, success: {0}", basicData != null ? basicData.ToString() : "null");
             }, (errorText) =>
             {
                 Debug.LogFormat("<><GameStartView.LoadGameData>GetBasicData, failure: {0}", errorText);
+            });
+
+            this.CyclingDataUtil.GetOriginData((originData) =>
+            {
+                this.originDataLoaded = true;
+                Debug.LogFormat("<><GameStartView.LoadGameData>GetOriginData, success: {0}", originData != null ? originData.ToString() : "null");
+
+            }, (errorText) =>
+            {
+                Debug.LogErrorFormat("<><CyclingMediator.RefreshOriginData>Error: {0}", errorText);
             });
 
             this.CyclingDataUtil.GetGameData((playerDataList) =>
@@ -301,14 +319,14 @@ namespace AppGame.Module.GameStart
                 Debug.LogFormat("<><GameStartView.LoadGameData>GetGameData, failure: {0}", errorText);
             });
 
-            yield return new WaitUntil(() => this.itemDataLoaded && this.basicDataLoaded && this.playerDataLoaded || (Time.time - startTime) > 3);
-            if (this.itemDataLoaded && this.basicDataLoaded && this.playerDataLoaded) this.totalProgress.Value = endValue;
+            yield return new WaitUntil(() => this.allDataLoaded || (Time.time - startTime) > 3);
+            if (this.itemDataLoaded && this.basicDataLoaded && this.originDataLoaded && this.playerDataLoaded) this.totalProgress.Value = endValue;
             Debug.LogFormat("<><GameStartView.LoadGameData>Load game data complete...{0}, {1}, {2}", this.itemDataLoaded, this.basicDataLoaded, this.playerDataLoaded);
         }
         //加载场景
         private IEnumerator LoadScene(float startValue, float endValue)
         {
-            if (!this.itemDataLoaded || !this.basicDataLoaded || !this.playerDataLoaded)
+            if (!this.allDataLoaded)
             {//如果数据未完整下载，则退出游戏
                 this.tipText.text = "数据下载失败，请稍后再试！";
                 this.tipText.DOFade(1, 0.5f);

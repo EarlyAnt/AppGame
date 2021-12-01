@@ -49,7 +49,6 @@ public class iOSNativeAPI : BaseView
         iOSNativeMessage nativeMessage = this.jsonUtil.String2Json<iOSNativeMessage>(message);
         if (nativeMessage != null)
         {
-            AppGame.Module.Cycling.CyclingView.PlayerName = nativeMessage.childSN;
             GameData.ChildSn = nativeMessage.childSN;
             GameData.Token = nativeMessage.token;
             this.OnReceivedGameData(GameData.ChildSn, GameData.Token);

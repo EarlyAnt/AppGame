@@ -10,7 +10,7 @@ namespace AppGame.Data.Local
 
         void SavePlayerDataList(List<PlayerData> playerDataList);
         List<PlayerData> GetAllPlayerData();
-        bool HasPlayerData();
+        bool IsNovice();
         List<PlayerData> BuildGameData();
 
         void SavePlayerData(PlayerData playerData);
