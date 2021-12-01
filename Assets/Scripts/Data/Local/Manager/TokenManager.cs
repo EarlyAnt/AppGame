@@ -17,12 +17,15 @@ namespace AppGame.Data.Local
         }
         public string GetToken()
         {
-            //if (string.IsNullOrEmpty(this.token))
-            //{
-            //    this.token = this.GameDataHelper.GetObject<string>(DATA_KEY, "");
-            //}
-            //return this.token;
-            return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c24iOiJ1c184QUg4eWZZZUI1NWciLCJleHAiOjE2MzgyMzkzNjh9.ULQjkREajGueGe3TS3Hr00vQkvU5XLJ5t8yTtHg9R6A";
+#if UNITY_EDITOR
+            return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c24iOiJ1c184QUg4eWZZZUI1NWciLCJleHAiOjE2Mzg0MDYyNTZ9.IxFOH-lNJ0YHXpw1-iXzza97tjNF265fRIWO1Vz-fj8";
+#else
+            if (string.IsNullOrEmpty(this.token))
+            {
+                this.token = this.GameDataHelper.GetObject<string>(DATA_KEY, "");
+            }
+            return this.token;
+#endif
         }
     }
 }
