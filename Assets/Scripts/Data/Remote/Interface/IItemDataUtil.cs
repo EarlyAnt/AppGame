@@ -14,14 +14,14 @@ namespace AppGame.Data.Remote
 
     public class GetItemDataResponse : DataBase
     {
-        public NetItemDataList data { get; set; }
+        public List<NetItemData> data { get; set; }
 
         public List<ItemData> ToItemDataList()
         {
-            if (this.data != null && this.data.itemDataList != null)
+            if (this.data != null && this.data != null)
             {
                 List<ItemData> itemDataList = new List<ItemData>();
-                foreach (var item in this.data.itemDataList)
+                foreach (var item in this.data)
                 {
                     itemDataList.Add(item.ToItemData());
                 }
@@ -29,11 +29,6 @@ namespace AppGame.Data.Remote
             }
             else return null;
         }
-    }
-
-    public class NetItemDataList
-    {
-        public List<NetItemData> itemDataList { get; set; }
     }
 
     public class NetItemData

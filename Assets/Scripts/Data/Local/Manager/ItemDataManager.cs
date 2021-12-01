@@ -25,61 +25,60 @@ namespace AppGame.Data.Local
         public const string ITEM_DATA_KEY = "ItemData";
         private List<ItemData> buffer = new List<ItemData>();
 
+        [PostConstruct]
+        public void PostConstruct()
+        {
+            this.buffer = this.GameDataHelper.GetObject<List<ItemData>>(ITEM_DATA_KEY);
+            if (this.buffer == null) this.buffer = new List<ItemData>();
+        }
+
         //增加物品数量
         public void AddItem(string itemID, int itemCount = 1)
         {
             if (!this.ItemValid(itemID)) return;
 
-            ItemData itemData = this.buffer.Find(t => t.ItemID == itemID);
-            if (itemData != null)
+            ItemData newItemData = new ItemData() { ItemID = itemID };
+            ItemData curItemData = this.buffer.Find(t => t.ItemID == itemID);
+            if (curItemData != null)
             {
-                itemData.ItemCount += itemCount;
-                Debug.LogFormat("<><ItemDataManager.AddItem>existed, id: {0}, add count: {1}, current count: {2}", itemID, itemCount, itemData.ItemCount);
+                newItemData.ItemCount = curItemData.ItemCount + itemCount;
+                Debug.LogFormat("<><ItemDataManager.AddItem>existed, id: {0}, add count: {1}, current count: {2}", itemID, itemCount, curItemData.ItemCount);
             }
             else
             {
-                this.buffer.Add(new ItemData() { ItemID = itemID, ItemCount = itemCount });
+                newItemData.ItemCount = itemCount;
                 Debug.LogFormat("<><ItemDataManager.AddItem>not existed, id: {0}, add count: {1}, current count: {2}", itemID, itemCount, itemCount);
             }
 
-            this.UploadItemData();
+            this.SaveItemData(newItemData);
         }
         //减少物品数量
         public void ReduceItem(string itemID, int itemCount = 1)
         {
             if (!this.ItemValid(itemID)) return;
 
-            ItemData itemData = this.buffer.Find(t => t.ItemID == itemID);
-            if (itemData != null)
+            ItemData curItemData = this.buffer.Find(t => t.ItemID == itemID);
+            if (curItemData != null)
             {
-                itemData.ItemCount -= itemCount;
-                Debug.LogFormat("<><ItemDataManager.ReduceItem>existed, id: {0}, reduce count: {1}, current count: {2}", itemID, itemCount, itemData.ItemCount);
+                ItemData newItemData = new ItemData() { ItemID = itemID, ItemCount = curItemData.ItemCount - itemCount };
+                if (newItemData.ItemCount < 0) newItemData.ItemCount = 0;
+                this.SaveItemData(newItemData);
+                Debug.LogFormat("<><ItemDataManager.ReduceItem>existed, id: {0}, reduce count: {1}, current count: {2}", itemID, itemCount, curItemData.ItemCount);
             }
             else
             {
                 Debug.LogErrorFormat("<><ItemDataManager.ReduceItem>Error: item[{0}] is not existed", itemID);
             }
-
-            this.UploadItemData();
         }
         //设置物品数量
         public void SetItem(string itemID, int itemCount)
         {
             if (!this.ItemValid(itemID)) return;
 
-            ItemData itemData = this.buffer.Find(t => t.ItemID == itemID);
-            if (itemData != null)
-            {
-                itemData.ItemCount = itemCount;
-                Debug.LogFormat("<><ItemDataManager.SetItem>existed, id: {0}, add count: {1}", itemID, itemCount);
-            }
-            else
-            {
-                this.buffer.Add(new ItemData() { ItemID = itemID, ItemCount = itemCount });
-                Debug.LogFormat("<><ItemDataManager.SetItem>not existed, id: {0}, add count: {1}", itemID, itemCount);
-            }
+            ItemData itemData = new ItemData() { ItemID = itemID, ItemCount = itemCount };
+            Debug.LogFormat("<><ItemDataManager.SetItem>id: {0}, add count: {1}", itemID, itemCount);
 
-            this.UploadItemData();
+            this.SaveItemData(itemData);
         }
         //判断是否有物品
         public bool HasItem(string itemID, int itemCount = 1)
@@ -111,27 +110,24 @@ namespace AppGame.Data.Local
         //保存物品列表
         public void SaveItemList(List<ItemData> itemDataList)
         {
-            if (itemDataList != null)
+            if (itemDataList == null)
             {
-                if (this.buffer == null)
-                    this.buffer = new List<ItemData>();
-
-                foreach (ItemData remoteItem in itemDataList)
-                {
-                    ItemData localItem = this.buffer.Find(t => t.ItemID == remoteItem.ItemID);
-                    if (localItem != null)
-                    {
-                        localItem.ItemCount = Mathf.Max(localItem.ItemCount, remoteItem.ItemCount);
-                        this.buffer.Add(localItem);
-                    }
-                    else
-                    {
-                        this.buffer.Add(new ItemData() { ItemID = remoteItem.ItemID, ItemCount = remoteItem.ItemCount });
-                    }
-
-                }
-                this.GameDataHelper.SaveObject<List<ItemData>>(ITEM_DATA_KEY, itemDataList);
+                Debug.LogError("<><ItemDataManager.SaveItemList>error: parameter 'itemDataList' is null");
+                return;
             }
+
+            if (this.buffer == null)
+                this.buffer = new List<ItemData>();
+
+            foreach (ItemData remoteItem in itemDataList)
+            {
+                ItemData localItem = this.buffer.Find(t => t.ItemID == remoteItem.ItemID);
+                if (localItem != null)
+                    localItem.ItemCount = Mathf.Max(localItem.ItemCount, remoteItem.ItemCount);
+                else
+                    this.buffer.Add(new ItemData() { ItemID = remoteItem.ItemID, ItemCount = remoteItem.ItemCount });
+            }
+            this.GameDataHelper.SaveObject<List<ItemData>>(ITEM_DATA_KEY, this.buffer);
         }
         //清除本地缓存
         public void Clear(bool confirm = false)
@@ -151,15 +147,36 @@ namespace AppGame.Data.Local
 
             return valid;
         }
+        //保存物品数据
+        private void SaveItemData(ItemData itemData)
+        {
+            if (itemData == null)
+            {
+                Debug.LogError("<><ItemDataManager.SaveItemData>error: parameter 'itemData' is null");
+                return;
+            }
+
+            ItemData curItemData = this.buffer.Find(t => t.ItemID == itemData.ItemID);
+            if (curItemData == null)
+                this.buffer.Add(itemData);
+            else
+                curItemData.ItemCount = itemData.ItemCount;
+
+            this.GameDataHelper.SaveObject<List<ItemData>>(ITEM_DATA_KEY, this.buffer);
+            Debug.LogFormat("<><ItemDataManager.SaveItemData>itemDataList.Count: {0}", this.buffer.Count);
+
+            List<ItemData> uploadItemDataList = new List<ItemData>();
+            uploadItemDataList.Add(itemData);
+            this.UploadItemData(uploadItemDataList);
+        }
         //上传物品数据
-        private void UploadItemData()
+        private void UploadItemData(List<ItemData> itemDataList)
         {
             try
             {
-                if (this.buffer != null)
+                if (itemDataList != null)
                 {
-                    this.UploadItemDataSignal.Dispatch(this.buffer);
-                    Debug.LogError("<><ItemDataManager.UploadItemData>+++++++++++++++++++++++++++++++++++++++");
+                    this.UploadItemDataSignal.Dispatch(itemDataList);
                 }
                 else
                 {

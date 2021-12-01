@@ -54,6 +54,7 @@ namespace AppGame.Module.Cycling
             if (Input.GetKeyDown(KeyCode.E))
             {
                 this.CyclingDataManager.ClearAllData();
+                this.ItemDataManager.Clear(true);
                 Debug.Log("<><CyclingMediator.Update>clear all player data");
             }
             else if (Input.GetKeyDown(KeyCode.D))

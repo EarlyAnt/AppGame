@@ -27,8 +27,6 @@ namespace AppGame.Data.Common
                 Debug.LogErrorFormat("<><UploadItemDataCommand.Execute>error: {0}, {1}", failure.code, failure.info);
                 Release();
             });
-
-            Debug.LogErrorFormat("<><UploadItemDataCommand.Execute>+++++++++++++++++++++++++++++++++++++++, {0}", this.ItemDataList == null);
         }
     }
 }
