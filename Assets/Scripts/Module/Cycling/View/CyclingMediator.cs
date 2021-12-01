@@ -207,9 +207,10 @@ namespace AppGame.Module.Cycling
             MapPointNode endPointNode = this.View.Player.MapNode.Points[pointCount - 1].GetComponent<MapPointNode>();
             int maxPointIndex = int.Parse(endPointNode.ID.Substring(5, 2));
 
-            int index = Random.Range(0, 100) % this.playerDataList.Count;
+            List<PlayerData> friendDataList = this.playerDataList.FindAll(t => t.child_sn != this.ChildInfoManager.GetChildSN());
+            int index = Random.Range(0, 100) % friendDataList.Count;
             int offset = Random.Range(1, 5);
-            PlayerData playerData = this.playerDataList[index];
+            PlayerData playerData = friendDataList[index];
             int position = int.Parse(playerData.map_position.Substring(5, 2));
             position = Mathf.Clamp(position + offset, 1, maxPointIndex);//不能超过地图上最大的编号
             playerData.map_position = string.Format("{0}_{1:d2}", playerData.map_id, position);

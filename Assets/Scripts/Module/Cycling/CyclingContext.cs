@@ -37,6 +37,7 @@ namespace AppGame.Module.Cycling
             //bind command
             commandBinder.Bind<StartSignal>().To<StartCommand>();
             commandBinder.Bind<UploadItemDataSignal>().To<UploadItemDataCommand>();
+            commandBinder.Bind<UploadPlayerDataSignal>().To<UploadPlayerDataCommand>();
 
             //bind injection
             injectionBinder.Bind<IItemDataManager>().To<ItemDataManager>().ToSingleton();

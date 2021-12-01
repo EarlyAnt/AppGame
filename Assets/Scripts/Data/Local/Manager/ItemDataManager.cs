@@ -180,7 +180,7 @@ namespace AppGame.Data.Local
                 }
                 else
                 {
-                    Debug.LogError("<><ItemDataManager.UploadItemData>error: parameter 'buffer' is null");
+                    Debug.LogError("<><ItemDataManager.UploadItemData>error: parameter 'itemDataList' is null");
                 }
             }
             catch (System.Exception ex)

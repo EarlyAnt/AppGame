@@ -15,6 +15,8 @@ namespace AppGame.Data.Local
         public IChildInfoManager ChildInfoManager { get; set; }
         [Inject]
         public IBasicDataManager BasicDataManager { get; set; }
+        [Inject]
+        public UploadPlayerDataSignal UploadPlayerDataSignal { get; set; }
 
         private const string ORIGIN_DATA_DATA_KEY = "origin_data";
         private const string PLAYER_DATA_DATA_KEY = "player_data";
@@ -220,6 +222,9 @@ namespace AppGame.Data.Local
             mpDataList.ForEach(t => { if ((t.Date - DateTime.Today).TotalDays >= 7) removeItems.Add(t); });
             removeItems.ForEach(t => mpDataList.Remove(t));
             this.GameDataHelper.SaveObject<List<MpData>>(YESTERDAY_MP_DATA_KEY, mpDataList);
+
+            if (playerData.child_sn == this.ChildInfoManager.GetChildSN())//只有玩家自己的数据才需要上传服务器
+                this.UploadPlayerData(playerData);
         }
         /// <summary>
         /// 获取指定玩家的游戏数据
@@ -284,6 +289,27 @@ namespace AppGame.Data.Local
             this.GameDataHelper.Clear(YESTERDAY_MP_DATA_KEY);
         }
 
-
+        /// <summary>
+        /// 上传玩家游戏数据
+        /// </summary>
+        /// <param name="playerData"></param>
+        private void UploadPlayerData(PlayerData playerData)
+        {
+            try
+            {
+                if (playerData != null)
+                {
+                    this.UploadPlayerDataSignal.Dispatch(playerData);
+                }
+                else
+                {
+                    Debug.LogError("<><CyclingDataManager.UploadPlayerData>error: parameter 'playerData' is null");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogErrorFormat("<><CyclingDataManager.UploadPlayerData>error: {0}", ex.Message);
+            }
+        }
     }
 }

@@ -28,5 +28,5 @@ namespace AppGame.Data.Common
                 Release();
             });
         }
-    }
+    }    
 }
