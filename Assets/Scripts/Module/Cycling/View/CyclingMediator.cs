@@ -173,7 +173,6 @@ namespace AppGame.Module.Cycling
 
             //定时刷新页面
             this.CancelInvoke();
-            this.InvokeRepeating("GetGameData", 3f, 3f);
             this.InvokeRepeating("RefreshOriginData", 3f, 3f);
             this.InvokeRepeating("RefreshFriendData", 3f, 15f);
         }
@@ -186,10 +185,12 @@ namespace AppGame.Module.Cycling
         //刷新健康数据
         private void RefreshOriginData()
         {
+            #region 测试数据
             //this.originData.walk += Random.Range(1000, 25000) * 3;
             //this.originData.ride += Random.Range(1000, 25000) * 3;
             //this.CyclingDataManager.SaveOriginData(this.originData);
             //this.RefreshMpDatas();
+            #endregion
 
             this.CyclingDataUtil.GetOriginData((originData) =>
             {
@@ -203,19 +204,31 @@ namespace AppGame.Module.Cycling
         //刷新亲友数据
         private void RefreshFriendData()
         {
-            int pointCount = this.View.Player.MapNode.Points.Count;
-            MapPointNode endPointNode = this.View.Player.MapNode.Points[pointCount - 1].GetComponent<MapPointNode>();
-            int maxPointIndex = int.Parse(endPointNode.ID.Substring(5, 2));
+            #region 测试数据
+            //int pointCount = this.View.Player.MapNode.Points.Count;
+            //MapPointNode endPointNode = this.View.Player.MapNode.Points[pointCount - 1].GetComponent<MapPointNode>();
+            //int maxPointIndex = int.Parse(endPointNode.ID.Substring(5, 2));
 
-            List<PlayerData> friendDataList = this.playerDataList.FindAll(t => t.child_sn != this.ChildInfoManager.GetChildSN());
-            int index = Random.Range(0, 100) % friendDataList.Count;
-            int offset = Random.Range(1, 5);
-            PlayerData playerData = friendDataList[index];
-            int position = int.Parse(playerData.map_position.Substring(5, 2));
-            position = Mathf.Clamp(position + offset, 1, maxPointIndex);//不能超过地图上最大的编号
-            playerData.map_position = string.Format("{0}_{1:d2}", playerData.map_id, position);
-            this.CyclingDataManager.SavePlayerData(playerData);
-            this.View.RefreshTeammates(this.playerDataList);
+            //List<PlayerData> friendDataList = this.playerDataList.FindAll(t => t.child_sn != this.ChildInfoManager.GetChildSN());
+            //int index = Random.Range(0, 100) % friendDataList.Count;
+            //int offset = Random.Range(1, 5);
+            //PlayerData playerData = friendDataList[index];
+            //int position = int.Parse(playerData.map_position.Substring(5, 2));
+            //position = Mathf.Clamp(position + offset, 1, maxPointIndex);//不能超过地图上最大的编号
+            //playerData.map_position = string.Format("{0}_{1:d2}", playerData.map_id, position);
+            //this.CyclingDataManager.SavePlayerData(playerData);
+            //this.View.RefreshTeammates(this.playerDataList);
+            #endregion
+
+            this.CyclingDataUtil.GetGameData((playerDataList) =>
+            {
+                this.playerDataList = playerDataList;
+                this.View.RefreshTeammates(this.playerDataList);
+                Debug.LogFormat("<><CyclingMediator.RefreshFriendData>GetGameData, success: {0}", playerDataList != null ? playerDataList.Count : 0);
+            }, (errorText) =>
+            {
+                Debug.LogFormat("<><CyclingMediator.RefreshFriendData>GetGameData, failure: {0}", errorText);
+            });
         }
         //刷新页面数据
         private void RefreshViewData()
