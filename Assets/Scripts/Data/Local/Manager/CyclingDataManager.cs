@@ -117,7 +117,7 @@ namespace AppGame.Data.Local
                 mp_today = 0,
                 mp_date = System.DateTime.Today,
                 mp_yestoday = 0,
-                hp = 3
+                hp = 20
             });
             #region 创建亲友游戏数据(测试用)
             //playerDataList.Add(new PlayerData()
