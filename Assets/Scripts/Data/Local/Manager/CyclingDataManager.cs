@@ -98,7 +98,7 @@ namespace AppGame.Data.Local
             //创建游戏数据
             List<PlayerData> playerDataList = new List<PlayerData>();
             //创建自己初始数据
-            playerDataList.Add(new PlayerData()
+            PlayerData playerData = new PlayerData()
             {
                 is_novice = true,
                 child_sn = childSN,
@@ -118,7 +118,9 @@ namespace AppGame.Data.Local
                 mp_date = System.DateTime.Today,
                 mp_yestoday = 0,
                 hp = 20
-            });
+            };
+            playerDataList.Add(playerData);
+
             #region 创建亲友游戏数据(测试用)
             //playerDataList.Add(new PlayerData()
             //{
@@ -167,12 +169,14 @@ namespace AppGame.Data.Local
             #endregion
 
             List<PlayerData> curPlayerDataList = this.GetAllPlayerData();
-            foreach (PlayerData playerData in curPlayerDataList)
+            foreach (PlayerData onePlayerData in curPlayerDataList)
             {
-                if (!playerDataList.Exists(t => t.child_sn == playerData.child_sn))
-                    playerDataList.Add(playerData);
+                if (!playerDataList.Exists(t => t.child_sn == onePlayerData.child_sn))
+                    playerDataList.Add(onePlayerData);
             }
             this.GameDataHelper.SaveObject(PLAYER_DATA_DATA_KEY, playerDataList);
+            this.UploadPlayerData(playerData);
+
             return playerDataList;
         }
 
