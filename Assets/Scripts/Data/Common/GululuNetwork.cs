@@ -48,9 +48,8 @@ namespace AppGame.Data.Common
 
         public void SendRequest(string url, IDictionary<string, string> headrs, Action<string> callBack, Action<ResponseErroInfo> errCallBack, HTTPMethods methods)
         {
-
-            string requestInfo = "mothod:" + methods + " url:" + url;
-            Debug.LogFormat("GululuNetwork: {0}", requestInfo);
+            //string requestInfo = "mothod:" + methods + " url:" + url;
+            //Debug.LogFormat("GululuNetwork: {0}", requestInfo);
 
             HTTPRequest hTTPRequest = new HTTPRequest(new Uri(url), methods);
             hTTPRequest.Tag = RequestRetryInfo.allRetryCount;

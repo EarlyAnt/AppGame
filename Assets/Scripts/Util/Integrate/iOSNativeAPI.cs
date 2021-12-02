@@ -46,19 +46,28 @@ public class iOSNativeAPI : BaseView
 
     public void ReceiveMessageFromiOS(string message)
     {
-        iOSNativeMessage nativeMessage = this.jsonUtil.String2Json<iOSNativeMessage>(message);
-        if (nativeMessage != null)
-        {
-            GameData.ChildSn = nativeMessage.childSN;
-            GameData.Token = nativeMessage.token;
-            this.OnReceivedGameData(GameData.ChildSn, GameData.Token);
-        }
-        else
-        {
-            Debug.LogError("<><iOSNativeAPI.ReceiveMessageFromiOS>Error: invalid message[type error]");
-        }
-
         Debug.Log("<><iOSNativeAPI.ReceiveMessageFromiOS>message: " + message);
+
+        try
+        {
+            iOSNativeMessage nativeMessage = this.jsonUtil.String2Json<iOSNativeMessage>(message);
+            if (nativeMessage != null)
+            {
+                GameData.ChildSn = nativeMessage.childSN;
+                GameData.Token = nativeMessage.token;
+                this.OnReceivedGameData(GameData.ChildSn, GameData.Token);
+                Debug.LogFormat("<><iOSNativeAPI.ReceiveMessageFromiOS>childSN: {0}, token: {1}", GameData.ChildSn, GameData.Token);
+            }
+            else
+            {
+                Debug.LogError("<><iOSNativeAPI.ReceiveMessageFromiOS>Error: invalid message[type error]");
+
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogErrorFormat("<><iOSNativeAPI.ReceiveMessageFromiOS>Error: {0}", ex.Message);
+        }
     }
 
     public void GoBack()

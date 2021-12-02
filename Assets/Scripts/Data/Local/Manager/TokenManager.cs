@@ -1,5 +1,6 @@
 using AppGame.Data.Common;
 using AppGame.Util;
+using UnityEngine;
 
 namespace AppGame.Data.Local
 {
@@ -24,6 +25,7 @@ namespace AppGame.Data.Local
             {
                 this.token = this.GameDataHelper.GetObject<string>(DATA_KEY, "");
             }
+            //Debug.LogFormat("<><TokenManager.GetToken>token: {0}", this.token);
             return this.token;
 #endif
         }

@@ -50,19 +50,27 @@ public class AndroidNativeAPI : BaseView
 
     public void ReceiveMessageFromAndroid(string message)
     {
-        AndroidNativeMessage nativeMessage = this.jsonUtil.String2Json<AndroidNativeMessage>(message);
-        if (nativeMessage != null)
-        {
-            GameData.ChildSn = nativeMessage.childSN;
-            GameData.Token = nativeMessage.token;
-            this.OnReceivedGameData(GameData.ChildSn, GameData.Token);
-        }
-        else
-        {
-            Debug.LogError("<><AndroidNativeAPI.ReceiveMessageFromiOS>Error: invalid message[type error]");
-        }
+        Debug.Log("<><AndroidNativeAPI.ReceiveMessageFromAndroid>message: " + message);
 
-        Debug.Log("<><AndroidNativeAPI.ReceiveMessageFromiOS>message: " + message);
+        try
+        {
+            AndroidNativeMessage nativeMessage = this.jsonUtil.String2Json<AndroidNativeMessage>(message);
+            if (nativeMessage != null)
+            {
+                GameData.ChildSn = nativeMessage.childSN;
+                GameData.Token = nativeMessage.token;
+                this.OnReceivedGameData(GameData.ChildSn, GameData.Token);
+                Debug.LogFormat("<><AndroidNativeAPI.ReceiveMessageFromAndroid>childSN: {0}, token: {1}", GameData.ChildSn, GameData.Token);
+            }
+            else
+            {
+                Debug.LogError("<><AndroidNativeAPI.ReceiveMessageFromAndroid>Error: invalid message[type error]");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogErrorFormat("<><AndroidNativeAPI.ReceiveMessageFromAndroid>Error: {0}", ex.Message);
+        }
     }
 
     public void GoBack()

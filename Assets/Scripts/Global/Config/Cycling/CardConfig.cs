@@ -31,7 +31,7 @@ namespace AppGame.Config
                 try
                 {
                     SecurityParser xmlDoc = new SecurityParser();
-                    Debug.LogFormat("<><CardConfig.ReadConfig>Content: {0}", www.text);
+                    //Debug.LogFormat("<><CardConfig.ReadConfig>Content: {0}", www.text);
 
                     xmlDoc.LoadXml(www.text);
                     ArrayList allNodes = xmlDoc.ToXml().Children;

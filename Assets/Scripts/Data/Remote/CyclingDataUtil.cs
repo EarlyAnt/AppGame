@@ -45,7 +45,7 @@ namespace AppGame.Data.Remote
         public void GetBasicData(Action<BasicData> callback = null, Action<string> errCallback = null)
         {
             string url = this.UrlProvider.GetBasicDataUrl(this.ChildInfoManager.GetChildSN());
-            Debug.LogFormat("<><CyclingDataUtil.GetBasicData>ChildSN: {0}, Url: {1}", this.ChildInfoManager.GetChildSN(), url);
+            Debug.LogFormat("<><CyclingDataUtil.GetBasicData>ChildSN: {0}, Url: {1}, token: {2}", this.ChildInfoManager.GetChildSN(), url, this.TokenManager.GetToken());
 
             Header header = new Header();
             header.headers.Add(new HeaderData() { key = "Authorization", value = this.TokenManager.GetToken() });
@@ -73,7 +73,7 @@ namespace AppGame.Data.Remote
         public void GetOriginData(Action<OriginData> callback = null, Action<string> errCallback = null)
         {
             string url = this.UrlProvider.GetOriginDataUrl(this.ChildInfoManager.GetChildSN(), "cycling");
-            Debug.LogFormat("<><CyclingDataUtil.GetOriginData>ChildSN: {0}, Url: {1}", this.ChildInfoManager.GetChildSN(), url);
+            Debug.LogFormat("<><CyclingDataUtil.GetOriginData>ChildSN: {0}, Url: {1}, token: {2}", this.ChildInfoManager.GetChildSN(), url, this.TokenManager.GetToken());
 
             Header header = new Header();
             header.headers.Add(new HeaderData() { key = "Authorization", value = this.TokenManager.GetToken() });
@@ -110,7 +110,7 @@ namespace AppGame.Data.Remote
         public void GetGameData(Action<List<PlayerData>> callback = null, Action<string> errCallback = null)
         {
             string url = this.UrlProvider.GetGameDataUrl(this.ChildInfoManager.GetChildSN());
-            //Debug.LogFormat("<><CyclingDataUtil.GetGameData>ChildSN: {0}, Url: {1}", this.LocalChildInfoAgent.getChildSN(), url);
+            Debug.LogFormat("<><CyclingDataUtil.GetGameData>ChildSN: {0}, Url: {1}, token: {2}", this.ChildInfoManager.GetChildSN(), url, this.TokenManager.GetToken());
 
             Header header = new Header();
             header.headers.Add(new HeaderData() { key = "Authorization", value = this.TokenManager.GetToken() });

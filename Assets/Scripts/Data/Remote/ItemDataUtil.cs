@@ -43,7 +43,7 @@ namespace AppGame.Data.Remote
         public void GetItemData(Action<List<ItemData>> callback = null, Action<string> errCallback = null)
         {
             string url = this.UrlProvider.ItemDataUrl(this.ChildInfoManager.GetChildSN());
-            //Debug.LogFormat("<><ItemDataUtil.GetItemData>ChildSN: {0}, Url: {1}", this.LocalChildInfoAgent.getChildSN(), url);
+            Debug.LogFormat("<><ItemDataUtil.GetItemData>ChildSN: {0}, Url: {1}, token: {2}", this.ChildInfoManager.GetChildSN(), url, this.TokenManager.GetToken());
 
             Header header = new Header();
             header.headers.Add(new HeaderData() { key = "Authorization", value = this.TokenManager.GetToken() });
