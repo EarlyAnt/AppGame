@@ -333,12 +333,12 @@ namespace AppGame.Module.GameStart
                 this.tipText.DOFade(1, 0.5f);
                 yield return new WaitForSeconds(2f);
                 Debug.LogError("<><GameStartView.LoadScene>Download game data, exit game");
-                //#if UNITY_ANDROID && !UNITY_EDITOR
-                //                AndroidNativeAPI.Instance.GoBack();
-                //#elif UNITY_IOS && !UNITY_EDITOR
-                //                iOSNativeAPI.Instance.GoBack();
-                //#endif
-                //                yield break;
+#if UNITY_ANDROID && !UNITY_EDITOR
+                AndroidNativeAPI.Instance.GoBack();
+#elif UNITY_IOS && !UNITY_EDITOR
+                iOSNativeAPI.Instance.GoBack();
+#endif
+                yield break;
             }
 
             AsyncOperation async = SceneManager.LoadSceneAsync("TripMap", LoadSceneMode.Single);
