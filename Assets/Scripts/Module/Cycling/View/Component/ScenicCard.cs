@@ -108,7 +108,7 @@ namespace AppGame.Module.Cycling
         {
             Debug.LogFormat("<><ScenicCard.OpenUrl>url: {0}", this.url);
 #if UNITY_ANDROID
-                AndroidNativeAPI.Instance.SendMessageToAndroid(this.url);
+                AndroidNativeAPI.Instance.OpenWebPage(this.url);
 #elif UNITY_IOS
                 iOSNativeAPI.Instance.OpenWebPage(this.url);
 #endif

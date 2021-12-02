@@ -319,9 +319,9 @@ namespace AppGame.Module.GameStart
                 Debug.LogFormat("<><GameStartView.LoadGameData>GetGameData, failure: {0}", errorText);
             });
 
-            yield return new WaitUntil(() => this.allDataLoaded || (Time.time - startTime) > 3);
+            yield return new WaitUntil(() => this.allDataLoaded || (Time.time - startTime) > 10);
             if (this.itemDataLoaded && this.basicDataLoaded && this.originDataLoaded && this.playerDataLoaded) this.totalProgress.Value = endValue;
-            Debug.LogFormat("<><GameStartView.LoadGameData>Load game data complete...{0}, {1}, {2}", this.itemDataLoaded, this.basicDataLoaded, this.playerDataLoaded);
+            Debug.LogFormat("<><GameStartView.LoadGameData>Load game data complete...{0}, {1}, {2}, {3}", this.itemDataLoaded, this.basicDataLoaded, this.originDataLoaded, this.playerDataLoaded);
         }
         //加载场景
         private IEnumerator LoadScene(float startValue, float endValue)
