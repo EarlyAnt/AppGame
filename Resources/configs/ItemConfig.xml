@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Project Name="Gululu" Version="">
   <Items>
-    <Item ItemID="10000" ItemType="10" ItemName="Coin" ItemIcon="" ItemDesc="" />
-    <Item ItemID="20010001" ItemType="20" ItemName="中山陵" ItemIcon="" ItemDesc="" />
-    <Item ItemID="20010002" ItemType="20" ItemName="总统府" ItemIcon="" ItemDesc="" />
-    <Item ItemID="20010003" ItemType="20" ItemName="夫子庙" ItemIcon="" ItemDesc="" />
-    <Item ItemID="20010004" ItemType="20" ItemName="瞻园" ItemIcon="" ItemDesc="" />
-    <Item ItemID="20010005" ItemType="20" ItemName="玄武湖公园" ItemIcon="" ItemDesc="" />
-    <Item ItemID="20010006" ItemType="20" ItemName="明孝陵" ItemIcon="" ItemDesc="" />
-    <Item ItemID="20010007" ItemType="20" ItemName="美龄宫" ItemIcon="" ItemDesc="" />
-    <Item ItemID="20010008" ItemType="20" ItemName="南京大屠杀纪念馆" ItemIcon="" ItemDesc="" />
-    <Item ItemID="20010009" ItemType="20" ItemName="栖霞山" ItemIcon="" ItemDesc="" />
+	<Item ItemID="10000" ItemType="10" ItemName="Coin" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010001" ItemType="20" ItemName="中山陵" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010002" ItemType="20" ItemName="总统府" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010003" ItemType="20" ItemName="夫子庙" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010004" ItemType="20" ItemName="瞻园" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010005" ItemType="20" ItemName="玄武湖公园" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010006" ItemType="20" ItemName="明孝陵" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010007" ItemType="20" ItemName="美龄宫" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010008" ItemType="20" ItemName="南京大屠杀纪念馆" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010009" ItemType="20" ItemName="栖霞山" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010010" ItemType="21" ItemName="西津渡古街" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010011" ItemType="22" ItemName="金山寺" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010012" ItemType="23" ItemName="北固山" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010013" ItemType="24" ItemName="焦山" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010014" ItemType="25" ItemName="得撒石磨豆腐村" ItemIcon="" ItemDesc="" />
+	<Item ItemID="20010015" ItemType="26" ItemName="宝华山国家森林公园" ItemIcon="" ItemDesc="" />
   </Items>
 </Project>
