@@ -17,9 +17,18 @@ public abstract class ImageLoader : BaseView
     {
         get { return this.autoLoad; }
     }
+    public string ImageName
+    {
+        get { return this.imageName; }
+    }
     /************************************************Unity方法与事件***********************************************/
 
     /************************************************自 定 义 方 法************************************************/
     //加载图片
     public abstract void LoadImage();
+    //设置图片名称
+    public void SetImageName(string name)
+    {
+        this.imageName = name;
+    }
 }

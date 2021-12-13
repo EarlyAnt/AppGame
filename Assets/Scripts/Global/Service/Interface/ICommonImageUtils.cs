@@ -6,6 +6,6 @@ namespace AppGame.Global
     {
         void Initialize();
         void LoadCommonImages();
-        Sprite GetAvatar(string avatarName);
+        string GetAvatarFileName(string avatarName);
     }
 }

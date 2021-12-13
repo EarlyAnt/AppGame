@@ -12,7 +12,7 @@ namespace AppGame.Module.Cycling
         #endregion
         #region 页面UI组件
         [SerializeField]
-        protected Image avatarBox;
+        protected ABSpriteLoader avatarLoader;
         [SerializeField]
         protected MapNode mapNode;
         [SerializeField]
@@ -29,11 +29,6 @@ namespace AppGame.Module.Cycling
                 return this.mapNode != null && this.mapNode.Points != null && this.mapNode.Points.Count > 0 ?
                        this.mapNode.Points[this.nodeIndex].position : Vector3.zero;
             }
-        }
-        public Sprite Avatar
-        {
-            get { return this.avatarBox.sprite; }
-            set { this.avatarBox.sprite = value; }
         }
         public MapNode MapNode
         {
@@ -61,6 +56,11 @@ namespace AppGame.Module.Cycling
         protected virtual void Initialize()
         {
             this.player.position = this.mapNode.Points[this.nodeIndex].position;
+        }
+        //设置头像
+        public void SetAvatar(string avatarName)
+        {
+            this.avatarLoader.LoadImage(avatarName);
         }
         //移动到指定位置
         public abstract void MoveToNode(string nodeID, bool lerp = false);

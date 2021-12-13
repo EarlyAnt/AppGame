@@ -38,12 +38,14 @@ public class SpriteLoader : ImageLoader
     {
         if (string.IsNullOrEmpty(this.imageName))
         {
-            Debug.LogErrorFormat("<><SpriteLoader.LoadImage>Parameter 'imageName' is null or empty, object: {0}", this.gameObject != null ? this.gameObject.name : "");
+            if (this.autoLoad)
+                Debug.LogErrorFormat("<><SpriteLoader.LoadImage>Parameter 'imageName' is null or empty, object: {0}", this.gameObject != null ? this.gameObject.name : "");
             return;
         }
         else if (this.moduleView == ModuleViews.None)
         {
-            Debug.LogErrorFormat("<><SpriteLoader.LoadImage>Component 'baseView' is null, object: {0}", this.gameObject != null ? this.gameObject.name : "");
+            if (this.autoLoad)
+                Debug.LogErrorFormat("<><SpriteLoader.LoadImage>Component 'baseView' is null, object: {0}", this.gameObject != null ? this.gameObject.name : "");
             return;
         }
 
@@ -82,19 +84,24 @@ public class SpriteLoader : ImageLoader
         this.imageName = newImageName;
         this.LoadImage();
     }
+    //设置图片所属模块
+    public void SetModuleView(ModuleViews moduleView)
+    {
+        this.moduleView = moduleView;
+    }
     [ContextMenu("0-设置Image组件和图片名字")]
-    private void SetAll()
+    public void SetAll()
     {
         this.SetImageBox();
         this.SetImageName();
     }
     [ContextMenu("1-设置Image组件")]
-    private void SetImageBox()
+    public void SetImageBox()
     {
         this.imageBox = this.GetComponent<Image>();
     }
     [ContextMenu("2-设置图片名字")]
-    private void SetImageName()
+    public void SetImageName()
     {
         if (this.imageBox != null && this.imageBox.sprite != null)
             this.imageName = this.imageBox.sprite.name;

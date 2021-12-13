@@ -31,7 +31,7 @@ namespace AppGame.Module.Cycling
         [SerializeField, Range(0f, 1f)]
         private float rotateDuration = 1f;//卡片旋转时长
         [SerializeField]
-        private Image imageBox;//景点图片框
+        private ABSpriteLoader imageSite;//景点图片
         [SerializeField]
         private Text cityNameBox;//城市名字文字框
         [SerializeField]
@@ -77,7 +77,7 @@ namespace AppGame.Module.Cycling
             }
 
             //设置页面内容
-            this.imageBox.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, string.Format("Texture/Cycling/Site/{0}", card.Image));
+            this.imageSite.LoadImage(card.Image);
             this.cityNameBox.text = mapInfo.CityName;
             this.scenicNameBox.text = scenicInfo.Name;
             this.descriptionBox.text = this.I18NConfig.GetText(card.Text);
@@ -108,7 +108,7 @@ namespace AppGame.Module.Cycling
         {
             Debug.LogFormat("<><ScenicCard.OpenUrl>url: {0}", this.url);
 #if UNITY_ANDROID
-                AndroidNativeAPI.Instance.OpenWebPage(this.url);
+            AndroidNativeAPI.Instance.OpenWebPage(this.url);
 #elif UNITY_IOS
                 iOSNativeAPI.Instance.OpenWebPage(this.url);
 #endif

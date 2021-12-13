@@ -19,7 +19,7 @@ namespace AppGame.Data.Local
         public string GetToken()
         {
 #if UNITY_EDITOR
-            return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c24iOiJ1c184QUg4eWZZZUI1NWciLCJleHAiOjE2Mzg1MTIyODB9.lVh9M8xmDWWYk4TA-op-9m14d-zEtgIUIBkwcS0tQiE";
+            return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c24iOiJ1c184QUg4eWZZZUI1NWciLCJleHAiOjE2Mzk0NDYxMjV9._30v8AezZp6_6OPVhs2dubckDwTzoiim6WdWZ4lK9Os";
 #else
             if (string.IsNullOrEmpty(this.token))
             {

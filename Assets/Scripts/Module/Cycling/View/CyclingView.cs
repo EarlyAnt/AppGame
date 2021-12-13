@@ -55,7 +55,7 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private Text progressBox;
         [SerializeField]
-        private Image avatarBox;
+        private ABSpriteLoader avatarLoader;
         [SerializeField]
         private Text nameBox;
         [SerializeField]
@@ -167,7 +167,7 @@ namespace AppGame.Module.Cycling
             {
                 this.AssetBundleUtil.UnloadAllAssets();
 #if UNITY_ANDROID
-            AndroidNativeAPI.Instance.GoBack();
+                AndroidNativeAPI.Instance.GoBack();
 #elif UNITY_IOS
             iOSNativeAPI.Instance.GoBack();
 #endif
@@ -237,9 +237,9 @@ namespace AppGame.Module.Cycling
             this.player.MapNode = this.mapNode;
             this.player.MoveToNode(myPlayerData.map_position);
             this.player.name = "Player_" + myPlayerData.child_sn;
-            Sprite avatar = this.CommonImageUtils.GetAvatar(myPlayerData.child_avatar);
-            this.player.Avatar = avatar;
-            this.avatarBox.sprite = avatar;
+            string avatarFileName = this.CommonImageUtils.GetAvatarFileName(myPlayerData.child_avatar);
+            this.player.SetAvatar(avatarFileName);
+            this.avatarLoader.SetImageName(avatarFileName);
             this.nameBox.text = myPlayerData.child_name;
             Debug.LogFormat("<><CyclingView.RefreshPlayer>player name: {0}", this.nameBox.text);
             this.coinBox.text = coin.ToString();
@@ -265,7 +265,7 @@ namespace AppGame.Module.Cycling
 
                     Teammate teammate = GameObject.Instantiate<Teammate>(this.teammatePrefab, this.teammateRoot);
                     teammate.name = "Teammate_" + teammateData.child_sn;
-                    teammate.Avatar = this.CommonImageUtils.GetAvatar(teammateData.child_avatar);
+                    teammate.SetAvatar(this.CommonImageUtils.GetAvatarFileName(teammateData.child_avatar));
                     teammate.MapNode = this.mapNode;
                     teammate.MoveToNode(teammateData.map_position);
                     this.teammates.Add(teammate);

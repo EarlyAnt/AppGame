@@ -5,8 +5,8 @@ using UnityEngine.UI;
 /// <summary>
 /// 图片加载框
 /// </summary>
-[RequireComponent(typeof(RawImage))]
-public class TextureLoader : ImageLoader
+[RequireComponent(typeof(Image))]
+public class ABSpriteLoader : ImageLoader
 {
     /************************************************属性与变量命名************************************************/
     [Inject]
@@ -14,9 +14,7 @@ public class TextureLoader : ImageLoader
     [SerializeField]
     private string assetbundleName;
     [SerializeField]
-    private RawImage imageBox;
-    [SerializeField]
-    private bool setNativeSize;
+    private Image imageBox;
     /************************************************Unity方法与事件***********************************************/
     protected override void Start()
     {
@@ -31,53 +29,50 @@ public class TextureLoader : ImageLoader
         if (string.IsNullOrEmpty(this.assetbundleName))
         {
             if (this.autoLoad)
-                Debug.LogErrorFormat("<><TextureLoader.LoadImage>Parameter 'assetbundleName' is null or empty, object: {0}", this.gameObject != null ? this.gameObject.name : "");
+                Debug.LogErrorFormat("<><ABSpriteLoader.LoadImage>Parameter 'assetbundleName' is null or empty, object: {0}", this.gameObject != null ? this.gameObject.name : "");
             return;
         }
         else if (string.IsNullOrEmpty(this.imageName))
         {
             if (this.autoLoad)
-                Debug.LogErrorFormat("<><TextureLoader.LoadImage>Parameter 'imageName' is null or empty, object: {0}", this.gameObject != null ? this.gameObject.name : "");
+                Debug.LogErrorFormat("<><ABSpriteLoader.LoadImage>Parameter 'imageName' is null or empty, object: {0}", this.gameObject != null ? this.gameObject.name : "");
             return;
         }
 
         //检查并设置组件
         if (this.imageBox == null)
-            this.imageBox = this.GetComponent<RawImage>();
+            this.imageBox = this.GetComponent<Image>();
 
         //再次检查组件
         if (this.imageBox == null)
         {
-            Debug.LogErrorFormat("<><TextureLoader.LoadImage>Component 'image' is null");
+            Debug.LogErrorFormat("<><ABSpriteLoader.LoadImage>Component 'image' is null");
             return;
         }
 
         //加载图片
-        //Debug.LogFormat("<><TextureLoader.LoadImage>Object: {0}, Image: {1}", this.gameObject.name, imagePath);
+        //Debug.LogFormat("<><ABSpriteLoader.LoadImage>Object: {0}, Image: {1}", this.gameObject.name, imagePath);
         this.AssetBundleUtil.LoadAssetBundleAsync(this.assetbundleName, (assetbundle) =>
         {
-            Texture2D texture = assetbundle.LoadAsset<Texture2D>(this.imageName);
-            if (texture != null)
+            Sprite sprite = assetbundle.LoadAsset<Sprite>(this.imageName);
+            if (sprite != null)
             {
-                this.imageBox.texture = texture;
-                if (this.setNativeSize)
-                    this.imageBox.SetNativeSize();
-                if (this.autoLoad)
-                    GameObject.Destroy(this);
+                this.imageBox.sprite = sprite;
+                //if (this.autoLoad)
+                //    GameObject.Destroy(this);
             }
             else
             {
-                Debug.LogErrorFormat("<><TextureLoader.LoadImage>Error: can not find texture, assetbundle: {0}, texture: {1}", this.assetbundleName, this.imageName);
+                Debug.LogErrorFormat("<><ABSpriteLoader.LoadImage>Error: can not find sprite, assetbundle: {0}, texture: {1}", this.assetbundleName, this.imageName);
             }
         }, (failureInfo) =>
         {
-            Debug.LogErrorFormat("<><TextureLoader.LoadImage>Error: can not find assetbundle, assetbundle: {0}", this.assetbundleName);
+            Debug.LogErrorFormat("<><ABSpriteLoader.LoadImage>Error: can not find assetbundle, assetbundle: {0}", this.assetbundleName);
         });
     }
     //加载图片
-    public void LoadImage(string assetbundleName, string newImageName)
+    public void LoadImage(string newImageName)
     {
-        this.assetbundleName = assetbundleName;
         this.imageName = newImageName;
         this.LoadImage();
     }
@@ -92,17 +87,17 @@ public class TextureLoader : ImageLoader
         this.SetImageBox();
         this.SetImageName();
     }
-    [ContextMenu("1-设置RawImage组件")]
-    private void SetImageBox()
+    [ContextMenu("1-设置Image组件")]
+    public void SetImageBox()
     {
-        this.imageBox = this.GetComponent<RawImage>();
+        this.imageBox = this.GetComponent<Image>();
     }
     [ContextMenu("2-设置图片名字")]
     public void SetImageName()
     {
-        if (this.imageBox != null && this.imageBox.texture != null)
-            this.imageName = this.imageBox.texture.name;
+        if (this.imageBox != null && this.imageBox.sprite != null)
+            this.imageName = this.imageBox.sprite.name;
         else
-            Debug.LogError("<><TextureLoader.SetImageName>Error: imageBox is null or sprite is null");
+            Debug.LogError("<><ABSpriteLoader.SetImageName>Error: imageBox is null or sprite is null");
     }
 }
