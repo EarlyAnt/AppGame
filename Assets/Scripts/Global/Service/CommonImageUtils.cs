@@ -8,29 +8,14 @@ namespace AppGame.Global
     {
         [Inject]
         public IModuleConfig ModuleConfig { get; set; }
-        private bool initialized = false;
         private Dictionary<string, string> icons = new Dictionary<string, string>();
 
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        public void Initialize()
-        {
-            if (!this.initialized)
-            {//每次程序启动时只加载一次公共图片
-                this.initialized = true;
-                SpriteHelper.Instance.LoadModuleImages(ModuleViews.Common);
-            }
-        }
         /// <summary>
         /// 加载所有公共图片
         /// </summary>
         public void LoadCommonImages()
         {
-            if (this.initialized)
-            {
-                this.LoadAvatar();
-            }
+            this.LoadAvatar();
         }
         /// <summary>
         /// 加载头像

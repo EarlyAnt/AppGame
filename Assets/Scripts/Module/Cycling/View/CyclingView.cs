@@ -113,7 +113,6 @@ namespace AppGame.Module.Cycling
         protected override void Start()
         {
             base.Start();
-            this.Initialize();
             this.UpdateDispatcher(true);
         }
         protected override void OnDestroy()
@@ -123,10 +122,6 @@ namespace AppGame.Module.Cycling
             base.OnDestroy();
         }
         /************************************************自 定 义 方 法************************************************/
-        private void Initialize()
-        {
-            this.StartCoroutine(this.LoadModuleFiles(ModuleViews.Cycling));
-        }
         public void RestartGame()
         {
             this.dispatcher.Dispatch(GameEvent.GAME_START);

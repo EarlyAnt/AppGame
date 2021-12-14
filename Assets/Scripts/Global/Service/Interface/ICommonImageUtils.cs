@@ -4,7 +4,6 @@ namespace AppGame.Global
 {
     public interface ICommonImageUtils
     {
-        void Initialize();
         void LoadCommonImages();
         string GetAvatarFileName(string avatarName);
     }

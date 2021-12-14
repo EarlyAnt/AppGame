@@ -3,7 +3,6 @@ using strange.extensions.mediation.impl;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace AppGame.UI
@@ -54,31 +53,6 @@ namespace AppGame.UI
         {
             yield return new WaitUntil(condition);
             if (callback != null) callback();
-        }
-
-        protected IEnumerator LoadModuleFiles(ModuleViews moduleView, Action callback = null, float delaySeconds = 0)
-        {
-            SpriteHelper.Instance.LoadModuleImages(moduleView);
-            yield return new WaitForSeconds(0.2f);
-            this.LoadStaticImage();
-            yield return new WaitForSeconds(delaySeconds);
-            if (callback != null) callback();
-        }
-
-        protected virtual void LoadStaticImage()
-        {
-            ImageLoader[] imageLoaders = this.GetComponentsInChildren<ImageLoader>(true);
-            if (imageLoaders != null)
-            {
-                imageLoaders.ToList().ForEach(t =>
-                {
-                    if (!t.AutoLoad) t.LoadImage();
-                });
-            }
-        }
-
-        protected virtual void ClearImageBuffer()
-        {
         }
     }
 }

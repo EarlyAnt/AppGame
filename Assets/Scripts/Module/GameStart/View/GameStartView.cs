@@ -271,7 +271,6 @@ namespace AppGame.Module.GameStart
         //加载图片
         private IEnumerator LoadImage(float endValue)
         {
-            this.CommonImageUtils.Initialize();
             yield return new WaitForSeconds(1f);
             this.CommonImageUtils.LoadCommonImages();
             yield return new WaitForSeconds(UnityEngine.Random.Range(this.durationMin, this.durationMax) * this.speedRate);
