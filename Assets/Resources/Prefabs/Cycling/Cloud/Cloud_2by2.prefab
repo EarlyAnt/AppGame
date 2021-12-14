@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3019743186812092271}
   - component: {fileID: 3896242244290369625}
   - component: {fileID: 8830645368816641364}
-  - component: {fileID: 4515767451406218126}
+  - component: {fileID: 8986200400923523427}
   m_Layer: 5
   m_Name: Cloud (6)
   m_TagString: Untagged
@@ -75,7 +75,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4515767451406218126
+--- !u!114 &8986200400923523427
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -84,12 +84,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1016765330713234474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Script: {fileID: 11500000, guid: addf0a73644e2ca4dbe8d281b562e173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   imageName: cloud_04
   autoLoad: 1
-  moduleView: 3
+  assetbundleName: cycling/view
   imageBox: {fileID: 8830645368816641364}
 --- !u!1 &4045578666442873233
 GameObject:
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 8476433444739417296}
   - component: {fileID: 5591026359090605483}
   - component: {fileID: 4039668581916316537}
-  - component: {fileID: 7208882382899690698}
+  - component: {fileID: 3131874261661255783}
   m_Layer: 5
   m_Name: Cloud (2)
   m_TagString: Untagged
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7208882382899690698
+--- !u!114 &3131874261661255783
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -175,12 +175,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4045578666442873233}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Script: {fileID: 11500000, guid: addf0a73644e2ca4dbe8d281b562e173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   imageName: cloud_01
   autoLoad: 1
-  moduleView: 3
+  assetbundleName: cycling/view
   imageBox: {fileID: 4039668581916316537}
 --- !u!1 &6699777264226553902
 GameObject:
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 4560570681775223807}
   - component: {fileID: 5417581418604581875}
   - component: {fileID: 5890187177275420100}
-  - component: {fileID: 684517184931995479}
+  - component: {fileID: 6572941515682386782}
   m_Layer: 5
   m_Name: Cloud (1)
   m_TagString: Untagged
@@ -257,7 +257,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &684517184931995479
+--- !u!114 &6572941515682386782
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -266,12 +266,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6699777264226553902}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Script: {fileID: 11500000, guid: addf0a73644e2ca4dbe8d281b562e173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   imageName: cloud_02
   autoLoad: 1
-  moduleView: 3
+  assetbundleName: cycling/view
   imageBox: {fileID: 5890187177275420100}
 --- !u!1 &6830067565703674745
 GameObject:
@@ -284,7 +284,7 @@ GameObject:
   - component: {fileID: 3335443303944396626}
   - component: {fileID: 4674790077692952408}
   - component: {fileID: 6755427128379828427}
-  - component: {fileID: 3763532536141130566}
+  - component: {fileID: 5362413811779523715}
   m_Layer: 5
   m_Name: Cloud (3)
   m_TagString: Untagged
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3763532536141130566
+--- !u!114 &5362413811779523715
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -357,12 +357,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6830067565703674745}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Script: {fileID: 11500000, guid: addf0a73644e2ca4dbe8d281b562e173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   imageName: cloud_02
   autoLoad: 1
-  moduleView: 3
+  assetbundleName: cycling/view
   imageBox: {fileID: 6755427128379828427}
 --- !u!1 &6970056420294267230
 GameObject:
@@ -456,7 +456,7 @@ GameObject:
   - component: {fileID: 5845705882564910291}
   - component: {fileID: 403124792338136330}
   - component: {fileID: 1040987122352309916}
-  - component: {fileID: 9165661959810422268}
+  - component: {fileID: 5446215277143011285}
   m_Layer: 5
   m_Name: Cloud (4)
   m_TagString: Untagged
@@ -520,7 +520,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &9165661959810422268
+--- !u!114 &5446215277143011285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -529,12 +529,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7073773057995679570}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Script: {fileID: 11500000, guid: addf0a73644e2ca4dbe8d281b562e173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   imageName: cloud_03
   autoLoad: 1
-  moduleView: 3
+  assetbundleName: cycling/view
   imageBox: {fileID: 1040987122352309916}
 --- !u!1 &7080025594099621480
 GameObject:
@@ -547,7 +547,7 @@ GameObject:
   - component: {fileID: 3377033373328404515}
   - component: {fileID: 1992751534464412148}
   - component: {fileID: 3047950837714903969}
-  - component: {fileID: 8700730800266096762}
+  - component: {fileID: 7378087156439517998}
   m_Layer: 5
   m_Name: Cloud (5)
   m_TagString: Untagged
@@ -611,7 +611,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8700730800266096762
+--- !u!114 &7378087156439517998
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -620,10 +620,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7080025594099621480}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d41d717e5643a44695dd3926c0ee256, type: 3}
+  m_Script: {fileID: 11500000, guid: addf0a73644e2ca4dbe8d281b562e173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   imageName: cloud_04
   autoLoad: 1
-  moduleView: 3
+  assetbundleName: cycling/view
   imageBox: {fileID: 3047950837714903969}

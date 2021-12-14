@@ -115,10 +115,12 @@ namespace AppGame.Util
             {
                 foreach (var file in moduleInfo.Files)
                 {
+                    if (!file.Enable) continue;
+
                     if (file.FileType == Config.FileTypes.Sprite || file.FileType == Config.FileTypes.Texture1)
                         assetFiles.Add(new AssetFile() { Path = file.Path, FullPath = string.Format("Texture/{0}.png", file.Path), MD5 = "" });
                     else if (file.FileType == Config.FileTypes.Texture2 || file.FileType == Config.FileTypes.Spine)
-                        assetFiles.Add(new AssetFile() { Path = file.Path, FullPath = string.Format("Model/{0}.ab", file.AB), MD5 = "" });
+                        assetFiles.Add(new AssetFile() { Path = file.Path, FullPath = string.Format("Model/{0}/{1}.ab", platform, file.AB), MD5 = "" });
                 }
             }
             #endregion

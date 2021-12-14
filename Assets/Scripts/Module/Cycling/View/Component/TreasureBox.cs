@@ -303,7 +303,7 @@ namespace AppGame.Module.Cycling
                         this.treasureBoxList.ForEach(t => t.Spine.DOFade(0f, 0.5f));
                         this.DelayInvoke(() =>
                         {
-                            //this.treasureBoxList.ForEach(t => t.Spine.AnimationState.SetAnimation(0, "box03", false));//DoFade把透明度改为零后，再执行这句话就报错，暂时先注释掉(注释掉也没发现有视觉问题)
+                            this.treasureBoxList.ForEach(t => t.Spine.AnimationState.SetAnimation(0, "box03", false));
                             this.currentStep = OpenTreasureBoxSteps.GotReward;
                             this.Reset();
                             this.OnCallback();
