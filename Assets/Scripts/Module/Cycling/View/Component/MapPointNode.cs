@@ -17,7 +17,7 @@ namespace AppGame.Module.Cycling
         private string normalImageName;
         [SerializeField]
         private string lightImageName;
-        private SpriteLoader spriteLoader;
+        private ABSpriteLoader spriteLoader;
         public string ID { get { return this.id; } }
         public NodeTypes NodeType { get { return this.nodeType; } }
         /************************************************Unity方法与事件***********************************************/
@@ -44,7 +44,7 @@ namespace AppGame.Module.Cycling
         public void SetIcon(bool light)
         {
             if (this.spriteLoader == null)
-                this.spriteLoader = this.GetComponent<SpriteLoader>();
+                this.spriteLoader = this.GetComponent<ABSpriteLoader>();
 
             if (this.spriteLoader != null)
                 this.spriteLoader.LoadImage(light ? this.lightImageName : this.normalImageName);

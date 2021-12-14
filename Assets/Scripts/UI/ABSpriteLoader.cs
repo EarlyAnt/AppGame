@@ -1,4 +1,5 @@
 using AppGame.Util;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,7 +52,21 @@ public class ABSpriteLoader : ImageLoader
         }
 
         //加载图片
-        //Debug.LogFormat("<><ABSpriteLoader.LoadImage>Object: {0}, Image: {1}", this.gameObject.name, imagePath);
+        this.StartCoroutine(this.LoadImageAsync());
+    }
+    //加载图片
+    public void LoadImage(string newImageName)
+    {
+        this.imageName = newImageName;
+        this.LoadImage();
+    }
+    //延迟加载图片(防止AssetBundleUtil还未inject就被调用)
+    private IEnumerator LoadImageAsync()
+    {
+        float time = Time.time;
+        yield return new WaitUntil(() => this.AssetBundleUtil != null || (Time.time - time) > 1);
+
+        //Debug.LogFormat("<><ABSpriteLoader.LoadImageAsync>Object: {0}, Image: {1}", this.gameObject.name, imagePath);
         this.AssetBundleUtil.LoadAssetBundleAsync(this.assetbundleName, (assetbundle) =>
         {
             Sprite sprite = assetbundle.LoadAsset<Sprite>(this.imageName);
@@ -63,18 +78,12 @@ public class ABSpriteLoader : ImageLoader
             }
             else
             {
-                Debug.LogErrorFormat("<><ABSpriteLoader.LoadImage>Error: can not find sprite, assetbundle: {0}, texture: {1}", this.assetbundleName, this.imageName);
+                Debug.LogErrorFormat("<><ABSpriteLoader.LoadImageAsync>Error: can not find sprite, assetbundle: {0}, texture: {1}", this.assetbundleName, this.imageName);
             }
         }, (failureInfo) =>
         {
-            Debug.LogErrorFormat("<><ABSpriteLoader.LoadImage>Error: can not find assetbundle, assetbundle: {0}", this.assetbundleName);
+            Debug.LogErrorFormat("<><ABSpriteLoader.LoadImageAsync>Error: can not find assetbundle, assetbundle: {0}", this.assetbundleName);
         });
-    }
-    //加载图片
-    public void LoadImage(string newImageName)
-    {
-        this.imageName = newImageName;
-        this.LoadImage();
     }
     //设置AB包名称
     public void SetAssetBundleName(string name)
