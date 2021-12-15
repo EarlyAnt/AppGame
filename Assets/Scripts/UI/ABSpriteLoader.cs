@@ -52,7 +52,7 @@ public class ABSpriteLoader : ImageLoader
         }
 
         //加载图片
-        this.StartCoroutine(this.LoadImageAsync());
+        AsyncActionHelper.Instance.StartCoroutine(this.LoadImageAsync());
     }
     //加载图片
     public void LoadImage(string newImageName)
