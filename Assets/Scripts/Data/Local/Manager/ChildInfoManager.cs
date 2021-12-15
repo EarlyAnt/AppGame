@@ -20,17 +20,12 @@ namespace AppGame.Data.Local
 
         public string GetChildSN()
         {
-            //#if UNITY_EDITOR
-            //            if (AppData.DebugMode)
-            //                return "";
-
-            //            this.SaveChildSN(DEFAULT_CHILD_SN);
-            //#endif
-            //            this.childSn = this.LocalDataHelper.GetObject<string>(DATA_KEY, "");
-            //            //Debug.LogFormat("<><ChildInfoManager.GetChildSN>childSn: {0}", this.childSn);
-            //            return childSn;
-
-            return DEFAULT_CHILD_SN;
+#if UNITY_EDITOR
+            this.SaveChildSN(DEFAULT_CHILD_SN);
+#endif
+            this.childSn = this.LocalDataHelper.GetObject<string>(DATA_KEY, "");
+            //Debug.LogFormat("<><ChildInfoManager.GetChildSN>childSn: {0}", this.childSn);
+            return childSn;
         }
 
         public void Clear()
