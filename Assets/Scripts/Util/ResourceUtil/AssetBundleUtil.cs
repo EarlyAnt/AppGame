@@ -19,9 +19,9 @@ namespace AppGame.Util
         {
             get
             {
-#if UNITY_ANDROID && !UNITY_EDITOR
+#if UNITY_ANDROID
                 return "Android";
-#elif UNITY_IOS && !UNITY_EDITOR
+#elif UNITY_IOS
                 return "iOS";
 #else
                 return "Android";

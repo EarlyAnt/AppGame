@@ -85,7 +85,7 @@ namespace AppGame.Util
         public List<AssetFile> GetAllFileList()
         {
             string platform = "Android";
-#if UNITY_IOS && !UNITY_EDITOR
+#if UNITY_IOS
             platform = "iOS";
 #endif
             List<AssetFile> assetFiles = new List<AssetFile>();
