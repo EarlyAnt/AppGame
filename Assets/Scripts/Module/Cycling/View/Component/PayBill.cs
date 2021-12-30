@@ -65,8 +65,10 @@ namespace AppGame.Module.Cycling
             this.feepBox.color = mpData.CoinEnough ? Color.white : this.noMoneyColor;
             //this.titleBox.text = "";//Todo: 后续补上国际化的功能
             //this.tipBox.text = "";//Todo: 后续补上国际化的功能
-            Sprite sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, this.ModuleConfig.GetImagePath(ModuleViews.Cycling, mpData.CoinEnough ? "enable_button" : "disable_button"));
-            this.buttonBox.sprite = sprite;
+
+            ABSpriteLoader loader = this.buttonBox.GetComponent<ABSpriteLoader>();
+            if (loader != null)
+                loader.LoadImage(mpData.CoinEnough ? "enable_button" : "disable_button");
             this.buttonBox.raycastTarget = mpData.CoinEnough;
             this.root.gameObject.SetActive(true);
             this.SetErrorPanel(!mpData.CoinEnough);

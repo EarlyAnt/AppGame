@@ -192,8 +192,9 @@ namespace AppGame.Module.Cycling
             //this.RefreshMpDatas();
             #endregion
 
-            this.CyclingDataUtil.GetOriginData((originData) =>
+            this.CyclingDataUtil.GetOriginData((data) =>
             {
+                this.originData.ride = data.ride;
                 this.RefreshMpDatas();
 
             }, (errorText) =>
@@ -390,8 +391,15 @@ namespace AppGame.Module.Cycling
             }
 
             this.myPlayerData.mp += mpData.Mp;//记录增加的能量值
-            if (this.myPlayerData.mp_date == System.DateTime.Today)
+            if (this.myPlayerData.mp_date != System.DateTime.Today)
+            {//当天，累加能量值
                 this.myPlayerData.mp_today += mpData.Mp;//记录增加的能量值
+            }
+            else
+            {//跨天，重新记录能量值
+                this.myPlayerData.mp_date = System.DateTime.Today;
+                this.myPlayerData.mp_today += mpData.Mp;//记录增加的能量值
+            }
             int hpIncrease = (int)((this.myPlayerData.mp - myPlayerData.mp_expend) / 100);//计算能量值是否可转换成行动点数
             if (hpIncrease > 0)//每满100可转换成1点行动点数
             {
