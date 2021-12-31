@@ -324,7 +324,8 @@ namespace AppGame.Module.Cycling
             }
 
             MpData mpData = mpBall.ToMpData();
-            bool overLimit = this.myPlayerData.mp_today >= this.DeviceInfoManager.GetMpLimit();
+            bool overLimit = this.myPlayerData.mp_date == System.DateTime.Today &&
+                             this.myPlayerData.mp_today >= this.DeviceInfoManager.GetMpLimit();
             if (overLimit && mpData.RefreshView)
             {//超出每日能量收取上限时，弹出支付手续费页面
                 int coin = this.ItemDataManager.GetItemCount(Items.COIN);
@@ -391,14 +392,14 @@ namespace AppGame.Module.Cycling
             }
 
             this.myPlayerData.mp += mpData.Mp;//记录增加的能量值
-            if (this.myPlayerData.mp_date != System.DateTime.Today)
+            if (this.myPlayerData.mp_date == System.DateTime.Today)
             {//当天，累加能量值
-                this.myPlayerData.mp_today += mpData.Mp;//记录增加的能量值
+                this.myPlayerData.mp_today += mpData.Mp;
             }
             else
             {//跨天，重新记录能量值
                 this.myPlayerData.mp_date = System.DateTime.Today;
-                this.myPlayerData.mp_today += mpData.Mp;//记录增加的能量值
+                this.myPlayerData.mp_today = mpData.Mp;
             }
             int hpIncrease = (int)((this.myPlayerData.mp - myPlayerData.mp_expend) / 100);//计算能量值是否可转换成行动点数
             if (hpIncrease > 0)//每满100可转换成1点行动点数
