@@ -52,7 +52,7 @@ namespace AppGame.Data.Remote
     {
         public string child_sn { get; set; }
         public int? distance { get; set; }
-        public int? duration { get; set; }
+        public long? duration { get; set; }
         public int? calories { get; set; }
 
         public OriginData ToOriginData()
