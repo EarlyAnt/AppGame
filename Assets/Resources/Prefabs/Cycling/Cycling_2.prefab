@@ -469,7 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d18840151e0daf49914736fbb3981dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 1219055528}
+  background: {fileID: 1704122211}
   button: {fileID: 9989571}
   enableBgName: cost_panel
   disableBgName: disable_button
@@ -1905,6 +1905,7 @@ GameObject:
   - component: {fileID: 820288853}
   - component: {fileID: 820288855}
   - component: {fileID: 820288854}
+  - component: {fileID: 1704122213}
   m_Layer: 5
   m_Name: Cost
   m_TagString: Untagged
@@ -1971,6 +1972,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1704122213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 820288852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: addf0a73644e2ca4dbe8d281b562e173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageName: cost_panel
+  autoLoad: 1
+  assetbundleName: cycling/view
+  imageBox: {fileID: 820288854}
 --- !u!1 &827919867
 GameObject:
   m_ObjectHideFlags: 0
@@ -2116,7 +2133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d18840151e0daf49914736fbb3981dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 1456605079}
+  background: {fileID: 1704122212}
   button: {fileID: 9989575}
   enableBgName: cost_panel
   disableBgName: disable_button
@@ -2270,7 +2287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d18840151e0daf49914736fbb3981dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 1822355985}
+  background: {fileID: 1704122210}
   button: {fileID: 9989573}
   enableBgName: cost_panel
   disableBgName: disable_button
@@ -3007,6 +3024,7 @@ GameObject:
   - component: {fileID: 1219055527}
   - component: {fileID: 1219055529}
   - component: {fileID: 1219055528}
+  - component: {fileID: 1704122211}
   m_Layer: 5
   m_Name: Cost
   m_TagString: Untagged
@@ -3073,6 +3091,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1704122211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219055526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: addf0a73644e2ca4dbe8d281b562e173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageName: cost_panel
+  autoLoad: 1
+  assetbundleName: cycling/view
+  imageBox: {fileID: 1219055528}
 --- !u!1 &1228692476
 GameObject:
   m_ObjectHideFlags: 0
@@ -3737,6 +3771,7 @@ GameObject:
   - component: {fileID: 1456605078}
   - component: {fileID: 1456605080}
   - component: {fileID: 1456605079}
+  - component: {fileID: 1704122212}
   m_Layer: 5
   m_Name: Cost
   m_TagString: Untagged
@@ -3803,6 +3838,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1704122212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456605077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: addf0a73644e2ca4dbe8d281b562e173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageName: cost_panel
+  autoLoad: 1
+  assetbundleName: cycling/view
+  imageBox: {fileID: 1456605079}
 --- !u!1 &1532280016
 GameObject:
   m_ObjectHideFlags: 0
@@ -4134,7 +4185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d18840151e0daf49914736fbb3981dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  background: {fileID: 820288854}
+  background: {fileID: 1704122213}
   button: {fileID: 9989564}
   enableBgName: cost_panel
   disableBgName: disable_button
@@ -4592,6 +4643,7 @@ GameObject:
   - component: {fileID: 1822355984}
   - component: {fileID: 1822355986}
   - component: {fileID: 1822355985}
+  - component: {fileID: 1704122210}
   m_Layer: 5
   m_Name: Cost
   m_TagString: Untagged
@@ -4658,6 +4710,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1704122210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822355983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: addf0a73644e2ca4dbe8d281b562e173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageName: cost_panel
+  autoLoad: 1
+  assetbundleName: cycling/view
+  imageBox: {fileID: 1822355985}
 --- !u!1 &1919715792
 GameObject:
   m_ObjectHideFlags: 0

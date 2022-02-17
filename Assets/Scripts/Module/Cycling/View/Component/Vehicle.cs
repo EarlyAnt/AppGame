@@ -11,7 +11,7 @@ namespace AppGame.Module.Cycling
         [Inject]
         public IModuleConfig ModuleConfig { get; set; }
         [SerializeField]
-        private Image background;
+        private ABSpriteLoader background;
         [SerializeField]
         private Image button;
         [SerializeField]
@@ -59,7 +59,7 @@ namespace AppGame.Module.Cycling
         public void SetStatus(bool enable)
         {
             string imageName = enable ? this.enableBgName : this.disableBgName;
-            this.background.sprite = SpriteHelper.Instance.LoadSpriteFromBuffer(ModuleViews.Cycling, this.ModuleConfig.GetImagePath(ModuleViews.Cycling, imageName));
+            this.background.LoadImage(imageName);
             this.button.raycastTarget = enable;
         }
     }
