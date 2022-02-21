@@ -28,6 +28,7 @@ namespace AppGame.Module.Cycling
         private int hpPrice;//交通费单价：能量点数
         [SerializeField]
         private string vehicleName;//交通工具名称
+        private Color disableButtonTextColor = new Color(0.62f, 0.62f, 0.62f, 1f);
 
         private int coin;//交通费：金币
         private int hp;//交通费：能量点数
@@ -61,6 +62,8 @@ namespace AppGame.Module.Cycling
             string imageName = enable ? this.enableBgName : this.disableBgName;
             this.background.LoadImage(imageName);
             this.button.raycastTarget = enable;
+            this.coinBox.color = enable ? Color.white : this.disableButtonTextColor;
+            this.hpBox.color = enable ? Color.white : this.disableButtonTextColor;
         }
     }
 }
