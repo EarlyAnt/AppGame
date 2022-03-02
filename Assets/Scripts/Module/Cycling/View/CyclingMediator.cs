@@ -37,6 +37,8 @@ namespace AppGame.Module.Cycling
         public ICyclingDataManager CyclingDataManager { get; set; }
         #endregion
         #region 其他变量
+        private const int DISTANCE_TO_ENERGY = 5;
+        private const int ENERGY_TO_GO = 200;
         private OriginData originData = null;
         private List<PlayerData> playerDataList = null;
         private PlayerData myPlayerData
@@ -173,7 +175,7 @@ namespace AppGame.Module.Cycling
 
             //定时刷新页面
             this.CancelInvoke();
-            this.InvokeRepeating("RefreshOriginData", 3f, 3f);
+            this.InvokeRepeating("RefreshOriginData", 3f, 5);
             this.InvokeRepeating("RefreshFriendData", 3f, 15f);
         }
         //获取游戏数据
@@ -186,8 +188,8 @@ namespace AppGame.Module.Cycling
         private void RefreshOriginData()
         {
             #region 测试数据
-            //this.originData.walk += Random.Range(1000, 25000) * 3;
-            //this.originData.ride += Random.Range(1000, 25000) * 3;
+            //this.originData.walk += Random.Range(5, 500);
+            //this.originData.ride += Random.Range(5, 500);
             //this.CyclingDataManager.SaveOriginData(this.originData);
             //this.RefreshMpDatas();
             #endregion
@@ -244,10 +246,10 @@ namespace AppGame.Module.Cycling
         {
             List<MpData> mpDatas = new List<MpData>();
 
-            int mpWalk = (int)((this.originData.walk - this.myPlayerData.walk_expend) / 500);
+            int mpWalk = (int)((this.originData.walk - this.myPlayerData.walk_expend) / DISTANCE_TO_ENERGY);
             mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Walk, Mp = mpWalk });
 
-            int mpRide = (int)((this.originData.ride - this.myPlayerData.ride_expend) / 500);
+            int mpRide = (int)((this.originData.ride - this.myPlayerData.ride_expend) / DISTANCE_TO_ENERGY);
             mpDatas.Add(new MpData() { MpBallType = MpBallTypes.Ride, Mp = mpRide });
 
             int mpTrain = (this.originData.train - this.myPlayerData.train_expend);
@@ -372,10 +374,10 @@ namespace AppGame.Module.Cycling
             switch (mpData.MpBallType)
             {
                 case MpBallTypes.Walk:
-                    this.myPlayerData.walk_expend += mpData.Mp * 500;
+                    this.myPlayerData.walk_expend += mpData.Mp * DISTANCE_TO_ENERGY;
                     break;
                 case MpBallTypes.Ride:
-                    this.myPlayerData.ride_expend += mpData.Mp * 500;
+                    this.myPlayerData.ride_expend += mpData.Mp * DISTANCE_TO_ENERGY;
                     break;
                 case MpBallTypes.Train:
                     this.myPlayerData.train_expend += mpData.Mp;
@@ -401,10 +403,10 @@ namespace AppGame.Module.Cycling
                 this.myPlayerData.mp_date = System.DateTime.Today;
                 this.myPlayerData.mp_today = mpData.Mp;
             }
-            int hpIncrease = (int)((this.myPlayerData.mp - myPlayerData.mp_expend) / 100);//计算能量值是否可转换成行动点数
+            int hpIncrease = (int)((this.myPlayerData.mp - myPlayerData.mp_expend) / ENERGY_TO_GO);//计算能量值是否可转换成行动点数
             if (hpIncrease > 0)//每满100可转换成1点行动点数
             {
-                this.myPlayerData.mp_expend += hpIncrease * 100;//记录耗用的能量
+                this.myPlayerData.mp_expend += hpIncrease * ENERGY_TO_GO;//记录耗用的能量
                 this.myPlayerData.hp += hpIncrease;//记录增加的行动点数
             }
             this.CyclingDataManager.SavePlayerData(this.myPlayerData);//保存数据

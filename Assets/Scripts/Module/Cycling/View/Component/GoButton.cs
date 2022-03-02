@@ -107,9 +107,8 @@ namespace AppGame.Module.Cycling
             if (this.goButton == null)
                 return;
 
-            percent = Mathf.Clamp(percent, 0, 100);
-            percent = percent / 10;
-
+            percent = Mathf.Clamp(percent, 0, 200);
+            percent = percent / 20;
             string animationName = percent == 0 ? "animation10" : string.Format("animation{0}", percent * 10);
             //Debug.LogFormat("<><GoButton.SetWaterLevel>animation: {0}", animationName);
             this.goButton.AnimationState.SetAnimation(0, animationName, true).Complete += (trackEntry) =>
