@@ -93,7 +93,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &6790664248285505183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +217,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &125295648865145542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,7 +341,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &735397718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,7 +465,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &5115591618343816364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,7 +589,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &1047359123979115570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1040,7 +1040,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &1376826666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2190,7 +2190,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &1376826667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2821,7 +2821,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &1376826665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2945,7 +2945,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &1376826664
 MonoBehaviour:
   m_ObjectHideFlags: 0

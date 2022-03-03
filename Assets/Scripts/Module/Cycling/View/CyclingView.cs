@@ -137,14 +137,12 @@ namespace AppGame.Module.Cycling
             //复原状态变量
             this.playerCanGo = true;
             this.hideMpBalls = false;
-            this.mask.DOFade(1f, 0f);
-            this.canvasGroup.DOFade(0f, 0f);
+            this.DoFade(0f, 0f);
 
             //场景过渡
             this.DelayInvoke(() =>
             {
-                this.mask.DOFade(0f, 0.5f);
-                this.canvasGroup.DOFade(1f, 0.5f);
+                this.DoFade(1f, 0.5f);
             }, 0.5f);
 
             //清除队友
@@ -163,13 +161,9 @@ namespace AppGame.Module.Cycling
         }
         public void GoBack()
         {
-            this.mask.DOFade(1f, 0.5f);
-            this.goButton.DoFade(0f, 0.5f);
-            this.uiCanvasGroup.DOFade(0f, 0.5f);
-            this.roadCanvasGroup.DOFade(0f, 0.5f);
-            this.sceneCanvasGroup.DOFade(0f, 0.5f);
-            this.canvasGroup.DOFade(0f, 0.75f).onComplete += () =>
+            this.DoFade(0f, 0.5f, () =>
             {
+
                 SceneManager.LoadScene("GameOver");
                 this.DelayInvoke(() =>
                 {
@@ -181,7 +175,7 @@ namespace AppGame.Module.Cycling
 #endif
                     Debug.Log("<><CyclingView.GoBack>go back to flutter");
                 }, 1f);
-            };
+            });
         }
         public void LoadMap(string mapID)
         {
@@ -385,6 +379,22 @@ namespace AppGame.Module.Cycling
         {
             this.playerCanGo = true;
             this.SetMpBallVisible(true);
+        }
+        private void DoFade(float endValue, float seconds, System.Action callback = null)
+        {
+            if (endValue == 0)
+                this.roadCanvasGroup.gameObject.SetActive(false);
+
+            this.mask.DOFade(Mathf.Clamp01(1 - endValue), seconds);
+            this.canvasGroup.DOFade(endValue, seconds);
+            this.goButton.DoFade(endValue, seconds);
+            this.uiCanvasGroup.DOFade(endValue, seconds);
+            this.sceneCanvasGroup.DOFade(endValue, seconds).onComplete += () =>
+            {
+                this.roadCanvasGroup.gameObject.SetActive(endValue == 1);
+                if (callback != null)
+                    callback();
+            };
         }
         private void UpdateDispatcher(bool register)
         {

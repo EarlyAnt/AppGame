@@ -600,7 +600,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &8109064874835406744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -724,7 +724,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &6602330707627710633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -957,7 +957,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &4306593147837019833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1697,7 +1697,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &9075283897971444775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2328,7 +2328,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &6594501799411221781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3645,7 +3645,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &5596644186325645502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4040,7 +4040,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &883231413737072111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4636,7 +4636,7 @@ MonoBehaviour:
   idLock: 1
   nodeType: 2
   normalImageName: treasure_box
-  lightImageName: treasure_box
+  lightImageName: treasure_box_opened
 --- !u!114 &8490687834759963549
 MonoBehaviour:
   m_ObjectHideFlags: 0
