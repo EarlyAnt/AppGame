@@ -60,8 +60,6 @@ namespace AppGame.Module.GameStart
         private CanvasGroup canvasGroup;
         [SerializeField]
         private ProgressBar totalProgress;
-        [SerializeField]
-        private ProgressBar downloadProgress;
         [SerializeField, Range(0f, 5f)]
         private float durationMin = 3f;
         [SerializeField, Range(0f, 5f)]
@@ -211,6 +209,9 @@ namespace AppGame.Module.GameStart
         //下载资源文件
         private IEnumerator Download(float endValue)
         {
+            float startValue = this.totalProgress.Value;
+            float stepValue = endValue - this.totalProgress.Value;
+
             List<AssetFile> assetFiles = this.CommonResourceUtil.GetUpdateFileList();
             if (assetFiles == null || assetFiles.Count == 0)
             {
@@ -265,8 +266,8 @@ namespace AppGame.Module.GameStart
 
                 //更新进度条及进度文字
                 float percent = (float)++this.downloadInfo.CompleteCount / this.downloadInfo.TotalCount;
-                percent = Mathf.Clamp01(percent);
-                this.downloadProgress.Value = percent;
+                percent = Mathf.Clamp01(percent) * stepValue;
+                this.totalProgress.Value = startValue + percent;
             }
             System.GC.Collect();
             this.CancelInvoke("CheckOverTime");//结束下载时(无论是正常结束还是遇到错误时异常结束)停止检测下载超时
@@ -403,7 +404,7 @@ namespace AppGame.Module.GameStart
             {
                 this.progressValue = Mathf.Clamp01(value);
                 this.progressBar.fillAmount = this.progressValue;
-                this.progressText.text = string.Format("{0:f1}%", this.progressValue * 100);
+                this.progressText.text = string.Format("{0:f0}%", this.progressValue * 100);
             }
         }
     }
