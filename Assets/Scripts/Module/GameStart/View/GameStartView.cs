@@ -5,6 +5,7 @@ using AppGame.Global;
 using AppGame.UI;
 using AppGame.Util;
 using DG.Tweening;
+using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,6 +60,8 @@ namespace AppGame.Module.GameStart
         [SerializeField]
         private CanvasGroup canvasGroup;
         [SerializeField]
+        private SkeletonGraphic loadingSpine;
+        [SerializeField]
         private ProgressBar totalProgress;
         [SerializeField, Range(0f, 5f)]
         private float durationMin = 3f;
@@ -92,6 +95,7 @@ namespace AppGame.Module.GameStart
             base.Awake();
             this.canvasGroup.alpha = 0;
             this.canvasGroup.DOFade(1f, 1.5f);
+            this.loadingSpine.DOFade(1f, 2f);
         }
         protected override void Start()
         {
@@ -353,6 +357,7 @@ namespace AppGame.Module.GameStart
             async.allowSceneActivation = false;
             while (async.progress < 0.9f)
             {
+                this.loadingSpine.DOFade(0f, 0.75f);
                 this.canvasGroup.DOFade(0f, 0.75f).onComplete += () =>
                 {
                     this.totalProgress.Value = startValue + async.progress * (endValue - startValue);
