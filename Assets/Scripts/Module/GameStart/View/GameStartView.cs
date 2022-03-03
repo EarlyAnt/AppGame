@@ -1,4 +1,5 @@
 using AppGame.Config;
+using AppGame.Data.Common;
 using AppGame.Data.Local;
 using AppGame.Data.Remote;
 using AppGame.Global;
@@ -60,6 +61,8 @@ namespace AppGame.Module.GameStart
         [SerializeField]
         private CanvasGroup canvasGroup;
         [SerializeField]
+        private Text loadingLabel;
+        [SerializeField]
         private SkeletonGraphic loadingSpine;
         [SerializeField]
         private ProgressBar totalProgress;
@@ -95,7 +98,7 @@ namespace AppGame.Module.GameStart
             base.Awake();
             this.canvasGroup.alpha = 0;
             this.canvasGroup.DOFade(1f, 1.5f);
-            this.loadingSpine.DOFade(1f, 2f);
+            this.loadingSpine.DOColor(SpineColors.NORMAL, 1.5f);
         }
         protected override void Start()
         {
@@ -129,6 +132,12 @@ namespace AppGame.Module.GameStart
         {
             iOSNativeAPI.Instance.OnReceiveGameData = this.OnReceivedGameData;
             AndroidNativeAPI.Instance.OnReceiveGameData = this.OnReceivedGameData;
+
+            List<AssetFile> assetFiles = this.CommonResourceUtil.GetUpdateFileList();
+            bool needToDownload = assetFiles != null && assetFiles.Count > 0;
+            this.loadingLabel.gameObject.SetActive(!needToDownload);
+            this.totalProgress.Enable = needToDownload;
+
             float progress = UnityEngine.Random.Range(0.15f, 0.2f);
             yield return this.StartCoroutine(this.ReadConfig(progress));
             progress = UnityEngine.Random.Range(0.2f, 0.5f);
@@ -358,6 +367,7 @@ namespace AppGame.Module.GameStart
             while (async.progress < 0.9f)
             {
                 this.loadingSpine.DOFade(0f, 0.75f);
+                this.loadingSpine.DOColor(SpineColors.TRANSPARENT, 0.75f);
                 this.canvasGroup.DOFade(0f, 0.75f).onComplete += () =>
                 {
                     this.totalProgress.Value = startValue + async.progress * (endValue - startValue);
@@ -395,6 +405,8 @@ namespace AppGame.Module.GameStart
     public class ProgressBar
     {
         [SerializeField]
+        private GameObject root;
+        [SerializeField]
         private Image progressBar;
         [SerializeField]
         private Text progressText;
@@ -411,6 +423,11 @@ namespace AppGame.Module.GameStart
                 this.progressBar.fillAmount = this.progressValue;
                 this.progressText.text = string.Format("{0:f0}%", this.progressValue * 100);
             }
+        }
+        public bool Enable
+        {
+            get { return this.root.activeInHierarchy; }
+            set { this.root.SetActive(value); }
         }
     }
 

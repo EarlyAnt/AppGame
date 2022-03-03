@@ -1,6 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine;
 
 namespace AppGame.Data.Common
 {
@@ -29,5 +28,11 @@ namespace AppGame.Data.Common
         public int code { get; set; }
         public string msg { get; set; }
         public bool success { get; set; }
+    }
+
+    public static class SpineColors
+    {
+        public static Color TRANSPARENT = new Color(0, 0, 0, 0);
+        public static Color NORMAL = new Color(1, 1, 1, 1);
     }
 }

@@ -1,3 +1,4 @@
+using AppGame.Data.Common;
 using AppGame.Data.Local;
 using AppGame.UI;
 using AppGame.Util;
@@ -76,6 +77,7 @@ namespace AppGame.Module.Cycling
                 goButtonObject.transform.localScale = Vector3.one;
                 goButtonObject.GetComponent<RectTransform>().sizeDelta = buttonSize;
                 this.goButton = goButtonObject.GetComponent<SkeletonGraphic>();
+                this.goButton.DOColor(SpineColors.TRANSPARENT, 0f);
                 CyclingView cyclingView = GameObject.FindObjectOfType<CyclingView>();
                 if (cyclingView != null)
                 {
@@ -121,7 +123,7 @@ namespace AppGame.Module.Cycling
         //淡入淡出
         public void DoFade(float endValue, float seconds)
         {
-            this.goButton.DOFade(endValue, seconds);
+            this.goButton.DOColor(endValue == 0 ? SpineColors.TRANSPARENT : SpineColors.NORMAL, seconds);
             this.particleEffect.DOFade(endValue, seconds);
         }
     }
