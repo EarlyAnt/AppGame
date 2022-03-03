@@ -117,7 +117,7 @@ namespace AppGame.Data.Local
                 mp_today = 0,
                 mp_date = System.DateTime.Today,
                 mp_yestoday = 0,
-                hp = 0
+                hp = 20
             };
             playerDataList.Add(playerData);
 
