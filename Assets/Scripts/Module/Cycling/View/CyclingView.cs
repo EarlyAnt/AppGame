@@ -163,6 +163,7 @@ namespace AppGame.Module.Cycling
         }
         public void GoBack()
         {
+            this.mask.DOFade(1f, 0.5f);
             this.goButton.DoFade(0f, 0.5f);
             this.uiCanvasGroup.DOFade(0f, 0.5f);
             this.roadCanvasGroup.DOFade(0f, 0.5f);
