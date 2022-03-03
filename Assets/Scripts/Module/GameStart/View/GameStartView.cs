@@ -57,6 +57,8 @@ namespace AppGame.Module.GameStart
         #endregion
         #region 页面UI组件
         [SerializeField]
+        private CanvasGroup canvasGroup;
+        [SerializeField]
         private ProgressBar totalProgress;
         [SerializeField]
         private ProgressBar downloadProgress;
@@ -87,6 +89,12 @@ namespace AppGame.Module.GameStart
         private DownloadInfo downloadInfo = new DownloadInfo();//下载信息
         #endregion
         /************************************************Unity方法与事件***********************************************/
+        protected override void Awake()
+        {
+            base.Awake();
+            this.canvasGroup.alpha = 0;
+            this.canvasGroup.DOFade(1f, 1.5f);
+        }
         protected override void Start()
         {
             base.Start();
@@ -344,7 +352,10 @@ namespace AppGame.Module.GameStart
             async.allowSceneActivation = false;
             while (async.progress < 0.9f)
             {
-                this.totalProgress.Value = startValue + async.progress * (endValue - startValue);
+                this.canvasGroup.DOFade(0f, 0.75f).onComplete += () =>
+                {
+                    this.totalProgress.Value = startValue + async.progress * (endValue - startValue);
+                };
                 yield return new WaitForEndOfFrame();
             }
             Debug.Log("<><GameStartView.ReadConfig>Load scene async complete...");

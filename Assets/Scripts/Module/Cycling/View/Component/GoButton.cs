@@ -118,6 +118,12 @@ namespace AppGame.Module.Cycling
 
             this.particleEffect.gameObject.SetActive(percent > 0);
         }
+        //淡入淡出
+        public void DoFade(float endValue, float seconds)
+        {
+            this.goButton.DOFade(endValue, seconds);
+            this.particleEffect.DOFade(endValue, seconds);
+        }
     }
 }
 

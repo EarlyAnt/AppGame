@@ -157,17 +157,21 @@ namespace AppGame.Module.Cycling
         }
         public void GoBack()
         {
-            SceneManager.LoadScene("GameOver");
-            this.DelayInvoke(() =>
+            this.goButton.DoFade(0f, 0.75f);
+            this.canvasGroup.DOFade(0f, 0.75f).onComplete += () =>
             {
-                this.AssetBundleUtil.UnloadAllAssets();
+                SceneManager.LoadScene("GameOver");
+                this.DelayInvoke(() =>
+                {
+                    this.AssetBundleUtil.UnloadAllAssets();
 #if UNITY_ANDROID
-                AndroidNativeAPI.Instance.GoBack();
+                    AndroidNativeAPI.Instance.GoBack();
 #elif UNITY_IOS
             iOSNativeAPI.Instance.GoBack();
 #endif
-                Debug.Log("<><CyclingView.GoBack>go back to flutter");
-            }, 1f);
+                    Debug.Log("<><CyclingView.GoBack>go back to flutter");
+                }, 1f);
+            };
         }
         public void LoadMap(string mapID)
         {

@@ -806,6 +806,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5579319783833105599}
   - component: {fileID: 5579319783833105598}
+  - component: {fileID: 9136460203518914558}
   m_Layer: 5
   m_Name: GameStart
   m_TagString: Untagged
@@ -849,6 +850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 956ff60881431204cb494bae9d5eadab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 9136460203518914558}
   totalProgress:
     progressBar: {fileID: 946753428}
     progressText: {fileID: 858122552}
@@ -859,6 +861,18 @@ MonoBehaviour:
   durationMax: 0.5
   speedRate: 0.5
   tipText: {fileID: 5420346415036841425}
+--- !u!225 &9136460203518914558
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5579319783833105596}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6148595636266974617
 GameObject:
   m_ObjectHideFlags: 0

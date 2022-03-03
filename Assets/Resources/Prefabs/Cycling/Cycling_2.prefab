@@ -41,8 +41,8 @@ Camera:
   m_GameObject: {fileID: 34381787}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -4923,7 +4923,6 @@ GameObject:
   - component: {fileID: 2010325264}
   - component: {fileID: 2010325263}
   - component: {fileID: 2010325262}
-  - component: {fileID: 191638086}
   m_Layer: 5
   m_Name: UICanvas
   m_TagString: Untagged
@@ -5020,18 +5019,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!225 &191638086
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2010325261}
-  m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1 &2017656712
 GameObject:
   m_ObjectHideFlags: 0
@@ -12276,6 +12263,7 @@ GameObject:
   - component: {fileID: 6632596976234362360}
   - component: {fileID: 6632596976234362361}
   - component: {fileID: 2003566745}
+  - component: {fileID: 4572201780970125139}
   m_Layer: 5
   m_Name: Cycling_2
   m_TagString: Untagged
@@ -12321,7 +12309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mask: {fileID: 8873641227983445751}
-  canvasGroup: {fileID: 191638086}
+  canvasGroup: {fileID: 4572201780970125139}
   mapBox: {fileID: 2041042005}
   pathBox: {fileID: 2041042004}
   mapRoot: {fileID: 2136893580907109432}
@@ -12357,6 +12345,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2b5fb51061ff9f42878f59193f711a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &4572201780970125139
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6632596976234362362}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6777721256263595312
 GameObject:
   m_ObjectHideFlags: 0
