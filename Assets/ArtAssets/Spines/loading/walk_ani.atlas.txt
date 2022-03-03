@@ -1,0 +1,104 @@
+
+walk_ani.png
+size: 760,1028
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body03
+  rotate: false
+  xy: 577, 131
+  size: 94, 123
+  orig: 94, 123
+  offset: 0, 0
+  index: -1
+distance03
+  rotate: true
+  xy: 4, 58
+  size: 966, 291
+  orig: 966, 291
+  offset: 0, 0
+  index: -1
+grass03
+  rotate: true
+  xy: 444, 92
+  size: 932, 129
+  orig: 932, 129
+  offset: 0, 0
+  index: -1
+hand_l03
+  rotate: false
+  xy: 675, 139
+  size: 34, 115
+  orig: 34, 115
+  offset: 0, 0
+  index: -1
+hand_r03
+  rotate: false
+  xy: 713, 139
+  size: 34, 115
+  orig: 34, 115
+  offset: 0, 0
+  index: -1
+head03
+  rotate: false
+  xy: 577, 40
+  size: 103, 87
+  orig: 103, 87
+  offset: 0, 0
+  index: -1
+leg_l03
+  rotate: true
+  xy: 4, 28
+  size: 26, 132
+  orig: 26, 132
+  offset: 0, 0
+  index: -1
+leg_r03
+  rotate: true
+  xy: 140, 28
+  size: 26, 132
+  orig: 26, 132
+  offset: 0, 0
+  index: -1
+midshot03
+  rotate: true
+  xy: 577, 258
+  size: 766, 179
+  orig: 766, 179
+  offset: 0, 0
+  index: -1
+neck01
+  rotate: true
+  xy: 4, 4
+  size: 20, 35
+  orig: 20, 35
+  offset: 0, 0
+  index: -1
+neck02
+  rotate: true
+  xy: 4, 4
+  size: 20, 35
+  orig: 20, 35
+  offset: 0, 0
+  index: -1
+neck03
+  rotate: true
+  xy: 4, 4
+  size: 20, 35
+  orig: 20, 35
+  offset: 0, 0
+  index: -1
+prospect03
+  rotate: true
+  xy: 299, 78
+  size: 946, 141
+  orig: 946, 141
+  offset: 0, 0
+  index: -1
+shadow02
+  rotate: false
+  xy: 299, 58
+  size: 135, 16
+  orig: 135, 16
+  offset: 0, 0
+  index: -1
