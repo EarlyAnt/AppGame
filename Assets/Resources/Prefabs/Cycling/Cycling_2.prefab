@@ -4923,6 +4923,7 @@ GameObject:
   - component: {fileID: 2010325264}
   - component: {fileID: 2010325263}
   - component: {fileID: 2010325262}
+  - component: {fileID: 5234801444723755009}
   m_Layer: 5
   m_Name: UICanvas
   m_TagString: Untagged
@@ -5019,6 +5020,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &5234801444723755009
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2010325261}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2017656712
 GameObject:
   m_ObjectHideFlags: 0
@@ -6503,6 +6516,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2304167213753516861}
   - component: {fileID: 229744761209280218}
+  - component: {fileID: 586210710202718558}
   m_Layer: 5
   m_Name: RoadRenderer
   m_TagString: Untagged
@@ -6549,6 +6563,18 @@ MonoBehaviour:
   vertices: 0
   sortingOrder: 1
   useWorldSpace: 1
+--- !u!225 &586210710202718558
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269227433592769086}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1367583385578437463
 GameObject:
   m_ObjectHideFlags: 0
@@ -12310,6 +12336,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mask: {fileID: 8873641227983445751}
   canvasGroup: {fileID: 4572201780970125139}
+  uiCanvasGroup: {fileID: 5234801444723755009}
+  roadCanvasGroup: {fileID: 586210710202718558}
+  sceneCanvasGroup: {fileID: 2912600275347063821}
   mapBox: {fileID: 2041042005}
   pathBox: {fileID: 2041042004}
   mapRoot: {fileID: 2136893580907109432}
@@ -13214,6 +13243,7 @@ GameObject:
   - component: {fileID: 6696670945964333887}
   - component: {fileID: 1817552410218403122}
   - component: {fileID: 3289198178781452601}
+  - component: {fileID: 2912600275347063821}
   m_Layer: 5
   m_Name: ScenicCanvas
   m_TagString: Untagged
@@ -13306,6 +13336,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &2912600275347063821
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7635276728505201832}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7866700219791634383
 GameObject:
   m_ObjectHideFlags: 0

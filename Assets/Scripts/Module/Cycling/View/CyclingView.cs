@@ -39,6 +39,12 @@ namespace AppGame.Module.Cycling
         [SerializeField]
         private CanvasGroup canvasGroup;
         [SerializeField]
+        private CanvasGroup uiCanvasGroup;
+        [SerializeField]
+        private CanvasGroup roadCanvasGroup;
+        [SerializeField]
+        private CanvasGroup sceneCanvasGroup;
+        [SerializeField]
         private TextureLoader mapBox;
         [SerializeField]
         private TextureLoader pathBox;
@@ -157,7 +163,10 @@ namespace AppGame.Module.Cycling
         }
         public void GoBack()
         {
-            this.goButton.DoFade(0f, 0.75f);
+            this.goButton.DoFade(0f, 0.5f);
+            this.uiCanvasGroup.DOFade(0f, 0.5f);
+            this.roadCanvasGroup.DOFade(0f, 0.5f);
+            this.sceneCanvasGroup.DOFade(0f, 0.5f);
             this.canvasGroup.DOFade(0f, 0.75f).onComplete += () =>
             {
                 SceneManager.LoadScene("GameOver");
