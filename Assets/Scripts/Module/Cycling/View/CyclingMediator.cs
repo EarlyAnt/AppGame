@@ -113,7 +113,7 @@ namespace AppGame.Module.Cycling
             {
                 this.playerDataList = this.CyclingDataManager.BuildGameData();
                 this.ItemDataManager.Clear(true);
-                this.ItemDataManager.AddItem(Items.COIN, 50000);
+                this.ItemDataManager.AddItem(Items.COIN, 0);
             }
 
             this.Initialize();
