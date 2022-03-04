@@ -37,7 +37,7 @@ namespace AppGame.Module.Cycling
         public ICyclingDataManager CyclingDataManager { get; set; }
         #endregion
         #region 其他变量
-        private const int DISTANCE_TO_ENERGY = 5;
+        private const int DISTANCE_TO_ENERGY = 500;
         private const int ENERGY_TO_GO = 200;
         private OriginData originData = null;
         private List<PlayerData> playerDataList = null;
