@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,10 @@ namespace AppGame.Module.Cycling
         private MpBallTypes mpBallType;
         [SerializeField]
         private Text mpBox;
+        [SerializeField]
+        private Text reduceBox;
+        [SerializeField]
+        private Transform reduceDestination;
         [SerializeField]
         private Text fromBox;
         [SerializeField]
@@ -41,8 +46,8 @@ namespace AppGame.Module.Cycling
             }
             set
             {
-                this.mp = value;
-                this.mpBox.text = value > 999 ? "999" : value.ToString();
+                this.StopCoroutine("ChangeValue");
+                this.StartCoroutine(this.ChangeValue(value));
             }
         }
         public MpBallTypes MpBallType
@@ -156,6 +161,29 @@ namespace AppGame.Module.Cycling
                 Mp = this.Value,
                 RefreshView = this.clicked
             };
+        }
+        //播放数值变化动画
+        private IEnumerator ChangeValue(int value)
+        {
+            if (this.mp > value)
+            {
+                int currentMp = this.mp;
+                this.mp = value;
+                this.reduceBox.transform.position = this.mpBox.transform.position;
+                this.reduceBox.text = (value - currentMp).ToString();
+                this.reduceBox.DOFade(1f, 0f);
+                this.reduceBox.DOFade(0f, 1.5f);
+                this.reduceBox.transform.DOMoveY(this.reduceDestination.position.y, 1.5f);
+                yield return null;
+                this.mpBox.text = value > 999 ? "999" : value.ToString();
+                this.reduceBox.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0f, 0f);
+            }
+            else
+            {
+                this.mp = value;
+                this.mpBox.text = value > 999 ? "999" : value.ToString();
+            }
+            yield return null;
         }
     }
 }
