@@ -217,17 +217,17 @@ namespace AppGame.Module.Cycling
         {
             this.treasureBoxList.ForEach(t => t.Spine.raycastTarget = false);
 
-            float time = 0;
             bool forward = Random.Range(0, 10) % 2 == 1;
-            while (time <= 3)
+            System.DateTime startTime = System.DateTime.Now;
+            while ((System.DateTime.Now - startTime).TotalSeconds <= 3)
             {
                 if (forward)
                     this.pageCounter.PreItem();
                 else
                     this.pageCounter.NextItem();
                 this.ChangeBox();
-                yield return new WaitForSeconds(this.curve.Evaluate(time / 3f) / 10f);
-                time += Time.deltaTime;
+                yield return new WaitForSeconds(0.25f);
+                print(string.Format("time-> {0}", (System.DateTime.Now - startTime).TotalSeconds));
             }
             //SoundPlayer.GetInstance().PlaySoundInChannal("garden_open_chest", this.audioPlayer, 0.2f);
             this.OpenBox(this.pageCounter.ItemIndex);
